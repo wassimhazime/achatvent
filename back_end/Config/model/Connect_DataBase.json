@@ -1,0 +1,31 @@
+{"BOOT":"TEST",
+    
+    "TEST":{
+        "cache": true,
+
+    "DB": "mysql",
+    "dbhost": "localhost",
+    "dbuser": "root", 
+    "dbpass": "root", 
+    "dbname": "comptable"
+}
+    ,
+    "PROD":{
+     "cache": true,
+        
+    "DB": "mysql",
+    "dbhost": "localhost",
+    "dbuser": "comptable", 
+    "dbpass": "achrafwassim", 
+    "dbname": "comptable"
+},
+    "godaddy":{
+     "cache": true,
+        
+    "DB": "mysql",
+    "dbhost": "localhost",
+    "dbuser": "comptable", 
+    "dbpass": "achrafwassim", 
+    "dbname": "comptable"
+}
+}
