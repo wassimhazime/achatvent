@@ -1,0 +1,38 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 3 avr. 2017, 00:44:14
+    Author     : Wassim Hazime
+*/
+body{
+    margin-top: 60px;
+}
+.cadre{
+    margin: auto;
+    border: solid 1px;
+    border-color: #1b6d85;
+    border-radius: 10px;
+    padding:15px;
+    padding-top: 18px;
+    
+     
+        
+    
+}
+table.scroll tbody,
+table.scroll thead { display: block; }
+
+table.scroll tbody {
+    /*height: 500px;*/
+    margin: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+
+
+

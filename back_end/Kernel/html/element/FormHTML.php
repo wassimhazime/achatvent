@@ -5,35 +5,35 @@ namespace Kernel\html\element;
 use Kernel\html\element\AbstractHTML;
 use Kernel\INTENT\Intent;
 
-class FormHTML extends AbstractHTML
-{
+class FormHTML extends AbstractHTML {
 
     protected $input = [];
     protected $Conevert_TypeClomunSQL_to_TypeInputHTML;
 
-    function __construct(Intent $intent, array $Conevert_TypeClomunSQL_to_TypeInputHTML)
-    {
+    function __construct($COLUMNS_META_object, $entitysDataTable, array $Conevert_TypeClomunSQL_to_TypeInputHTML) {
 
-        parent::__construct($intent);
+
+
+        $COLUMNS_META = json_decode(json_encode($COLUMNS_META_object), true);
         $this->Conevert_TypeClomunSQL_to_TypeInputHTML = $Conevert_TypeClomunSQL_to_TypeInputHTML;
 
-        $COLUMNS_META = json_decode(json_encode($intent->getEntitysSchema()->getCOLUMNS_META()), true);
 
 
+        //// change taype sql to type html
 
         foreach ($COLUMNS_META as $COLUMN_META) {
             $COLUMN_META['Type'] = ($this->conevert_TypeClomunSQL_to_TypeInputHTML($COLUMN_META['Type']));
             $this->input[$COLUMN_META["Field"]] = $COLUMN_META;
 
             if ($COLUMN_META["Key"] == "MUL") {
-                $DataFOREIGN_KEY = $intent->getEntitysDataTable_FOREIGN_KEYs($COLUMN_META["Field"]);
+                $DataFOREIGN_KEY = $entitysDataTable["FOREIGN_KEYs"][$COLUMN_META["Field"]];
                 $this->input[$COLUMN_META["Field"]]["DataFOREIGN_KEY"] = $DataFOREIGN_KEY;
             }
         }
 
 
 
-        foreach ($intent->getEntitysDataTable_CHILDRENs() as $name_CHILDREN => $data) {
+        foreach ($entitysDataTable["CHILDRENs"] as $name_CHILDREN => $data) {
             $this->input[] = ["Field" => $name_CHILDREN,
                 "Type" => "multiSelect",
                 "Null" => "NO",
@@ -44,8 +44,7 @@ class FormHTML extends AbstractHTML
         }
     }
 
-    private function conevert_TypeClomunSQL_to_TypeInputHTML(string $Type): string
-    {
+    private function conevert_TypeClomunSQL_to_TypeInputHTML(string $Type): string {
 
         $Conevert = $this->Conevert_TypeClomunSQL_to_TypeInputHTML;
 
@@ -56,8 +55,7 @@ class FormHTML extends AbstractHTML
         }
     }
 
-    public function builder($att)
-    {
+    public function builder($att) {
         $INPUT = [];
         foreach ($this->input as $input) {
             $labelHTML = $this->labelHTML($input);
@@ -82,4 +80,5 @@ class FormHTML extends AbstractHTML
 
         return $builder;
     }
+
 }

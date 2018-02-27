@@ -94,67 +94,53 @@ use Kernel\INTENT\Intent;
  *
  * @author Wassim Hazime
  */
-class TableHTML extends AbstractHTML
-{
+class TableHTML extends AbstractHTML {
 
-    
-    function __construct($intent)
-    {
-        parent::__construct($intent);
-    }
-
-    public function builder($att)
-    {
-        $intent=$this->intent;
-        $thead = $this->thead($intent);
-
-        $tbody = $this->tbody($intent);
+    public function builder($att, array $heade, array $table, string $input, array $CHILD) {
+        $thead = $this->thead($heade);
+        $tbody = $this->tbody($table, $input, $CHILD);
         return "\n<table $att> $thead $tbody </table>";
     }
 
-    protected function thead(Intent $intent): string
-    {
-        $COLUMNS_master = $intent->getEntitysSchema()->getCOLUMNS_master();
-        $COLUMNS_all = $intent->getEntitysSchema()->getCOLUMNS_all();
-        $FOREIGN_KEY = $intent->getEntitysSchema()->getFOREIGN_KEY();
-        $table_CHILDREN = $intent->getEntitysSchema()->get_table_CHILDREN();
-
-        if (Intent::is_PARENT_MASTER($intent)) {
-            $columns = array_merge($COLUMNS_master, $FOREIGN_KEY);
-        } elseif (Intent::is_PARENT_ALL($intent)) {
-            $columns = array_merge($COLUMNS_all, $FOREIGN_KEY);
-        }
-        $columns = array_merge($columns, ["controle"=>"controle"]); /////////////
-        if (Intent::is_get_CHILDREN($intent)) {
-            $columns = array_merge($columns, $table_CHILDREN);
-        }
-        
-        
-        
-        
+    protected function thead(array $thead_columns): string {
         $thead = [];
-        foreach ($columns as $column) {
+        foreach ($thead_columns as $column) {
             $thead[] = $this->th(strtoupper(str_replace("_", " ", $column)));
         }
         return "<thead align='center'>" . $this->tr(implode(" \n", $thead)) . " </thead > ";
     }
 
-    protected function tbody(Intent $intent): string
-    {
-        $table = $intent->getEntitysDataTable();
+    protected function tbody($table, $input, $CHILD): string {
+        $flag_show_CHILDREN = $CHILD["flag_show_CHILDREN"];
+
+
+
+
         $bodys = [];
+        //**********************ROWS***************************///
         foreach ($table as $index => $ROWS) {
             $row = [];
             foreach ($ROWS as $head => $body) {
                 $row[] = $this->td($body);
             }
-            $row[]=$this->td('<input type="submit" value="effacer  "><input type="submit" value="modifier">');////
-            foreach ($intent->getEntitysSchema()->get_table_CHILDREN() as $name_table_child) {
-                if ($this->TableCHILD($intent, $index) != []) {
-                    $row[] = $this->td($this->TableCHILD($intent, $index)[$name_table_child]);
+            //*************************************************///   
+            //*******************input******************************///
+            $row[] = $this->td($input); ////
+            //*************************************************///
+            //*******************TableCHILD******************************///   
+            if ($flag_show_CHILDREN) {
+                $table_CHILDREN = $CHILD["table_CHILDREN"];
+                $CHILDREN = $CHILD["CHILDREN"];
+                $datajoins = $CHILD["datajoins"];
+                $TableCHILD = $this->TableCHILD($table_CHILDREN, $CHILDREN, $datajoins [$index]);
+
+                if ($TableCHILD != []) {
+                    foreach ($table_CHILDREN as $name_table_child) {
+                        $row[] = $this->td($TableCHILD[$name_table_child]);
+                    }
                 }
             }
-       
+            //*************************************************///
             $bodys[] = $this->tr(implode(" \n", $row));
         }
 
@@ -163,22 +149,18 @@ class TableHTML extends AbstractHTML
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected function TableCHILD(Intent $intent, int $indexROW): array
-    {
-        if (!Intent::is_get_CHILDREN($intent)) {
-            return [];
-        }
+    protected function TableCHILD($table_CHILDREN, $CHILDREN, $datajoin): array {
 
-        $theadCHILD = $this->theadCHILD($intent);
-        $tbodyCHILD = $this->tbodyCHILD($intent, $indexROW);
+
+
+        $theadCHILD = $this->theadCHILD($table_CHILDREN, $CHILDREN);
+        $tbodyCHILD = $this->tbodyCHILD($datajoin);
+
+
 
         if (implode("", $tbodyCHILD) == '') {
             return [];
         }
-
-
-
-
 
 
         foreach ($theadCHILD as $nameTABLE => $data) {
@@ -192,13 +174,12 @@ class TableHTML extends AbstractHTML
         return $tableCHILD;
     }
 
-    protected function theadCHILD(Intent $intent): array
-    {
-        $Schema = $intent->getEntitysSchema();
+    protected function theadCHILD($table_CHILDREN, $CHILDREN): array {
+
         $theadChild = [];
-        foreach ($Schema->get_table_CHILDREN() as $table) {
+        foreach ($table_CHILDREN as $table) {
             $thead = [];
-            foreach ($Schema->getCHILDREN()[$table] as $column) {
+            foreach ($CHILDREN[$table] as $column) {
                 $thead[] = $this->th(str_replace("_", " ", $column));
             }
 
@@ -209,13 +190,9 @@ class TableHTML extends AbstractHTML
         return $theadChild;
     }
 
-    protected function tbodyCHILD(Intent $intent, int $indexROW): array
-    {
-        $childs = $intent->getEntitysSchema()->get_table_CHILDREN();
-        $datajoin = [];
-        foreach ($childs as $nameTable) {
-            $datajoin[$nameTable] = $intent->getEntitysDataTable()[$indexROW]->getDataJOIN($nameTable);
-        }
+    protected function tbodyCHILD($datajoin): array {
+
+
 
         foreach ($datajoin as $nameTable => $table) {
             $bodys = [];
@@ -236,18 +213,16 @@ class TableHTML extends AbstractHTML
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    protected function tr($content, $att = "style='text-align: center'"): string
-    {
+    protected function tr($content, $att = "style='text-align: center'"): string {
         return "\n<tr $att>\n{$content}\n</tr>\n";
     }
 
-    protected function th($content, $att = "style='text-align: center'"): string
-    {
+    protected function th($content, $att = "style='text-align: center'"): string {
         return "<th  $att>{$content}</th>";
     }
 
-    protected function td($content, $att = "style='text-align: center'"): string
-    {
+    protected function td($content, $att = "style='text-align: center'"): string {
         return "<td $att> {$content}</td>";
     }
+
 }

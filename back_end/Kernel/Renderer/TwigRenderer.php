@@ -31,6 +31,18 @@ class TwigRenderer implements InterfaceRenderer
         $this->twig = new Twig_Environment($this->loader, array(
             'cache' => false,'debug' => true
         ));
+        $this->twig ->addFunction(new \Twig_SimpleFunction("html", function ($context){
+            
+            return $context ;
+            
+        },['is_safe' => ['html']]));
+        
+       $this->twig ->addFunction(new \Twig_SimpleFunction("awa", function ($context,$context2){
+            
+            return $context . "   => ".$context2;
+            
+        },['is_safe' => ['html']]));
+        
     }
 
     public static function getRenderer(string $path = "")

@@ -7,10 +7,10 @@ class AbstractHTML
 
     protected $intent;
 
-    function __construct($intent)
-    {
-        $this->intent = $intent;
-    }
+//    function __construct($intent)
+//    {
+//        $this->intent = $intent;
+//    }
 
     protected function labelHTML(array $input, $att = 'class="control-label" '): string
     {
