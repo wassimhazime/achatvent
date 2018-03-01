@@ -44,8 +44,7 @@ class FactoryTAG {
             $columns = array_merge($COLUMNS_all, $FOREIGN_KEY);
         }
 
-        $columns = array_merge($columns, ["controle" => "controle"]); //////add dans thead titre controle ... ///////
-        /////////////////////////////
+        $columns = array_merge($columns, ["controle" => "controle"]); 
 
 
         $CHILD = [];
@@ -81,6 +80,11 @@ class FactoryTAG {
 
         $formhtml = new FormHTML($COLUMNS_META_object, $entitysDataTable, $Conevert);
         return $formhtml->builder("  ");
+    }
+
+    public function message(Intent $intent) {
+
+        return $this->tableHTML($intent);
     }
 
 }

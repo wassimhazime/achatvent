@@ -66,6 +66,7 @@ class Statement extends RUN
                     unset($data->$name_CHILDREN); // remove CHILDREN in $data
                 }
             }
+           
             $data = self::entitys_TO_array($data);
 
 
@@ -178,4 +179,17 @@ class Statement extends RUN
 
         return new Intent($schema, $data, $mode);
     }
+    
+    //////////////////////////////////////////////////////////////:
+        public static function entitys_TO_array($object): array {
+        if (is_array($object)) {
+            return $object;
+        }
+        $array = [];
+        foreach ($object as $key => $value) {
+            $array[$key] = $value;
+        }
+        return $array;
+    }
+    
 }

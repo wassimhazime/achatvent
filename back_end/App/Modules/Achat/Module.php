@@ -35,8 +35,11 @@ class Module {
     public function addRoute($router) {
 
         // $router->get("/{controle:[a-z]+}", [$this, "MVC"], "blog.strj");
-        $router->get("/achat/{controle:[a-z]+}", [$this, "MVC"], "blog.str");
-        $router->get("/{controle:[a-z]*}", [$this, "MVC"], "root");
+        $router->get("/achat/{controle:[a-z\_]+}", [$this, "MVC"], "achat.get");
+        $router->get("/{controle:[a-z\_]*}", [$this, "MVC"], "achat");
+
+        $router->post("/achat/{controle:[a-z\_]+}", [$this, "POST"], "post.post");
+        $router->post("/{controle:[a-z\_]*}", [$this, "POST"], "post");
     }
 
     public function __construct(ContainerInterface $container) {
@@ -47,21 +50,28 @@ class Module {
     }
 
     public function MVC(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params) {
-       
-        $this->model->setStatement("avoir");
-        $intentshow = $this->model->show(Intent::MODE_SELECT_ALL_NULL, true);
-       
-         $table = $this->FactoryTAG->tableHTML($intentshow);
-        
-     
-         
-         
-      
+        $page = $params["controle"];
+        $this->model->setStatement($page);
+        $intentshow = $this->model->show(Intent::MODE_SELECT_ALL_ALL, true);
         $intentform = $this->model->form(Intent::MODE_FORM);
 
-        $form = $this->FactoryTAG->FormHTML($intentform);
+        $table = $this->FactoryTAG->tableHTML($intentshow); //twig
+        $form = $this->FactoryTAG->FormHTML($intentform);  //twig
+
         $data = $this->renderer->render("@achat/facture", ["form" => $form, "table" => $table]);
 
+        $response->getBody()->write($data);
+        return $response;
+    }
+
+    public function POST(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params) {
+        $insert = $request->getParsedBody();
+
+        $page = $params["controle"];
+        $this->model->setStatement($page);
+        $msg = $this->model->setData($insert, Intent::MODE_INSERT);
+        $msghtml = $this->FactoryTAG->message($msg);  //twig
+        $data = $this->renderer->render("@achat/message_ajouter", ["message" => $msghtml]);
         $response->getBody()->write($data);
         return $response;
     }

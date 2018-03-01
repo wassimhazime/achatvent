@@ -43,7 +43,7 @@ class Model
     public function show(array $mode, $condition): Intent
     {
         if ($this->is_null) {
-            throw new TypeError(" set table ==> call function setStatement() ");
+            throw new TypeError(" is_null==> show ");
         }
         $intent = $this->statement->Select($mode, $condition);
         return $intent;
