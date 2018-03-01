@@ -45,9 +45,11 @@ class Statement extends RUN
 
 
 
-        return (new QuerySQL())
+        $delete= (new QuerySQL())
                         ->delete($condition)
                         ->from($this->getTable());
+       
+         $this->exec($delete);
     }
 
     public function insert(array $dataForm, $mode): Intent

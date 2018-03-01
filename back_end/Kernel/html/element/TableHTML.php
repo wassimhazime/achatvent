@@ -12,6 +12,7 @@ use Kernel\html\element\AbstractHTML;
 class TableHTML extends AbstractHTML {
 
     public function builder($att, array $heade, array $table, string $input, array $CHILD): string {
+        
         $thead = $this->thead($heade);
         $tbody = $this->tbody($table, $input, $CHILD);
         return "\n<table $att> $thead $tbody </table>";
@@ -31,13 +32,18 @@ class TableHTML extends AbstractHTML {
 
         foreach ($table as $index => $ROWS) {
             $row = [];
+            $line="";
             //**********************ROWS***************************///
-            foreach ($ROWS as $body) {
+            foreach ($ROWS as $head => $body) {
                 $row[] = $this->td($body);
+                $line.="&$head=$body";
             }
             //****************************************************///   
             //*******************input******************************///
-            $row[] = $this->td($input);
+            
+          
+           $in= str_replace('index', $index.$line, $input);
+            $row[] = $this->td($in);
             //******************************************************///
             //*******************TableCHILD******************************///   
             $flag_show_CHILDREN = $CHILD["flag_show_CHILDREN"];

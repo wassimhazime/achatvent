@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/wassime/projetPHP/achatvente/public/index.php</file>
-            <file>file:/home/wassime/projetPHP/achatvente/back_end/App/TEMPLETE/twig/themes.twig</file>
+            <file>file:/home/wassime/projetPHP/achatvente/back_end/Kernel/Model/Model.php</file>
+            <file>file:/home/wassime/projetPHP/achatvente/back_end/Kernel/Model/Base_Donnee/Statement.php</file>
             <file>file:/home/wassime/projetPHP/achatvente/back_end/App/Modules/Achat/Module.php</file>
+            <file>file:/home/wassime/projetPHP/achatvente/back_end/Kernel/Model/Query/QuerySQL.php</file>
+            <file>file:/home/wassime/projetPHP/achatvente/back_end/Kernel/html/FactoryTAG.php</file>
+            <file>file:/home/wassime/projetPHP/achatvente/back_end/Kernel/html/element/TableHTML.php</file>
         </group>
     </open-files>
 </project-private>

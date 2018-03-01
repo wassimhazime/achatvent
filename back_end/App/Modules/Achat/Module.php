@@ -50,15 +50,21 @@ class Module {
     }
 
     public function MVC(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params) {
+
         $page = $params["controle"];
         $this->model->setStatement($page);
+
         $intentshow = $this->model->show(Intent::MODE_SELECT_ALL_ALL, true);
         $intentform = $this->model->form(Intent::MODE_FORM);
 
         $table = $this->FactoryTAG->tableHTML($intentshow); //twig
         $form = $this->FactoryTAG->FormHTML($intentform);  //twig
 
+        $query = $request->getQueryParams();
+        $this->message($query);
+
         $data = $this->renderer->render("@achat/facture", ["form" => $form, "table" => $table]);
+
 
         $response->getBody()->write($data);
         return $response;
@@ -69,11 +75,26 @@ class Module {
 
         $page = $params["controle"];
         $this->model->setStatement($page);
+
         $msg = $this->model->setData($insert, Intent::MODE_INSERT);
         $msghtml = $this->FactoryTAG->message($msg);  //twig
         $data = $this->renderer->render("@achat/message_ajouter", ["message" => $msghtml]);
         $response->getBody()->write($data);
         return $response;
+    }
+
+    public function message($query) {
+        if (isset($query["supprimer"])) {
+
+        $conditon=['id' => $query['id']];
+        
+        $this->model->delete($conditon);
+        
+        } elseif (isset($query["modifier"])) {
+            die("mod");
+        } else {
+            
+        }
     }
 
 }
