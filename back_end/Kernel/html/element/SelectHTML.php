@@ -19,37 +19,35 @@ class SelectHTML {
         }
 
         return HTML::TAG("select")
-                ->setClass("form-control")
-                ->setData($optionTag)
-                ->setName($input['Field'])
-                ->builder();
+                        ->setClass("form-control")
+                        ->setData($optionTag)
+                        ->setName($input['Field'])
+                        ->builder();
     }
 
     public function multiSelectTag(array $input): string {
-    return HTML::TAG("select")
-                 ->setAtt('multiple')
-                 ->setClass("multiSelectItemwassim form-control")
-                 ->setName($input['Field'] . '[]')
-                 ->setData($this->chargeListHtml($input['DataCHILDRENS']) )
-                 ->builder();
-       
-    }
-
-    private function chargeListHtml($DataCHILDRENS, $param = '') {
-        $TAGoption = "";
-        foreach ($DataCHILDRENS as $row) {
-            if (!isset($row->id)) {
-                return "<option></option>";
-            }
-            $dataOption = '';
+        $optionTag = [];
+        foreach ($input['DataCHILDRENS'] as $row) {
+            $dataOption = "";
             foreach ($row as $column => $value) {
                 $dataOption .= $column . '$$$' . $value . ' £££ ';
             }
-            $popover = 'data-container="body" data-toggle="popover" data-placement="top" data-content="' . $dataOption . ' "';
-            $TAGoption .= "<option $param $popover " . "  value ={$row->id}> $dataOption </option> ";
-            // $TAGoption .= "<option $param $popover " . "  value ={$row->id}> {$row->id} </option> ";
+            $optionTag [] = HTML::TAG('option')
+                    ->setValue($row->id)
+                    ->setAtt(' data-container="body" '
+                            . 'data-toggle="popover"'
+                            . ' data-placement="top"'
+                            . ' data-content="' . $dataOption . ' "')
+                    ->setData($dataOption)->builder();
         }
-        return $TAGoption;
+
+        return HTML::TAG("select")
+                        ->setAtt('multiple')
+                        ->setClass("multiSelectItemwassim form-control")
+                        ->setName($input['Field'] . '[]')
+                        ->setData($optionTag)->builder();
     }
+
+
 
 }
