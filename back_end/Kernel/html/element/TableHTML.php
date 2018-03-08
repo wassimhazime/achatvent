@@ -2,17 +2,17 @@
 
 namespace Kernel\html\element;
 
-use Kernel\html\element\AbstractHTML;
+
 
 /**
  * Description of TableHTML
  *
  * @author Wassim Hazime
  */
-class TableHTML extends AbstractHTML {
+class TableHTML {
 
     public function builder($att, array $heade, array $table, string $input, array $CHILD): string {
-        
+
         $thead = $this->thead($heade);
         $tbody = $this->tbody($table, $input, $CHILD);
         return "\n<table $att> $thead $tbody </table>";
@@ -32,17 +32,31 @@ class TableHTML extends AbstractHTML {
 
         foreach ($table as $index => $ROWS) {
             $row = [];
-            $line="";
+            $line = "";
             //**********************ROWS***************************///
             foreach ($ROWS as $head => $body) {
-                $row[] = $this->td($body);
-                $line.="&$head=$body";
+
+                if (strtoupper($head) == "IMAGE") {
+                    if ($body=="image.jpg") {
+                        $body=" ";
+                        $id_image="";
+                    } else {
+                        $id_image = str_replace("id_image=>", "", $body);
+                        $body = '<a class="btn btn-default"  role="button" href="?imageview=' . $id_image . '" >les fichies</a>';
+                    }
+
+                    $row[] = $this->td($body);
+                    $line .= "&$head=$id_image";
+                } else {
+                    $row[] = $this->td($body);
+                    $line .= "&$head=$body";
+                }
             }
             //****************************************************///   
             //*******************input******************************///
-            
-          
-           $in= str_replace('index', $index.$line, $input);
+
+
+            $in = str_replace('index', $index . $line, $input);
             $row[] = $this->td($in);
             //******************************************************///
             //*******************TableCHILD******************************///   

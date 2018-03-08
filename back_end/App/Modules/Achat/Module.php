@@ -53,48 +53,73 @@ class Module {
 
         $page = $params["controle"];
         $this->model->setStatement($page);
-
-        $intentshow = $this->model->show(Intent::MODE_SELECT_ALL_ALL, true);
-        $intentform = $this->model->form(Intent::MODE_FORM);
-
-        $table = $this->FactoryTAG->tableHTML($intentshow); //twig
-        $form = $this->FactoryTAG->FormHTML($intentform);  //twig
-
         $query = $request->getQueryParams();
-        $this->message($query);
+        if (isset($query["supprimer"])) {
+            $conditon = ['id' => $query['id']];
+            $this->model->delete($conditon);
+            $url = $request->getUri()->getPath();
+            return $response->withStatus(301)->withHeader('Location', $url);
+        } elseif (isset($query["modifier"])) {
+            // 1er methode 
+            $conditon = ['avoir.id' => $query['id']];
+            $oldData = $this->model->show(Intent::MODE_SELECT_ALL_ALL, $conditon);
+            $intentform = $this->model->form(Intent::MODE_FORM);
+            
+           
+          
+            $table = $this->FactoryTAG->tableHTML($oldData); //twig
+            $form = $this->FactoryTAG->FormHTML($intentform, $oldData);  //twig
+            $data = $this->renderer->render("@achat/facture", ["form" => $form, "table" => $table]);
+            $response->getBody()->write($data);
+            return $response;
+            // 2emme 
+            // recherche id ==> set form
+        } elseif (isset($query["imageview"])) {
+            $id_image = $query["imageview"];
+            $dir = ROOT . "public/imageUpload/";
+            $dir = "imageUpload/";
+            $images = [];
+            foreach (scandir($dir) as $image) {
+                $subject = $image;
+                $pattern = '/^' . $id_image . '/';
 
-        $data = $this->renderer->render("@achat/facture", ["form" => $form, "table" => $table]);
+                if (preg_match($pattern, $subject)) {
+                    $images[] = $dir . $image;
+                }
+            }
+            foreach ($images as $image) {
+                echo '<img src="' . $image . '" alt="Girl in a jacket" style="width:800px;"> <br>';
+            }
 
-
-        $response->getBody()->write($data);
-        return $response;
+            die();
+        } else {
+            $intentshow = $this->model->show(Intent::MODE_SELECT_ALL_ALL, true);
+            $intentform = $this->model->form(Intent::MODE_FORM);
+            $table = $this->FactoryTAG->tableHTML($intentshow); //twig
+            $form = $this->FactoryTAG->FormHTML($intentform);  //twig
+            $data = $this->renderer->render("@achat/facture", ["form" => $form, "table" => $table]);
+            $response->getBody()->write($data);
+            return $response;
+        }
     }
 
-    public function POST(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params) {
+    public function POST(\GuzzleHttp\Psr7\ServerRequest $request, ResponseInterface $response, ContainerInterface $container, $params) {
         $insert = $request->getParsedBody();
-
+        $fils = $request->getUploadedFiles();
+        $id_image = round(microtime(true), 10);
+        foreach ($fils["image"] as $f) {
+            if (!$f->getClientFilename() == "") {
+                $f->moveTo("imageUpload/" . $id_image . "_" . $f->getClientFilename());
+            }
+        }
+        $insert["image"] = "id_image=>" . $id_image;
         $page = $params["controle"];
         $this->model->setStatement($page);
-
         $msg = $this->model->setData($insert, Intent::MODE_INSERT);
         $msghtml = $this->FactoryTAG->message($msg);  //twig
         $data = $this->renderer->render("@achat/message_ajouter", ["message" => $msghtml]);
         $response->getBody()->write($data);
         return $response;
-    }
-
-    public function message($query) {
-        if (isset($query["supprimer"])) {
-
-        $conditon=['id' => $query['id']];
-        
-        $this->model->delete($conditon);
-        
-        } elseif (isset($query["modifier"])) {
-            die("mod");
-        } else {
-            
-        }
     }
 
 }

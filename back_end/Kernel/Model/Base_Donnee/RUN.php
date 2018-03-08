@@ -35,8 +35,8 @@ class RUN extends DataBase
 
             return $Statement->fetchAll();
         } catch (PDOException $exc) {
-            Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-            die();
+        //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
+            die($sql);
         }
     }
 
@@ -52,8 +52,8 @@ class RUN extends DataBase
             return $this->db->lastInsertId();
         } catch (PDOException $exc) {
             // $db->rollBack();
-            Notify::send_Notify($exc->getMessage() . "exec SQL ERROR ==> </br> $sql");
-            die();
+          //  Notify::send_Notify($exc->getMessage() . "exec SQL ERROR ==> </br> $sql");
+            die($exc->getMessage() . "exec SQL ERROR ==> </br> $sql");
         }
     }
 

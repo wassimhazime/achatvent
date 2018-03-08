@@ -18,6 +18,7 @@ return array(
     'PhpDocReader\\' => array($vendorDir . '/php-di/phpdoc-reader/src/PhpDocReader'),
     'Kernel\\' => array($baseDir . '/back_end/Kernel'),
     'Invoker\\' => array($vendorDir . '/php-di/invoker/src'),
+    'Intervention\\Image\\' => array($vendorDir . '/intervention/image/src/Intervention/Image'),
     'Interop\\Http\\Server\\' => array($vendorDir . '/http-interop/http-middleware/src'),
     'Interop\\Container\\' => array($vendorDir . '/container-interop/container-interop/src/Interop/Container'),
     'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/src'),

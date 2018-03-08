@@ -246,6 +246,8 @@ class UploadedFile implements UploadedFileInterface
      */
     public function moveTo($targetPath)
     {
+       
+      
         $this->validateActive();
 
         if (false === $this->isStringNotEmpty($targetPath)) {

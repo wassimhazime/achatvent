@@ -7,9 +7,9 @@ namespace Composer\Autoload;
 class ComposerStaticInit8ed5de433aea7f4bb013337ba0ff4609
 {
     public static $files = array (
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         'aaf5b53a99b4de51dadc23016def253f' => __DIR__ . '/..' . '/webimpress/http-middleware-compatibility/autoload/http-middleware.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '6f2c5977e422114bbaec553e7c77ee8b' => __DIR__ . '/..' . '/http-interop/response-sender/src/functions.php',
@@ -52,6 +52,7 @@ class ComposerStaticInit8ed5de433aea7f4bb013337ba0ff4609
         'I' => 
         array (
             'Invoker\\' => 8,
+            'Intervention\\Image\\' => 19,
             'Interop\\Http\\Server\\' => 20,
             'Interop\\Container\\' => 18,
         ),
@@ -131,6 +132,10 @@ class ComposerStaticInit8ed5de433aea7f4bb013337ba0ff4609
         'Invoker\\' => 
         array (
             0 => __DIR__ . '/..' . '/php-di/invoker/src',
+        ),
+        'Intervention\\Image\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image',
         ),
         'Interop\\Http\\Server\\' => 
         array (
