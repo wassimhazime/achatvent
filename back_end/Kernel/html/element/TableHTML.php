@@ -2,23 +2,24 @@
 
 namespace Kernel\html\element;
 
-
-
 /**
  * Description of TableHTML
  *
  * @author Wassim Hazime
  */
-class TableHTML {
+class TableHTML
+{
 
-    public function builder($att, array $heade, array $table, string $input, array $CHILD): string {
+    public function builder($att, array $heade, array $table, string $input, array $CHILD): string
+    {
 
         $thead = $this->thead($heade);
         $tbody = $this->tbody($table, $input, $CHILD);
         return "\n<table $att> $thead $tbody </table>";
     }
 
-    protected function thead(array $thead_columns): string {
+    protected function thead(array $thead_columns): string
+    {
         $thead = [];
         foreach ($thead_columns as $column) {
             $thead[] = $this->th(strtoupper(str_replace("_", " ", $column)));
@@ -26,7 +27,8 @@ class TableHTML {
         return "<thead align='center'>" . $this->tr(implode(" \n", $thead)) . " </thead > ";
     }
 
-    protected function tbody($table, $input, $CHILD): string {
+    protected function tbody($table, $input, $CHILD): string
+    {
 
         $bodys = [];
 
@@ -35,7 +37,6 @@ class TableHTML {
             $line = "";
             //**********************ROWS***************************///
             foreach ($ROWS as $head => $body) {
-
                 if (strtoupper($head) == "IMAGE") {
                     if ($body=="image.jpg") {
                         $body=" ";
@@ -52,14 +53,14 @@ class TableHTML {
                     $line .= "&$head=$body";
                 }
             }
-            //****************************************************///   
+            //****************************************************///
             //*******************input******************************///
 
 
             $in = str_replace('index', $index . $line, $input);
             $row[] = $this->td($in);
             //******************************************************///
-            //*******************TableCHILD******************************///   
+            //*******************TableCHILD******************************///
             $flag_show_CHILDREN = $CHILD["flag_show_CHILDREN"];
             if ($flag_show_CHILDREN) {
                 $table_CHILDREN = $CHILD["table_CHILDREN"]; /// les noms des tables childe
@@ -82,7 +83,8 @@ class TableHTML {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected function TableCHILD($table_CHILDREN, $CHILDREN, $datajoin): array {
+    protected function TableCHILD($table_CHILDREN, $CHILDREN, $datajoin): array
+    {
         $theadCHILD = $this->theadCHILD($table_CHILDREN, $CHILDREN);
         $tbodyCHILD = $this->tbodyCHILD($datajoin);
 
@@ -104,7 +106,8 @@ class TableHTML {
         return $tableCHILD;
     }
 
-    protected function theadCHILD($table_CHILDREN, $CHILDREN): array {
+    protected function theadCHILD($table_CHILDREN, $CHILDREN): array
+    {
 
         $theadChild = [];
         foreach ($table_CHILDREN as $table) {
@@ -120,7 +123,8 @@ class TableHTML {
         return $theadChild;
     }
 
-    protected function tbodyCHILD($datajoin): array {
+    protected function tbodyCHILD($datajoin): array
+    {
 
 
 
@@ -143,16 +147,18 @@ class TableHTML {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    protected function tr($content, $att = "style='text-align: center'"): string {
+    protected function tr($content, $att = "style='text-align: center'"): string
+    {
         return "\n<tr $att>\n{$content}\n</tr>\n";
     }
 
-    protected function th($content, $att = "style='text-align: center'"): string {
+    protected function th($content, $att = "style='text-align: center'"): string
+    {
         return "<th  $att>{$content}</th>";
     }
 
-    protected function td($content, $att = "style='text-align: center'"): string {
+    protected function td($content, $att = "style='text-align: center'"): string
+    {
         return "<td $att> {$content}</td>";
     }
-
 }

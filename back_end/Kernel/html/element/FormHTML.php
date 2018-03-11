@@ -4,41 +4,49 @@ namespace Kernel\html\element;
 
 use Kernel\html\HTML;
 
-class FormHTML {
+class FormHTML
+{
 
     protected $input = [];
     protected $Conevert_TypeClomunSQL_to_TypeInputHTML;
 
-    function __construct($COLUMNS_META_object, $entitysDataTable, array $Conevert_TypeClomunSQL_to_TypeInputHTML) {
+    function __construct($COLUMNS_META_object, array $Conevert_TypeClomunSQL_to_TypeInputHTML, $entitysDataTable, $DefaultData = [])
+    {
         $COLUMNS_META = json_decode(json_encode($COLUMNS_META_object), true);
         $this->Conevert_TypeClomunSQL_to_TypeInputHTML = $Conevert_TypeClomunSQL_to_TypeInputHTML;
-//// change taype sql to type html
+//// change type sql to type html
 
         foreach ($COLUMNS_META as $COLUMN_META) {
             $COLUMN_META['Type'] = ($this->conevert_TypeClomunSQL_to_TypeInputHTML($COLUMN_META['Type']));
             $this->input[$COLUMN_META["Field"]] = $COLUMN_META;
+            if (isset($DefaultData[$COLUMN_META["Field"]])) {
+                $this->input[$COLUMN_META["Field"]] ['Default'] = $DefaultData[$COLUMN_META['Field']];
+            }
 
             if ($COLUMN_META["Key"] == "MUL") {
                 $DataFOREIGN_KEY = $entitysDataTable["FOREIGN_KEYs"][$COLUMN_META["Field"]];
-                $this->input[$COLUMN_META["Field"]]["DataFOREIGN_KEY"] = $DataFOREIGN_KEY;
+                $this->input[$COLUMN_META["Field"]]["Data_load"] = $DataFOREIGN_KEY;
             }
         }
-
-
-
         foreach ($entitysDataTable["CHILDRENs"] as $name_CHILDREN => $data) {
-            $this->input[] = [
+            $default = [];
+            if (isset($DefaultData['DataJOIN'][$name_CHILDREN])) {
+                $default = $DefaultData['DataJOIN'][$name_CHILDREN];
+            }
+
+            $this->input["CHILDRENs"] = [
                 "Field" => $name_CHILDREN,
                 "Type" => "multiSelect",
                 "Null" => "NO",
                 "Key" => "",
-                "Default" => "",
+                "Default" => $default,
                 "Extra" => "",
-                "DataCHILDRENS" => $data];
+                "Data_load" => $data];
         }
     }
 
-    private function conevert_TypeClomunSQL_to_TypeInputHTML(string $Type): string {
+    private function conevert_TypeClomunSQL_to_TypeInputHTML(string $Type): string
+    {
 
         $Conevert = $this->Conevert_TypeClomunSQL_to_TypeInputHTML;
 
@@ -49,57 +57,29 @@ class FormHTML {
         }
     }
 
-    public function builder($att, $DefaultData = []) {
-
-
+    public function builder()
+    {
 
 
         $INPUT = [];
 
         foreach ($this->input as $input) {
-            if (isset($DefaultData[$input['Field']])) {
-                $input['Default'] = $DefaultData[$input['Field']];
-            }
-            $labelHTML = HTML::TAG('label')
-                    ->setClass("control-label")
-                    ->setData(str_replace("_", " ", $input['Field']))
-                    ->setFor($input['Field'])
-                    ->builder();
             switch ($input['Type']) {
                 case "textarea":
-                    $inputHTML = HTML::TAG("textarea")
-                            ->setClass("form-control")
-                            ->setName($input['Field'])
-                            ->setPlaceholder(str_replace("_", " ", $input['Field']))
-                            ->setValue($input['Default'])
-                            ->setData($input['Default'])
-                            ->setTag("textarea")
-                            ->builder();
+                    $inputHTML = $this->textareaTage($input);
                     break;
                 case "select":
-                    $select=new SelectHTML();
-                    $inputHTML = $select->selectTage($input);
+                    $inputHTML = $this->selectTage($input);
                     break;
                 case "multiSelect":
-                    $select=new SelectHTML();
-                    $inputHTML = $select->multiSelectTag($input);
+                    $inputHTML = $this->multiSelectTag($input);
                     break;
                 default:
-
-                    $tag = HTML::TAG('input')
-                            ->setClass("form-control")
-                            ->setType($input['Type'])
-                            ->setName($input['Field'])
-                            ->setPlaceholder(str_replace("_", " ", $input['Field']))
-                            ->setValue($input['Default']);
-                    if ($input['Type'] == "file") {
-                        $tag->setAtt('multiple accept=" .jpg, .jpeg, .png"')
-                        ->setName($input['Field']."[]");
-                    }
-                    $inputHTML = $tag->builder();
-
+                    $inputHTML = $this->inputTage($input);
                     break;
             }
+
+            $labelHTML = $this->labelTage($input);
             $INPUT[] = HTML::TAG("div")
                     ->setClass("form-group")
                     ->setData([$labelHTML, $inputHTML])
@@ -111,4 +91,124 @@ class FormHTML {
         return $builder;
     }
 
+    public function selectTage(array $input): string
+    {
+        $name = $input['Field'];
+        $Default = $input['Default'];
+        $optionTag = [];
+        $data_load = [];
+        foreach ($input['Data_load'] as $row) {
+            $data_load[$row->id] = $row->$name;
+        }
+
+///////////////////////////////////////////////////////////////////
+        foreach ($data_load as $key => $data) {
+            $rowTag = HTML::TAG('option')
+                    ->setValue($key)
+                    ->setData($data);
+            if ($Default == $data) {
+                $rowTag->setAtt("selected");
+            }
+            $optionTag [] = $rowTag->builder();
+        }
+
+        return HTML::TAG("select")
+                        ->setClass("form-control")
+                        ->setData($optionTag)
+                        ->setName($name)
+                        ->builder();
+    }
+
+    public function multiSelectTag(array $input): string
+    {
+        $name = $input['Field'];
+        $Default = $input['Default'];
+        $data_load = [];
+        foreach ($input['Data_load'] as $row) {
+            $ligne = "";
+            foreach ($row as $column => $value) {
+                $ligne .= $column . '$$$' . $value . ' £££ ';
+            }
+            $data_load[$row->id] = $ligne;
+        }
+//////////////////////////////////////////////////////
+        $optionTag = [];
+        foreach ($data_load as $key => $data) {
+            $optionTag [] = HTML::TAG('option')
+                            ->setValue($key)
+                            ->setAtt(' data-container="body" '
+                                    . 'data-toggle="popover"'
+                                    . ' data-placement="top"'
+                                    . ' data-content="' . $data . ' "')
+                            ->setData($data)->builder();
+        }
+        foreach ($Default as $row) {
+            $dataOption = "";
+            foreach ($row as $column => $value) {
+                $dataOption .= $column . '$$$' . $value . ' £££ ';
+            }
+            $optionTag [] = HTML::TAG('option')
+                            ->setValue($row->commande_id)
+                            ->setAtt(' data-container="body" '
+                                    . 'data-toggle="popover"'
+                                    . ' data-placement="top"'
+                                    . ' data-content="' . $dataOption . ' " selected ')
+                            ->setData($dataOption)->builder();
+        }
+
+
+
+
+
+
+        return HTML::TAG("select")
+                        ->setAtt('multiple')
+                        ->setClass("multiSelectItemwassim form-control")
+                        ->setName($name . '[]')
+                        ->setData($optionTag)
+                        ->builder();
+    }
+
+    public function labelTage(array $input): string
+    {
+        $name = $input['Field'];
+        return HTML::TAG('label')
+                        ->setClass("control-label")
+                        ->setData(str_replace("_", " ", $name))
+                        ->setFor($name)
+                        ->builder();
+    }
+
+    public function inputTage(array $input): string
+    {
+        $name = $input['Field'];
+        $Default = $input['Default'];
+        $type = $input['Type'];
+
+        $tag = HTML::TAG('input')
+                ->setClass("form-control")
+                ->setType($type)
+                ->setName($name)
+                ->setPlaceholder(str_replace("_", " ", $name))
+                ->setValue($Default);
+        if ($input['Type'] == "file") {
+            $tag->setAtt('multiple accept=" .jpg, .jpeg, .png"')
+                    ->setName($name . "[]");
+        }
+        return $tag->builder();
+    }
+
+    public function textareaTage(array $input): string
+    {
+        $name = $input['Field'];
+        $Default = $input['Default'];
+        return $inputHTML = HTML::TAG("textarea")
+                ->setClass("form-control")
+                ->setName($name)
+                ->setPlaceholder(str_replace("_", " ", $name))
+                ->setValue($Default)
+                ->setData($Default)
+                ->setTag("textarea")
+                ->builder();
+    }
 }

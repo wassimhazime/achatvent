@@ -39,7 +39,7 @@ class Model
             throw new TypeError(" ERROR setData(data) model  ==> data null");
         }
     }
-    public function delete( $condition)
+    public function delete($condition)
     {
         
         $intent = $this->statement->delete($condition);

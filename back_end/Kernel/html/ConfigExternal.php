@@ -15,16 +15,19 @@ use Kernel\File\File;
  *
  * @author Wassim Hazime
  */
-class ConfigExternal {
+class ConfigExternal
+{
 
     private $file;
 
-    function __construct($PathConfigJsone) {
+    function __construct($PathConfigJsone)
+    {
 
         $this->file = new File($PathConfigJsone, File::JSON, []);
     }
 
-    public function getConevert_TypeClomunSQL_to_TypeInputHTML(): array {
+    public function getConevert_TypeClomunSQL_to_TypeInputHTML(): array
+    {
         $Conevert_Type = $this->file->get('Conevert_TypeClomunSQL_to_TypeInputHTML');
         if ($Conevert_Type == []) {
             return $TypeClomunSQL_to_TypeInputHTML = [
@@ -44,5 +47,4 @@ class ConfigExternal {
             return $Conevert_Type;
         }
     }
-
 }

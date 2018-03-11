@@ -11,7 +11,7 @@ class Kernel
 {
 
     private $container;
-private $modules;
+    private $modules;
     function __construct($config)
     {
         $this->container = Factory_Container::getContainer($config);
@@ -32,12 +32,11 @@ private $modules;
 
         foreach ($this->modules as $module) {
             if (class_exists($module)) {
-                
                 $m = new $module($this->container);
                
                 $m->addRoute($this->router);
                
-                $m->addPathRenderer($renderer,$pathModules);
+                $m->addPathRenderer($renderer, $pathModules);
             }
         }
 
@@ -50,7 +49,6 @@ private $modules;
             $r = new \GuzzleHttp\Psr7\Response(404);
             $r->getBody()->write($res);
             $res = $r;
-            
         }
 
         return $res;

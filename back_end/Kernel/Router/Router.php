@@ -18,7 +18,7 @@ class Router
         $route = new \Zend\Expressive\Router\Route($url, $callable, ['GET'], $name);
         $this->router->addRoute($route);
     }
-      public function post(string $url, callable $callable, string $name)
+    public function post(string $url, callable $callable, string $name)
     {
         $route = new \Zend\Expressive\Router\Route($url, $callable, ['POST'], $name);
         $this->router->addRoute($route);

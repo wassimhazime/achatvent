@@ -5,7 +5,8 @@ namespace Kernel\INTENT;
 use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Model\Entitys\EntitysDataTable;
 
-class Intent {
+class Intent
+{
 
     const MODE_SELECT_MASTER_MASTER = ["MASTER", "MASTER"];
     const MODE_SELECT_MASTER_ALL = ["MASTER", "ALL"];
@@ -22,7 +23,8 @@ class Intent {
     private $entitysDataTable;
     private $mode;
 
-    public function __construct(EntitysSchema $entitysSchema, array $entitysDataTables, array $mode) {
+    public function __construct(EntitysSchema $entitysSchema, array $entitysDataTables, array $mode)
+    {
         $this->mode = $mode;
         if ($mode == self::MODE_FORM) {
             if (!empty($entitysDataTables) and ! $this->isAssoc($entitysDataTables)) {
@@ -31,7 +33,6 @@ class Intent {
         } else {
             foreach ($entitysDataTables as $entitysDataTable) {
                 if ($entitysDataTable instanceof EntitysDataTable) {
-                    
                 } else {
                     throw new \TypeError("type array entre ERROR ==> EntitysDataTable mode:: MODE_SELECT ");
                 }
@@ -44,22 +45,26 @@ class Intent {
         $this->entitysDataTable = $entitysDataTables;
     }
 
-    public function getEntitysSchema(): EntitysSchema {
+    public function getEntitysSchema(): EntitysSchema
+    {
         return $this->entitysSchema;
     }
 
-    public function getEntitysDataTable() {
+    public function getEntitysDataTable()
+    {
         return $this->entitysDataTable;
     }
 
-    public function getMode(): array {
+    public function getMode(): array
+    {
         return $this->mode;
     }
 
   
 
     /// insert Statement
-    public static function parse(array $data, EntitysSchema $schema, array $mode): self {
+    public static function parse(array $data, EntitysSchema $schema, array $mode): self
+    {
 
         if (self::isAssoc($data) and isset($data)) {
             return (new self($schema, ((new EntitysDataTable())->set($data)), $mode));
@@ -68,7 +73,8 @@ class Intent {
 
     //TOOLS
     //// for show Statement
-    public static function is_PARENT_MASTER($_intentORmode): bool {
+    public static function is_PARENT_MASTER($_intentORmode): bool
+    {
         if ($_intentORmode instanceof Intent) {
             $mode = $_intentORmode->getMode();
         } else {
@@ -78,7 +84,8 @@ class Intent {
         return $mode[0] == "MASTER";
     }
 
-    public static function is_PARENT_ALL($_intentORmode): bool {
+    public static function is_PARENT_ALL($_intentORmode): bool
+    {
         if ($_intentORmode instanceof Intent) {
             $mode = $_intentORmode->getMode();
         } else {
@@ -87,7 +94,8 @@ class Intent {
         return $mode[0] == "ALL";
     }
 
-    public static function is_get_CHILDREN($_intentORmode): bool {
+    public static function is_get_CHILDREN($_intentORmode): bool
+    {
         if ($_intentORmode instanceof Intent) {
             $mode = $_intentORmode->getMode();
         } else {
@@ -96,11 +104,11 @@ class Intent {
         return $mode[1] != "EMPTY";
     }
 
-    public static function isAssoc(array $arr): bool {
+    public static function isAssoc(array $arr): bool
+    {
         if (array() === $arr) {
             return false;
         }
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
-
 }

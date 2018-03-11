@@ -22,17 +22,20 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class Module {
+class Module
+{
 
     public $model;
     public $FactoryTAG;
     public $renderer;
 
-    public function addPathRenderer($renderer, $pathModules) {
+    public function addPathRenderer($renderer, $pathModules)
+    {
         $renderer->addPath($pathModules . "Achat" . D_S . "views", "achat");
     }
 
-    public function addRoute($router) {
+    public function addRoute($router)
+    {
 
         // $router->get("/{controle:[a-z]+}", [$this, "MVC"], "blog.strj");
         $router->get("/achat/{controle:[a-z\_]+}", [$this, "MVC"], "achat.get");
@@ -42,14 +45,16 @@ class Module {
         $router->post("/{controle:[a-z\_]*}", [$this, "POST"], "post");
     }
 
-    public function __construct(ContainerInterface $container) {
+    public function __construct(ContainerInterface $container)
+    {
 
         $this->model = $container->get(Model::class);
         $this->FactoryTAG = $container->get(FactoryTAG::class);
         $this->renderer = $container->get(TwigRenderer::class);
     }
 
-    public function MVC(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params) {
+    public function MVC(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params)
+    {
 
         $page = $params["controle"];
         $this->model->setStatement($page);
@@ -60,19 +65,19 @@ class Module {
             $url = $request->getUri()->getPath();
             return $response->withStatus(301)->withHeader('Location', $url);
         } elseif (isset($query["modifier"])) {
-            // 1er methode 
-            $conditon = ['avoir.id' => $query['id']];
+            // 1er methode
+            $conditon = ['bl.id' => $query['id']];
             $oldData = $this->model->show(Intent::MODE_SELECT_ALL_ALL, $conditon);
             $intentform = $this->model->form(Intent::MODE_FORM);
-            
-           
-          
+
+
+
             $table = $this->FactoryTAG->tableHTML($oldData); //twig
             $form = $this->FactoryTAG->FormHTML($intentform, $oldData);  //twig
             $data = $this->renderer->render("@achat/facture", ["form" => $form, "table" => $table]);
             $response->getBody()->write($data);
             return $response;
-            // 2emme 
+            // 2emme
             // recherche id ==> set form
         } elseif (isset($query["imageview"])) {
             $id_image = $query["imageview"];
@@ -103,16 +108,23 @@ class Module {
         }
     }
 
-    public function POST(\GuzzleHttp\Psr7\ServerRequest $request, ResponseInterface $response, ContainerInterface $container, $params) {
+    public function POST(\GuzzleHttp\Psr7\ServerRequest $request, ResponseInterface $response, ContainerInterface $container, $params)
+    {
         $insert = $request->getParsedBody();
         $fils = $request->getUploadedFiles();
-        $id_image = round(microtime(true), 10);
-        foreach ($fils["image"] as $f) {
-            if (!$f->getClientFilename() == "") {
-                $f->moveTo("imageUpload/" . $id_image . "_" . $f->getClientFilename());
+        $images=$fils["image"];
+        $flage=($images[0]);
+
+        if ($flage->getClientFilename()!= '') {
+            $id_image = round(microtime(true), 10);
+            foreach ($images as $f) {
+                if (!$f->getClientFilename() == "") {
+                    $f->moveTo("imageUpload/" . $id_image . "_" . $f->getClientFilename());
+                }
             }
+            $insert["image"] = "id_image=>" . $id_image;
         }
-        $insert["image"] = "id_image=>" . $id_image;
+      
         $page = $params["controle"];
         $this->model->setStatement($page);
         $msg = $this->model->setData($insert, Intent::MODE_INSERT);
@@ -121,5 +133,4 @@ class Module {
         $response->getBody()->write($data);
         return $response;
     }
-
 }

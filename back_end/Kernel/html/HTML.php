@@ -25,7 +25,8 @@ namespace Kernel\html;
  *
  * @author wassime
  */
-class HTML {
+class HTML
+{
 
     private $tag = "";
     private $BaliseOrpheline = ["br", "hr", "input", "area", "meta", "img", "link", "param"];
@@ -33,15 +34,18 @@ class HTML {
     private $data = "";
     private $att = "";
 
-    public static function TAG(string $tag): self {
+    public static function TAG(string $tag): self
+    {
         return new self($tag);
     }
 
-    function __construct(string $tag = "") {
+    function __construct(string $tag = "")
+    {
         $this->setTag($tag);
     }
 
-    function builder(): string {
+    function builder(): string
+    {
         $params = "";
         foreach ($this->html as $param => $value) {
             $params .= $param . ' = "' . $value . '"   ';
@@ -57,63 +61,71 @@ class HTML {
         return $builder;
     }
 
-    function setTag(string $tag): self {
+    function setTag(string $tag): self
+    {
         $this->tag = strtolower($tag);
         return $this;
     }
 
-    function setAtt(string $att): self {
+    function setAtt(string $att): self
+    {
         $this->att = $att;
         return $this;
     }
 
-    function setData( $data ): self {
+    function setData($data): self
+    {
         if ($data !=null) {
-            if(is_string($data)){
-               $this->data = $data; 
-            }if(is_array($data))
-             $this->data = implode("\n", $data);
+            if (is_string($data)) {
+                $this->data = $data;
+            }if (is_array($data)) {
+                $this->data = implode("\n", $data);
             }
+        }
         
         return $this;
     }
 
     /////////////////////////////////////////////////////////////////////
 
-    function setType(string $type): self {
+    function setType(string $type): self
+    {
 
         $this->html['type'] = trim($type);
         return $this;
     }
 
-    function setFor(string $For): self {
+    function setFor(string $For): self
+    {
 
         $this->html['for'] = trim($For);
         return $this;
     }
 
-    function setClass(string $class): self {
+    function setClass(string $class): self
+    {
         $this->html['class'] = trim($class);
         return $this;
     }
 
-    function setName(string $name): self {
+    function setName(string $name): self
+    {
         $this->html['name'] = trim($name);
         return $this;
     }
 
-    function setPlaceholder(string $placeholder): self {
+    function setPlaceholder(string $placeholder): self
+    {
         $this->html['placeholder'] = trim($placeholder);
         return $this;
     }
 
-    function setValue($value = null): self {
+    function setValue($value = null): self
+    {
         if ($value != null) {
             $this->html['value'] = trim($value);
         }
         return $this;
     }
     ///////////////////////////////////////////////////////////////////
-    
-
 }

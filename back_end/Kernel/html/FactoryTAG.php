@@ -18,18 +18,21 @@ use Kernel\INTENT\Intent;
  *
  * Les décorateurs
  */
-class FactoryTAG {
+class FactoryTAG
+{
 
     private $ConfigExternal;
 
-    public function __construct($PathConfigJsone) {
+    public function __construct($PathConfigJsone)
+    {
 
 
         $this->ConfigExternal = new ConfigExternal($PathConfigJsone);
     }
 
     //"nette/forms": "^2.4",
-    public function tableHTML(Intent $intent) {
+    public function tableHTML(Intent $intent)
+    {
         $input = ["title" => 'Controle',
             "body" => '<a class="btn btn-default"  role="button" href="?supprimer=index" >supprimer</a>'
             . '<a class="btn btn-default"  role="button" href="?modifier=index" >modifier</a>'
@@ -57,8 +60,6 @@ class FactoryTAG {
         $CHILD["flag_show_CHILDREN"] = Intent::is_get_CHILDREN($intent);
 
         if ($CHILD["flag_show_CHILDREN"]) {
-
-
             $CHILD["table_CHILDREN"] = $schema->get_table_CHILDREN(); // le nom de la table
             $CHILD["CHILDREN"] = $schema->getCHILDREN(); // les noms des champ
             $CHILD["datajoins"] = [];  //// body
@@ -74,32 +75,32 @@ class FactoryTAG {
         return $tablehtml->builder("class='table table-hover table-bordered' style='width:100%'", $columns, $table, $input["body"], $CHILD);
     }
 
-    public function FormHTML(Intent $intent, $oldData = null) {
+    public function FormHTML(Intent $intent, $oldData = null)
+    {
         if ($intent->getMode() != Intent::MODE_FORM) {
             throw new \Exception("methode call  ERROR ==>  mode != MODE_FORM ");
         }
         if ($oldData !== null) {
             $old=$oldData->getEntitysDataTable();
             $DataJOIN=$old[0]->getDataJOIN();
-            $Data = json_decode(json_encode($old[0]), true);
-            $Data["DataJOIN"]=$DataJOIN;
-           
+            $DefaultData = json_decode(json_encode($old[0]), true);
+            $DefaultData["DataJOIN"]=$DataJOIN;
         } else {
-            $Data=[];
+            $DefaultData=[];
         }
 
         $Conevert = ($this->ConfigExternal->getConevert_TypeClomunSQL_to_TypeInputHTML());
         $entitysDataTable = $intent->getEntitysDataTable();
         $COLUMNS_META_object = $intent->getEntitysSchema()->getCOLUMNS_META();
 
-        $formhtml = new FormHTML($COLUMNS_META_object, $entitysDataTable, $Conevert);
+        $formhtml = new FormHTML($COLUMNS_META_object, $Conevert, $entitysDataTable, $DefaultData);
         
-        return $formhtml->builder("  ", $Data);
+        return $formhtml->builder();
     }
 
-    public function message(Intent $intent) {
+    public function message(Intent $intent)
+    {
 
         return $this->tableHTML($intent);
     }
-
 }

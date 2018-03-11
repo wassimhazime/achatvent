@@ -183,7 +183,8 @@ class Statement extends RUN
     }
     
     //////////////////////////////////////////////////////////////:
-        public static function entitys_TO_array($object): array {
+    public static function entitys_TO_array($object): array
+    {
         if (is_array($object)) {
             return $object;
         }
@@ -193,5 +194,4 @@ class Statement extends RUN
         }
         return $array;
     }
-    
 }
