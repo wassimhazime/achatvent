@@ -24,11 +24,15 @@ interface I_QuerySQL_LDD
     
 //where
     public function where() ;
-    public function whereNot(string $column, string $value);
-    public function whereNotBETWEEN(string $column, $valeur1, $valeur2);
     public function whereIn(string $column, array $range);
     public function whereBETWEEN(string $column, $valeur1, $valeur2);
     public function whereLike(string $column, $LIKE);
+    
+    public function whereNot(string $column, int $value);
+    public function whereNotBETWEEN(string $column, $valeur1, $valeur2);
+    public function whereNotIn(string $column, array $range);
+    public function whereNotLike(string $column, $LIKE);
+    
     public function whereNULL(string $column);
  
     

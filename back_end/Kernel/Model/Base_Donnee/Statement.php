@@ -43,13 +43,13 @@ class Statement extends RUN
     public function delete($condition)
     {
 
-
-
-        $delete= (new QuerySQL())
-                        ->delete($condition)
-                        ->from($this->getTable());
        
-         $this->exec($delete);
+
+        $delete = (new QuerySQL())
+                ->delete($condition)
+                ->from($this->getTable());
+        
+        $this->exec($delete);
     }
 
     public function insert(array $dataForm, $mode): Intent
@@ -68,7 +68,7 @@ class Statement extends RUN
                     unset($data->$name_CHILDREN); // remove CHILDREN in $data
                 }
             }
-           
+
             $data = self::entitys_TO_array($data);
 
 
@@ -105,8 +105,14 @@ class Statement extends RUN
 ////////////////////////////////////////////////////////////////////////////////
     public function Select(array $mode, $condition): Intent
     {
-
+        
         $schema = $this->entitysSchema;
+        var_dump($schema->select_master(), (new QuerySQL())
+                            ->select($schema->select_master())
+                            ->from($schema->getPARENT())
+                            ->join($schema->getFOREIGN_KEY())
+                            ->where($condition)
+                            ->query());
         if (Intent::is_PARENT_MASTER($mode)) {
             $Entitys = $this->query((new QuerySQL())
                             ->select($schema->select_master())
@@ -146,11 +152,13 @@ class Statement extends RUN
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public function form(array $mode): Intent
+    public function form(array $mode, $condition): Intent
     {
+
         $schema = $this->entitysSchema;
         $nameTable_FOREIGNs = $schema->getFOREIGN_KEY();
 
+       /// charge select input
         $Entitys_FOREIGNs = [];
         foreach ($nameTable_FOREIGNs as $nameTable_FOREIGN) {
             $schem_Table_FOREIGN = $this->shema->getschema($nameTable_FOREIGN);
@@ -161,8 +169,7 @@ class Statement extends RUN
                             ->join($schem_Table_FOREIGN->getFOREIGN_KEY()));
         }
 
-
-        ////////////////////////////////////////////////////////////
+        //// charge multi select
         $nameTable_CHILDRENs = $schema->get_table_CHILDREN();
         $Entitys_CHILDRENs = [];
 
@@ -172,15 +179,75 @@ class Statement extends RUN
             $Entitys_CHILDRENs[$table_CHILDREN] = $this->query(((new QuerySQL())
                             ->select($schem_Table_CHILDREN->select_master())
                             ->from($schem_Table_CHILDREN->getPARENT())
-                            ->join($schem_Table_CHILDREN->getFOREIGN_KEY())
+                           ->join($schem_Table_CHILDREN->getFOREIGN_KEY())
                             ->independent($schema->getPARENT())));
         }
-
-        $data = ["FOREIGN_KEYs" => $Entitys_FOREIGNs,
-            "CHILDRENs" => $Entitys_CHILDRENs];
-
+      
+      
+        if ($condition == "") {
+            $data = ["FOREIGN_KEYs" => $Entitys_FOREIGNs,
+                "CHILDRENs" => $Entitys_CHILDRENs,
+                "Default" => ""];
+        } else {
+            $Entitys = $this->query((new QuerySQL())
+                            ->select($schema->select_all())
+                            ->from($schema->getPARENT())
+                            ->join($schema->getFOREIGN_KEY())
+                            ->where($condition));
+            
+            
+            foreach ($Entitys as $Entity) {
+                if (!empty($schema->get_table_CHILDREN())) {
+                    foreach ($nameTable_CHILDRENs as $tablechild) {
+                        $schem_Table_CHILDREN = $this->shema->getschema($tablechild);
+                        $Entity->setDataJOIN($tablechild, $this->query((
+                                            new QuerySQL())
+                            ->select($schem_Table_CHILDREN->select_master())
+                                            //->select($schema->select_CHILDREN($tablechild,"MASTER"))
+                                            //->select("commande.raison_sociale")
+                                            ->from($schema->getPARENT())
+                                            
+                                            ->join($tablechild, " INNER ", true)
+                            
+                                            ->where($schema->getPARENT() . ".id = " . $Entity->id)));
+                    }
+                } else {
+                    $Entity->setDataJOIN("empty", []);
+                }
+            }
+            
+          
+            $data = ["FOREIGN_KEYs" => $Entitys_FOREIGNs,
+                "CHILDRENs" => $Entitys_CHILDRENs,
+                "Default" => $Entitys];
+        }
+        
         return new Intent($schema, $data, $mode);
     }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     //////////////////////////////////////////////////////////////:
     public static function entitys_TO_array($object): array

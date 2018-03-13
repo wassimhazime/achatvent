@@ -56,12 +56,12 @@ class Model
         return $intent;
     }
 
-    public function form(array $mode): Intent
+    public function form(array $mode, $conditon = ""): Intent
     {
         if ($this->is_null) {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
-        $intent = $this->statement->form($mode);
+        $intent = $this->statement->form($mode, $conditon);
         return $intent;
     }
 

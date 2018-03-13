@@ -69,7 +69,7 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
     public function column()
     {
         /// column query
-//(new QuerySQL())->select()->
+        //(new QuerySQL())->select()->
         // ->column("nom,age,adress") or
         // ->column("nom")->column("age")->column("adress as ADRESS") or
         // ->column("nom","age","adress") or
@@ -226,7 +226,7 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
         return $this;
     }
 
-    public function whereNot(string $column, string $value)
+    public function whereNot(string $column, int $value)
     {
         // qury not
         //
@@ -239,11 +239,58 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
         return $this;
     }
 
+    public function whereNotIn(string $column, array $range)
+    {
+        //query IN
+        //
+        //(new QuerySQL())->select()
+        //  ->from("test")
+        // ->whereNotIn("id", [37,38,48])
+        //SELECT *  FROM  test WHERE ( id NOT IN  ( 37 , 38 , 48 )  )
+        $range = ' ( ' . implode(' , ', $range) . ' )';
+
+        $this->where("$column NOT IN $range ");
+        return $this;
+    }
+
     public function whereNotBETWEEN(string $column, $valeur1, $valeur2)
     {
         // query notbetwen inverst betwin
 
         $this->where("$column NOT BETWEEN '$valeur1' AND '$valeur2'");
+        return $this;
+    }
+
+    public function whereNotLike(string $column, $LIKE)
+    {
+        //query Like
+        //Ce mot-clé permet d’effectuer une recherche sur un modèle
+        //particulier. Il est par exemple possible de rechercher les
+        //enregistrements dont la valeur d’une colonne commence par
+        // telle ou telle lettre. Les modèles de recherches sont multiple.
+        //
+        //(new QuerySQL())->select()
+        //               ->from('test')
+        //               ->whereNotLike("id",["3%","4%"] )
+        //              ->whereNotLike("nom",["a%","A%"] )
+        //              ->whereNotLike("age","2_" )
+        //SELECT *  FROM  test WHERE (
+        // ( `id`  NOT LIKE '3%'  )         OR ( `id`  NOT LIKE '4%'  )  )
+        // AND ( ( `nom`  NOT LIKE 'a%'  )  OR ( `nom`  NOT LIKE 'A%'  )  )
+        //  AND ( age NOT Like '2_'  )
+
+        if (is_array($LIKE)) {
+            $liks = [];
+            foreach ($LIKE as $link) {
+                $liks[] = "( `$column` NOT LIKE '$link'  ) ";
+            }
+
+
+
+            $this->where(implode(' OR ', $liks));
+        } else {
+            $this->where("$column NOT Like '$LIKE' ");
+        }
         return $this;
     }
 
@@ -257,35 +304,30 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
     private function joinstring($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '')
     {
-     
-        
-        
+
+
+
 //
 //( new QuerySQL())->select()
-                       // ->from('produit')
-                       // ->join("categorie")
-                      
+        // ->from('produit')
+        // ->join("categorie")
 //SELECT *  FROM  produit INNER JOIN categorie ON id_categorie  = categorie_produit
-        
 //or
 //select()
-                       // ->from('produit')
-                       // ->join("categorie","INNER",FALSE,"id_categorie=pro_categorie")
-                       
+        // ->from('produit')
+        // ->join("categorie","INNER",FALSE,"id_categorie=pro_categorie")
 //    SELECT *  FROM  produit INNER JOIN categorie ON  id_categorie=pro_categorie     
-        
-        
 //or 
 //                      select() ->from('produit')
-                        //->join("categorie","INNER",true)
+        //->join("categorie","INNER",true)
 //
 //SELECT *  FROM  produit 
 // INNER JOIN d_produit_categorie ON id_produit=id_produit_detail     
 // INNER JOIN categorie           ON id_categorie=id_categorie_detail
 //        
         $TABLEpere = $this->table[0];
-        
-        
+
+
         if ($relation) {
             $TABLEenfant = $tablejoin;
             $RD = 'r_' . $TABLEpere . '_' . $TABLEenfant;
@@ -293,14 +335,14 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
 
             //LEFT JOIN d_facture_bl     ON id_facture              =id_facture_detail
             $this->join[] = "  $type JOIN $RD      ON $TABLEpere.id =$RD.id_" . $TABLEpere
-            // LEFT      JOIN  bl             on id_bl                        =id_bl_detail
-                    . " $type JOIN $TABLEenfant   ON $TABLEenfant.id =$RD.id_" . $TABLEenfant ;
+                    // LEFT      JOIN  bl             on id_bl                        =id_bl_detail
+                    . " $type JOIN $TABLEenfant   ON $TABLEenfant.id =$RD.id_" . $TABLEenfant;
         } else {
             //INNER JOIN raison_sociale ON id_raison_sociale = raison_sociale_facture
             if ($conditions == '') {
-                $this->join[] = " $type JOIN $tablejoin ON  $tablejoin.id  = $TABLEpere.$tablejoin" ;
+                $this->join[] = " $type JOIN $tablejoin ON  $tablejoin.id  = $TABLEpere.$tablejoin";
             } else {
-                $join = " $type JOIN $tablejoin ON  " . $conditions ;
+                $join = " $type JOIN $tablejoin ON  " . $conditions;
 
                 $this->join[] = $join;
             }
@@ -310,38 +352,39 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
     public function join($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '')
     {
 
-        
-        
+
+
         if (is_array($tablejoin)) {
             if ($this->isAssoc($tablejoin)) {
                 foreach ($tablejoin as $tableJ => $colums) {
-                    $this->joinstring($tableJ, $type, $relation, $conditions) ;
+                    $this->joinstring($tableJ, $type, $relation, $conditions);
                 }
             } else {
                 foreach ($tablejoin as $tableJ) {
-                    $this->joinstring($tableJ, $type, $relation, $conditions) ;
+                    $this->joinstring($tableJ, $type, $relation, $conditions);
                 }
             }
         } else {
-             $this->joinstring($tablejoin, $type, $relation, $conditions) ;
+            $this->joinstring($tablejoin, $type, $relation, $conditions);
         }
 
         return $this;
     }
+
     public function joinAlias(string $tablejoin, string $alias, string $conditions, $type = "INNER")
     {
-    
+
         //select()
-                       // ->from('produit')
-                       // ->joinAlias("Categorie","c","c.id_categorie=pro_categorie")
+        // ->from('produit')
+        // ->joinAlias("Categorie","c","c.id_categorie=pro_categorie")
         //
         //SELECT *  FROM  produit INNER JOIN Categorie AS c ON  c.id_categorie=pro_categorie
         //
         $join = " $type JOIN $tablejoin AS $alias ON  "
-                    . $conditions ;
+                . $conditions;
 
-            $this->join[] = $join;
-        
+        $this->join[] = $join;
+
         return $this;
     }
 
@@ -349,8 +392,8 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
     {
         //
         //select()
-                //        ->from('produit')
-                //        ->independent("categorie")
+        //        ->from('produit')
+        //        ->independent("categorie")
         //SELECT *  FROM  produit
         //LEFT JOIN d_categorie_produit ON id_produit_detail =id_produit
         //WHERE (  id_produit_detail IS NULL )
@@ -365,17 +408,27 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
         $this->where(" $RD.id_" . $TABLE . " IS NULL");
         return $this;
     }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-    
+
+
     public function group($column, $direction = null)
     {
     }
+
     ///delete
     public function delete()
     {
+        $condition = func_get_args();
+        if (isset($condition[0])) {
+            if (is_array($condition[0])) {
+                $condition = $condition[0];
+            }
+        }
+
+
         $this->action = "delete";
-        $this->where(func_get_args()[0]);
+        $this->where($condition);
 
         return $this;
     }
@@ -395,7 +448,7 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
     {
         if ($this->isAssoc($data)) {
             $this->value = " (`" . implode("`, `", array_keys($data)) . "`)" .
-                " VALUES ('" . implode("', '", $data) . "') ";
+                    " VALUES ('" . implode("', '", $data) . "') ";
             return $this;
         }
         return "error value insert querysql";
@@ -413,18 +466,16 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
 
     public function set(array $data)
     {
-        $id = 'id_' . $this->table[0];
+     
         $l = "";
         foreach ($data as $x => $x_value) {
-            if ($x != $id) {
-                if ($l == "") {
-                    $l = '  `' . $x . '`' . '=' . '\'' . $x_value . '\'  ';
-                } else {
-                    $l .= " , " . '`' . $x . '`' . '=' . '\'' . $x_value . '\'  ';
-                }
+            if ($l == "") {
+                $l = '  `' . $x . '`' . '=' . '\'' . $x_value . '\'  ';
+            } else {
+                $l .= " , " . '`' . $x . '`' . '=' . '\'' . $x_value . '\'  ';
             }
         }
-        $this->value =" SET ". $l;
+        $this->value = " SET " . $l;
         return $this;
     }
 

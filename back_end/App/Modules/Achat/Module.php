@@ -68,8 +68,8 @@ class Module
             // 1er methode
             $conditon = ['bl.id' => $query['id']];
             $oldData = $this->model->show(Intent::MODE_SELECT_ALL_ALL, $conditon);
-            $intentform = $this->model->form(Intent::MODE_FORM);
-
+            $intentform = $this->model->form(Intent::MODE_FORM, $conditon);
+            
 
 
             $table = $this->FactoryTAG->tableHTML($oldData); //twig
@@ -112,19 +112,20 @@ class Module
     {
         $insert = $request->getParsedBody();
         $fils = $request->getUploadedFiles();
-        $images=$fils["image"];
-        $flage=($images[0]);
+        if (isset($fils["image"])) {
+            $images=$fils["image"];
+            $flage=($images[0]);
 
-        if ($flage->getClientFilename()!= '') {
-            $id_image = round(microtime(true), 10);
-            foreach ($images as $f) {
-                if (!$f->getClientFilename() == "") {
-                    $f->moveTo("imageUpload/" . $id_image . "_" . $f->getClientFilename());
+            if ($flage->getClientFilename()!= '') {
+                $id_image = round(microtime(true), 10);
+                foreach ($images as $f) {
+                    if (!$f->getClientFilename() == "") {
+                        $f->moveTo("imageUpload/" . $id_image . "_" . $f->getClientFilename());
+                    }
                 }
+                $insert["image"] = "id_image=>" . $id_image;
             }
-            $insert["image"] = "id_image=>" . $id_image;
         }
-      
         $page = $params["controle"];
         $this->model->setStatement($page);
         $msg = $this->model->setData($insert, Intent::MODE_INSERT);

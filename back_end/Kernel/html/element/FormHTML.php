@@ -148,7 +148,7 @@ class FormHTML
                 $dataOption .= $column . '$$$' . $value . ' £££ ';
             }
             $optionTag [] = HTML::TAG('option')
-                            ->setValue($row->commande_id)
+                            ->setValue($row->id)
                             ->setAtt(' data-container="body" '
                                     . 'data-toggle="popover"'
                                     . ' data-placement="top"'

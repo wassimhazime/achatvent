@@ -137,9 +137,9 @@ class EntitysSchema extends abstractEntitys
         foreach ($this->COLUMNS_master as $colom) {
             $select[] = $this->PARENT . "." . $colom;
         }
-        foreach ($this->FOREIGN_KEY as $FOREIGN) {
-            $select[] = $FOREIGN . "." . $FOREIGN;
-        }
+//        foreach ($this->FOREIGN_KEY as $FOREIGN) {
+//            $select[] = $FOREIGN . "." . $FOREIGN;
+//        }
         return $select;
     }
     public function select_all()
@@ -185,7 +185,7 @@ class EntitysSchema extends abstractEntitys
 
 
         
-
+        
         return $select;
     }
 }
