@@ -2,6 +2,9 @@
 
 
 {% block container %}
+    
+    <a href="?ajouter=ajouter" class="btn">ajouter<a/>
+    
     <div class ="container">
       <h1>{{title}}  </h1>
       <div class="row">
@@ -9,26 +12,9 @@
           {{table |raw}}   
         </div>
       </div>
+
+
     </div>
 
-    <div class ="container">
-      <div class="row">
-        <div id="wform" class="cadre">
-          
-          {{awa("uuu","ddd")}}
-      
-          <form  action=""  method='POST'  enctype="multipart/form-data">
-            {{html(form)}}   <div class="form-group">
-              <label for="ok"> AJOUTER </label>            <input type="submit" name="ajout_data" class="btn btn-primary btn-lg" >
-              <label for="reset"> VIDE </label>            <input type="reset" name="reset"  class="btn btn-success btn-lg"></div> 
-          </form>
-        </div>      
-      </div>
-    </div> 
-              
-             
-    <h1>Index</h1>
-    <p class="important">
-      Welcome on my awesome homepage.
-    </p>
+
 {% endblock %}

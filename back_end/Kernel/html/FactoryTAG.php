@@ -75,21 +75,16 @@ class FactoryTAG
         return $tablehtml->builder("class='table table-hover table-bordered' style='width:100%'", $columns, $table, $input["body"], $CHILD);
     }
 
-    public function FormHTML(Intent $intent, $oldData = null)
+    public function FormHTML(Intent $intent)
     {
         if ($intent->getMode() != Intent::MODE_FORM) {
             throw new \Exception("methode call  ERROR ==>  mode != MODE_FORM ");
         }
-        ////
-          $entitysDataTable = $intent->getEntitysDataTable();
-       
+      
+        $entitysDataTable = $intent->getEntitysDataTable();
         $old=$entitysDataTable["Default"];
-        //var_dump($D);
-     
-        ///
-        
-        if ($oldData !== null) {
-            //$old=$oldData->getEntitysDataTable();
+         if ($old !=[]) {
+           
             $DataJOIN=$old[0]->getDataJOIN();
             $DefaultData = json_decode(json_encode($old[0]), true);
             $DefaultData["DataJOIN"]=$DataJOIN;
@@ -97,6 +92,7 @@ class FactoryTAG
             $DefaultData=[];
         }
 
+        
         $Conevert = ($this->ConfigExternal->getConevert_TypeClomunSQL_to_TypeInputHTML());
      
         $COLUMNS_META_object = $intent->getEntitysSchema()->getCOLUMNS_META();

@@ -18,13 +18,10 @@ use core\notify\Notify;
  *
  * @author Wassim Hazime
  */
-class RUN extends DataBase
-{
-    
+class RUN extends DataBase {
 
-    protected function query($sql): array
-    {
-            
+    protected function query($sql): array {
+
 
 
         try {
@@ -35,13 +32,14 @@ class RUN extends DataBase
 
             return $Statement->fetchAll();
         } catch (PDOException $exc) {
-        //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
+            //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
+            echo $exc->getMessage();
+            echo '<br><hr>';
             die($sql);
         }
     }
 
-    protected function exec($sql): string
-    {
+    protected function exec($sql): string {
 
 
         try {
@@ -52,15 +50,16 @@ class RUN extends DataBase
             return $this->db->lastInsertId();
         } catch (PDOException $exc) {
             // $db->rollBack();
-          //  Notify::send_Notify($exc->getMessage() . "exec SQL ERROR ==> </br> $sql");
-            die($exc->getMessage() . "exec SQL ERROR ==> </br> $sql");
+            //  Notify::send_Notify($exc->getMessage() . "exec SQL ERROR ==> </br> $sql");
+            echo $exc->getMessage();
+            echo '<br><hr>';
+            die($sql);
         }
     }
 
     // TOOLS
 
-    public static function parse_object_TO_array($object): array
-    {
+    public static function parse_object_TO_array($object): array {
         if (is_array($object)) {
             return $object;
         }
@@ -73,4 +72,5 @@ class RUN extends DataBase
         }
         return $array;
     }
+
 }

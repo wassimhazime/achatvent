@@ -6,27 +6,23 @@ use Kernel\INTENT\Intent;
 use Kernel\Model\Base_Donnee\Statement;
 use TypeError;
 
-class Model
-{
+class Model {
 
     private $statement = null;
     private $is_null = true;
     private $PathJsonConfig;
 
-    public function __construct($PathConfigJsone)
-    {
+    public function __construct($PathConfigJsone) {
         $this->PathJsonConfig = $PathConfigJsone;
     }
 
-    function setStatement($table)
-    {
+    function setStatement($table) {
         $this->is_null = false;
 
         $this->statement = new Statement($this->PathJsonConfig, $table);
     }
 
-    public function setData($data, $mode): Intent
-    {
+    public function setData($data, $mode): Intent {
         if ($this->is_null) {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
@@ -39,16 +35,15 @@ class Model
             throw new TypeError(" ERROR setData(data) model  ==> data null");
         }
     }
-    public function delete($condition)
-    {
-        
+
+    public function delete($condition) {
+
         $intent = $this->statement->delete($condition);
-       
+
         return $intent;
     }
 
-    public function show(array $mode, $condition): Intent
-    {
+    public function show(array $mode, $condition): Intent {
         if ($this->is_null) {
             throw new TypeError(" is_null==> show ");
         }
@@ -56,17 +51,38 @@ class Model
         return $intent;
     }
 
-    public function form(array $mode, $conditon = ""): Intent
-    {
+    public function form(array $mode, $conditon = ""): Intent {
         if ($this->is_null) {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
+
         $intent = $this->statement->form($mode, $conditon);
+
+
         return $intent;
     }
 
-    function is_null()
-    {
+    public function formDefault(array $mode, $conditon = ""): Intent {
+        if ($this->is_null) {
+            throw new TypeError(" set table ==> call function setStatement() ");
+        }
+
+        $intent = $this->statement->formDefault($mode, $conditon);
+
+
+        return $intent;
+    }
+
+    public function formSelect(array $mode): Intent {
+        if ($this->is_null) {
+            throw new TypeError(" set table ==> call function setStatement() ");
+        }
+        $intent = $this->statement->formSelect($mode);
+        return $intent;
+    }
+
+    function is_null() {
         return $this->is_null;
     }
+
 }

@@ -1,0 +1,21 @@
+{% extends "themes.twig" %}
+
+
+{% block container %}
+
+
+    <div class ="container">
+      <h1>select</h1>
+      <div class="row">
+        <div id="wform" class="cadre">
+          <form  action=""  method='GET'  enctype="multipart/form-data">
+            {{html(form)}}   <div class="form-group">
+              <label for="ok"> AJOUTER </label>            <input type="submit" name="ajouter" class="btn btn-primary btn-lg" >
+              <label for="reset"> VIDE </label>            <input type="reset" name="reset"  class="btn btn-success btn-lg"></div> 
+          </form>
+        </div>      
+      </div>
+    </div> 
+
+
+{% endblock %}
