@@ -4,11 +4,15 @@ namespace Kernel\Model;
 
 use Kernel\INTENT\Intent;
 use Kernel\Model\Base_Donnee\Statement;
+use Kernel\Model\Base_Donnee\FORM;
+use Kernel\Model\Base_Donnee\Select;
 use TypeError;
 
 class Model {
 
     private $statement = null;
+    private $form = null;
+    private $select = null;
     private $is_null = true;
     private $PathJsonConfig;
 
@@ -20,6 +24,8 @@ class Model {
         $this->is_null = false;
 
         $this->statement = new Statement($this->PathJsonConfig, $table);
+        $this->form = new FORM($this->PathJsonConfig, $table);
+        $this->select = new Select($this->PathJsonConfig, $table);
     }
 
     public function setData($data, $mode): Intent {
@@ -47,7 +53,7 @@ class Model {
         if ($this->is_null) {
             throw new TypeError(" is_null==> show ");
         }
-        $intent = $this->statement->Select($mode, $condition);
+        $intent = $this->select->select($mode, $condition);
         return $intent;
     }
 
@@ -56,7 +62,7 @@ class Model {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
 
-        $intent = $this->statement->form($mode, $conditon);
+        $intent = $this->form->form($mode, $conditon);
 
 
         return $intent;
@@ -67,7 +73,7 @@ class Model {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
 
-        $intent = $this->statement->formDefault($mode, $conditon);
+        $intent = $this->form->formDefault($mode, $conditon);
 
 
         return $intent;
@@ -77,7 +83,7 @@ class Model {
         if ($this->is_null) {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
-        $intent = $this->statement->formSelect($mode);
+        $intent = $this->form->formSelect($mode);
         return $intent;
     }
 

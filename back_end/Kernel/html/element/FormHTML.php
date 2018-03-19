@@ -34,7 +34,7 @@ class FormHTML
                 $default = $DefaultData['DataJOIN'][$name_CHILDREN];
             }
 
-            $this->input["CHILDRENs"] = [
+            $this->input[$name_CHILDREN] = [
                 "Field" => $name_CHILDREN,
                 "Type" => "multiSelect",
                 "Null" => "NO",
