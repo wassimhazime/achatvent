@@ -15,6 +15,7 @@ class Intent
     const MODE_SELECT_MASTER_NULL = ["MASTER", "EMPTY"];
     const MODE_SELECT_ALL_NULL = ["ALL", "EMPTY"];
     const MODE_INSERT = ["INSERT"];
+    const MODE_UPDATE = ["UPDATE"];
     const MODE_FORM = ["FORM"];
 
     //const MODE_FORM_ADMIN = ["FORM"];
@@ -71,6 +72,21 @@ class Intent
         }
     }
 
+    public static function entitys_TO_array($object): array
+    {
+
+        return json_decode(json_encode($object), true);
+
+        if (is_array($object)) {
+            return $object;
+        }
+        $array = [];
+        foreach ($object as $key => $value) {
+            $array[$key] = $value;
+        }
+        return $array;
+    }
+    
     //TOOLS
     //// for show Statement
     public static function is_PARENT_MASTER($_intentORmode): bool

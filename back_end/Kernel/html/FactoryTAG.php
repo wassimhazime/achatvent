@@ -83,8 +83,7 @@ class FactoryTAG
       
         $entitysDataTable = $intent->getEntitysDataTable();
         $old=$entitysDataTable["Default"];
-         if ($old !=[]) {
-           
+        if ($old !=[]) {
             $DataJOIN=$old[0]->getDataJOIN();
             $DefaultData = json_decode(json_encode($old[0]), true);
             $DefaultData["DataJOIN"]=$DataJOIN;

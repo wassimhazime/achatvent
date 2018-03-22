@@ -20,18 +20,21 @@ use Kernel\Model\Entitys\EntitysDataTable;
 use Kernel\Model\Query\QuerySQL;
 use TypeError;
 
-class Select extends RUN {
+class Select extends RUN
+{
 
     private $shema;
 
-    public function __construct($PathConfigJsone, $table) {
+    public function __construct($PathConfigJsone, $table)
+    {
 
         $this->shema = new Schema($PathConfigJsone);
 
         parent::__construct($PathConfigJsone, new EntitysDataTable(), $this->shema->getschema($table));
     }
 
-    public function select(array $mode, $condition): Intent {
+    public function select(array $mode, $condition): Intent
+    {
 
         $schema = $this->entitysSchema;
 
@@ -53,7 +56,8 @@ class Select extends RUN {
         return new Intent($schema, $Entitys, $mode);
     }
 
-    private function setDataJoins(array $Entitys, array $mode) {
+    private function setDataJoins(array $Entitys, array $mode)
+    {
         $schema = $this->entitysSchema;
 
         foreach ($Entitys as $Entity) {
@@ -71,5 +75,4 @@ class Select extends RUN {
             }
         }
     }
-
 }

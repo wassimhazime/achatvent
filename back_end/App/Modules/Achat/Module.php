@@ -22,17 +22,20 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class Module {
+class Module
+{
 
     public $model;
     public $FactoryTAG;
     public $renderer;
 
-    public function addPathRenderer($renderer, $pathModules) {
+    public function addPathRenderer($renderer, $pathModules)
+    {
         $renderer->addPath($pathModules . "Achat" . D_S . "views", "achat");
     }
 
-    public function addRoute($router) {
+    public function addRoute($router)
+    {
 
         // $router->get("/{controle:[a-z]+}", [$this, "MVC"], "blog.strj");
         $router->get("/achat/{controle:[a-z\_]+}", [$this, "MVC"], "achat.get");
@@ -42,14 +45,16 @@ class Module {
         $router->post("/{controle:[a-z\_]*}", [$this, "POST"], "post");
     }
 
-    public function __construct(ContainerInterface $container) {
+    public function __construct(ContainerInterface $container)
+    {
 
         $this->model = $container->get(Model::class);
         $this->FactoryTAG = $container->get(FactoryTAG::class);
         $this->renderer = $container->get(TwigRenderer::class);
     }
 
-    public function MVC(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params) {
+    public function MVC(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params)
+    {
 
         $page = $params["controle"];
         $query = $request->getQueryParams();
@@ -59,7 +64,6 @@ class Module {
 
 
         if (isset($query["supprimer"])) {
-
             return $this->supprimer($query, $request, $response);
         } elseif (isset($query["modifier"])) {
             return $this->modifier($page, $query, $request, $response);
@@ -72,15 +76,23 @@ class Module {
         }
     }
 
-    public function POST(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params) {
+    public function POST(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params)
+    {
         $insert = $request->getParsedBody();
+        
         $page = $params["controle"];
 
 
         $insert = $this->setImage($request, $page, $insert);
 
         $this->model->setStatement($page);
-        $msg = $this->model->setData($insert, Intent::MODE_INSERT);
+        if ($insert['id']=="") {
+             $msg = $this->model->setData($insert, Intent::MODE_INSERT);
+        } else {
+             $msg = $this->model->setData($insert, Intent::MODE_UPDATE);
+        }
+       
+        
         $msghtml = $this->FactoryTAG->message($msg);  //twig
         $data = $this->renderer->render("@achat/message_ajouter", ["message" => $msghtml]);
         $response->getBody()->write($data);
@@ -88,14 +100,16 @@ class Module {
     }
 
     //////////////////////////////////////////////////////////////////////
-    public function supprimer($query, $request, $response) {
+    public function supprimer($query, $request, $response)
+    {
         $conditon = ['id' => $query['id']];
         $this->model->delete($conditon);
         $url = $request->getUri()->getPath();
         return $response->withStatus(301)->withHeader('Location', $url);
     }
 
-    public function modifier($page, $query, $request, $response) {
+    public function modifier($page, $query, $request, $response)
+    {
         //  $oldData = $this->model->show(Intent::MODE_SELECT_ALL_ALL, $conditon);
         //  $table = $this->FactoryTAG->tableHTML($oldData); //twig
         $conditon = ["$page.id" => $query['id']];
@@ -107,7 +121,8 @@ class Module {
         return $response;
     }
 
-    public function ajouter($query, $response) {
+    public function ajouter($query, $response)
+    {
         if ($query["ajouter"] != "Valider") {
             $intentformselect = $this->model->formSelect(Intent::MODE_FORM);
             if (!empty($intentformselect->getEntitysSchema()->getFOREIGN_KEY())) {
@@ -127,7 +142,8 @@ class Module {
         return $response;
     }
 
-    public function imageview($query, $request, $response) {
+    public function imageview($query, $request, $response)
+    {
         $id_image = $query["imageview"];
         $dir = ROOT . "public/imageUpload/";
         $dir = "imageUpload/";
@@ -147,7 +163,8 @@ class Module {
         die();
     }
 
-    public function setImage($request, $page, $insert) {
+    public function setImage($request, $page, $insert)
+    {
         $fils = $request->getUploadedFiles();
         if (isset($fils["image"])) {
             $images = $fils["image"];
@@ -167,7 +184,8 @@ class Module {
         return $insert;
     }
 
-    public function show($response) {
+    public function show($response)
+    {
         $intentshow = $this->model->show(Intent::MODE_SELECT_ALL_ALL, true);
 
         $table = $this->FactoryTAG->tableHTML($intentshow); //twig
@@ -176,5 +194,4 @@ class Module {
         $response->getBody()->write($data);
         return $response;
     }
-
 }

@@ -20,11 +20,13 @@ use TypeError;
  *
  * @author wassime
  */
-class FORM extends RUN {
+class FORM extends RUN
+{
 
     private $shema;
 
-    public function __construct($PathConfigJsone, $table) {
+    public function __construct($PathConfigJsone, $table)
+    {
 
         $this->shema = new Schema($PathConfigJsone);
 
@@ -32,7 +34,8 @@ class FORM extends RUN {
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-    public function formSelect(array $mode): Intent {
+    public function formSelect(array $mode): Intent
+    {
 
         $schema = $this->entitysSchema;
         // data form
@@ -52,7 +55,8 @@ class FORM extends RUN {
         return new Intent($schemaFOREIGN_KEY, $data, $mode);
     }
 
-    public function form(array $mode, $condition): Intent {
+    public function form(array $mode, $condition): Intent
+    {
         $schema = $this->entitysSchema;
         // data form
         /// charge select input
@@ -68,7 +72,8 @@ class FORM extends RUN {
         return new Intent($schema, $data, $mode);
     }
 
-    public function formDefault(array $mode, $conditionDefault): Intent {
+    public function formDefault(array $mode, $conditionDefault): Intent
+    {
         $schema = $this->entitysSchema;
         // data Default
         $Entitys = $this->query((new QuerySQL())
@@ -100,7 +105,8 @@ class FORM extends RUN {
     ///////////////////////////////////////////////////////////////////
 
 
-    private function datachargeselect(array $condition = []) {
+    private function datachargeselect(array $condition = [])
+    {
         $schema = $this->entitysSchema;
 
         $nameTable_FOREIGNs = $schema->getFOREIGN_KEY();
@@ -124,7 +130,8 @@ class FORM extends RUN {
         return $Entitys_FOREIGNs;
     }
 
-    private function dataChargeMultiSelectIndependent(array $condition = []) {
+    private function dataChargeMultiSelectIndependent(array $condition = [])
+    {
 
         $schema = $this->entitysSchema;
         $nameTable_CHILDRENs = $schema->get_table_CHILDREN();
@@ -149,7 +156,8 @@ class FORM extends RUN {
         return $Entitys_CHILDRENs;
     }
 
-    private function dataChargeMultiSelectDependent($tablechild, array $condition) {
+    private function dataChargeMultiSelectDependent($tablechild, array $condition)
+    {
         $schema = $this->entitysSchema;
         $schem_Table_CHILDREN = $this->shema->getschema($tablechild);
         return $this->query((
@@ -160,7 +168,8 @@ class FORM extends RUN {
                                 ->where($condition));
     }
 
-    private function query_enfant_lier_formSelect(QuerySQL $query, array $condition, array $FOREIGN_KEY_CHILDRENs) {
+    private function query_enfant_lier_formSelect(QuerySQL $query, array $condition, array $FOREIGN_KEY_CHILDRENs)
+    {
 
 
         if (!empty($condition) and ! empty($FOREIGN_KEY_CHILDRENs)) {
@@ -174,10 +183,13 @@ class FORM extends RUN {
         return $query;
     }
 
-    private function condition_formSelect_par_condition_Default($condition): array {
+    private function condition_formSelect_par_condition_Default($condition): array
+    {
         $schema = $this->entitysSchema;
         $FOREIGN_KEYs = $schema->getFOREIGN_KEY();
-        if (empty($FOREIGN_KEYs)) {return []; }
+        if (empty($FOREIGN_KEYs)) {
+            return [];
+        }
         $columnFOREIGN_KEY = [];
         foreach ($FOREIGN_KEYs as $FOREIGN_KEY) {
             $columnFOREIGN_KEY[] = "$FOREIGN_KEY.id as $FOREIGN_KEY" . "_id";
@@ -195,5 +207,4 @@ class FORM extends RUN {
         }
         return $cond;
     }
-
 }

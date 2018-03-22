@@ -18,9 +18,11 @@ use core\notify\Notify;
  *
  * @author Wassim Hazime
  */
-class RUN extends DataBase {
+class RUN extends DataBase
+{
 
-    protected function query($sql): array {
+    protected function query($sql): array
+    {
 
 
 
@@ -39,7 +41,8 @@ class RUN extends DataBase {
         }
     }
 
-    protected function exec($sql): string {
+    protected function exec($sql): string
+    {
 
 
         try {
@@ -59,7 +62,8 @@ class RUN extends DataBase {
 
     // TOOLS
 
-    public static function parse_object_TO_array($object): array {
+    public static function parse_object_TO_array($object): array
+    {
         if (is_array($object)) {
             return $object;
         }
@@ -72,5 +76,4 @@ class RUN extends DataBase {
         }
         return $array;
     }
-
 }
