@@ -113,7 +113,7 @@ class FormHTML
         }
 
         return HTML::TAG("select")
-                        ->setClass("form-control")
+                        ->setClass("form-control form-string")
                         ->setData($optionTag)
                         ->setName($name)
                         ->builder();
@@ -163,7 +163,7 @@ class FormHTML
 
         return HTML::TAG("select")
                         ->setAtt('multiple')
-                        ->setClass("multiSelectItemwassim form-control")
+                        ->setClass("multiSelectItemwassim form-control form-childs")
                         ->setName($name . '[]')
                         ->setData($optionTag)
                         ->builder();
@@ -192,8 +192,12 @@ class FormHTML
                 ->setPlaceholder(str_replace("_", " ", $name))
                 ->setValue($Default);
         if ($input['Type'] == "file") {
-            $tag->setAtt('multiple accept=" .jpg, .jpeg, .png"')
+            
+                    $tag->setClass("form-file form-control")
+                    ->setAtt('multiple accept=" .jpg, .jpeg, .png"')
                     ->setName($name . "[]");
+        } else {
+               $tag->setClass("form-string form-control") ;
         }
         return $tag->builder();
     }
@@ -203,7 +207,7 @@ class FormHTML
         $name = $input['Field'];
         $Default = $input['Default'];
         return $inputHTML = HTML::TAG("textarea")
-                ->setClass("form-control")
+                ->setClass("form-control form-string")
                 ->setName($name)
                 ->setPlaceholder(str_replace("_", " ", $name))
                 ->setValue($Default)

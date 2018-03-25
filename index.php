@@ -1,12 +1,8 @@
-
-
- 
 <?php
 
-
 define('D_S', DIRECTORY_SEPARATOR);
-define('ROOT', dirname(__DIR__) . D_S);
-
+//define('ROOT', dirname(__DIR__) . D_S);
+define('ROOT', __DIR__. D_S);
 require ROOT . "vendor/autoload.php";
 
 use App\App;
