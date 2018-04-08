@@ -8,7 +8,7 @@ and open the template in the editor.
     Author     : Wassim Hazime
 */
 body{
-    margin-top: 60px;
+    margin-top: 0px;
 }
 .cadre{
     margin: auto;
@@ -30,6 +30,9 @@ table.scroll tbody {
     margin: auto;
     overflow-y: auto;
     overflow-x: hidden;
+}
+.table{
+    width: auto;
 }
 
 

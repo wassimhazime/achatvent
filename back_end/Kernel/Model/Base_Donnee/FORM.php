@@ -9,18 +9,18 @@
 namespace Kernel\Model\Base_Donnee;
 
 use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\RUN;
+use Kernel\Model\Base_Donnee\DataBase;
 use Kernel\Model\Base_Donnee\Schema;
 use Kernel\Model\Entitys\EntitysDataTable;
+use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Model\Query\QuerySQL;
-use TypeError;
 
 /**
  * Description of FORM
  *
  * @author wassime
  */
-class FORM extends RUN
+class FORM extends DataBase
 {
 
     private $shema;
@@ -46,8 +46,8 @@ class FORM extends RUN
         ];
         // schem form
         /// new EntitysSchema pour form select
-        $schemaFOREIGN_KEY = new \Kernel\Model\Entitys\EntitysSchema();
-        $schemaFOREIGN_KEY->setPARENT($schema->getPARENT());
+        $schemaFOREIGN_KEY = new EntitysSchema();
+        $schemaFOREIGN_KEY->setNameTable($schema->getNameTable());
         $schemaFOREIGN_KEY->setCOLUMNS_META($schema->getCOLUMNS_META(["Key" => "MUL"]));
         $schemaFOREIGN_KEY->setFOREIGN_KEY($schema->getFOREIGN_KEY());
 
@@ -78,7 +78,7 @@ class FORM extends RUN
         // data Default
         $Entitys = $this->query((new QuerySQL())
                         ->select($schema->select_all())
-                        ->from($schema->getPARENT())
+                        ->from($schema->getNameTable())
                         ->join($schema->getFOREIGN_KEY())
                         ->where($conditionDefault));
         $Entity = $Entitys[0];
@@ -117,8 +117,8 @@ class FORM extends RUN
 
             $querydataCharge = new QuerySQL();
 
-            $querydataCharge->select($schem_Table_FOREIGN->select_all())
-                    ->from($schem_Table_FOREIGN->getPARENT())
+            $querydataCharge->select($schem_Table_FOREIGN->select_master())
+                    ->from($schem_Table_FOREIGN->getNameTable())
                     ->join($schem_Table_FOREIGN->getFOREIGN_KEY());
             if (!empty($condition)) {
                 $querydataCharge->where($nameTable_FOREIGN . ".id=" . $condition[$nameTable_FOREIGN]);
@@ -144,10 +144,10 @@ class FORM extends RUN
 
             $querydataCharge = new QuerySQL();
 
-            $querydataCharge->select($schem_Table_CHILDREN->select_master())
-                    ->from($schem_Table_CHILDREN->getPARENT())
+            $querydataCharge->select($schem_Table_CHILDREN->select_NameTable())
+                    ->from($schem_Table_CHILDREN->getNameTable())
                     ->join($FOREIGN_KEY_CHILDRENs)
-                    ->independent($schema->getPARENT());
+                    ->independent($schema->getNameTable());
 
             $query = $this->query_enfant_lier_formSelect($querydataCharge, $condition, $FOREIGN_KEY_CHILDRENs);
             $Entitys_CHILDRENs[$table_CHILDREN] = $this->query($query);
@@ -162,8 +162,8 @@ class FORM extends RUN
         $schem_Table_CHILDREN = $this->shema->getschema($tablechild);
         return $this->query((
                                 new QuerySQL())
-                                ->select($schem_Table_CHILDREN->select_master())
-                                ->from($schema->getPARENT())
+                                ->select($schem_Table_CHILDREN->select_NameTable())
+                                ->from($schema->getNameTable())
                                 ->join($tablechild, " INNER ", true)
                                 ->where($condition));
     }
@@ -196,7 +196,7 @@ class FORM extends RUN
         }
         $Entitys = $this->query((new QuerySQL())
                         ->select($columnFOREIGN_KEY)
-                        ->from($schema->getPARENT())
+                        ->from($schema->getNameTable())
                         ->join($schema->getFOREIGN_KEY())
                         ->where($condition));
         $Entity = $Entitys[0];

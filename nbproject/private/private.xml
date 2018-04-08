@@ -2,16 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/wassime/projetPHP/achatvente/back_end/Kernel/Model/Model.php</file>
-            <file>file:/home/wassime/projetPHP/achatvente/back_end/Kernel/html/element/FormHTML.php</file>
-            <file>file:/home/wassime/projetPHP/achatvente/back_end/App/TEMPLETE/twig/themes.twig</file>
-            <file>file:/home/wassime/projetPHP/achatvente/public/src/js/app.multi-select.js</file>
-            <file>file:/home/wassime/projetPHP/achatvente/back_end/App/Modules/Achat/Module.php</file>
-            <file>file:/home/wassime/projetPHP/achatvente/public/etats_file.php</file>
-            <file>file:/home/wassime/projetPHP/achatvente/back_end/Config/model/Connect_DataBase.json</file>
-            <file>file:/home/wassime/projetPHP/achatvente/back_end/App/Modules/Achat/views/twig/add.twig</file>
-            <file>file:/home/wassime/projetPHP/achatvente/.htaccess</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

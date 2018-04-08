@@ -2,6 +2,8 @@
 
 namespace Kernel\Model\Entitys;
 
+use Kernel\INTENT\Intent;
+
 class EntitysDataTable extends abstractEntitys
 {
 
@@ -27,7 +29,7 @@ class EntitysDataTable extends abstractEntitys
 
     public function set(array $data): array
     {
-        if ($this->isAssoc($data)) {
+        if (Intent::isAssoc($data)) {
             foreach ($data as $key => $value) {
                 $this->$key = $value;
             }

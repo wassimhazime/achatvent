@@ -77,19 +77,32 @@ class Intent
 
         return json_decode(json_encode($object), true);
 
+       
+    }
+    
+    
+     // TOOLS
+/// plus
+    public static function parse_object_TO_array($object): array
+    {
+        
         if (is_array($object)) {
             return $object;
         }
+        $reflectionClass = new \ReflectionClass(get_class($object));
         $array = [];
-        foreach ($object as $key => $value) {
-            $array[$key] = $value;
+        foreach ($reflectionClass->getProperties() as $property) {
+            $property->setAccessible(true);
+            $array[$property->getName()] = $property->getValue($object);
+            $property->setAccessible(false);
         }
+      
         return $array;
     }
     
     //TOOLS
     //// for show Statement
-    public static function is_PARENT_MASTER($_intentORmode): bool
+    public static function is_NameTable_MASTER($_intentORmode): bool
     {
         if ($_intentORmode instanceof Intent) {
             $mode = $_intentORmode->getMode();
@@ -100,7 +113,7 @@ class Intent
         return $mode[0] == "MASTER";
     }
 
-    public static function is_PARENT_ALL($_intentORmode): bool
+    public static function is_NameTable_ALL($_intentORmode): bool
     {
         if ($_intentORmode instanceof Intent) {
             $mode = $_intentORmode->getMode();

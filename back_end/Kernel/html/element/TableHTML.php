@@ -7,28 +7,25 @@ namespace Kernel\html\element;
  *
  * @author Wassim Hazime
  */
-class TableHTML
-{
+class TableHTML {
 
-    public function builder($att, array $heade, array $table, string $input, array $CHILD): string
-    {
+    public function builder($att, array $heade, array $table, string $input, array $CHILD): string {
 
         $thead = $this->thead($heade);
         $tbody = $this->tbody($table, $input, $CHILD);
         return "\n<table $att> $thead $tbody </table>";
     }
 
-    protected function thead(array $thead_columns): string
-    {
+    protected function thead(array $thead_columns): string {
         $thead = [];
         foreach ($thead_columns as $column) {
-            $thead[] = $this->th(strtoupper(str_replace("_", " ", $column)));
+            $str = (str_replace("_", " ", $column));
+            $thead[] = $this->th(strtoupper(str_replace("$", " ", $str)));
         }
-        return "<thead align='center'>" . $this->tr(implode(" \n", $thead)) . " </thead > ";
+        return "<thead >" . $this->tr(implode(" \n", $thead)) . " </thead > ";
     }
 
-    protected function tbody($table, $input, $CHILD): string
-    {
+    protected function tbody($table, $input, $CHILD): string {
 
         $bodys = [];
 
@@ -38,9 +35,9 @@ class TableHTML
             //**********************ROWS***************************///
             foreach ($ROWS as $head => $body) {
                 if (strtoupper($head) == "IMAGE") {
-                    if ($body=="image.jpg") {
-                        $body=" ";
-                        $id_image="";
+                    if ($body == "image.jpg") {
+                        $body = " ";
+                        $id_image = "";
                     } else {
                         $id_image = str_replace("id_image=>", "", $body);
                         $body = '<a class="btn btn-default"  role="button" href="?imageview=' . $id_image . '" >les fichies</a>';
@@ -66,6 +63,9 @@ class TableHTML
                 $table_CHILDREN = $CHILD["table_CHILDREN"]; /// les noms des tables childe
                 $CHILDREN = $CHILD["CHILDREN"]; /// les noms des champs childe
                 $datajoins = $CHILD["datajoins"]; // donnes des table child
+
+
+
                 $TableCHILD = $this->TableCHILD($table_CHILDREN, $CHILDREN, $datajoins [$index]);
 
                 if ($TableCHILD != []) {
@@ -83,31 +83,33 @@ class TableHTML
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected function TableCHILD($table_CHILDREN, $CHILDREN, $datajoin): array
-    {
+    protected function TableCHILD($table_CHILDREN, $CHILDREN, $datajoin): array {
         $theadCHILD = $this->theadCHILD($table_CHILDREN, $CHILDREN);
         $tbodyCHILD = $this->tbodyCHILD($datajoin);
 
 
 
-        if (implode("", $tbodyCHILD) == '') {
+        if (implode("", $theadCHILD) == '') {
             return [];
         }
 
-
+        $tableCHILD = [];
         foreach ($theadCHILD as $nameTABLE => $data) {
             $tableCHILD[$nameTABLE] = "\n<table class='table'>" . $data;
         }
 
         foreach ($tbodyCHILD as $nameTABLE => $data) {
-            $tableCHILD[$nameTABLE] .= $data . "\n</table>\n";
+            if ($data != " vide") {
+                $tableCHILD[$nameTABLE] .= $data . "\n</table>\n";
+            } else {
+                $tableCHILD[$nameTABLE] .= "\n</table>\n";
+            }
         }
 
         return $tableCHILD;
     }
 
-    protected function theadCHILD($table_CHILDREN, $CHILDREN): array
-    {
+    protected function theadCHILD($table_CHILDREN, $CHILDREN): array {
 
         $theadChild = [];
         foreach ($table_CHILDREN as $table) {
@@ -123,8 +125,7 @@ class TableHTML
         return $theadChild;
     }
 
-    protected function tbodyCHILD($datajoin): array
-    {
+    protected function tbodyCHILD($datajoin): array {
 
 
 
@@ -138,6 +139,9 @@ class TableHTML
 
                 $bodys[] = $this->tr(implode(" \n", $row));
             }
+            if (empty($bodys)) {
+                $bodys[] = " vide";
+            }
 
             $datajoin[$nameTable] = (implode(" \n", $bodys));
         }
@@ -147,18 +151,16 @@ class TableHTML
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    protected function tr($content, $att = "style='text-align: center'"): string
-    {
+    protected function tr($content, $att = ""): string {
         return "\n<tr $att>\n{$content}\n</tr>\n";
     }
 
-    protected function th($content, $att = "style='text-align: center'"): string
-    {
+    protected function th($content, $att = ""): string {
         return "<th  $att>{$content}</th>";
     }
 
-    protected function td($content, $att = "style='text-align: center'"): string
-    {
+    protected function td($content, $att = ""): string {
         return "<td $att> {$content}</td>";
     }
+
 }

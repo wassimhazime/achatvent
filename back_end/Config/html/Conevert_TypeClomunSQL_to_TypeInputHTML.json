@@ -1,13 +1,18 @@
 {
+     "text": "textarea",
+    "date": "date",
+    "tinyint(1)": "checkBox",
+    
     "varchar(20)": "tel",
     "varchar(150)": "email",
     "varchar(200)": "text",
     "varchar(201)": "text",
     "varchar(250)": "file",
-    "text": "textarea",
-    "date": "date",
-    "tinyint(1)": "checkBox",
+   
+
     "int(12)": "number",
     "int(11)": "select",
-    "int(10)": "hidden"
+    "int(10)": "hidden",
+    
+    "datetime": "hidden"
 }

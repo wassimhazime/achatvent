@@ -3,17 +3,19 @@
 namespace Kernel\Model;
 
 use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\Statement;
 use Kernel\Model\Base_Donnee\FORM;
-use Kernel\Model\Base_Donnee\Select;
+use Kernel\Model\Base_Donnee\SetData;
+use Kernel\Model\Base_Donnee\GetData;
+use Kernel\Model\Base_Donnee\Statistique;
 use TypeError;
 
 class Model {
 
-    private $statement = null;
+    private $setData = null;
     private $table = null;
     private $form = null;
-    private $select = null;
+    private $getData = null;
+    private $statistique = null;
     private $is_null = true;
     private $PathJsonConfig;
 
@@ -22,12 +24,24 @@ class Model {
     }
 
     function setStatement($table) {
-        $this->is_null = false;
-        $this->table = $table;
-        $this->statement = new Statement($this->PathJsonConfig, $table);
-        $this->form = new FORM($this->PathJsonConfig, $table);
-        $this->select = new Select($this->PathJsonConfig, $table);
+        if ($table == "statistique") {
+            $this->statistique = new Statistique($this->PathJsonConfig);
+            $this->statistique->statistique_par();
+            $total = $this->statistique->total("commande", 'tarif_estime', 'tarif', "2017");
+            $total = $this->statistique->totalpar("commande", 'tarif_estime', 'tarif', "2018", 'raison$sociale');
+
+            var_dump($total);
+
+            die();
+        } else {
+            $this->is_null = false;
+            $this->table = $table;
+            $this->setData = new SetData($this->PathJsonConfig, $table);
+            $this->form = new FORM($this->PathJsonConfig, $table);
+            $this->getData = new GetData($this->PathJsonConfig, $table);
+        }
     }
+    
 
     public function setData($data): Intent {
         if ($this->is_null) {
@@ -36,15 +50,15 @@ class Model {
         if (isset($data) && !empty($data)) {
 
             unset($data["ajout_data"]);
-                      
+
             if ($data['id'] == "") {
-                $id_parent = $this->statement->insert($data, Intent::MODE_INSERT);
+                $id_parent = $this->setData->insert($data, Intent::MODE_INSERT);
             } else {
-                $id_parent = $this->statement->update($data, Intent::MODE_UPDATE);
+                $id_parent = $this->setData->update($data, Intent::MODE_UPDATE);
             }
 
 
-            return $this->select->select(Intent::MODE_SELECT_ALL_ALL, "{$this->table}.id=$id_parent");
+            return $this->getData->select(Intent::MODE_SELECT_ALL_ALL, "{$this->table}.id=$id_parent");
         } else {
             die("rak 3aya9ti");
         }
@@ -52,7 +66,7 @@ class Model {
 
     public function delete($condition) {
 
-        $intent = $this->statement->delete($condition);
+        $intent = $this->setData->delete($condition);
 
         return $intent;
     }
@@ -61,7 +75,7 @@ class Model {
         if ($this->is_null) {
             throw new TypeError(" is_null==> show ");
         }
-        $intent = $this->select->select($mode, $condition);
+        $intent = $this->getData->select($mode, $condition);
         return $intent;
     }
 
@@ -97,6 +111,47 @@ class Model {
 
     function is_null() {
         return $this->is_null;
+    }
+
+//statistique
+    public function Facture_achat_HT($date) {
+        
+    }
+
+    public function Facture_vente_HT($date) {
+        
+    }
+
+    public function Avoirs_HT($date) {
+        
+    }
+
+    public function Depenses($date) {
+        
+    }
+
+    public function Recettes($date) {
+        
+    }
+
+    public function Creances($date) {
+        
+    }
+
+    public function Dettes($date) {
+        
+    }
+
+    public function TVA_collectee($date) {
+        
+    }
+
+    public function TVA_deductible($date) {
+        
+    }
+
+    public function TVA_due($date) {
+        
     }
 
 }

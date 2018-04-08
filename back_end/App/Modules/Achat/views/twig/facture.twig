@@ -2,10 +2,16 @@
 
 
 {% block container %}
+ 
     
-    <a href="?ajouter=ajouter" class="btn">ajouter<a/>
-    
-    <div class ="container">
+    <a href="?ajouter=ajouter" class="btn btn-default">ajouter</a>
+    <a href="?s=mm" class="btn btn-default">MASTER_MASTER</a>
+    <a href="?s=ma" class="btn btn-default">MASTER_ALL </a>
+    <a href="?s=am" class="btn btn-default">ALL_MASTER</a>
+     <a href="?s=aa" class="btn btn-default">ALL_ALL</a>
+     <a href="?s=mn" class="btn btn-default">MASTER_NULL</a>
+      <a href="?s=an" class="btn btn-default">ALL_NULL</a>
+    <div class ="">
       <h1>{{title}}  </h1>
       <div class="row">
         <div id="wtable"  >
@@ -16,5 +22,6 @@
 
     </div>
 
-
+          
+          
 {% endblock %}

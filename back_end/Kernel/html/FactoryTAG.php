@@ -34,8 +34,10 @@ class FactoryTAG
     public function tableHTML(Intent $intent)
     {
         $input = ["title" => 'Controle',
-            "body" => '<a class="btn btn-default"  role="button" href="?supprimer=index" >supprimer</a>'
-            . '<a class="btn btn-default"  role="button" href="?modifier=index" >modifier</a>'
+            "body" => '<spam style="display: inline-block;    width: max-content;">'
+            . '<a class="btn btn-danger  "   href="?supprimer=index" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>'
+            . '<a class="btn btn-success"    href="?modifier=index" ><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></a>'
+            . '</spam>'
         ];
 
         $tablehtml = new TableHTML($intent);
@@ -47,12 +49,12 @@ class FactoryTAG
 
         $table = $intent->getEntitysDataTable();
 
-        if (Intent::is_PARENT_MASTER($intent)) {
+        if (Intent::is_NameTable_MASTER($intent)) {
             $columns = array_merge($COLUMNS_master, $FOREIGN_KEY);
-        } elseif (Intent::is_PARENT_ALL($intent)) {
+        } elseif (Intent::is_NameTable_ALL($intent)) {
             $columns = array_merge($COLUMNS_all, $FOREIGN_KEY);
         }
-
+       
         $columns = array_merge($columns, [$input["title"]]);
 
 
@@ -72,7 +74,7 @@ class FactoryTAG
 
         ////////////////////////////
 
-        return $tablehtml->builder("class='table table-hover table-bordered' style='width:100%'", $columns, $table, $input["body"], $CHILD);
+        return $tablehtml->builder('id="example" class="table table-striped table-bordered dt-responsive nowrap"', $columns, $table, $input["body"], $CHILD);
     }
 
     public function FormHTML(Intent $intent)
@@ -85,7 +87,8 @@ class FactoryTAG
         $old=$entitysDataTable["Default"];
         if ($old !=[]) {
             $DataJOIN=$old[0]->getDataJOIN();
-            $DefaultData = json_decode(json_encode($old[0]), true);
+            $DefaultData= Intent::entitys_TO_array($old[0]);
+            
             $DefaultData["DataJOIN"]=$DataJOIN;
         } else {
             $DefaultData=[];

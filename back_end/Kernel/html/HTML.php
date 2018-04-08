@@ -69,7 +69,7 @@ class HTML
 
     function setAtt(string $att): self
     {
-        $this->att = $att;
+        $this->att =$this->att. $att;
         return $this;
     }
 

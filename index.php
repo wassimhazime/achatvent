@@ -11,9 +11,9 @@ use GuzzleHttp\Psr7\ServerRequest;
 use function Http\Response\send;
 
 $app = new App(ROOT . "back_end" . D_S . "Config" . D_S . "Config_Container.php");
-$app->addModule(\App\Modules\achraf\Module::class);
+$app->addModule(\App\Modules\Vente\Module::class);
 $app->addModule(\App\Modules\Achat\Module::class);
-$app->addModule(\App\Modules\test\Module::class);
+
 
 
 $Response = $app->run(ServerRequest::fromGlobals(), new Response());

@@ -2,20 +2,23 @@
 
 namespace Kernel\Model\Entitys;
 
+use Kernel\INTENT\Intent;
+
 class EntitysSchema extends abstractEntitys
 {
 
     private $modeCHILDREN = null;
-    private $PARENT = null;
+    private $NameTable = null;
     private $COLUMNS_META = [];
     private $COLUMNS_master = ["*"];
     private $COLUMNS_all = ["*"];
     private $FOREIGN_KEY = [];
+    private $STATISTIQUE = [];
     private $CHILDREN = [];
 
     public function Instance(array $table): self
     {
-        $this->PARENT = $table["PARENT"];
+        $this->NameTable = $table["NameTable"];
         $this->COLUMNS_master = $table["COLUMNS_master"];
         $this->COLUMNS_all = $table["COLUMNS_all"];
         $this->COLUMNS_META = $table["COLUMNS_META"];
@@ -39,17 +42,17 @@ class EntitysSchema extends abstractEntitys
     }
 
     /*
-     * PARENT
+     * NameTable
      */
 
-    function getPARENT()
+    function getNameTable()
     {
-        return $this->PARENT;
+        return $this->NameTable;
     }
 
-    function setPARENT($PARENT)
+    function setNameTable($NameTable)
     {
-        $this->PARENT = $PARENT;
+        $this->NameTable = $NameTable;
     }
 
     /**
@@ -62,11 +65,13 @@ class EntitysSchema extends abstractEntitys
         if (empty($key)) {
             return $this->COLUMNS_META;
         } else {
-            if ($this->isAssoc($key)) {
-                $COLUMNS_META = $this->COLUMNS_META;
+            if (Intent::isAssoc($key)) {
+                $COLUMNS_META = Intent::entitys_TO_array($this->COLUMNS_META);
+                
                 $COLUMNS_META_select = [];
                 foreach ($key as $k => $v) {
                     foreach ($COLUMNS_META as $COLUMNS) {
+                        
                         if ($COLUMNS[$k] == $v) {
                             $COLUMNS_META_select[] = $COLUMNS;
                         }
@@ -118,6 +123,20 @@ class EntitysSchema extends abstractEntitys
         $this->FOREIGN_KEY = $FOREIGN_KEY;
     }
 
+    
+    
+    function getSTATISTIQUE() {
+        return $this->STATISTIQUE;
+    }
+
+    function setSTATISTIQUE($STATISTIQUE) {
+        $this->STATISTIQUE = $STATISTIQUE;
+    }
+
+        
+    
+    
+    
     /*
      * CHILDREN
      */
@@ -157,20 +176,7 @@ class EntitysSchema extends abstractEntitys
 
         $select = [];
         foreach ($this->COLUMNS_master as $colom) {
-            $select[] = $this->PARENT . "." . $colom;
-        }
-//        foreach ($this->FOREIGN_KEY as $FOREIGN) {
-//            $select[] = $FOREIGN . "." . $FOREIGN;
-//        }
-        return $select;
-    }
-
-    public function select_all()
-    {
-
-        $select = [];
-        foreach ($this->COLUMNS_all as $colom) {
-            $select[] = $this->PARENT . "." . $colom;
+            $select[] = $this->NameTable . "." . $colom;
         }
         foreach ($this->FOREIGN_KEY as $FOREIGN) {
             $select[] = $FOREIGN . "." . $FOREIGN;
@@ -178,6 +184,33 @@ class EntitysSchema extends abstractEntitys
         return $select;
     }
 
+    public function select_NameTable()
+    {
+
+        $select = [];
+        foreach ($this->COLUMNS_master as $colom) {
+            $select[] = $this->NameTable . "." . $colom;
+        }
+       
+        return $select;
+    }
+    public function select_all()
+    {
+
+        $select = [];
+        foreach ($this->COLUMNS_all as $colom) {
+            $select[] = $this->NameTable . "." . $colom;
+        }
+        foreach ($this->FOREIGN_KEY as $FOREIGN) {
+            $select[] = $FOREIGN . "." . $FOREIGN;
+        }
+        return $select;
+    }
+
+    
+    
+    
+    
     public function select_FOREIGN_KEY(array $FOREIGN_KEY = null)
     {
         $select = [];
@@ -212,5 +245,26 @@ class EntitysSchema extends abstractEntitys
 
 
         return $select;
+    }
+    
+    //// 
+    public function select_statistique_SUM(): array
+    {
+
+        $select = [];
+        $FOREIGN_KEY = [];
+        
+        foreach ($this->STATISTIQUE as $colom) {
+            
+            $select[] ="SUM(". $this->NameTable . "." . $colom.") as  ` $colom des ".str_replace("$", " suite aux ", $this->NameTable)." ` ";
+        }
+        
+        foreach ($this->FOREIGN_KEY as $FOREIGN) {
+            $FOREIGN_KEY[] =  $FOREIGN;
+        }
+        
+        return ["table"=> $this->NameTable,
+              "select"=>$select,
+              "FOREIGN_KEY"=>$FOREIGN_KEY];
     }
 }

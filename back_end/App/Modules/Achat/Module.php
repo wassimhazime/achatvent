@@ -35,12 +35,14 @@ class Module {
 
     public function addRoute($router) {
 
-        // $router->get("/{controle:[a-z]+}", [$this, "MVC"], "blog.strj");
-        $router->get("/achat/{controle:[a-z\_]+}", [$this, "MVC"], "achat.get");
-        $router->get("/{controle:[a-z\_]*}", [$this, "MVC"], "achat");
 
-        $router->post("/achat/{controle:[a-z\_]+}", [$this, "POST"], "post.post");
-        $router->post("/{controle:[a-z\_]*}", [$this, "POST"], "post");
+        $router->get("/achat/{controle:[a-z\_\-\$]+}", [$this, "MVC"], "achat.get");
+
+
+        $router->post("/achat/{controle:[a-z\_\-\$]+}", [$this, "POST"], "post.post");
+        
+        
+        
     }
 
     public function __construct(ContainerInterface $container) {
@@ -48,17 +50,27 @@ class Module {
         $this->model = $container->get(Model::class);
         $this->FactoryTAG = $container->get(FactoryTAG::class);
         $this->renderer = $container->get(TwigRenderer::class);
-        $this->File_Upload=new \Kernel\html\File_Upload();
+        $this->File_Upload = new \Kernel\html\File_Upload();
     }
 
     public function MVC(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params) {
 
         $page = $params["controle"];
-       if($page=="" or $page=="index" ){    
-            $response->getBody()->write("menu");
-        return $response;
-           
-       }
+        if ($page == "" or $page == "index") {
+            $data = $this->renderer->render("@achat/facture", ["table" => ""]);
+            $response->getBody()->write($data);
+            return $response;
+        }
+        if ($page == "tb" or $page == "TB") {
+            
+             $this->model->setStatement('statistique');
+             
+            echo 'tva';
+            die();
+            $data = $this->renderer->render("@achat/tb", ["table" => ""]);
+            $response->getBody()->write($data);
+            return $response;
+        }
         $query = $request->getQueryParams();
 
         $this->model->setStatement($page);
@@ -75,7 +87,7 @@ class Module {
             $id_image = $query["imageview"];
             return $this->File_Upload->get($id_image);
         } else {
-            return $this->show($response);
+            return $this->show($query, $response);
         }
     }
 
@@ -86,8 +98,8 @@ class Module {
         $this->model->setStatement($page);
         $msg = $this->model->setData($insert);
         $msghtml = $this->FactoryTAG->message($msg);  //twig
-        $data = $this->renderer->render("@achat/message_ajouter", ["message" => $msghtml]);
-        $response->getBody()->write($data);
+        // $data = $this->renderer->render("@achat/message_ajouter", ["message" => $msghtml]);
+        $response->getBody()->write($msghtml);
         return $response;
     }
 
@@ -130,8 +142,44 @@ class Module {
         return $response;
     }
 
-    public function show($response) {
-        $intentshow = $this->model->show(Intent::MODE_SELECT_ALL_ALL, true);
+    public function show($query, $response) {
+        if (isset($query["s"])) {
+            $select = $query["s"];
+        } else {
+            $select = "an";
+        }
+        switch ($select) {
+            case "mm":
+                $mode = Intent::MODE_SELECT_MASTER_MASTER;
+
+                break;
+            case "ma":
+
+                $mode = Intent::MODE_SELECT_MASTER_ALL;
+                break;
+            case "am":
+
+                $mode = Intent::MODE_SELECT_ALL_MASTER;
+                break;
+            case "aa":
+                $mode = Intent::MODE_SELECT_ALL_ALL;
+
+                break;
+            case "an":
+                $mode = Intent::MODE_SELECT_ALL_NULL;
+
+                break;
+            case "mn":
+
+                $mode = Intent::MODE_SELECT_MASTER_NULL;
+                break;
+            default:
+                $mode = Intent::MODE_SELECT_MASTER_MASTER;
+                break;
+        }
+
+
+        $intentshow = $this->model->show($mode, true);
 
         $table = $this->FactoryTAG->tableHTML($intentshow); //twig
 
@@ -139,8 +187,5 @@ class Module {
         $response->getBody()->write($data);
         return $response;
     }
-    
-
-   
 
 }

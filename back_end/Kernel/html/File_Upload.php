@@ -31,17 +31,24 @@ class File_Upload {
     public function get($id_image) {
       
         $images = [];
-        foreach (scandir($this->path) as $image) {
+        var_dump($this->path);
+        foreach (scandir(ROOT.$this->path) as $image) {
+            $image = str_replace("$", " ", $image);
+           
             $subject = $image;
+             $id_image = str_replace("$", " ", $id_image);
             $pattern = '/^' . $id_image . '/';
 
             if (preg_match($pattern, $subject)) {
                 $images[] = $this->path . $image;
             }
         }
-        /// por godaddy  public/
+       
         foreach ($images as $image) {
-            echo '<img src="'. $image . '" alt="Girl in a jacket" style="width:800px;"> <br>';
+            $image = "/".str_replace(" ", "$", $image);
+           
+            echo '<center><a href="'. $image . '"><img src="'. $image . '" alt="fichier" style="width:300px;" /></a><br></center>
+';
         }
 
         die();

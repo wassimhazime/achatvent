@@ -1,58 +1,35 @@
+{% extends "navigation.twig" %}
 
-<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="public/public/favicon.ico">
-        <title>Starter Template for Bootstrap</title>
-       
-          <link href="public/src/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-        <link href="public/src/css/Bootstrap-select.css" rel="stylesheet" type="text/css"/>
-        <link href="public/src/css/multi-select.dev.css" rel="stylesheet" type="text/css"/>
-        <link href="public/src/css/over-bootstrap.css" rel="stylesheet" type="text/css"/
-        
-        
-        
-    </head>
-    <body>
-       <script src="public/src/js/jquery.js" type="text/javascript"></script>
-        <div class="container">
-       <nav class="navbar navbar-inverse navbar-fixed-top">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="index">Project name </a>
-                    <a class="navbar-brand" href="mode_paiement">mode_paiement</a>
-                    <a class="navbar-brand" href="raison_sociale">raison_sociale</a>
-                    <a class="navbar-brand" href="commande">commande</a>
-                    <a class="navbar-brand" href="bl">bl</a>
-                    
-                    <a class="navbar-brand" href="avoir">avoir</a>
-                    <a class="navbar-brand" href="facture">facture</a>
-                    <a class="navbar-brand" href="paiement">paiement</a>
-                </div>
-            </nav>
-            <div class="container" >
-                <div class="starter-template">
-                    <h1></h1><br>  <h1></h1><br>  <h1></h1><br>
-                    <p class="lead"> </p>
-                </div>
-            </div>
-            {% block container %}
-               test twig
-            {% endblock %}
-            
-           
-            <script src="public/src/js/bootstrap.js" type="text/javascript"></script>
-            <script src="public/src/js/Bootstrap-select.js" type="text/javascript"></script>
-            <script src="public/src/js/jquery.quicksearch.js" type="text/javascript"></script>
-            <script src="public/src/js/jquery.multi-select.js" type="text/javascript"></script>
-            <script src="public/src/js/app.elementHTML.js" type="text/javascript"></script>
-            <script src="public/src/js/app.multi-select.js" type="text/javascript"></script>
-        
+
+
+
+{% block body %}
+
+
+
+    <div id="page-wrapper">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">Hope Drip</h1>
         </div>
-    </body>
-</html>
+        <!-- /.col-lg-12 -->
+      </div>
+      <!-- /.row -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-success" style="overflow: auto;padding:  50px">
+            
+            {% block container %}
+            
+            {% endblock %}
+          </div>
+        </div>
+        <!-- /.col-lg-12 -->
+      </div>
+
+    </div>
+
+
+{% endblock %}
+
+
