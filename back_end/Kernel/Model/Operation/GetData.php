@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Kernel\Model\Base_Donnee;
+namespace Kernel\Model\Operation;
 
 /**
  * Description of Select
@@ -14,29 +14,23 @@ namespace Kernel\Model\Base_Donnee;
  * @author wassime
  */
 use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\DataBase;
-use Kernel\Model\Base_Donnee\Schema;
-use Kernel\Model\Entitys\EntitysDataTable;
+use Kernel\Model\Base_Donnee\MetaDatabase;
 use Kernel\Model\Query\QuerySQL;
-use TypeError;
 
-class GetData extends DataBase
-{
+class GetData extends MetaDatabase {
 
-    private $shema;
+    private $table;
 
-    public function __construct($PathConfigJsone, $table)
-    {
+    public function __construct($PathConfigJsone, $table) {
 
-        $this->shema = new Schema($PathConfigJsone);
+        $this->table = $table;
 
-        parent::__construct($PathConfigJsone, new EntitysDataTable(), $this->shema->getschema($table));
+        parent::__construct($PathConfigJsone);
     }
 
-    public function select(array $mode, $condition): Intent
-    {
+    public function select(array $mode, $condition): Intent {
 
-        $schema = $this->entitysSchema;
+        $schema = $this->getschema($this->table);
 
         if (Intent::is_NameTable_MASTER($mode)) {
             $sql = ((new QuerySQL())
@@ -51,16 +45,15 @@ class GetData extends DataBase
                             ->join($schema->getFOREIGN_KEY())
                             ->where($condition));
         }
-        
-         $Entitys = $this->query($sql);
+
+        $Entitys = $this->query($sql);
         $this->setDataJoins($Entitys, $mode);
 
         return new Intent($schema, $Entitys, $mode);
     }
 
-    private function setDataJoins(array $Entitys, array $mode)
-    {
-        $schema = $this->entitysSchema;
+    private function setDataJoins(array $Entitys, array $mode) {
+        $schema = $this->getschema($this->table);
 
         foreach ($Entitys as $Entity) {
             if (!empty($schema->get_table_CHILDREN())and Intent::is_get_CHILDREN($mode)) {
@@ -77,4 +70,5 @@ class GetData extends DataBase
             }
         }
     }
+
 }

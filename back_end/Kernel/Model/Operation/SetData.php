@@ -1,30 +1,27 @@
 <?php
 
-namespace Kernel\Model\Base_Donnee;
+namespace Kernel\Model\Operation;
 
 use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\DataBase;
-use Kernel\Model\Base_Donnee\Schema;
-use Kernel\Model\Entitys\EntitysDataTable;
+use Kernel\Model\Base_Donnee\MetaDatabase;
 use Kernel\Model\Query\QuerySQL;
 use TypeError;
 
-class SetData extends DataBase
+class SetData extends MetaDatabase
 {
+    private $table;
 
-    private $shema;
 
     public function __construct($PathConfigJsone, $table)
     {
+        $this->table=$table;
 
-        $this->shema = new Schema($PathConfigJsone);
-
-        parent::__construct($PathConfigJsone, new EntitysDataTable(), $this->shema->getschema($table));
+        parent::__construct($PathConfigJsone);
     }
 
     function getTable()
     {
-        return $this->entitysSchema->getNameTable();
+        return $this->table;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -34,7 +31,7 @@ class SetData extends DataBase
             throw new TypeError(" ERROR mode Intent ==> mode!= MODE_UPDATE ");
         }
 
-        $intent = Intent::parse($dataForm, $this->entitysSchema, $mode);
+        $intent = Intent::parse($dataForm, $this->getschema($this->table), $mode);
 
         $dataCHILDRENs = $this->charge_data_childe($intent);
         $data_NameTable = $this->remove_childe_in_data($intent);
@@ -80,7 +77,7 @@ class SetData extends DataBase
             throw new TypeError(" ERROR mode Intent ==> mode!= MODE_INSERT ");
         }
 
-        $intent = Intent::parse($dataForm, $this->entitysSchema, $mode);
+        $intent = Intent::parse($dataForm, $this->getschema($this->table), $mode);
         $dataCHILDRENs = $this->charge_data_childe($intent);
         $data_NameTable = $this->remove_childe_in_data($intent);
         unset($data_NameTable["id"]);   // remove id

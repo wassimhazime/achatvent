@@ -1,25 +1,26 @@
 <?php
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 namespace Kernel\Model\Base_Donnee;
 
 use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\DataBase;
 use Kernel\Model\Entitys\EntitysSchema;
 
-class Schema extends DataBase
-{
+/**
+ * Description of MetaDatabase
+ *
+ * @author wassime
+ */
+class MetaDatabase extends ActionDataBase {
 
-    private $NameTable = null;
-    private $pathConfigJsone;
+    private $allSchema = [];
 
-    function __construct($pathConfigJsone)
-    {
-        $this->pathConfigJsone = $pathConfigJsone;
-        parent::__construct($pathConfigJsone, new EntitysSchema()); /// pour setFetchMode(PDO::FETCH_CLASS, get_class($this->entity));
-    }
-
-    public function getschema(string $NameTable): EntitysSchema
-    {
+    public function getschema(string $NameTable): EntitysSchema {
 
         if ($this->configExternal->is_set_cache()) {
             //generateCache()is null|[] file $path/CACHE_SELECT.JSON
@@ -39,11 +40,6 @@ class Schema extends DataBase
             $this->configExternal->removeCACHE_SELECT();
         }
 
-
-
-
-
-
         //find json config => model file 2SCHEMA_SELECT_MANUAL
         foreach ($this->configExternal->getSCHEMA_SELECT_MANUAL() as $table) {
             $TABLE = (new EntitysSchema())->Instance($table);
@@ -58,17 +54,17 @@ class Schema extends DataBase
                 return $TABLE;
             }
         }
-
-
         return (new EntitysSchema()); // == return EntitysSchema vide
     }
 
-    public function getALLschema(array $config = []): array
-    {
+    /////////////////////////////////////////////////////////
+
+
+    public function getALLschema(array $config = []): array {
         $DB_name = $this->configExternal->getNameDataBase();
-        if ($this->NameTable == null) {
-            $NameTable = $this->query(' SELECT table_name as NameTable FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" and  table_name not LIKE("r\_%") ');
-            foreach ($NameTable as $table) {
+        if (empty($this->allSchema)) {
+            $allSchema = $this->querySchema(' SELECT table_name as NameTable FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" and  table_name not LIKE("r\_%") ');
+            foreach ($allSchema as $table) {
                 $table->setCOLUMNS_master($this->columns_master($table, $config));
                 $table->setCOLUMNS_all($this->columns_all($table, $config));
                 $table->setCOLUMNS_META($this->columns_META($table, $config));
@@ -76,22 +72,19 @@ class Schema extends DataBase
                 $table->setFOREIGN_KEY($this->FOREIGN_KEY($table, $config));
                 $table->setCHILDREN($this->tables_CHILDREN($table, $config, $DB_name));
             }
-            $this->NameTable = $NameTable;
+            $this->allSchema = $allSchema;
         }
-        return $this->NameTable;
+        return $this->allSchema;
     }
 
-    
-    
     //private//////////////////////////////////////////////////////////////////////////
-    private function columns_master($table, array $config = [])
-    {
+    private function columns_master($table, array $config = []) {
         if (isset($config['COLUMNS_master']) and ! empty($config['COLUMNS_master'])) {
-            $describe = $this->query("SHOW COLUMNS FROM " .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['COLUMNS_master']);
         } else {
-            $describe = $this->query("SHOW COLUMNS FROM " .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     " WHERE `null`='no' and "
                     . "`Type` !='varchar(201)' and"
@@ -108,14 +101,13 @@ class Schema extends DataBase
         return $select;
     }
 
-    private function columns_all($table, array $config = [])
-    {
+    private function columns_all($table, array $config = []) {
         if (isset($config['COLUMNS_all']) and ! empty($config['COLUMNS_all'])) {
-            $describe = $this->query("SHOW COLUMNS FROM " .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['COLUMNS_all']);
         } else {
-            $describe = $this->query("SHOW COLUMNS FROM " .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     " WHERE "
                     . "`Key`!='MUL' ");
@@ -130,28 +122,26 @@ class Schema extends DataBase
         return $select;
     }
 
-    private function columns_META($table, array $config = [])
-    {
+    private function columns_META($table, array $config = []) {
 
         if (isset($config['COLUMNS_META']) and ! empty($config['COLUMNS_META'])) {
-            $describe = $this->query("  DESCRIBE   " .
+            $describe = $this->querySchema("  DESCRIBE   " .
                     $table->getNameTable());
         } else {
-            $describe = $this->query("  DESCRIBE   " .
+            $describe = $this->querySchema("  DESCRIBE   " .
                     $table->getNameTable());
         }
 
         return $describe;
     }
 
-    private function columns_master_CHILDREN($table, array $config = [])
-    {
+    private function columns_master_CHILDREN($table, array $config = []) {
 
         if (isset($config['CHILDREN']['MASTER']) and ! empty($config['CHILDREN']['MASTER'])) {
-            $describe = $this->query("SHOW COLUMNS FROM " . $table .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " . $table .
                     $config['CHILDREN']['MASTER']);
         } else {
-            $describe = $this->query("SHOW COLUMNS FROM " . $table .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " . $table .
                     " WHERE `null`='no' and "
                     . "`Type` !='varchar(201)' and"
                     . " `Type` !='varchar(20)' and"
@@ -169,13 +159,12 @@ class Schema extends DataBase
         return $colums;
     }
 
-    private function columns_all_CHILDREN($table, array $config = [])
-    {
+    private function columns_all_CHILDREN($table, array $config = []) {
         if (isset($config['CHILDREN']['ALL']) and ! empty($config['CHILDREN']['ALL'])) {
-            $describe = $this->query("SHOW COLUMNS FROM " . $table .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " . $table .
                     $config['CHILDREN']['ALL']);
         } else {
-            $describe = $this->query("SHOW COLUMNS FROM " . $table .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " . $table .
                     " WHERE "
                     . "`Key`!='MUL' ");
         }
@@ -191,14 +180,13 @@ class Schema extends DataBase
         return $colums;
     }
 
-    private function FOREIGN_KEY($table, array $config = [])
-    {
+    private function FOREIGN_KEY($table, array $config = []) {
         if (isset($config['FOREIGN_KEY']) and ! empty($config['FOREIGN_KEY'])) {
-            $describe = $this->query("SHOW COLUMNS FROM " .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['FOREIGN_KEY']);
         } else {
-            $describe = $this->query("SHOW COLUMNS FROM " .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     " WHERE `Key`='MUL'");
         }
@@ -212,14 +200,13 @@ class Schema extends DataBase
         return $FOREIGN_KEY;
     }
 
-     private function STATISTIQUE($table, array $config = [])
-    {
+    private function STATISTIQUE($table, array $config = []) {
         if (isset($config['STATISTIQUE']) and ! empty($config['STATISTIQUE'])) {
-            $describe = $this->query("SHOW COLUMNS FROM " .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['STATISTIQUE']);
         } else {
-            $describe = $this->query("SHOW COLUMNS FROM " .
+            $describe = $this->querySchema("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     " WHERE `Type` ='int(12)'");
         }
@@ -232,12 +219,10 @@ class Schema extends DataBase
         }
         return $FOREIGN_KEY;
     }
-    
-    
-    
-    private function tables_CHILDREN($mainTable, $config, $DB_name)
-    {
-        $tables_relation = (new self($this->pathConfigJsone))->query('SELECT table_name as tables_relation FROM'
+
+    private function tables_CHILDREN($mainTable, $config, $DB_name) {
+        
+        $tables_relation = $this->querySchema('SELECT table_name as tables_relation FROM'
                 . ' INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" '
                 . 'and  table_name  LIKE("r\_' . $mainTable->getNameTable() . '%")  ');
         $tables_CHILDREN['MASTER'] = [];
@@ -247,8 +232,8 @@ class Schema extends DataBase
         foreach ($tables_relation as $champ) {
             $table = str_replace("r_{$mainTable->getNameTable()}_", "", $champ->tables_relation);
 
-            $tables_CHILDREN['MASTER'][$table] = (new self($this->pathConfigJsone))->columns_master_CHILDREN($table, $config);
-            $tables_CHILDREN['ALL'][$table] = (new self($this->pathConfigJsone))->columns_all_CHILDREN($table, $config);
+            $tables_CHILDREN['MASTER'][$table] = $this->columns_master_CHILDREN($table, $config);
+            $tables_CHILDREN['ALL'][$table] = $this->columns_all_CHILDREN($table, $config);
             $tables_CHILDREN['EMPTY'][$table] = [];
         }
         return $tables_CHILDREN;
@@ -259,8 +244,7 @@ class Schema extends DataBase
      * generateCache
      */
     //////////////////////////////////////
-    private function generateCache()
-    {
+    private function generateCache() {
         $config = $this->configExternal;
         $tempschmaTabls = [];
         $schmaTabls = [];
@@ -283,4 +267,5 @@ class Schema extends DataBase
 
         $config->setgenerateCACHE_SELECT($schmaTabls);
     }
+
 }

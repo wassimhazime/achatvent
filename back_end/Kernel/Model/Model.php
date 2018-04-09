@@ -3,10 +3,10 @@
 namespace Kernel\Model;
 
 use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\FORM;
-use Kernel\Model\Base_Donnee\SetData;
-use Kernel\Model\Base_Donnee\GetData;
-use Kernel\Model\Base_Donnee\Statistique;
+use Kernel\Model\Operation\FORM;
+use Kernel\Model\Operation\GetData;
+use Kernel\Model\Operation\SetData;
+use Kernel\Model\Operation\Statistique;
 use TypeError;
 
 class Model {

@@ -6,41 +6,36 @@
  * and open the template in the editor.
  */
 
-namespace Kernel\Model\Base_Donnee;
+namespace Kernel\Model\Operation;
 
 use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\DataBase;
-use Kernel\Model\Base_Donnee\Schema;
-use Kernel\Model\Entitys\EntitysDataTable;
+use Kernel\Model\Base_Donnee\MetaDatabase;
 use Kernel\Model\Query\QuerySQL;
-use TypeError;
 
 /**
  * Description of FORM
  *
  * @author wassime
  */
-class Statistique extends DataBase {
+class Statistique extends MetaDatabase {
 
     private $schema;
     private $schema_statistique = [];
 
     public function __construct($PathConfigJsone) {
 
-        $this->schema = new Schema($PathConfigJsone);
-        $sh = $this->schema->getALLschema();
-        
+        parent::__construct($PathConfigJsone);
+
+        $sh = $this->getALLschema();
+
         foreach ($sh as $value) {
             $st = ($value->select_statistique_SUM());
             if (!empty($st["select"])) {
-                
-                $this->schema_statistique[$st["table"]] =
-                        ["champ"=>$st["select"],
-                        "par"=>$st["FOREIGN_KEY"]];
+
+                $this->schema_statistique[$st["table"]] = ["champ" => $st["select"],
+                    "par" => $st["FOREIGN_KEY"]];
             }
         }
-
-        parent::__construct($PathConfigJsone, new EntitysDataTable());
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -49,60 +44,47 @@ class Statistique extends DataBase {
 
     public function statistique_global() {
 
-        foreach ($this->schema_statistique as $table=>$st) {
-           
+        foreach ($this->schema_statistique as $table => $st) {
+
             $champ = $st["champ"];
             echo "<h1> $table </h1>";
-             $sql = ((new QuerySQL())
+            $sql = ((new QuerySQL())
                             ->select($champ)
                             ->from($table)
-                           ->where("YEAR(`date`)=2018")
-                     );
-            
-            
-              $entity = $this->query($sql);
-                var_dump(Intent::entitys_TO_array($entity)[0]);
-            
-          
+                            ->where("YEAR(`date`)=2018")
+                    );
+
+
+            $entity = $this->query($sql);
+            var_dump(Intent::entitys_TO_array($entity)[0]);
         }
     }
-   public function statistique_par() {
 
-        foreach ($this->schema_statistique as $table=>$st) {
-           
+    public function statistique_par() {
+
+        foreach ($this->schema_statistique as $table => $st) {
+
             $champ = $st["champ"];
-            $par=$st["par"];
+            $par = $st["par"];
             echo "<h1> $table </h1>";
             foreach ($par as $by) {
                 echo "<h3> $by </h3>";
-                    $sql = ((new QuerySQL())
-                            ->select($champ)
-                            ->column("$by.$by")
-                            ->from($table)
-                            ->join($by)
-                     
-                           ->where("YEAR(`date`)=2018"
-                                   )
-                     );
-            
-           
-              $entity = $this->query($sql. " GROUP BY $by ");
+                $sql = ((new QuerySQL())
+                                ->select($champ)
+                                ->column("$by.$by")
+                                ->from($table)
+                                ->join($by)
+                                ->where("YEAR(`date`)=2018"
+                                )
+                        );
+
+
+                $entity = $this->query($sql . " GROUP BY $by ");
                 var_dump(Intent::entitys_TO_array($entity));
             }
-            
-            
-         
-            
-          
         }
     }
-    
-    
-    
-    
-    
-    
-    
+
     public function total($table, $champ, $alias, $date) {
 
         var_dump($this->schema_statistique);
@@ -121,10 +103,5 @@ class Statistique extends DataBase {
 
         return Intent::entitys_TO_array($entity);
     }
-    
-   
-    
-    
-    
 
 }

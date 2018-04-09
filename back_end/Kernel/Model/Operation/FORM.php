@@ -6,12 +6,10 @@
  * and open the template in the editor.
  */
 
-namespace Kernel\Model\Base_Donnee;
+namespace Kernel\Model\Operation;
 
 use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\DataBase;
-use Kernel\Model\Base_Donnee\Schema;
-use Kernel\Model\Entitys\EntitysDataTable;
+use Kernel\Model\Base_Donnee\MetaDatabase;
 use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Model\Query\QuerySQL;
 
@@ -20,24 +18,19 @@ use Kernel\Model\Query\QuerySQL;
  *
  * @author wassime
  */
-class FORM extends DataBase
-{
+class FORM extends MetaDatabase {
 
-    private $shema;
+    private $table;
 
-    public function __construct($PathConfigJsone, $table)
-    {
-
-        $this->shema = new Schema($PathConfigJsone);
-
-        parent::__construct($PathConfigJsone, new EntitysDataTable(), $this->shema->getschema($table));
+    public function __construct($PathConfigJsone, $table) {
+        $this->table = $table;
+        parent::__construct($PathConfigJsone);
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-    public function formSelect(array $mode): Intent
-    {
+    public function formSelect(array $mode): Intent {
 
-        $schema = $this->entitysSchema;
+        $schema = $this->getschema($this->table);
         // data form
         /// charge select input
         $Entitys_FOREIGNs = $this->datachargeselect();
@@ -55,9 +48,8 @@ class FORM extends DataBase
         return new Intent($schemaFOREIGN_KEY, $data, $mode);
     }
 
-    public function form(array $mode, $condition): Intent
-    {
-        $schema = $this->entitysSchema;
+    public function form(array $mode, $condition): Intent {
+        $schema = $this->getschema($this->table);
         // data form
         /// charge select input
         $Entitys_FOREIGNs = $this->datachargeselect($condition);
@@ -72,9 +64,8 @@ class FORM extends DataBase
         return new Intent($schema, $data, $mode);
     }
 
-    public function formDefault(array $mode, $conditionDefault): Intent
-    {
-        $schema = $this->entitysSchema;
+    public function formDefault(array $mode, $conditionDefault): Intent {
+        $schema = $this->getschema($this->table);
         // data Default
         $Entitys = $this->query((new QuerySQL())
                         ->select($schema->select_all())
@@ -105,15 +96,14 @@ class FORM extends DataBase
     ///////////////////////////////////////////////////////////////////
 
 
-    private function datachargeselect(array $condition = [])
-    {
-        $schema = $this->entitysSchema;
+    private function datachargeselect(array $condition = []) {
+        $schema = $this->getschema($this->table);
 
         $nameTable_FOREIGNs = $schema->getFOREIGN_KEY();
         /// charge select input
         $Entitys_FOREIGNs = [];
         foreach ($nameTable_FOREIGNs as $nameTable_FOREIGN) {
-            $schem_Table_FOREIGN = $this->shema->getschema($nameTable_FOREIGN);
+            $schem_Table_FOREIGN = $this->getschema($nameTable_FOREIGN);
 
             $querydataCharge = new QuerySQL();
 
@@ -130,16 +120,15 @@ class FORM extends DataBase
         return $Entitys_FOREIGNs;
     }
 
-    private function dataChargeMultiSelectIndependent(array $condition = [])
-    {
+    private function dataChargeMultiSelectIndependent(array $condition = []) {
 
-        $schema = $this->entitysSchema;
+        $schema = $this->getschema($this->table);
         $nameTable_CHILDRENs = $schema->get_table_CHILDREN();
 
         $Entitys_CHILDRENs = [];
 
         foreach ($nameTable_CHILDRENs as $table_CHILDREN) {
-            $schem_Table_CHILDREN = $this->shema->getschema($table_CHILDREN);
+            $schem_Table_CHILDREN = $this->getschema($table_CHILDREN);
             $FOREIGN_KEY_CHILDRENs = $schem_Table_CHILDREN->getFOREIGN_KEY();
 
             $querydataCharge = new QuerySQL();
@@ -156,10 +145,9 @@ class FORM extends DataBase
         return $Entitys_CHILDRENs;
     }
 
-    private function dataChargeMultiSelectDependent($tablechild, array $condition)
-    {
-        $schema = $this->entitysSchema;
-        $schem_Table_CHILDREN = $this->shema->getschema($tablechild);
+    private function dataChargeMultiSelectDependent($tablechild, array $condition) {
+        $schema = $this->getschema($this->table);
+        $schem_Table_CHILDREN = $this->getschema($tablechild);
         return $this->query((
                                 new QuerySQL())
                                 ->select($schem_Table_CHILDREN->select_NameTable())
@@ -168,8 +156,7 @@ class FORM extends DataBase
                                 ->where($condition));
     }
 
-    private function query_enfant_lier_formSelect(QuerySQL $query, array $condition, array $FOREIGN_KEY_CHILDRENs)
-    {
+    private function query_enfant_lier_formSelect(QuerySQL $query, array $condition, array $FOREIGN_KEY_CHILDRENs) {
 
 
         if (!empty($condition) and ! empty($FOREIGN_KEY_CHILDRENs)) {
@@ -183,9 +170,8 @@ class FORM extends DataBase
         return $query;
     }
 
-    private function condition_formSelect_par_condition_Default($condition): array
-    {
-        $schema = $this->entitysSchema;
+    private function condition_formSelect_par_condition_Default($condition): array {
+        $schema = $this->getschema($this->table);
         $FOREIGN_KEYs = $schema->getFOREIGN_KEY();
         if (empty($FOREIGN_KEYs)) {
             return [];
@@ -207,4 +193,5 @@ class FORM extends DataBase
         }
         return $cond;
     }
+
 }
