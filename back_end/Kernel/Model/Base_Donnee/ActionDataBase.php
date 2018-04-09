@@ -8,12 +8,13 @@ use Kernel\Model\Entitys\EntitysSchema;
 use \PDO;
 
 class ActionDataBase extends Connection {
-
+    
     ///////////////////////////////////////////////////
     /// getData
     protected function query($sql): array {
+        
         try {
-
+            
             $Statement = $this->getDataBase()->query($sql);
 
             $Statement->setFetchMode(PDO::FETCH_CLASS, EntitysDataTable::class);
@@ -62,5 +63,24 @@ class ActionDataBase extends Connection {
         }
     }
 
+    
+    
+    
+       /// getShema
+    protected function querySimple($sql): array {
+
+        try {
+
+            $Statement = $this->getDataBase()->query($sql);
+
+            $Statement->setFetchMode(PDO::FETCH_ASSOC);
+            return $Statement->fetchAll();
+        } catch (PDOException $exc) {
+            //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
+            echo $exc->getMessage();
+            echo '<br><hr>';
+            die($sql);
+        }
+    }
     ////////////////////////////////////////////////////////
 }

@@ -4,7 +4,7 @@ namespace Kernel\Model\Entitys;
 
 use Kernel\Tools\Tools;
 
-class EntitysSchema  {
+class EntitysSchema {
 
     private $modeCHILDREN = null;
     private $NameTable = null;
@@ -21,6 +21,7 @@ class EntitysSchema  {
         $this->COLUMNS_all = $table["COLUMNS_all"];
         $this->COLUMNS_META = $table["COLUMNS_META"];
         $this->FOREIGN_KEY = $table["FOREIGN_KEY"];
+        $this->STATISTIQUE = $table["STATISTIQUE"];
         $this->CHILDREN = $table["CHILDREN"];
 
         return $this;
@@ -217,15 +218,34 @@ class EntitysSchema  {
         return $select;
     }
 
-    //// 
-    public function select_statistique_SUM(): array {
+//    //// 
+//       public function select_statistique_SUM(): array {
+//
+//        $select = [];
+//        $FOREIGN_KEY = [];
+//
+//        foreach ($this->STATISTIQUE as $colom) {
+//
+//            $select[] = "SUM(" . $this->NameTable . "." . $colom . ") as  ` $colom des " . str_replace("$", " suite aux ", $this->NameTable) . " ` ";
+//        }
+//
+//        foreach ($this->FOREIGN_KEY as $FOREIGN) {
+//            $FOREIGN_KEY[] = $FOREIGN;
+//        }
+//
+//        return ["table" => $this->NameTable,
+//            "select" => $select,
+//            "FOREIGN_KEY" => $FOREIGN_KEY];
+//    }
+
+    public function select_statistique($fonction, $alias): array {
 
         $select = [];
         $FOREIGN_KEY = [];
 
         foreach ($this->STATISTIQUE as $colom) {
-
-            $select[] = "SUM(" . $this->NameTable . "." . $colom . ") as  ` $colom des " . str_replace("$", " suite aux ", $this->NameTable) . " ` ";
+            $table = str_replace("$", " suite aux ", $this->NameTable);
+            $select[] = "$fonction( $this->NameTable.$colom  ) as  ` "."$colom "."$alias"." $table ` ";
         }
 
         foreach ($this->FOREIGN_KEY as $FOREIGN) {

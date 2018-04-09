@@ -27,10 +27,7 @@ class Model {
         if ($table == "statistique") {
             $this->statistique = new Statistique($this->PathJsonConfig);
             $this->statistique->statistique_par();
-            $total = $this->statistique->total("commande", 'tarif_estime', 'tarif', "2017");
-            $total = $this->statistique->totalpar("commande", 'tarif_estime', 'tarif', "2018", 'raison$sociale');
-
-            var_dump($total);
+            
 
             die();
         } else {

@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Kernel\Model\Base_Donnee;
 
 use Kernel\Model\Entitys\EntitysSchema;
@@ -44,7 +42,7 @@ class MetaDatabase extends ActionDataBase {
             }
         }
         //find json config => model file 3SCHEMA_SELECT_AUTO
-        //and system SCHEMA_SELECT_AUTO
+
         foreach ($this->getALLschema($this->configExternal->getSCHEMA_SELECT_AUTO()) as $TABLE) {
             if ($TABLE->getNameTable() == $NameTable) {
                 return $TABLE;
@@ -56,7 +54,7 @@ class MetaDatabase extends ActionDataBase {
     /////////////////////////////////////////////////////////
 
 
-    public function getALLschema(array $config = []): array {
+    public function getALLschema(array $config): array {
         $DB_name = $this->configExternal->getNameDataBase();
         if (empty($this->allSchema)) {
             $allSchema = $this->querySchema(' SELECT table_name as NameTable FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" and  table_name not LIKE("r\_%") ');
@@ -73,57 +71,48 @@ class MetaDatabase extends ActionDataBase {
         return $this->allSchema;
     }
 
+    public function getSchemaStatistique($fonction, $alias, $table = "") {
+        if ($table == "") {
+            $Schemas = $this->getALLschema();
+        } else {
+            $Schemas = [$this->getschema($table)];
+        }
+        $schema_statistique = [];
+        foreach ($Schemas as $schema) {
+
+            $st = ($schema->select_statistique($fonction, $alias));
+
+            if (!empty($st["select"])) {
+                $schema_statistique[$st["table"]] = ["filds" => $st["select"],
+                    "GroupBy" => $st["FOREIGN_KEY"]];
+            }
+        }
+
+        return $schema_statistique;
+    }
+
     //private//////////////////////////////////////////////////////////////////////////
-    private function columns_master($table, array $config = []) {
+    private function columns_master($table, array $config) {
         if (isset($config['COLUMNS_master']) and ! empty($config['COLUMNS_master'])) {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " .
+            $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['COLUMNS_master']);
-        } else {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " .
-                    $table->getNameTable() .
-                    " WHERE `null`='no' and "
-                    . "`Type` !='varchar(201)' and"
-                    . " `Type` !='varchar(20)' and "
-                    . "`Key`!='MUL' ");
         }
-
-
-        $select = [];
-
-        foreach ($describe as $champ) {
-            $select[] = $champ->Field;
-        }
-        return $select;
+        return $this->getField($describe);
     }
 
-    private function columns_all($table, array $config = []) {
+    private function columns_all($table, array $config) {
         if (isset($config['COLUMNS_all']) and ! empty($config['COLUMNS_all'])) {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " .
+            $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['COLUMNS_all']);
-        } else {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " .
-                    $table->getNameTable() .
-                    " WHERE "
-                    . "`Key`!='MUL' ");
         }
-
-
-        $select = [];
-
-        foreach ($describe as $champ) {
-            $select[] = $champ->Field;
-        }
-        return $select;
+        return $this->getField($describe);
     }
 
-    private function columns_META($table, array $config = []) {
+    private function columns_META($table, array $config) {
 
         if (isset($config['COLUMNS_META']) and ! empty($config['COLUMNS_META'])) {
-            $describe = $this->querySchema("  DESCRIBE   " .
-                    $table->getNameTable());
-        } else {
             $describe = $this->querySchema("  DESCRIBE   " .
                     $table->getNameTable());
         }
@@ -131,89 +120,45 @@ class MetaDatabase extends ActionDataBase {
         return $describe;
     }
 
-    private function columns_master_CHILDREN($table, array $config = []) {
+    private function columns_master_CHILDREN($table, array $config) {
 
         if (isset($config['CHILDREN']['MASTER']) and ! empty($config['CHILDREN']['MASTER'])) {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " . $table .
+            $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
                     $config['CHILDREN']['MASTER']);
-        } else {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " . $table .
-                    " WHERE `null`='no' and "
-                    . "`Type` !='varchar(201)' and"
-                    . " `Type` !='varchar(20)' and"
-                    . "`Key`!='MUL' ");
         }
-
-
-        $colums = [];
-        if (!empty($describe) or $describe != null) {
-            foreach ($describe as $colum) {
-                $colums[] = $colum->Field;
-            }
-        }
-
-        return $colums;
+        return $this->getField($describe);
     }
 
-    private function columns_all_CHILDREN($table, array $config = []) {
+    private function columns_all_CHILDREN($table, array $config) {
         if (isset($config['CHILDREN']['ALL']) and ! empty($config['CHILDREN']['ALL'])) {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " . $table .
+            $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
                     $config['CHILDREN']['ALL']);
-        } else {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " . $table .
-                    " WHERE "
-                    . "`Key`!='MUL' ");
         }
 
 
-        $colums = [];
-        if (!empty($describe) or $describe != null) {
-            foreach ($describe as $colum) {
-                $colums[] = $colum->Field;
-            }
-        }
-
-        return $colums;
+        return $this->getField($describe);
     }
 
-    private function FOREIGN_KEY($table, array $config = []) {
+    private function FOREIGN_KEY($table, array $config) {
         if (isset($config['FOREIGN_KEY']) and ! empty($config['FOREIGN_KEY'])) {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " .
+            $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['FOREIGN_KEY']);
-        } else {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " .
-                    $table->getNameTable() .
-                    " WHERE `Key`='MUL'");
         }
 
 
-        $FOREIGN_KEY = [];
-
-        foreach ($describe as $champ) {
-            $FOREIGN_KEY[] = $champ->Field;
-        }
-        return $FOREIGN_KEY;
+        return $this->getField($describe);
     }
 
-    private function STATISTIQUE($table, array $config = []) {
+    private function STATISTIQUE($table, array $config) {
         if (isset($config['STATISTIQUE']) and ! empty($config['STATISTIQUE'])) {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " .
+            $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['STATISTIQUE']);
-        } else {
-            $describe = $this->querySchema("SHOW COLUMNS FROM " .
-                    $table->getNameTable() .
-                    " WHERE `Type` ='int(12)'");
         }
 
 
-        $FOREIGN_KEY = [];
-
-        foreach ($describe as $champ) {
-            $FOREIGN_KEY[] = $champ->Field;
-        }
-        return $FOREIGN_KEY;
+        return $this->getField($describe);
     }
 
     private function tables_CHILDREN($mainTable, $config, $DB_name) {
@@ -235,6 +180,17 @@ class MetaDatabase extends ActionDataBase {
         return $tables_CHILDREN;
     }
 
+    /////
+    private function getField(array $describe): array {
+        $Field = [];
+        foreach ($describe as $champ) {
+            $Field[] = $champ["Field"];
+        }
+
+        return $Field;
+    }
+
+    ////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * generateCache

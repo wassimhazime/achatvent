@@ -2,12 +2,12 @@
 {
 
     "COLUMNS_master": " WHERE (`null`='no' and `Type` !='varchar(201)' and  `Type` !='varchar(20)' and `Key`!='MUL')or(`Type` ='varchar(250)') ",
-    "COLUMNS_all": " WHERE `Key`!='MUL' ",
+    "COLUMNS_all": " WHERE  `Key`!='MUL' ",
     "COLUMNS_META": " DESCRIBE ",
     "FOREIGN_KEY": " WHERE `Key`='MUL'",
     "STATISTIQUE": " WHERE `Type` ='int(12)'",
     "CHILDREN": {
         "MASTER": " WHERE `null`='no' and `Type` !='varchar(201)' and `Type` !='varchar(20)' and `Key`!='MUL' ",
-        "ALL": " WHERE `Key`!='MUL'"
+        "ALL": " WHERE `Key`!='MUL' "
     }
 }   

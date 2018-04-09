@@ -22,6 +22,7 @@ class Connection {
 
     protected $configExternal;
     private static $dbConnection = null;
+    
     private $db;
 
     private static function getDB(array $config) {
@@ -50,8 +51,9 @@ class Connection {
         $this->configExternal = new ConfigExternal($PathConfigJsone);
         $this->db = self::getDB($this->configExternal->getConnect());
     }
-
+      
     protected function getDatabase() {
+      
         return $this->db;
     }
 

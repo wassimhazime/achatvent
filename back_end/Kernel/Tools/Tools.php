@@ -30,6 +30,12 @@ class Tools {
         return json_decode(json_encode($object), true);
     }
 
+     public static function json($object) {
+
+        return json_encode($object);
+    }
+
+    
     public static function parse_object_TO_array($object): array {
 
         if (is_array($object)) {

@@ -35,6 +35,8 @@ class Statistique extends AbstractOperatipn {
                     "par" => $st["FOREIGN_KEY"]];
             }
         }
+        
+        
         foreach ($this->schema_statistique as $table => $st) {
 
             $champ = $st["champ"];
@@ -52,20 +54,16 @@ class Statistique extends AbstractOperatipn {
     }
 
     public function statistique_par() {
-        $sh = $this->getALLschema();
+       
+        $schema_statistiqueMIN=$this->getSchemaStatistique("min"," min","commandes");
+       
+        
+        
+        
+        foreach ($schema_statistiqueMIN as $table => $st) {
 
-        foreach ($sh as $value) {
-            $st = ($value->select_statistique_SUM());
-            if (!empty($st["select"])) {
-
-                $this->schema_statistique[$st["table"]] = ["champ" => $st["select"],
-                    "par" => $st["FOREIGN_KEY"]];
-            }
-        }
-        foreach ($this->schema_statistique as $table => $st) {
-
-            $champ = $st["champ"];
-            $par = $st["par"];
+            $champ = $st["filds"];
+            $par = $st["GroupBy"];
             echo "<h1> $table </h1>";
             foreach ($par as $by) {
                 echo "<h3> $by </h3>";
@@ -78,9 +76,11 @@ class Statistique extends AbstractOperatipn {
                                 )
                         );
 
-
+               
                 $entity = $this->query($sql . " GROUP BY $by ");
+                
                 var_dump(Tools::entitys_TO_array($entity));
+             
             }
         }
     }
