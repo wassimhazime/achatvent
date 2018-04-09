@@ -13,7 +13,7 @@ class FormHTML {
     function __construct($COLUMNS_META_object, array $Conevert_TypeClomunSQL_to_TypeInputHTML, $entitysDataTable, $DefaultData = []) {
 
 
-        $COLUMNS_META = Intent::entitys_TO_array($COLUMNS_META_object);
+        $COLUMNS_META = \Kernel\Tools\Tools::entitys_TO_array($COLUMNS_META_object);
 
         $this->Conevert_TypeClomunSQL_to_TypeInputHTML = $Conevert_TypeClomunSQL_to_TypeInputHTML;
 //// change type sql to type html
@@ -97,7 +97,7 @@ class FormHTML {
         $optionTag = [];
         $data_load = [];
         foreach ($input['Data_load'] as $row) {
-            $data_load[$row->id] = Intent::entitys_TO_array($row);
+            $data_load[$row->id] = \Kernel\Tools\Tools::entitys_TO_array($row);
         }
 
 ///////////////////////////////////////////////////////////////////

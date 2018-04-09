@@ -28,7 +28,7 @@ class Intent
     {
         $this->mode = $mode;
         if ($mode == self::MODE_FORM) {
-            if (!empty($entitysDataTables) and ! $this->isAssoc($entitysDataTables)) {
+            if (!empty($entitysDataTables) and ! \Kernel\Tools\Tools::isAssoc($entitysDataTables)) {
                 throw new \TypeError("type array entre ERROR ==> EntitysDataTable de FOREIGN KEY mode:: MODE_FORM");
             }
         } else {
@@ -63,42 +63,9 @@ class Intent
 
   
 
-    /// insert Statement
-    public static function parse(array $data, EntitysSchema $schema, array $mode): self
-    {
-
-        if (self::isAssoc($data) and isset($data)) {
-            return (new self($schema, ((new EntitysDataTable())->set($data)), $mode));
-        }
-    }
-
-    public static function entitys_TO_array($object): array
-    {
-
-        return json_decode(json_encode($object), true);
-
-       
-    }
-    
-    
      // TOOLS
 /// plus
-    public static function parse_object_TO_array($object): array
-    {
-        
-        if (is_array($object)) {
-            return $object;
-        }
-        $reflectionClass = new \ReflectionClass(get_class($object));
-        $array = [];
-        foreach ($reflectionClass->getProperties() as $property) {
-            $property->setAccessible(true);
-            $array[$property->getName()] = $property->getValue($object);
-            $property->setAccessible(false);
-        }
-      
-        return $array;
-    }
+
     
     //TOOLS
     //// for show Statement
@@ -133,11 +100,5 @@ class Intent
         return $mode[1] != "EMPTY";
     }
 
-    public static function isAssoc(array $arr): bool
-    {
-        if (array() === $arr) {
-            return false;
-        }
-        return array_keys($arr) !== range(0, count($arr) - 1);
-    }
+  
 }

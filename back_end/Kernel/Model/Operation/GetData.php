@@ -13,24 +13,17 @@ namespace Kernel\Model\Operation;
  *
  * @author wassime
  */
+
 use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\MetaDatabase;
 use Kernel\Model\Query\QuerySQL;
 
-class GetData extends MetaDatabase {
+class GetData extends AbstractOperatipn {
 
-    private $table;
-
-    public function __construct($PathConfigJsone, $table) {
-
-        $this->table = $table;
-
-        parent::__construct($PathConfigJsone);
-    }
+   
 
     public function select(array $mode, $condition): Intent {
 
-        $schema = $this->getschema($this->table);
+        $schema = $this->schema;
 
         if (Intent::is_NameTable_MASTER($mode)) {
             $sql = ((new QuerySQL())
@@ -53,7 +46,7 @@ class GetData extends MetaDatabase {
     }
 
     private function setDataJoins(array $Entitys, array $mode) {
-        $schema = $this->getschema($this->table);
+        $schema = $this->schema;
 
         foreach ($Entitys as $Entity) {
             if (!empty($schema->get_table_CHILDREN())and Intent::is_get_CHILDREN($mode)) {

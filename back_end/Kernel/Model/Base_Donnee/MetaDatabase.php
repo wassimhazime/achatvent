@@ -1,15 +1,11 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 namespace Kernel\Model\Base_Donnee;
 
-use Kernel\INTENT\Intent;
 use Kernel\Model\Entitys\EntitysSchema;
+use Kernel\Tools\Tools;
 
 /**
  * Description of MetaDatabase
@@ -221,7 +217,7 @@ class MetaDatabase extends ActionDataBase {
     }
 
     private function tables_CHILDREN($mainTable, $config, $DB_name) {
-        
+
         $tables_relation = $this->querySchema('SELECT table_name as tables_relation FROM'
                 . ' INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" '
                 . 'and  table_name  LIKE("r\_' . $mainTable->getNameTable() . '%")  ');
@@ -251,16 +247,16 @@ class MetaDatabase extends ActionDataBase {
         $DB_AUTO = $this->getALLschema($config->getSCHEMA_SELECT_AUTO());
 
         foreach ($DB_AUTO as $TABLE) {
-            $tempschmaTabls[$TABLE->getNameTable()] = Intent::parse_object_TO_array($TABLE);
+            $tempschmaTabls[$TABLE->getNameTable()] = Tools::parse_object_TO_array($TABLE);
         }
 
         foreach ($config->getSCHEMA_SELECT_MANUAL() as $table) {
             $TABLE = (new EntitysSchema())->Instance($table);
-            $tempschmaTabls[$TABLE->getNameTable()] = Intent::parse_object_TO_array($TABLE);
+            $tempschmaTabls[$TABLE->getNameTable()] = Tools::parse_object_TO_array($TABLE);
         }
 
         foreach ($tempschmaTabls as $NameTable => $TABLE) {
-            $schmaTabls[] = Intent::parse_object_TO_array($TABLE);
+            $schmaTabls[] = Tools::parse_object_TO_array($TABLE);
         }
 
 

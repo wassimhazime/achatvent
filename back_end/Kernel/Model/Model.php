@@ -3,7 +3,7 @@
 namespace Kernel\Model;
 
 use Kernel\INTENT\Intent;
-use Kernel\Model\Operation\FORM;
+use Kernel\Model\Operation\GUI;
 use Kernel\Model\Operation\GetData;
 use Kernel\Model\Operation\SetData;
 use Kernel\Model\Operation\Statistique;
@@ -13,7 +13,7 @@ class Model {
 
     private $setData = null;
     private $table = null;
-    private $form = null;
+    private $gui = null;
     private $getData = null;
     private $statistique = null;
     private $is_null = true;
@@ -37,7 +37,7 @@ class Model {
             $this->is_null = false;
             $this->table = $table;
             $this->setData = new SetData($this->PathJsonConfig, $table);
-            $this->form = new FORM($this->PathJsonConfig, $table);
+            $this->gui = new GUI($this->PathJsonConfig, $table);
             $this->getData = new GetData($this->PathJsonConfig, $table);
         }
     }
@@ -84,7 +84,7 @@ class Model {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
 
-        $intent = $this->form->form($mode, $conditon);
+        $intent = $this->gui->form($mode, $conditon);
 
 
         return $intent;
@@ -95,7 +95,7 @@ class Model {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
 
-        $intent = $this->form->formDefault($mode, $conditon);
+        $intent = $this->gui->formDefault($mode, $conditon);
 
 
         return $intent;
@@ -105,7 +105,7 @@ class Model {
         if ($this->is_null) {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
-        $intent = $this->form->formSelect($mode);
+        $intent = $this->gui->formSelect($mode);
         return $intent;
     }
 

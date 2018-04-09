@@ -9,7 +9,6 @@
 namespace Kernel\Model\Operation;
 
 use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\MetaDatabase;
 use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Model\Query\QuerySQL;
 
@@ -18,19 +17,12 @@ use Kernel\Model\Query\QuerySQL;
  *
  * @author wassime
  */
-class FORM extends MetaDatabase {
-
-    private $table;
-
-    public function __construct($PathConfigJsone, $table) {
-        $this->table = $table;
-        parent::__construct($PathConfigJsone);
-    }
+class GUI extends AbstractOperatipn {
 
     ////////////////////////////////////////////////////////////////////////////////
     public function formSelect(array $mode): Intent {
 
-        $schema = $this->getschema($this->table);
+        $schema = $this->schema;
         // data form
         /// charge select input
         $Entitys_FOREIGNs = $this->datachargeselect();
@@ -49,7 +41,7 @@ class FORM extends MetaDatabase {
     }
 
     public function form(array $mode, $condition): Intent {
-        $schema = $this->getschema($this->table);
+        $schema = $this->schema;
         // data form
         /// charge select input
         $Entitys_FOREIGNs = $this->datachargeselect($condition);
@@ -65,7 +57,7 @@ class FORM extends MetaDatabase {
     }
 
     public function formDefault(array $mode, $conditionDefault): Intent {
-        $schema = $this->getschema($this->table);
+        $schema = $this->schema;
         // data Default
         $Entitys = $this->query((new QuerySQL())
                         ->select($schema->select_all())
@@ -97,7 +89,7 @@ class FORM extends MetaDatabase {
 
 
     private function datachargeselect(array $condition = []) {
-        $schema = $this->getschema($this->table);
+        $schema = $this->schema;
 
         $nameTable_FOREIGNs = $schema->getFOREIGN_KEY();
         /// charge select input
@@ -122,7 +114,7 @@ class FORM extends MetaDatabase {
 
     private function dataChargeMultiSelectIndependent(array $condition = []) {
 
-        $schema = $this->getschema($this->table);
+        $schema = $this->schema;
         $nameTable_CHILDRENs = $schema->get_table_CHILDREN();
 
         $Entitys_CHILDRENs = [];
@@ -146,7 +138,7 @@ class FORM extends MetaDatabase {
     }
 
     private function dataChargeMultiSelectDependent($tablechild, array $condition) {
-        $schema = $this->getschema($this->table);
+        $schema = $this->schema;
         $schem_Table_CHILDREN = $this->getschema($tablechild);
         return $this->query((
                                 new QuerySQL())
@@ -171,7 +163,7 @@ class FORM extends MetaDatabase {
     }
 
     private function condition_formSelect_par_condition_Default($condition): array {
-        $schema = $this->getschema($this->table);
+        $schema = $this->schema;
         $FOREIGN_KEYs = $schema->getFOREIGN_KEY();
         if (empty($FOREIGN_KEYs)) {
             return [];

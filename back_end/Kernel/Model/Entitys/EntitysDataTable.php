@@ -2,24 +2,20 @@
 
 namespace Kernel\Model\Entitys;
 
-use Kernel\INTENT\Intent;
+use Kernel\Tools\Tools;
 
-class EntitysDataTable extends abstractEntitys
-{
+class EntitysDataTable  {
 
     private $DataJOIN = array();
-  
 
 //add item enfant
-    
 
-    public function setDataJOIN($key, $enfant)
-    {
+
+    public function setDataJOIN($key, $enfant) {
         $this->DataJOIN[$key] = $enfant;
     }
 
-    public function getDataJOIN($key = null)
-    {
+    public function getDataJOIN($key = null) {
         if ($key == null) {
             return $this->DataJOIN;
         } else {
@@ -27,13 +23,13 @@ class EntitysDataTable extends abstractEntitys
         }
     }
 
-    public function set(array $data): array
-    {
-        if (Intent::isAssoc($data)) {
+    public function set(array $data): array {
+        if (Tools::isAssoc($data)) {
             foreach ($data as $key => $value) {
                 $this->$key = $value;
             }
         }
         return [$this];
     }
+
 }

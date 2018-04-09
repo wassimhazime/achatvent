@@ -87,7 +87,7 @@ class FactoryTAG
         $old=$entitysDataTable["Default"];
         if ($old !=[]) {
             $DataJOIN=$old[0]->getDataJOIN();
-            $DefaultData= Intent::entitys_TO_array($old[0]);
+            $DefaultData= \Kernel\Tools\Tools::entitys_TO_array($old[0]);
             
             $DefaultData["DataJOIN"]=$DataJOIN;
         } else {

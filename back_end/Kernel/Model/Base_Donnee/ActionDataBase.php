@@ -2,22 +2,19 @@
 
 namespace Kernel\Model\Base_Donnee;
 
+use Kernel\Model\Base_Donnee\Connection;
 use Kernel\Model\Entitys\EntitysDataTable;
 use Kernel\Model\Entitys\EntitysSchema;
-use PDO;
-use PDOException;
+use \PDO;
 
-class ActionDataBase extends Connection{
+class ActionDataBase extends Connection {
 
-  
-    
-
-    ////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////
     /// getData
     protected function query($sql): array {
         try {
 
-            $Statement = $this->db->query($sql);
+            $Statement = $this->getDataBase()->query($sql);
 
             $Statement->setFetchMode(PDO::FETCH_CLASS, EntitysDataTable::class);
             return $Statement->fetchAll();
@@ -34,13 +31,13 @@ class ActionDataBase extends Connection{
 
 
         try {
-            //$db->beginTransaction();
-            $this->db->exec($sql);
-            // $db->commit();
+            //$getDataBase()->beginTransaction();
+            $this->getDataBase()->exec($sql);
+            // $getDataBase()->commit();
 
-            return $this->db->lastInsertId();
+            return $this->getDataBase()->lastInsertId();
         } catch (PDOException $exc) {
-            // $db->rollBack();
+            // $getDataBase()->rollBack();
             //  Notify::send_Notify($exc->getMessage() . "exec SQL ERROR ==> </br> $sql");
             echo $exc->getMessage();
             echo '<br><hr>';
@@ -53,7 +50,7 @@ class ActionDataBase extends Connection{
 
         try {
 
-            $Statement = $this->db->query($sql);
+            $Statement = $this->getDataBase()->query($sql);
 
             $Statement->setFetchMode(PDO::FETCH_CLASS, EntitysSchema::class);
             return $Statement->fetchAll();
@@ -66,9 +63,4 @@ class ActionDataBase extends Connection{
     }
 
     ////////////////////////////////////////////////////////
-
-
-
-  
-
 }

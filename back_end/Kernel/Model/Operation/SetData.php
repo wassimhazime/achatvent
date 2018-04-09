@@ -3,35 +3,20 @@
 namespace Kernel\Model\Operation;
 
 use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\MetaDatabase;
+use Kernel\Model\Entitys\EntitysDataTable;
+use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Model\Query\QuerySQL;
+use Kernel\Tools\Tools;
 use TypeError;
 
-class SetData extends MetaDatabase
-{
-    private $table;
+class SetData extends AbstractOperatipn {
 
-
-    public function __construct($PathConfigJsone, $table)
-    {
-        $this->table=$table;
-
-        parent::__construct($PathConfigJsone);
-    }
-
-    function getTable()
-    {
-        return $this->table;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    public function update(array $dataForm, $mode): int
-    {
+    public function update(array $dataForm, $mode): int {
         if ($mode != Intent::MODE_UPDATE) {
             throw new TypeError(" ERROR mode Intent ==> mode!= MODE_UPDATE ");
         }
 
-        $intent = Intent::parse($dataForm, $this->getschema($this->table), $mode);
+        $intent = $this->parse($dataForm, $this->schema, $mode);
 
         $dataCHILDRENs = $this->charge_data_childe($intent);
         $data_NameTable = $this->remove_childe_in_data($intent);
@@ -39,10 +24,10 @@ class SetData extends MetaDatabase
 
         unset($data_NameTable["id"]);   // remove id
         // exec query sql insert to NameTable table
-        $datenow=date("Y-m-d-H-i-s");
-       
-        $data_NameTable["date_modifier"]=$datenow;
-        
+        $datenow = date("Y-m-d-H-i-s");
+
+        $data_NameTable["date_modifier"] = $datenow;
+
         $querySQL = (new QuerySQL())->
                 update($this->getTable())
                 ->set($data_NameTable)
@@ -62,29 +47,28 @@ class SetData extends MetaDatabase
         return $id_NameTable;
     }
 
-    public function delete($condition)
-    {
+    public function delete($condition) {
         $delete = (new QuerySQL())
                 ->delete($condition)
                 ->from($this->getTable());
-        $this->exec($delete);
+       $this->exec($delete);
+      
     }
 
-    public function insert(array $dataForm, $mode): int
-    {
+    public function insert(array $dataForm, $mode): int {
 
         if ($mode != Intent::MODE_INSERT) {
             throw new TypeError(" ERROR mode Intent ==> mode!= MODE_INSERT ");
         }
 
-        $intent = Intent::parse($dataForm, $this->getschema($this->table), $mode);
+        $intent = $this->parse($dataForm, $this->schema, $mode);
         $dataCHILDRENs = $this->charge_data_childe($intent);
         $data_NameTable = $this->remove_childe_in_data($intent);
         unset($data_NameTable["id"]);   // remove id
         // exec query sql insert to NameTable table
-        $datenow=date("Y-m-d-H-i-s");
-        $data_NameTable["date_ajoute"]=$datenow;
-        $data_NameTable["date_modifier"]=$datenow;
+        $datenow = date("Y-m-d-H-i-s");
+        $data_NameTable["date_ajoute"] = $datenow;
+        $data_NameTable["date_modifier"] = $datenow;
 
         $querySQL = (new QuerySQL())
                 ->insertInto($this->getTable())
@@ -107,8 +91,7 @@ class SetData extends MetaDatabase
      *
       charge data variables
      */
-    private function charge_data_childe($intent)
-    {
+    private function charge_data_childe($intent) {
         $data = ($intent->getEntitysDataTable()[0]);
         $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array
         $dataCHILDRENs = [];
@@ -120,8 +103,7 @@ class SetData extends MetaDatabase
         return $dataCHILDRENs;
     }
 
-    private function remove_childe_in_data($intent)
-    {
+    private function remove_childe_in_data($intent) {
         $data = ($intent->getEntitysDataTable()[0]);
         $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array
 
@@ -130,7 +112,7 @@ class SetData extends MetaDatabase
                 unset($data->$name_CHILDREN); // remove CHILDREN in $data
             }
         }
-        return Intent::entitys_TO_array($data);
+        return Tools::entitys_TO_array($data);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -139,8 +121,7 @@ class SetData extends MetaDatabase
      *
       exec SQL des tables relations
      */
-    private function insert_data_childe($intent, $id_NameTable, $dataCHILDRENs)
-    {
+    private function insert_data_childe($intent, $id_NameTable, $dataCHILDRENs) {
         foreach ($dataCHILDRENs as $name_table_CHILDREN => $id_CHILDRENs) {
             foreach ($id_CHILDRENs as $id_CHILD) {
                 $querySQL = (new QuerySQL())->
@@ -148,15 +129,14 @@ class SetData extends MetaDatabase
                         ->value([
                     "id_" . $intent->getEntitysSchema()->getNameTable() => $id_NameTable,
                     "id_" . $name_table_CHILDREN => $id_CHILD
-                        ]);
+                ]);
 
                 $this->exec($querySQL);
             }
         }
     }
 
-    private function delete_data_childe($intent, $id_NameTable)
-    {
+    private function delete_data_childe($intent, $id_NameTable) {
 
         $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array
         foreach ($name_CHILDRENs as $name_table_CHILDREN) {
@@ -167,4 +147,13 @@ class SetData extends MetaDatabase
             $this->exec($sqlquery);
         }
     }
+
+    /////////////////////////////
+    /// insert update
+    private function parse(array $data, EntitysSchema $schema, array $mode): Intent {
+        if (Tools::isAssoc($data) and isset($data)) {
+            return (new Intent($schema, ((new EntitysDataTable())->set($data)), $mode));
+        }
+    }
+
 }

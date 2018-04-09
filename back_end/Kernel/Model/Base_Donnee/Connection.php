@@ -19,9 +19,12 @@ use PDO;
  * @author wassime
  */
 class Connection {
-       private static $dbConnection = null;
 
-    protected static function getDB(array $config) {
+    protected $configExternal;
+    private static $dbConnection = null;
+    private $db;
+
+    private static function getDB(array $config) {
 
         if (self::$dbConnection === null) {
             $DB = $config['DB'];
@@ -41,18 +44,15 @@ class Connection {
         return self::$dbConnection;
     }
 
-    protected $db;
-    protected $configExternal;
-   // private $pathConfigJsone;
+    // private $pathConfigJsone;
     public function __construct(string $PathConfigJsone) {
-       // $this->pathConfigJsone = $PathConfigJsone;
+        // $this->pathConfigJsone = $PathConfigJsone;
         $this->configExternal = new ConfigExternal($PathConfigJsone);
         $this->db = self::getDB($this->configExternal->getConnect());
     }
 
-    
-    
-    
-    
-    
+    protected function getDatabase() {
+        return $this->db;
+    }
+
 }

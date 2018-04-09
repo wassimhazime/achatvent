@@ -8,24 +8,23 @@
 
 namespace Kernel\Model\Operation;
 
-use Kernel\INTENT\Intent;
-use Kernel\Model\Base_Donnee\MetaDatabase;
 use Kernel\Model\Query\QuerySQL;
+use Kernel\Tools\Tools;
 
 /**
  * Description of FORM
  *
  * @author wassime
  */
-class Statistique extends MetaDatabase {
+class Statistique extends AbstractOperatipn {
 
-    private $schema;
     private $schema_statistique = [];
 
-    public function __construct($PathConfigJsone) {
+    ////////////////////////////////////////////////////////////////////////////////
 
-        parent::__construct($PathConfigJsone);
 
+
+    public function statistique_global() {
         $sh = $this->getALLschema();
 
         foreach ($sh as $value) {
@@ -36,14 +35,6 @@ class Statistique extends MetaDatabase {
                     "par" => $st["FOREIGN_KEY"]];
             }
         }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-
-
-
-    public function statistique_global() {
-
         foreach ($this->schema_statistique as $table => $st) {
 
             $champ = $st["champ"];
@@ -56,12 +47,21 @@ class Statistique extends MetaDatabase {
 
 
             $entity = $this->query($sql);
-            var_dump(Intent::entitys_TO_array($entity)[0]);
+            var_dump(Tools::entitys_TO_array($entity)[0]);
         }
     }
 
     public function statistique_par() {
+        $sh = $this->getALLschema();
 
+        foreach ($sh as $value) {
+            $st = ($value->select_statistique_SUM());
+            if (!empty($st["select"])) {
+
+                $this->schema_statistique[$st["table"]] = ["champ" => $st["select"],
+                    "par" => $st["FOREIGN_KEY"]];
+            }
+        }
         foreach ($this->schema_statistique as $table => $st) {
 
             $champ = $st["champ"];
@@ -80,19 +80,28 @@ class Statistique extends MetaDatabase {
 
 
                 $entity = $this->query($sql . " GROUP BY $by ");
-                var_dump(Intent::entitys_TO_array($entity));
+                var_dump(Tools::entitys_TO_array($entity));
             }
         }
     }
 
     public function total($table, $champ, $alias, $date) {
+        $sh = $this->getALLschema();
 
+        foreach ($sh as $value) {
+            $st = ($value->select_statistique_SUM());
+            if (!empty($st["select"])) {
+
+                $this->schema_statistique[$st["table"]] = ["champ" => $st["select"],
+                    "par" => $st["FOREIGN_KEY"]];
+            }
+        }
         var_dump($this->schema_statistique);
         $sql = "SELECT  SUM($champ) as $alias FROM $table WHERE YEAR(`date`)=$date ";
 
         $entity = $this->query($sql);
 
-        return Intent::entitys_TO_array($entity);
+        return Tools::entitys_TO_array($entity);
     }
 
     public function totalpar($table, $champ, $alias, $date, $by) {
@@ -101,7 +110,7 @@ class Statistique extends MetaDatabase {
 
         $entity = $this->query($sql);
 
-        return Intent::entitys_TO_array($entity);
+        return Tools::entitys_TO_array($entity);
     }
 
 }
