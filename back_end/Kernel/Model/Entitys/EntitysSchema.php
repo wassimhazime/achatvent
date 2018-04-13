@@ -9,6 +9,7 @@ class EntitysSchema {
     private $modeCHILDREN = null;
     private $NameTable = null;
     private $COLUMNS_META = [];
+    private $COLUMNS_default = ["*"];
     private $COLUMNS_master = ["*"];
     private $COLUMNS_all = ["*"];
     private $FOREIGN_KEY = [];
@@ -17,6 +18,7 @@ class EntitysSchema {
 
     public function Instance(array $table): self {
         $this->NameTable = $table["NameTable"];
+         $this->COLUMNS_default = $table["COLUMNS_default"];
         $this->COLUMNS_master = $table["COLUMNS_master"];
         $this->COLUMNS_all = $table["COLUMNS_all"];
         $this->COLUMNS_META = $table["COLUMNS_META"];
@@ -83,7 +85,15 @@ class EntitysSchema {
         $this->COLUMNS_META = $COLUMNS_META;
     }
 
-    function getCOLUMNS_all() {
+    function getCOLUMNS_default() {
+        return $this->COLUMNS_default;
+    }
+
+    function setCOLUMNS_default($COLUMNS_default) {
+        $this->COLUMNS_default = $COLUMNS_default;
+    }
+
+        function getCOLUMNS_all() {
         return $this->COLUMNS_all;
     }
 
@@ -148,7 +158,17 @@ class EntitysSchema {
     /*
      * SELECT SQL
      */
+    public function select_default() {
 
+        $select = [];
+        foreach ($this->COLUMNS_default as $colom) {
+            $select[] = $this->NameTable . "." . $colom;
+        }
+        foreach ($this->FOREIGN_KEY as $FOREIGN) {
+            $select[] = $FOREIGN . "." . $FOREIGN;
+        }
+        return $select;
+    }
 
     public function select_master() {
 
@@ -244,8 +264,8 @@ class EntitysSchema {
         $FOREIGN_KEY = [];
 
         foreach ($this->STATISTIQUE as $colom) {
-            $table = str_replace("$", " suite aux ", $this->NameTable);
-            $select[] = "$fonction( $this->NameTable.$colom  ) as  ` "."$colom "."$alias"." $table ` ";
+            
+            $select[] = "$fonction( $this->NameTable.$colom ) as  `"."$colom "."$alias"."`";
         }
 
         foreach ($this->FOREIGN_KEY as $FOREIGN) {

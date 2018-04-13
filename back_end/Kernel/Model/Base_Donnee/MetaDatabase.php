@@ -59,6 +59,7 @@ class MetaDatabase extends ActionDataBase {
         if (empty($this->allSchema)) {
             $allSchema = $this->querySchema(' SELECT table_name as NameTable FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" and  table_name not LIKE("r\_%") ');
             foreach ($allSchema as $table) {
+                $table->setCOLUMNS_default($this->columns_default($table, $config));
                 $table->setCOLUMNS_master($this->columns_master($table, $config));
                 $table->setCOLUMNS_all($this->columns_all($table, $config));
                 $table->setCOLUMNS_META($this->columns_META($table, $config));
@@ -92,6 +93,16 @@ class MetaDatabase extends ActionDataBase {
     }
 
     //private//////////////////////////////////////////////////////////////////////////
+    
+     private function columns_default($table, array $config) {
+        if (isset($config['COLUMNS_default']) and ! empty($config['COLUMNS_default'])) {
+            $describe = $this->querySimple("SHOW COLUMNS FROM " .
+                    $table->getNameTable() .
+                    $config['COLUMNS_default']);
+        }
+        return $this->getField($describe);
+    }
+    
     private function columns_master($table, array $config) {
         if (isset($config['COLUMNS_master']) and ! empty($config['COLUMNS_master'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
@@ -125,6 +136,14 @@ class MetaDatabase extends ActionDataBase {
         if (isset($config['CHILDREN']['MASTER']) and ! empty($config['CHILDREN']['MASTER'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
                     $config['CHILDREN']['MASTER']);
+        }
+        return $this->getField($describe);
+    }
+     private function columns_default_CHILDREN($table, array $config) {
+
+        if (isset($config['CHILDREN']['DEFAULT']) and ! empty($config['CHILDREN']['DEFAULT'])) {
+            $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
+                    $config['CHILDREN']['DEFAULT']);
         }
         return $this->getField($describe);
     }
@@ -168,12 +187,14 @@ class MetaDatabase extends ActionDataBase {
                 . 'and  table_name  LIKE("r\_' . $mainTable->getNameTable() . '%")  ');
         $tables_CHILDREN['MASTER'] = [];
         $tables_CHILDREN['ALL'] = [];
+        $tables_CHILDREN['DEFAULT'] = [];
         $tables_CHILDREN['EMPTY'] = [];
 
         foreach ($tables_relation as $champ) {
             $table = str_replace("r_{$mainTable->getNameTable()}_", "", $champ->tables_relation);
 
             $tables_CHILDREN['MASTER'][$table] = $this->columns_master_CHILDREN($table, $config);
+            $tables_CHILDREN['DEFAULT'][$table] = $this->columns_default_CHILDREN($table, $config);
             $tables_CHILDREN['ALL'][$table] = $this->columns_all_CHILDREN($table, $config);
             $tables_CHILDREN['EMPTY'][$table] = [];
         }

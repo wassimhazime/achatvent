@@ -61,16 +61,28 @@ class Module {
             $response->getBody()->write($data);
             return $response;
         }
-        if ($page == "tb" or $page == "TB") {
+        
+        if ($page == "statistique" or $page == "statistique") {
             
-             $this->model->setStatement('statistique');
+             //$this->model->setStatement('statistique');
              
-            echo 'tva';
-            die();
-            $data = $this->renderer->render("@achat/tb", ["table" => ""]);
+           
+            $data = $this->renderer->render("@achat/statistique", ["table" => ""]);
             $response->getBody()->write($data);
             return $response;
         }
+        
+           if ($page == "st" or $page == "st") {
+            
+             $data=$this->model->setStatement('statistique');
+             
+           
+           
+            $response->getBody()->write($data);
+            return $response;
+        }
+        
+        
         $query = $request->getQueryParams();
 
         $this->model->setStatement($page);
@@ -93,6 +105,16 @@ class Module {
 
     public function POST(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, $params) {
         $page = $params["controle"];
+       
+        if ($page=="statistique"){
+          $query=$request->getParsedBody();
+          var_dump($query);
+             die($page);
+        }
+        
+        
+        
+        
         $this->File_Upload->setPreffix($page);
         $insert = $this->File_Upload->set($request);
         $this->model->setStatement($page);
@@ -146,9 +168,27 @@ class Module {
         if (isset($query["s"])) {
             $select = $query["s"];
         } else {
-            $select = "an";
+            $select = "dd";
         }
         switch ($select) {
+               case "dm":
+                $mode = Intent::MODE_SELECT_DEFAULT_MASTER;
+
+                break;
+            case "da":
+
+                $mode = Intent::MODE_SELECT_DEFAULT_ALL;
+                break;
+            case "dd":
+
+                $mode = Intent::MODE_SELECT_DEFAULT_DEFAULT;
+                break;
+             case "dn":
+
+                $mode = Intent::MODE_SELECT_DEFAULT_NULL;
+                break;
+            
+            
             case "mm":
                 $mode = Intent::MODE_SELECT_MASTER_MASTER;
 
@@ -174,7 +214,7 @@ class Module {
                 $mode = Intent::MODE_SELECT_MASTER_NULL;
                 break;
             default:
-                $mode = Intent::MODE_SELECT_MASTER_MASTER;
+                $mode = Intent::MODE_SELECT_DEFAULT_DEFAULT;
                 break;
         }
 

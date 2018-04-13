@@ -3,7 +3,7 @@
 namespace Kernel\html\element;
 
 use Kernel\html\HTML;
-use Kernel\INTENT\Intent;
+use Kernel\Tools\Tools;
 
 class FormHTML {
 
@@ -13,7 +13,7 @@ class FormHTML {
     function __construct($COLUMNS_META_object, array $Conevert_TypeClomunSQL_to_TypeInputHTML, $entitysDataTable, $DefaultData = []) {
 
 
-        $COLUMNS_META = \Kernel\Tools\Tools::entitys_TO_array($COLUMNS_META_object);
+        $COLUMNS_META = Tools::entitys_TO_array($COLUMNS_META_object);
 
         $this->Conevert_TypeClomunSQL_to_TypeInputHTML = $Conevert_TypeClomunSQL_to_TypeInputHTML;
 //// change type sql to type html
@@ -97,16 +97,18 @@ class FormHTML {
         $optionTag = [];
         $data_load = [];
         foreach ($input['Data_load'] as $row) {
-            $data_load[$row->id] = \Kernel\Tools\Tools::entitys_TO_array($row);
+            $data_load[$row->id] = Tools::entitys_TO_array($row);
         }
 
 ///////////////////////////////////////////////////////////////////
 
         foreach ($data_load as $key => $data) {
 
-            $ligne = "";
+            $infocontent = "";
+            $tokens = "";
             foreach ($data as $column => $value) {
-                $ligne .= $column . '$$$' . $value . ' £££ ';
+                $infocontent .= $column . '$$$' . $value . ' £££ ';
+                $tokens .=  $value . ' ';
             }
 
 
@@ -114,7 +116,9 @@ class FormHTML {
             $rowTag = HTML::TAG('option')
                     ->setValue($key)
                     ->setData($data[$name])
-                    ->setAtt(' data-content="' . $ligne . ' "');
+                    ->setAtt(' data-infocontent="' . $infocontent . ' "')
+                    ->setAtt(' data-tokens="'. $tokens .'"')
+                    ;
 
             if ($Default == $data[$name]) {
                 $rowTag->setAtt("selected");
@@ -132,7 +136,8 @@ class FormHTML {
             return $this->div($tag);
         } else {
             $tag = HTML::TAG("select")
-                    ->setClass("form-control form-string")
+                    ->setClass("selectpicker form-control form-string ")
+                    ->setAtt(' data-live-search="true"  ')
                     ->setData($optionTag)
                     ->setName($name)
                     ->builder();

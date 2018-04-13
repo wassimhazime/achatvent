@@ -55,7 +55,7 @@ class Statistique extends AbstractOperatipn {
 
     public function statistique_par() {
        
-        $schema_statistiqueMIN=$this->getSchemaStatistique("min"," min","commandes");
+        $schema_statistiqueMIN=$this->getSchemaStatistique("sum","",'ventes');
        
         
         
@@ -64,25 +64,31 @@ class Statistique extends AbstractOperatipn {
 
             $champ = $st["filds"];
             $par = $st["GroupBy"];
-            echo "<h1> $table </h1>";
+            $st=[];
             foreach ($par as $by) {
-                echo "<h3> $by </h3>";
+                
                 $sql = ((new QuerySQL())
                                 ->select($champ)
-                                ->column("$by.$by")
+                              //  ->column("$by.$by")
                                 ->from($table)
-                                ->join($by)
+                              //  ->join($by)
                                 ->where("YEAR(`date`)=2018"
                                 )
                         );
 
                
-                $entity = $this->query($sql . " GROUP BY $by ");
+                $st= $this->querySimple($sql . " GROUP BY $by ");
                 
-                var_dump(Tools::entitys_TO_array($entity));
-             
+                
+               
+               // echo (Tools::json($entity));
+                //return $sql . " GROUP BY $by ";
             }
+           //  var_dump (($st));
+            echo (Tools::json($st));
+            die();
         }
+         
     }
 
     public function total($table, $champ, $alias, $date) {

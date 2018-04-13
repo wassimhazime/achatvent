@@ -9,6 +9,9 @@ use App\App;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use function Http\Response\send;
+// start application
+$start= microtime(true);
+
 
 $app = new App(ROOT . "back_end" . D_S . "Config" . D_S . "Config_Container.php");
 $app->addModule(\App\Modules\Vente\Module::class);
@@ -21,6 +24,13 @@ $Response = $app->run(ServerRequest::fromGlobals(), new Response());
 send($Response);
 
 
+
+
+
+
+$fin= round(microtime(true)-$start,5);
+
+echo"<h5>". $fin.' secondes </h5>';
 
 
 

@@ -26,10 +26,10 @@ class Model {
     function setStatement($table) {
         if ($table == "statistique") {
             $this->statistique = new Statistique($this->PathJsonConfig);
-            $this->statistique->statistique_par();
+            return  $this->statistique->statistique_par();
             
 
-            die();
+         
         } else {
             $this->is_null = false;
             $this->table = $table;

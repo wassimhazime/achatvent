@@ -45,14 +45,17 @@ class FactoryTAG
 
         $COLUMNS_master = $schema->getCOLUMNS_master();
         $COLUMNS_all = $schema->getCOLUMNS_all();
+        $COLUMNS_default = $schema->getCOLUMNS_default();
         $FOREIGN_KEY = $schema->getFOREIGN_KEY();
 
         $table = $intent->getEntitysDataTable();
 
-        if (Intent::is_NameTable_MASTER($intent)) {
+        if (Intent::is_show_MASTER($intent)) {
             $columns = array_merge($COLUMNS_master, $FOREIGN_KEY);
-        } elseif (Intent::is_NameTable_ALL($intent)) {
+        } elseif (Intent::is_show_ALL($intent)) {
             $columns = array_merge($COLUMNS_all, $FOREIGN_KEY);
+        }elseif (Intent::is_show_DEFAULT($intent)) {
+            $columns = array_merge($COLUMNS_default, $FOREIGN_KEY);
         }
        
         $columns = array_merge($columns, [$input["title"]]);

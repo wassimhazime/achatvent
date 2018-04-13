@@ -23,10 +23,12 @@ class GetData extends AbstractOperatipn {
         $schema = $this->schema;
 
 
-        if (Intent::is_NameTable_MASTER($mode)) {
+        if (Intent::is_show_MASTER($mode)) {
             $champs = $schema->select_master();
-        } elseif (Intent::is_NameTable_ALL($mode)) {
+        } elseif (Intent::is_show_ALL($mode)) {
             $champs = $schema->select_all();
+        }elseif (Intent::is_show_DEFAULT($mode)) {
+            $champs = $schema->select_default();
         }
 
 
