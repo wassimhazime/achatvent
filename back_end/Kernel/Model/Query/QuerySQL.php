@@ -525,6 +525,20 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
         return "";
     }
 
+    public function prepareQuery(): array {
+        
+        //chwiya tamara
+        
+        
+        
+        
+         $query["prepare"]="";
+        $query["params_execute"]="";
+        return $query;  
+    }         
+    
+    
+    
     public function __toString()
     {
         return $this->query();

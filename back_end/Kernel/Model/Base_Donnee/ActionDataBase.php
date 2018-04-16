@@ -8,13 +8,29 @@ use Kernel\Model\Entitys\EntitysSchema;
 use \PDO;
 
 class ActionDataBase extends Connection {
-    
+
     ///////////////////////////////////////////////////
+    
+ 
+    protected function prepareQuerySQL(array $query) {
+       $sqlprepare = $query["prepare"];
+        $params_execute = $query["params_execute"];
+        var_dump($query);       die();
+        
+ /* Exécute une requête préparée en passant un tableau de valeurs */
+$sth = $dbh->prepare('SELECT nom, couleur, calories
+    FROM fruit
+    WHERE calories < ? AND couleur = ?');
+$sth->execute(array(150, 'rouge'));
+$red = $sth->fetchAll();
+        $red = $sth->fetchAll();
+    }
+
     /// getData
     protected function query($sql): array {
-        
+
         try {
-            
+
             $Statement = $this->getDataBase()->query($sql);
 
             $Statement->setFetchMode(PDO::FETCH_CLASS, EntitysDataTable::class);
@@ -63,10 +79,7 @@ class ActionDataBase extends Connection {
         }
     }
 
-    
-    
-    
-       /// getShema
+    /// getShema
     protected function querySimple($sql): array {
 
         try {
@@ -82,5 +95,6 @@ class ActionDataBase extends Connection {
             die($sql);
         }
     }
+
     ////////////////////////////////////////////////////////
 }

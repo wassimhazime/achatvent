@@ -22,7 +22,17 @@ class Statistique extends AbstractOperatipn {
 
     ////////////////////////////////////////////////////////////////////////////////
 
+    public function chargeDataSelect() {
 
+        $sh = $this->getSchemaStatistique("sum", " ");
+
+        $dataselect = [];
+        foreach ($sh as $key => $value) {
+            $dataselect[] = $key;
+        }
+
+        return $dataselect;
+    }
 
     public function statistique_global() {
         $sh = $this->getALLschema();
@@ -35,8 +45,8 @@ class Statistique extends AbstractOperatipn {
                     "par" => $st["FOREIGN_KEY"]];
             }
         }
-        
-        
+
+
         foreach ($this->schema_statistique as $table => $st) {
 
             $champ = $st["champ"];
@@ -53,42 +63,51 @@ class Statistique extends AbstractOperatipn {
         }
     }
 
-    public function statistique_par() {
-       
-        $schema_statistiqueMIN=$this->getSchemaStatistique("sum","",'ventes');
-       
-        
-        
-        
+    public function statistique_pour(array $query) {
+
+
+        $startdate = $query["startinputDate"];
+        $findate = $query["fininputDate"];
+        $tables = $query["Rapports"];
+        $json = [];
+        foreach ($tables as $table) {
+            $json[] = $this->statistique_par($table, $startdate, $findate);
+        }
+
+        return Tools::json($json);
+    }
+
+    public function statistique_par($table, $startdate, $findat) {
+
+        $schema_statistiqueMIN = $this->getSchemaStatistique("sum", "", $table);
         foreach ($schema_statistiqueMIN as $table => $st) {
 
             $champ = $st["filds"];
             $par = $st["GroupBy"];
-            $st=[];
+            $st = [];
             foreach ($par as $by) {
-                
+
                 $sql = ((new QuerySQL())
                                 ->select($champ)
-                              //  ->column("$by.$by")
+                                //  ->column("$by.$by")
                                 ->from($table)
-                              //  ->join($by)
-                                ->where("YEAR(`date`)=2018"
-                                )
+                                ->whereBETWEEN("date", Tools::date_FR_to_EN($startdate), Tools::date_FR_to_EN($findat))
+
+
                         );
 
-               
-                $st= $this->querySimple($sql . " GROUP BY $by ");
-                
-                
-               
-               // echo (Tools::json($entity));
+
+                $st = $this->querySimple($sql . " GROUP BY $by ");
+
+
+
+                // echo (Tools::json($entity));
                 //return $sql . " GROUP BY $by ";
             }
-           //  var_dump (($st));
-            echo (Tools::json($st));
-            die();
+            //  var_dump (($st));
+
+            return Tools::json($st);
         }
-         
     }
 
     public function total($table, $champ, $alias, $date) {

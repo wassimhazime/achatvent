@@ -42,8 +42,8 @@ class Kernel
 
         $route = $this->router->match($request);
         $call = $route->getCallable();
-        $params=$route->getParams();
-        $res = call_user_func_array($call, [$request, $respons, $this->container,$params]);
+        
+        $res = call_user_func_array($call, [$request, $respons]);
 
         if (is_string($res)) {
             $r = new \GuzzleHttp\Psr7\Response(404);

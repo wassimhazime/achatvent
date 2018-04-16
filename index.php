@@ -15,7 +15,7 @@ $start= microtime(true);
 
 $app = new App(ROOT . "back_end" . D_S . "Config" . D_S . "Config_Container.php");
 $app->addModule(\App\Modules\Vente\Module::class);
-$app->addModule(\App\Modules\Achat\Module::class);
+$app->addModule(\App\Modules\Comptable\ComptableModule::class);
 
 
 
@@ -30,7 +30,7 @@ send($Response);
 
 $fin= round(microtime(true)-$start,5);
 
-echo"<h5>". $fin.' secondes </h5>';
+//echo"<h5>". $fin.' secondes </h5>';
 
 
 

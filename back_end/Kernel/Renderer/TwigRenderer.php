@@ -27,7 +27,7 @@ class TwigRenderer implements InterfaceRenderer
     function __construct($path)
     {
         
-        $this->loader = new Twig_Loader_Filesystem($path."/twig");
+        $this->loader = new Twig_Loader_Filesystem($path);
         $this->twig = new Twig_Environment($this->loader, array(
             'cache' => false,'debug' => true
         ));
@@ -60,7 +60,7 @@ class TwigRenderer implements InterfaceRenderer
 
     public function addPath(string $path, string $namespace)
     {
-        $this->loader->addPath($path."/twig", $namespace) ;
+        $this->loader->addPath($path, $namespace) ;
         return $this;
     }
 

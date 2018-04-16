@@ -43,7 +43,7 @@ class MetaDatabase extends ActionDataBase {
         }
         //find json config => model file 3SCHEMA_SELECT_AUTO
 
-        foreach ($this->getALLschema($this->configExternal->getSCHEMA_SELECT_AUTO()) as $TABLE) {
+        foreach ($this->getALLschema() as $TABLE) {
             if ($TABLE->getNameTable() == $NameTable) {
                 return $TABLE;
             }
@@ -54,7 +54,8 @@ class MetaDatabase extends ActionDataBase {
     /////////////////////////////////////////////////////////
 
 
-    public function getALLschema(array $config): array {
+    public function getALLschema(): array {
+        $config=$this->configExternal->getSCHEMA_SELECT_AUTO();
         $DB_name = $this->configExternal->getNameDataBase();
         if (empty($this->allSchema)) {
             $allSchema = $this->querySchema(' SELECT table_name as NameTable FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" and  table_name not LIKE("r\_%") ');

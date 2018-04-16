@@ -18,6 +18,19 @@ use ReflectionClass;
 
 class Tools {
 
+    public static function date_FR_to_EN($var) {
+
+        $date = str_replace('/', '-', $var);
+        return date('Y-m-d', strtotime($date));
+    }
+    
+     public static function date_EN_to_FR($var) {
+
+        $date = str_replace('-', '/', $var);
+        return date('d/m/Y', strtotime($date));
+    }
+    
+
     public static function isAssoc(array $arr): bool {
         if (array() === $arr) {
             return false;
@@ -30,12 +43,11 @@ class Tools {
         return json_decode(json_encode($object), true);
     }
 
-     public static function json($object) {
+    public static function json($object) {
 
         return json_encode($object);
     }
 
-    
     public static function parse_object_TO_array($object): array {
 
         if (is_array($object)) {
