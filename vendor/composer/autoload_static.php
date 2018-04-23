@@ -4,13 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8ed5de433aea7f4bb013337ba0ff4609
+class ComposerStaticInit0b8c133c62dd92784292c707125eaf77
 {
     public static $files = array (
-        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         'aaf5b53a99b4de51dadc23016def253f' => __DIR__ . '/..' . '/webimpress/http-middleware-compatibility/autoload/http-middleware.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '6f2c5977e422114bbaec553e7c77ee8b' => __DIR__ . '/..' . '/http-interop/response-sender/src/functions.php',
         'bbf73f3db644d3dced353b837903e74c' => __DIR__ . '/..' . '/php-di/php-di/src/DI/functions.php',
@@ -127,7 +127,7 @@ class ComposerStaticInit8ed5de433aea7f4bb013337ba0ff4609
         ),
         'Kernel\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/back_end/Kernel',
+            0 => __DIR__ . '/../..' . '/Kernel',
         ),
         'Invoker\\' => 
         array (
@@ -171,11 +171,11 @@ class ComposerStaticInit8ed5de433aea7f4bb013337ba0ff4609
         ),
         'Config\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/back_end/Config',
+            0 => __DIR__ . '/../..' . '/Config',
         ),
         'App\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/back_end/App',
+            0 => __DIR__ . '/../..' . '/App',
         ),
     );
 
@@ -744,10 +744,10 @@ class ComposerStaticInit8ed5de433aea7f4bb013337ba0ff4609
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8ed5de433aea7f4bb013337ba0ff4609::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8ed5de433aea7f4bb013337ba0ff4609::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit8ed5de433aea7f4bb013337ba0ff4609::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit8ed5de433aea7f4bb013337ba0ff4609::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0b8c133c62dd92784292c707125eaf77::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0b8c133c62dd92784292c707125eaf77::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit0b8c133c62dd92784292c707125eaf77::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit0b8c133c62dd92784292c707125eaf77::$classMap;
 
         }, null, ClassLoader::class);
     }

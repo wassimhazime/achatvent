@@ -16,7 +16,7 @@ return array(
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'PhpDocReader\\' => array($vendorDir . '/php-di/phpdoc-reader/src/PhpDocReader'),
-    'Kernel\\' => array($baseDir . '/back_end/Kernel'),
+    'Kernel\\' => array($baseDir . '/Kernel'),
     'Invoker\\' => array($vendorDir . '/php-di/invoker/src'),
     'Intervention\\Image\\' => array($vendorDir . '/intervention/image/src/Intervention/Image'),
     'Interop\\Http\\Server\\' => array($vendorDir . '/http-interop/http-middleware/src'),
@@ -27,6 +27,6 @@ return array(
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
     'DI\\' => array($vendorDir . '/php-di/php-di/src/DI'),
-    'Config\\' => array($baseDir . '/back_end/Config'),
-    'App\\' => array($baseDir . '/back_end/App'),
+    'Config\\' => array($baseDir . '/Config'),
+    'App\\' => array($baseDir . '/App'),
 );

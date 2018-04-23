@@ -13,7 +13,7 @@ use function Http\Response\send;
 $start= microtime(true);
 
 
-$app = new App(ROOT . "back_end" . D_S . "Config" . D_S . "Config_Container.php");
+$app = new App(ROOT  . "Config" . D_S . "Config_Container.php");
 $app->addModule(\App\Modules\Vente\Module::class);
 $app->addModule(\App\Modules\Comptable\ComptableModule::class);
 
