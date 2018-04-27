@@ -8,11 +8,6 @@
 
 namespace Kernel\Renderer\Twig_Extension;
 
-/**
- * Description of Form
- *
- * @author wassime
- */
 use Exception;
 use Kernel\html\ConfigExternal;
 use Kernel\html\element\FormHTML;
@@ -22,7 +17,7 @@ use Kernel\INTENT\Intent;
 use Kernel\Router\Router;
 use Kernel\Tools\Tools;
 
-class Form extends \Twig_Extension
+class Show_Item extends \Twig_Extension
 {
 
     private $ConfigExternal;
@@ -35,11 +30,11 @@ class Form extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction("form", [$this, "form"], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction("Show_Item", [$this, "Show_Item"], ['is_safe' => ['html']]),
         ];
     }
 
-    public function form(Intent $intent)
+    public function Show_Item(Intent $intent)
     {
         if ($intent->getMode() != Intent::MODE_FORM) {
             throw new Exception("methode call  ERROR ==>  mode != MODE_FORM ");
@@ -64,7 +59,7 @@ class Form extends \Twig_Extension
 
 
 
-        $formhtml = new FormHTML($COLUMNS_META_object, $Conevert, $entitysDataTable, $DefaultData);
+        $formhtml = new ShowItem($COLUMNS_META_object, $Conevert, $entitysDataTable, $DefaultData);
 
         return $formhtml->builder();
     }

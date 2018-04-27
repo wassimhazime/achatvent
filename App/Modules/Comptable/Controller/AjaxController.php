@@ -16,9 +16,11 @@ namespace App\Modules\Comptable\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AjaxController extends AbstractController {
+class AjaxController extends AbstractController
+{
 
-    public function exec(): ResponseInterface {
+    public function exec(): ResponseInterface
+    {
 
 
 
@@ -32,7 +34,6 @@ class AjaxController extends AbstractController {
         }
 
         if ($this->page == "st" or $this->page == "st") {
-
             $st = $this->model->setStatement('statistique');
             $this->response->getBody()->write($st->statistique_par('bons$achats', "2017-01-01", "2019-01-01"));
 
@@ -68,5 +69,4 @@ class AjaxController extends AbstractController {
         $this->response->getBody()->write($json);
         return $this->response;
     }
-
 }

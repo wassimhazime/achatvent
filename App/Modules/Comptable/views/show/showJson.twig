@@ -4,6 +4,8 @@
 {% block headcss %}
     <script src="/public/admin/js/moment.js" ></script>
     <link href="/public/admin/DatatableRapide/datatables.min.css" rel="stylesheet" type="text/css"/>
+    <!-- Bootstrap-select Custom CSS -->
+    <link href="/public/admin/selectbootstrap/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
 
 {% endblock %}
 {% block headjs %}
@@ -12,17 +14,29 @@
 
 {% block container %}
     <a href="{{_URLaction._ajouter}}" class="btn btn-default">ajouter</a>
-    <a href="?s=dm" class="btn btn-default">DEFAULT_MASTER</a>
-    <a href="?s=da" class="btn btn-default">DEFAULT_ALL </a>
-    <a href="?s=dd" class="btn btn-default">DEFAULT_DEFAULT </a>
 
-    <a href="?s=mm" class="btn btn-default">MASTER_MASTER</a>
-    <a href="?s=ma" class="btn btn-default">MASTER_ALL </a>
-    <a href="?s=mn" class="btn btn-default">MASTER_NULL</a>
+    <form action="#" method="get">
+      <select class="selectpicker" id="modeShowSelect" name="s">
 
-    <a href="?s=am" class="btn btn-default">ALL_MASTER</a>
-    <a href="?s=aa" class="btn btn-default">ALL_ALL</a>
-    <a href="?s=an" class="btn btn-default">ALL_NULL</a>
+
+        <option value="dm" >DEFAULT_MASTER</option>
+        <option value="da" >DEFAULT_ALL </option>
+        <option value="dd" >DEFAULT_DEFAULT </option>
+
+        <option value="mm" >MASTER_MASTER</option>
+        <option value="ma" >MASTER_ALL </option>
+        <option href="mn" >MASTER_NULL</option>
+
+        <option value="am" >ALL_MASTER</option>
+        <option value="aa" >ALL_ALL</option>
+        <option value="an" >ALL_NULL</option>
+      </select>
+      <button type="submit">ok</button>
+    </form>
+
+
+
+
 
     <div class ="cadre">
 
@@ -85,5 +99,14 @@
 
 
     </script>
-    <!-- end dataTables -->   
+    <!-- end dataTables -->  
+
+    <!-- bootstrap-select Core JavaScript -->
+    <script src="/public/admin/selectbootstrap/js/bootstrap-select.min.js"></script>
+
+    <script>
+
+
+
+    </script>
 {% endblock %}

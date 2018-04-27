@@ -16,9 +16,11 @@ namespace Kernel\Model\Operation;
 use Kernel\INTENT\Intent;
 use Kernel\Model\Query\QuerySQL;
 
-class GetData extends AbstractOperatipn {
+class GetData extends AbstractOperatipn
+{
 
-    public function select(array $mode, $condition): Intent {
+    public function select(array $mode, $condition): Intent
+    {
 
         $schema = $this->schema;
 
@@ -27,7 +29,7 @@ class GetData extends AbstractOperatipn {
             $champs = $schema->select_master();
         } elseif (Intent::is_show_ALL($mode)) {
             $champs = $schema->select_all();
-        }elseif (Intent::is_show_DEFAULT($mode)) {
+        } elseif (Intent::is_show_DEFAULT($mode)) {
             $champs = $schema->select_default();
         }
 
@@ -48,7 +50,8 @@ class GetData extends AbstractOperatipn {
         return new Intent($schema, $Entitys, $mode);
     }
 
-    private function setDataJoins(array $Entitys, array $mode) {
+    private function setDataJoins(array $Entitys, array $mode)
+    {
         $schema = $this->schema;
 
         foreach ($Entitys as $Entity) {
@@ -61,12 +64,11 @@ class GetData extends AbstractOperatipn {
                             ->where($schema->getNameTable() . ".id = " . $Entity->id)
                             ->query();
 
-                $Entity->setDataJOIN($tablechild, $this->query($sql));
+                    $Entity->setDataJOIN($tablechild, $this->query($sql));
                 }
             } else {
                 $Entity->setDataJOIN("empty", []);
             }
         }
     }
-
 }

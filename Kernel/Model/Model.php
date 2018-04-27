@@ -8,7 +8,8 @@ use Kernel\Model\Operation\SetData;
 use Kernel\Model\Operation\Statistique;
 use Kernel\Model\Operation\ToolsDB;
 
-class Model {
+class Model
+{
 
     protected $setData = null;
     protected $table = null;
@@ -19,12 +20,14 @@ class Model {
     protected $PathJsonConfig;
     protected $ToolsDB;
 
-    public function __construct($PathConfigJsone) {
+    public function __construct($PathConfigJsone)
+    {
         $this->PathJsonConfig = $PathConfigJsone;
         $this->ToolsDB = new ToolsDB($PathConfigJsone);
     }
 
-    function setStatement($table) {
+    function setStatement($table)
+    {
 
         if ($table == "statistique") {
             return new Statistique($this->PathJsonConfig);
@@ -39,8 +42,8 @@ class Model {
         }
     }
     
-    public function getAllTables() {
+    public function getAllTables()
+    {
         return $this->ToolsDB->getAllTables();
     }
-
 }

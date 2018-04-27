@@ -1,7 +1,7 @@
 <?php
 
 use App\Modules\Comptable\Model\Model;
-use Kernel\html\FactoryTAG;
+
 use Kernel\html\File_Upload;
 use Kernel\Renderer\TwigRenderer;
 use Kernel\Router\Router;
@@ -19,9 +19,7 @@ return [
 
         return new Model(ROOT . "Config/model/");
     },
-    FactoryTAG::class => function (ContainerInterface $container): FactoryTAG {
-        return new FactoryTAG(ROOT . "Config/html/");
-    },
+
     Router::class => function (ContainerInterface $container): Router {
         return new Router;
     },

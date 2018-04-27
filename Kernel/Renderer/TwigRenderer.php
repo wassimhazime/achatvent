@@ -20,19 +20,21 @@ use Kernel\Tools\Tools;
  *
  * @author wassime
  */
-class TwigRenderer implements InterfaceRenderer {
+class TwigRenderer implements InterfaceRenderer
+{
 
     private $twig;
     private $loader;
     static $renderer = null;
 
-    function __construct($pathTemplete,$PathConfigJsone) {
+    function __construct($pathTemplete, $PathConfigJsone)
+    {
 
         $this->loader = new Twig_Loader_Filesystem($pathTemplete);
         $this->twig = new Twig_Environment($this->loader, array(
             'cache' => false, 'debug' => true
         ));
-        
+
         $this->twig->addFunction(new \Twig_SimpleFunction("html", function ($context) {
 
             return $context;
@@ -42,14 +44,16 @@ class TwigRenderer implements InterfaceRenderer {
 
             return $context . "   => " . $context2;
         }, ['is_safe' => ['html']]));
-        
+
         $this->twig->addExtension(new Twig_Extension\Table);
         $this->twig->addExtension(new \Twig_Extension_Debug);
         $this->twig->addExtension(new Twig_Extension\controle_Table);
         $this->twig->addExtension(new Twig_Extension\Form($PathConfigJsone));
+        $this->twig->addExtension(new Twig_Extension\Show_Item($PathConfigJsone));
     }
 
-    public static function getRenderer(string $path = "") {
+    public static function getRenderer(string $path = "")
+    {
 
         if (is_null(self::$renderer)) {
             self::$renderer = new self($path);
@@ -58,18 +62,20 @@ class TwigRenderer implements InterfaceRenderer {
         return self::$renderer;
     }
 
-    public function addGlobal(string $key, $value) {
+    public function addGlobal(string $key, $value)
+    {
         $this->twig->addGlobal($key, $value);
         return $this;
     }
 
-    public function addPath(string $path, string $namespace) {
+    public function addPath(string $path, string $namespace)
+    {
         $this->loader->addPath($path, $namespace);
         return $this;
     }
 
-    public function render(string $view, array $param = array()): string {
+    public function render(string $view, array $param = array()): string
+    {
         return $this->twig->render("$view.twig", $param);
     }
-
 }

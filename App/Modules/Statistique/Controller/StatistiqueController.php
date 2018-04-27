@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\Comptable\Controller;
+namespace App\Modules\Statistique\Controller;
 
 /**
  * Description of PostController

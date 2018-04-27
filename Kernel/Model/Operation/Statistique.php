@@ -16,13 +16,15 @@ use Kernel\Tools\Tools;
  *
  * @author wassime
  */
-class Statistique extends AbstractOperatipn {
+class Statistique extends AbstractOperatipn
+{
 
     private $schema_statistique = [];
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    public function chargeDataSelect() {
+    public function chargeDataSelect()
+    {
 
         $sh = $this->getSchemaStatistique("sum", " ");
 
@@ -34,13 +36,13 @@ class Statistique extends AbstractOperatipn {
         return $dataselect;
     }
 
-    public function statistique_global() {
+    public function statistique_global()
+    {
         $sh = $this->getALLschema();
 
         foreach ($sh as $value) {
             $st = ($value->select_statistique_SUM());
             if (!empty($st["select"])) {
-
                 $this->schema_statistique[$st["table"]] = ["champ" => $st["select"],
                     "par" => $st["FOREIGN_KEY"]];
             }
@@ -48,7 +50,6 @@ class Statistique extends AbstractOperatipn {
 
 
         foreach ($this->schema_statistique as $table => $st) {
-
             $champ = $st["champ"];
             echo "<h1> $table </h1>";
             $sql = ((new QuerySQL())
@@ -63,7 +64,8 @@ class Statistique extends AbstractOperatipn {
         }
     }
 
-    public function statistique_pour(array $query) {
+    public function statistique_pour(array $query)
+    {
 
 
         $startdate = $query["startinputDate"];
@@ -77,16 +79,15 @@ class Statistique extends AbstractOperatipn {
         return Tools::json($json);
     }
 
-    public function statistique_par($table, $startdate, $findat) {
+    public function statistique_par($table, $startdate, $findat)
+    {
 
         $schema_statistiqueMIN = $this->getSchemaStatistique("sum", "", $table);
         foreach ($schema_statistiqueMIN as $table => $st) {
-
             $champ = $st["filds"];
             $par = $st["GroupBy"];
             $st = [];
             foreach ($par as $by) {
-
                 $sql = ((new QuerySQL())
                                 ->select($champ)
                                 //  ->column("$by.$by")
@@ -110,13 +111,13 @@ class Statistique extends AbstractOperatipn {
         }
     }
 
-    public function total($table, $champ, $alias, $date) {
+    public function total($table, $champ, $alias, $date)
+    {
         $sh = $this->getALLschema();
 
         foreach ($sh as $value) {
             $st = ($value->select_statistique_SUM());
             if (!empty($st["select"])) {
-
                 $this->schema_statistique[$st["table"]] = ["champ" => $st["select"],
                     "par" => $st["FOREIGN_KEY"]];
             }
@@ -129,7 +130,8 @@ class Statistique extends AbstractOperatipn {
         return Tools::entitys_TO_array($entity);
     }
 
-    public function totalpar($table, $champ, $alias, $date, $by) {
+    public function totalpar($table, $champ, $alias, $date, $by)
+    {
         $sql = "SELECT $by, SUM($champ) as $alias FROM $table WHERE YEAR(`date`)=$date "
                 . " GROUP BY $by ";
 
@@ -137,5 +139,4 @@ class Statistique extends AbstractOperatipn {
 
         return Tools::entitys_TO_array($entity);
     }
-
 }

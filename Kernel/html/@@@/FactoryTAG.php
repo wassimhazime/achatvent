@@ -23,11 +23,13 @@ use Kernel\Tools\Tools;
  * Les décorateurs
  */
  //"nette/forms": "^2.4",
-class FactoryTAG {
+class FactoryTAG
+{
 
     private $ConfigExternal;
 
-    public function __construct($PathConfigJsone) {
+    public function __construct($PathConfigJsone)
+    {
         $this->ConfigExternal = new ConfigExternal($PathConfigJsone);
     }
 
@@ -59,7 +61,8 @@ class FactoryTAG {
     
     
     
-    public function FormHTML(Intent $intent) {
+    public function FormHTML(Intent $intent)
+    {
 //        if ($intent->getMode() != Intent::MODE_FORM) {
 //            throw new Exception("methode call  ERROR ==>  mode != MODE_FORM ");
 //        }
@@ -94,38 +97,39 @@ class FactoryTAG {
     
     
     
-    public function showinfo(Intent $intent) {
-        if ($intent->getMode() != Intent::MODE_FORM) {
-            throw new Exception("methode call  ERROR ==>  mode != MODE_FORM ");
-        }
-
-        $entitysDataTable = $intent->getEntitysDataTable();
-        $old = $entitysDataTable["Default"];
-        if ($old != []) {
-            $DataJOIN = $old[0]->getDataJOIN();
-            $DefaultData = Tools::entitys_TO_array($old[0]);
-
-            $DefaultData["DataJOIN"] = $DataJOIN;
-        } else {
-            $DefaultData = [];
-        }
-
-
-        $Conevert = ($this->ConfigExternal->getConevert_TypeClomunSQL_to_TypeInputHTML());
-
-        $COLUMNS_META_object = $intent->getEntitysSchema()->getCOLUMNS_META();
-
-
-
-
-        $formhtml = new ShowItem($COLUMNS_META_object, $Conevert, $entitysDataTable, $DefaultData);
-
-        return $formhtml->builder();
+    public function showinfo(Intent $intent)
+    {
+//        if ($intent->getMode() != Intent::MODE_FORM) {
+//            throw new Exception("methode call  ERROR ==>  mode != MODE_FORM ");
+//        }
+//
+//        $entitysDataTable = $intent->getEntitysDataTable();
+//        $old = $entitysDataTable["Default"];
+//        if ($old != []) {
+//            $DataJOIN = $old[0]->getDataJOIN();
+//            $DefaultData = Tools::entitys_TO_array($old[0]);
+//
+//            $DefaultData["DataJOIN"] = $DataJOIN;
+//        } else {
+//            $DefaultData = [];
+//        }
+//
+//
+//        $Conevert = ($this->ConfigExternal->getConevert_TypeClomunSQL_to_TypeInputHTML());
+//
+//        $COLUMNS_META_object = $intent->getEntitysSchema()->getCOLUMNS_META();
+//
+//
+//
+//
+//        $formhtml = new ShowItem($COLUMNS_META_object, $Conevert, $entitysDataTable, $DefaultData);
+//
+//        return $formhtml->builder();
     }
 
-    public function message(Intent $intent, Router $router, $nameRoute) {
+    public function message(Intent $intent, Router $router, $nameRoute)
+    {
 
-        return $this->tableHTML($intent, $router, $nameRoute);
+//        return $this->tableHTML($intent, $router, $nameRoute);
     }
-
 }

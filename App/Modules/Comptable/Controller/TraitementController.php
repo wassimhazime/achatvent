@@ -16,9 +16,11 @@ namespace App\Modules\Comptable\Controller;
 use Kernel\INTENT\Intent;
 use Psr\Http\Message\ResponseInterface;
 
-class TraitementController extends AbstractController {
+class TraitementController extends AbstractController
+{
 
-    public function exec(): ResponseInterface {
+    public function exec(): ResponseInterface
+    {
         $this->model->setStatement($this->page);
 
 
@@ -39,55 +41,43 @@ class TraitementController extends AbstractController {
         } elseif ($action == "voir") {
             return $this->show($id);
         }
-//        elseif (isset($query["imageview"])) {
-//            $id_image = $query["imageview"];
-//            return $this->File_Upload->get($id_image);
-//        }
     }
 
-    public function supprimer($id) {
+    public function supprimer($id)
+    {
         $conditon = ['id' => $id];
         $this->model->delete($conditon);
         $url = $this->router->generateUri("actionGET", ["controle" => $this->page, "action" => "suprim"]);
         return $this->response->withStatus(301)->withHeader('Location', $url);
     }
 
-    public function modifier($id) {
+    public function modifier($id)
+    {
         $page = $this->page;
         $conditon = ["$page.id" => $id];
         $intentform = $this->model->formDefault(Intent::MODE_FORM, $conditon);
-       return $this->render("@traitement/modifier_form", ["intent" => $intentform]);
+        return $this->render("@traitement/modifier_form", ["intent" => $intentform]);
     }
 
-    public function ajouter($id) {
+    public function ajouter($id)
+    {
         $getInfo = $this->request->getQueryParams();
 
         if (!isset($getInfo["ajouter"])) {
             $intentformselect = $this->model->formSelect(Intent::MODE_FORM);
             if (!empty($intentformselect->getEntitysSchema()->getFOREIGN_KEY())) {
-                //$form = $this->FactoryTAG->FormHTML($intentformselect);  //twig
                 return $this->render("@traitement/ajouter_select", ["intent" => $intentformselect]);
             }
         }
 
         unset($getInfo["ajouter"]);
-
-
         $intentform = $this->model->form(Intent::MODE_FORM, $getInfo);
-      //  $form = $this->FactoryTAG->FormHTML($intentform);  //twig
         return $this->render("@traitement/ajouter_form", ["intent" => $intentform]);
     }
-    
-    
-        public function show($id) {
-        
-        
-        $data = $this->model->show_id($id);
-        $msghtml = $this->FactoryTAG->showinfo($data);  //twig
-       
 
-
-        return $this->render("@show/show_id", ["data" => $msghtml]);
+    public function show($id)
+    {
+        $intent = $this->model->show_id($id);
+        return $this->render("@show/show_id", ["intent" => $intent]);
     }
-
 }

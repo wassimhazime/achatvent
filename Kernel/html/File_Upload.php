@@ -16,19 +16,24 @@ namespace Kernel\html;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-class File_Upload {
+
+class File_Upload
+{
     private $path;
     private $preffix;
-    function setPreffix($preffix) {
+    function setPreffix($preffix)
+    {
         $this->preffix = $preffix;
     }
 
-        function __construct($path="public/imageUpload/", $preffix="") {
+    function __construct($path = "public/imageUpload/", $preffix = "")
+    {
         $this->path = $path;
         $this->preffix = $preffix;
     }
 
-    public function get($id_image) {
+    public function get($id_image)
+    {
       
         $images = [];
         var_dump($this->path);
@@ -54,7 +59,8 @@ class File_Upload {
         die();
     }
 
-    public function set($request) {
+    public function set($request)
+    {
        
         
         $insert = $request->getParsedBody();
@@ -68,7 +74,7 @@ class File_Upload {
                     $name = $id_image . "_" . $file->getClientFilename();
                     $file->moveTo($this->path .$name);
                 } else {
-                    /// pour update si no upload image ne faire rien 
+                    /// pour update si no upload image ne faire rien
                     return $insert;
                 }
             }
@@ -77,5 +83,5 @@ class File_Upload {
 
 
         return $insert;
-    }  
+    }
 }

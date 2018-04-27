@@ -12,7 +12,7 @@
  * @author wassime
  */
 
-namespace App\Modules\Comptable\Model;
+namespace App\Modules\Statistique\Model;
 
 use Kernel\INTENT\Intent;
 use Kernel\Model\Model as kernelModel;

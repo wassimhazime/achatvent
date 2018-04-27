@@ -3,20 +3,9 @@
 
 
 {% block container %}
-
-
- 
-
     <div class ="cadre">
-      <h1>{{title}}  </h1>
-      <div class="row">
-        
-       
-          {{data |raw}}   
-    
-        
+       <div class="row">
+        {{Show_Item(intent)}}   
       </div>
-
-
     </div>   
 {% endblock %} 

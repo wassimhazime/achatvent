@@ -17,10 +17,12 @@ use Kernel\Model\Query\QuerySQL;
  *
  * @author wassime
  */
-class GUI extends AbstractOperatipn {
+class GUI extends AbstractOperatipn
+{
 
     ////////////////////////////////////////////////////////////////////////////////
-    public function formSelect(array $mode): Intent {
+    public function formSelect(array $mode): Intent
+    {
 
         $schema = $this->schema;
         // data form
@@ -40,7 +42,8 @@ class GUI extends AbstractOperatipn {
         return new Intent($schemaFOREIGN_KEY, $data, $mode);
     }
 
-    public function form(array $mode, $condition): Intent {
+    public function form(array $mode, $condition): Intent
+    {
         $schema = $this->schema;
         // data form
         /// charge select input
@@ -56,7 +59,8 @@ class GUI extends AbstractOperatipn {
         return new Intent($schema, $data, $mode);
     }
 
-    public function formDefault(array $mode, array $conditionDefault): Intent {
+    public function formDefault(array $mode, array $conditionDefault): Intent
+    {
         $schema = $this->schema;
         // data Default
         $Entitys = $this->query((new QuerySQL())
@@ -88,7 +92,8 @@ class GUI extends AbstractOperatipn {
     ///////////////////////////////////////////////////////////////////
 
 
-    private function datachargeselect(array $condition = []) {
+    private function datachargeselect(array $condition = [])
+    {
         $schema = $this->schema;
 
         $nameTable_FOREIGNs = $schema->getFOREIGN_KEY();
@@ -112,7 +117,8 @@ class GUI extends AbstractOperatipn {
         return $Entitys_FOREIGNs;
     }
 
-    private function dataChargeMultiSelectIndependent(array $condition = []) {
+    private function dataChargeMultiSelectIndependent(array $condition = [])
+    {
 
         $schema = $this->schema;
         $nameTable_CHILDRENs = $schema->get_table_CHILDREN();
@@ -137,7 +143,8 @@ class GUI extends AbstractOperatipn {
         return $Entitys_CHILDRENs;
     }
 
-    private function dataChargeMultiSelectDependent($tablechild, array $condition) {
+    private function dataChargeMultiSelectDependent($tablechild, array $condition)
+    {
         $schema = $this->schema;
         $schem_Table_CHILDREN = $this->getschema($tablechild);
         return $this->query((
@@ -148,7 +155,8 @@ class GUI extends AbstractOperatipn {
                                 ->where($condition));
     }
 
-    private function query_enfant_lier_formSelect(QuerySQL $query, array $condition, array $FOREIGN_KEY_CHILDRENs) {
+    private function query_enfant_lier_formSelect(QuerySQL $query, array $condition, array $FOREIGN_KEY_CHILDRENs)
+    {
 
 
         if (!empty($condition) and ! empty($FOREIGN_KEY_CHILDRENs)) {
@@ -162,7 +170,8 @@ class GUI extends AbstractOperatipn {
         return $query;
     }
 
-    private function condition_formSelect_par_condition_Default($condition): array {
+    private function condition_formSelect_par_condition_Default($condition): array
+    {
         $schema = $this->schema;
         $FOREIGN_KEYs = $schema->getFOREIGN_KEY();
         if (empty($FOREIGN_KEYs)) {
@@ -185,5 +194,4 @@ class GUI extends AbstractOperatipn {
         }
         return $cond;
     }
-
 }

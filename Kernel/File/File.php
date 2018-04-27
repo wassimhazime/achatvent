@@ -79,7 +79,4 @@ class File
         }
         return $contents;
     }
-    
-    
-    
 }

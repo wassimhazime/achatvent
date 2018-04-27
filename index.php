@@ -2,19 +2,20 @@
 
 define('D_S', DIRECTORY_SEPARATOR);
 //define('ROOT', dirname(__DIR__) . D_S);
-define('ROOT', __DIR__. D_S);
+define('ROOT', __DIR__ . D_S);
 require ROOT . "vendor/autoload.php";
 
 use App\App;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use function Http\Response\send;
+
 // start application
-$start= microtime(true);
+$start = microtime(true);
 
 
-$app = new App(ROOT  . "Config" . D_S . "Config_Container.php");
-$app->addModule(\App\Modules\Vente\Module::class);
+$app = new App(ROOT . "Config" . D_S . "Config_Container.php");
+$app->addModule(\App\Modules\Statistique\StatistiqueModule::class);
 $app->addModule(\App\Modules\Comptable\ComptableModule::class);
 
 
@@ -28,7 +29,7 @@ send($Response);
 
 
 
-$fin= round(microtime(true)-$start,5);
+$fin = round(microtime(true) - $start, 5);
 
 //echo"<h5>". $fin.' secondes </h5>';
 

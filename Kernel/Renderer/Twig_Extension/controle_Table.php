@@ -8,15 +8,18 @@
 
 namespace Kernel\Renderer\Twig_Extension;
 
-class controle_Table extends \Twig_Extension {
+class controle_Table extends \Twig_Extension
+{
 
-    public function getFunctions() {
+    public function getFunctions()
+    {
         return [
             new \Twig_SimpleFunction("input_tableHtml", [$this, "input_tableHtml"], ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
 
-    public function input_tableHtml(array $context, string $nameroute): array {
+    public function input_tableHtml(array $context, string $nameroute): array
+    {
        
         $page = $context["page"];
         $router = $context["router"];
@@ -40,5 +43,4 @@ class controle_Table extends \Twig_Extension {
         ];
         return $input;
     }
-
 }

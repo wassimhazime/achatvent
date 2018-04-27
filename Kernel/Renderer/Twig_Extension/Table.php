@@ -8,15 +8,18 @@ use Kernel\Tools\Tools;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
-class Table extends Twig_Extension {
+class Table extends Twig_Extension
+{
 
     private $tablehtml;
 
-    function __construct() {
+    function __construct()
+    {
         $this->tablehtml = new TableHTML();
     }
 
-    public function getFunctions() {
+    public function getFunctions()
+    {
         return [
             new Twig_SimpleFunction("table_intent", [$this, "table_intent"], ['is_safe' => ['html']]),
             new Twig_SimpleFunction("table_array", [$this, "table_array"], ['is_safe' => ['html']]),
@@ -24,7 +27,8 @@ class Table extends Twig_Extension {
         ];
     }
 
-    public function table_intent(string $attrHtml, Intent $intent, array $input = []) {
+    public function table_intent(string $attrHtml, Intent $intent, array $input = [])
+    {
 
 
 
@@ -37,11 +41,13 @@ class Table extends Twig_Extension {
         return $this->tablehtml->builder($attrHtml, $columns, $DataTable, $CHILD, $input);
     }
 
-    public function table_array(string $attrHtml, array $columns, array $DataTable, array $CHILD = [], array $input = []) {
+    public function table_array(string $attrHtml, array $columns, array $DataTable, array $CHILD = [], array $input = [])
+    {
         return $this->tablehtml->builder($attrHtml, $columns, $DataTable, $CHILD, $input);
     }
 
-    public function table_json_intent(Intent $intent) {
+    public function table_json_intent(Intent $intent)
+    {
 
 
         $entity = ($intent->getEntitysDataTable());
@@ -62,5 +68,4 @@ class Table extends Twig_Extension {
 
         return \Kernel\Tools\Tools::json(["data" => $data, "titles" => $titles, "dataSet" => $dataSets]);
     }
-
 }

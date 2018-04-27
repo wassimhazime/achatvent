@@ -80,7 +80,7 @@ class Intent
     
     //TOOLS
     //// for show Statement
-     public static function is_show_DEFAULT($_intentORmode): bool
+    public static function is_show_DEFAULT($_intentORmode): bool
     {
         if ($_intentORmode instanceof Intent) {
             $mode = $_intentORmode->getMode();
@@ -126,6 +126,4 @@ class Intent
         }
         return $mode[1] != "EMPTY";
     }
-
-  
 }

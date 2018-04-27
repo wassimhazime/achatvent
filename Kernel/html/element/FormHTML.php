@@ -5,12 +5,14 @@ namespace Kernel\html\element;
 use Kernel\html\HTML;
 use Kernel\Tools\Tools;
 
-class FormHTML {
+class FormHTML
+{
 
     protected $input = [];
     protected $Conevert_TypeClomunSQL_to_TypeInputHTML;
 
-    function __construct($COLUMNS_META_object, array $Conevert_TypeClomunSQL_to_TypeInputHTML, $entitysDataTable, $DefaultData = []) {
+    function __construct($COLUMNS_META_object, array $Conevert_TypeClomunSQL_to_TypeInputHTML, $entitysDataTable, $DefaultData = [])
+    {
 
 
         $COLUMNS_META = Tools::entitys_TO_array($COLUMNS_META_object);
@@ -47,7 +49,8 @@ class FormHTML {
         }
     }
 
-    private function conevert_TypeClomunSQL_to_TypeInputHTML(string $Type): string {
+    private function conevert_TypeClomunSQL_to_TypeInputHTML(string $Type): string
+    {
 
         $Conevert = $this->Conevert_TypeClomunSQL_to_TypeInputHTML;
 
@@ -58,7 +61,8 @@ class FormHTML {
         }
     }
 
-    public function builder() {
+    public function builder()
+    {
 
 
         $INPUT = [];
@@ -91,7 +95,8 @@ class FormHTML {
         return $builder;
     }
 
-    public function selectTage(array $input): string {
+    public function selectTage(array $input): string
+    {
         $name = $input['Field'];
         $Default = $input['Default'];
         $optionTag = [];
@@ -103,7 +108,6 @@ class FormHTML {
 ///////////////////////////////////////////////////////////////////
 
         foreach ($data_load as $key => $data) {
-
             $infocontent = "";
             $tokens = "";
             foreach ($data as $column => $value) {
@@ -145,7 +149,8 @@ class FormHTML {
         }
     }
 
-    public function multiSelectTag(array $input): string {
+    public function multiSelectTag(array $input): string
+    {
         $name = $input['Field'];
         $Default = $input['Default'];
         $data_load = [];
@@ -196,7 +201,8 @@ class FormHTML {
         return $this->div($tag, "col-sm-12");
     }
 
-    public function inputTage(array $input): string {
+    public function inputTage(array $input): string
+    {
         $name = $input['Field'];
         $Default = $input['Default'];
         $type = $input['Type'];
@@ -208,7 +214,6 @@ class FormHTML {
                 ->setPlaceholder(str_replace("_", " ", str_replace("$", " ", $name)))
                 ->setValue($Default);
         if ($input['Type'] == "file") {
-
             $tag->setClass("form-file form-control")
                     ->setAtt('multiple accept=" .jpg, .jpeg, .png"')
                     ->setName($name . "[]");
@@ -220,7 +225,8 @@ class FormHTML {
         return $this->div($tag->builder());
     }
 
-    public function textareaTage(array $input): string {
+    public function textareaTage(array $input): string
+    {
         $name = $input['Field'];
         $Default = $input['Default'];
         $tag = $inputHTML = HTML::TAG("textarea")
@@ -234,7 +240,8 @@ class FormHTML {
         return $this->div($tag);
     }
 
-    public function labelTage(array $input): string {
+    public function labelTage(array $input): string
+    {
         $type = $input['Type'];
         if ($type == "hidden") {
             return "";
@@ -257,11 +264,11 @@ class FormHTML {
                         ->builder();
     }
 
-    private function div($tag, $class = "col-sm-6 ") {
+    private function div($tag, $class = "col-sm-6 ")
+    {
         return HTML::TAG("div")
                         ->setClass($class)
                         ->setData($tag)
                         ->builder();
     }
-
 }

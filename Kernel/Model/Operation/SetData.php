@@ -9,9 +9,11 @@ use Kernel\Model\Query\QuerySQL;
 use Kernel\Tools\Tools;
 use TypeError;
 
-class SetData extends AbstractOperatipn {
+class SetData extends AbstractOperatipn
+{
 
-    public function update(array $dataForm, $mode): int {
+    public function update(array $dataForm, $mode): int
+    {
         if ($mode != Intent::MODE_UPDATE) {
             throw new TypeError(" ERROR mode Intent ==> mode!= MODE_UPDATE ");
         }
@@ -47,15 +49,16 @@ class SetData extends AbstractOperatipn {
         return $id_NameTable;
     }
 
-    public function delete($condition) {
+    public function delete($condition)
+    {
         $delete = (new QuerySQL())
                 ->delete($condition)
                 ->from($this->getTable());
-       $this->exec($delete);
-      
+        $this->exec($delete);
     }
 
-    public function insert(array $dataForm, $mode): int {
+    public function insert(array $dataForm, $mode): int
+    {
 
         if ($mode != Intent::MODE_INSERT) {
             throw new TypeError(" ERROR mode Intent ==> mode!= MODE_INSERT ");
@@ -91,7 +94,8 @@ class SetData extends AbstractOperatipn {
      *
       charge data variables
      */
-    private function charge_data_childe($intent) {
+    private function charge_data_childe($intent)
+    {
         $data = ($intent->getEntitysDataTable()[0]);
         $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array
         $dataCHILDRENs = [];
@@ -103,7 +107,8 @@ class SetData extends AbstractOperatipn {
         return $dataCHILDRENs;
     }
 
-    private function remove_childe_in_data($intent) {
+    private function remove_childe_in_data($intent)
+    {
         $data = ($intent->getEntitysDataTable()[0]);
         $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array
 
@@ -121,7 +126,8 @@ class SetData extends AbstractOperatipn {
      *
       exec SQL des tables relations
      */
-    private function insert_data_childe($intent, $id_NameTable, $dataCHILDRENs) {
+    private function insert_data_childe($intent, $id_NameTable, $dataCHILDRENs)
+    {
         foreach ($dataCHILDRENs as $name_table_CHILDREN => $id_CHILDRENs) {
             foreach ($id_CHILDRENs as $id_CHILD) {
                 $querySQL = (new QuerySQL())->
@@ -129,14 +135,15 @@ class SetData extends AbstractOperatipn {
                         ->value([
                     "id_" . $intent->getEntitysSchema()->getNameTable() => $id_NameTable,
                     "id_" . $name_table_CHILDREN => $id_CHILD
-                ]);
+                        ]);
 
                 $this->exec($querySQL);
             }
         }
     }
 
-    private function delete_data_childe($intent, $id_NameTable) {
+    private function delete_data_childe($intent, $id_NameTable)
+    {
 
         $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array
         foreach ($name_CHILDRENs as $name_table_CHILDREN) {
@@ -150,10 +157,10 @@ class SetData extends AbstractOperatipn {
 
     /////////////////////////////
     /// insert update
-    private function parse(array $data, EntitysSchema $schema, array $mode): Intent {
+    private function parse(array $data, EntitysSchema $schema, array $mode): Intent
+    {
         if (Tools::isAssoc($data) and isset($data)) {
             return (new Intent($schema, ((new EntitysDataTable())->set($data)), $mode));
         }
     }
-
 }

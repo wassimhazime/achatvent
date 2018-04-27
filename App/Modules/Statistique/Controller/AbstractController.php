@@ -12,7 +12,7 @@
  * @author wassime
  */
 
-namespace App\Modules\Comptable\Controller;
+namespace App\Modules\Statistique\Controller;
 
 use App\Modules\Comptable\Model\Model;
 use Kernel\html\File_Upload;

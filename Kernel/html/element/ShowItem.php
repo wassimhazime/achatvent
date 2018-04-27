@@ -5,12 +5,14 @@ namespace Kernel\html\element;
 use Kernel\html\HTML;
 use Kernel\Tools\Tools;
 
-class ShowItem {
+class ShowItem
+{
 
     protected $input = [];
     protected $Conevert_TypeClomunSQL_to_TypeInputHTML;
 
-    function __construct($COLUMNS_META_object, array $Conevert_TypeClomunSQL_to_TypeInputHTML, $entitysDataTable, $DefaultData = []) {
+    function __construct($COLUMNS_META_object, array $Conevert_TypeClomunSQL_to_TypeInputHTML, $entitysDataTable, $DefaultData = [])
+    {
 
 
         $COLUMNS_META = Tools::entitys_TO_array($COLUMNS_META_object);
@@ -47,7 +49,8 @@ class ShowItem {
         }
     }
 
-    private function conevert_TypeClomunSQL_to_TypeInputHTML(string $Type): string {
+    private function conevert_TypeClomunSQL_to_TypeInputHTML(string $Type): string
+    {
 
         $Conevert = $this->Conevert_TypeClomunSQL_to_TypeInputHTML;
 
@@ -58,14 +61,14 @@ class ShowItem {
         }
     }
 
-    public function builder() {
+    public function builder()
+    {
 
 
         $INPUT = [];
 
         foreach ($this->input as $input) {
             switch ($input['Type']) {
-
                 case "select":
                     $inputHTML = $this->selectTage($input);
                     break;
@@ -89,11 +92,12 @@ class ShowItem {
         return $builder;
     }
 
-    public function selectTage(array $input): string {
+    public function selectTage(array $input): string
+    {
         $name = $input['Field'];
       
             
-         $data_load = Tools::entitys_TO_array($input['Data_load'][0]);  
+         $data_load = Tools::entitys_TO_array($input['Data_load'][0]);
       
 
         /// spam attrdata
@@ -114,7 +118,8 @@ class ShowItem {
         return $this->div($p);
     }
 
-    public function multiSelectTag(array $input): string {
+    public function multiSelectTag(array $input): string
+    {
         $name = $input['Field'];
         $Default = $input['Default'];
         $data_load = [];
@@ -158,7 +163,8 @@ class ShowItem {
         return $this->div($tag, "col-sm-12");
     }
 
-    public function pTage(array $input): string {
+    public function pTage(array $input): string
+    {
 
         $Default = $input['Default'];
         $tag = $inputHTML = HTML::TAG("p")
@@ -168,7 +174,8 @@ class ShowItem {
         return $this->div($tag);
     }
 
-    public function labelTage(array $input): string {
+    public function labelTage(array $input): string
+    {
         $name = $input['Field'];
         $lable = str_replace("_", " ", str_replace("$", " ", $name));
         $null = $input['Null'];
@@ -181,11 +188,11 @@ class ShowItem {
                         ->builder();
     }
 
-    private function div($tag, $class = "col-sm-8") {
+    private function div($tag, $class = "col-sm-8")
+    {
         return HTML::TAG("div")
                         ->setClass($class)
                         ->setData($tag)
                         ->builder();
     }
-
 }

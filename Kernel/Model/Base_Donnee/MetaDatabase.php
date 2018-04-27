@@ -10,11 +10,13 @@ use Kernel\Tools\Tools;
  *
  * @author wassime
  */
-class MetaDatabase extends ActionDataBase {
+class MetaDatabase extends ActionDataBase
+{
 
     private $allSchema = [];
 
-    public function getschema(string $NameTable): EntitysSchema {
+    public function getschema(string $NameTable): EntitysSchema
+    {
 
         if ($this->configExternal->is_set_cache()) {
             //generateCache()is null|[] file $path/CACHE_SELECT.JSON
@@ -54,7 +56,8 @@ class MetaDatabase extends ActionDataBase {
     /////////////////////////////////////////////////////////
 
 
-    public function getALLschema(): array {
+    public function getALLschema(): array
+    {
         $config=$this->configExternal->getSCHEMA_SELECT_AUTO();
         $DB_name = $this->configExternal->getNameDataBase();
         if (empty($this->allSchema)) {
@@ -73,7 +76,8 @@ class MetaDatabase extends ActionDataBase {
         return $this->allSchema;
     }
 
-    public function getSchemaStatistique($fonction, $alias, $table = "") {
+    public function getSchemaStatistique($fonction, $alias, $table = "")
+    {
         if ($table == "") {
             $Schemas = $this->getALLschema();
         } else {
@@ -81,7 +85,6 @@ class MetaDatabase extends ActionDataBase {
         }
         $schema_statistique = [];
         foreach ($Schemas as $schema) {
-
             $st = ($schema->select_statistique($fonction, $alias));
 
             if (!empty($st["select"])) {
@@ -95,7 +98,8 @@ class MetaDatabase extends ActionDataBase {
 
     //private//////////////////////////////////////////////////////////////////////////
     
-     private function columns_default($table, array $config) {
+    private function columns_default($table, array $config)
+    {
         if (isset($config['COLUMNS_default']) and ! empty($config['COLUMNS_default'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
@@ -104,7 +108,8 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
     
-    private function columns_master($table, array $config) {
+    private function columns_master($table, array $config)
+    {
         if (isset($config['COLUMNS_master']) and ! empty($config['COLUMNS_master'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
@@ -113,7 +118,8 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
-    private function columns_all($table, array $config) {
+    private function columns_all($table, array $config)
+    {
         if (isset($config['COLUMNS_all']) and ! empty($config['COLUMNS_all'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
@@ -122,7 +128,8 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
-    private function columns_META($table, array $config) {
+    private function columns_META($table, array $config)
+    {
 
         if (isset($config['COLUMNS_META']) and ! empty($config['COLUMNS_META'])) {
             $describe = $this->querySchema("  DESCRIBE   " .
@@ -132,7 +139,8 @@ class MetaDatabase extends ActionDataBase {
         return $describe;
     }
 
-    private function columns_master_CHILDREN($table, array $config) {
+    private function columns_master_CHILDREN($table, array $config)
+    {
 
         if (isset($config['CHILDREN']['MASTER']) and ! empty($config['CHILDREN']['MASTER'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
@@ -140,7 +148,8 @@ class MetaDatabase extends ActionDataBase {
         }
         return $this->getField($describe);
     }
-     private function columns_default_CHILDREN($table, array $config) {
+    private function columns_default_CHILDREN($table, array $config)
+    {
 
         if (isset($config['CHILDREN']['DEFAULT']) and ! empty($config['CHILDREN']['DEFAULT'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
@@ -149,7 +158,8 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
-    private function columns_all_CHILDREN($table, array $config) {
+    private function columns_all_CHILDREN($table, array $config)
+    {
         if (isset($config['CHILDREN']['ALL']) and ! empty($config['CHILDREN']['ALL'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
                     $config['CHILDREN']['ALL']);
@@ -159,7 +169,8 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
-    private function FOREIGN_KEY($table, array $config) {
+    private function FOREIGN_KEY($table, array $config)
+    {
         if (isset($config['FOREIGN_KEY']) and ! empty($config['FOREIGN_KEY'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
@@ -170,7 +181,8 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
-    private function STATISTIQUE($table, array $config) {
+    private function STATISTIQUE($table, array $config)
+    {
         if (isset($config['STATISTIQUE']) and ! empty($config['STATISTIQUE'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
@@ -181,7 +193,8 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
-    private function tables_CHILDREN($mainTable, $config, $DB_name) {
+    private function tables_CHILDREN($mainTable, $config, $DB_name)
+    {
 
         $tables_relation = $this->querySchema('SELECT table_name as tables_relation FROM'
                 . ' INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" '
@@ -203,7 +216,8 @@ class MetaDatabase extends ActionDataBase {
     }
 
     /////
-    private function getField(array $describe): array {
+    private function getField(array $describe): array
+    {
         $Field = [];
         foreach ($describe as $champ) {
             $Field[] = $champ["Field"];
@@ -218,7 +232,8 @@ class MetaDatabase extends ActionDataBase {
      * generateCache
      */
     //////////////////////////////////////
-    private function generateCache() {
+    private function generateCache()
+    {
         $config = $this->configExternal;
         $tempschmaTabls = [];
         $schmaTabls = [];
@@ -241,5 +256,4 @@ class MetaDatabase extends ActionDataBase {
 
         $config->setgenerateCACHE_SELECT($schmaTabls);
     }
-
 }

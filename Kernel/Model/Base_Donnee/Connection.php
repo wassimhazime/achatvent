@@ -18,14 +18,16 @@ use PDO;
  *
  * @author wassime
  */
-class Connection {
+class Connection
+{
 
     protected $configExternal;
     private static $dbConnection = null;
     
     private $db;
 
-    private static function getDB(array $config) {
+    private static function getDB(array $config)
+    {
 
         if (self::$dbConnection === null) {
             $DB = $config['DB'];
@@ -34,7 +36,6 @@ class Connection {
             $dbpass = $config['dbpass'];
             $dbname = $config['dbname'];
             try {
-
                 self::$dbConnection = new PDO("$DB:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             } catch (Exception $e) {
                 Notify::send_Notify($e->getMessage());
@@ -46,15 +47,16 @@ class Connection {
     }
 
     // private $pathConfigJsone;
-    public function __construct(string $PathConfigJsone) {
+    public function __construct(string $PathConfigJsone)
+    {
         // $this->pathConfigJsone = $PathConfigJsone;
         $this->configExternal = new ConfigExternal($PathConfigJsone);
         $this->db = self::getDB($this->configExternal->getConnect());
     }
       
-    protected function getDatabase() {
+    protected function getDatabase()
+    {
       
         return $this->db;
     }
-
 }

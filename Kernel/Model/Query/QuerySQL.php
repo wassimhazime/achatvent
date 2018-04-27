@@ -525,7 +525,8 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
         return "";
     }
 
-    public function prepareQuery(): array {
+    public function prepareQuery(): array
+    {
         
         //chwiya tamara
         
@@ -534,8 +535,8 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT
         
          $query["prepare"]="";
         $query["params_execute"]="";
-        return $query;  
-    }         
+        return $query;
+    }
     
     
     

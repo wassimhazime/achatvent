@@ -3,17 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/wassime/projetPHP/achatvente/Kernel/Renderer/TwigRenderer.php</file>
-            <file>file:/home/wassime/projetPHP/achatvente/Kernel/Renderer/Twig_Extension/Table.php</file>
-            <file>file:/home/wassime/projetPHP/achatvente/App/Modules/Comptable/views/show/showAjax.twig</file>
+            <file>file:/home/wassime/projetPHP/achatvente/App/Modules/Comptable/Controller/AjaxController.php</file>
+            <file>file:/home/wassime/projetPHP/achatvente/App/Modules/Comptable/views/message/message_supprimer.twig</file>
             <file>file:/home/wassime/projetPHP/achatvente/App/Modules/Comptable/Controller/GetController.php</file>
             <file>file:/home/wassime/projetPHP/achatvente/App/Modules/Comptable/views/show/show.twig</file>
-            <file>file:/home/wassime/projetPHP/achatvente/App/TEMPLETE/navigation/static/login.twig</file>
-            <file>file:/home/wassime/projetPHP/achatvente/App/TEMPLETE/themes.twig</file>
-            <file>file:/home/wassime/projetPHP/achatvente/App/TEMPLETE/navigation/static/TableDataBase.twig</file>
-            <file>file:/home/wassime/projetPHP/achatvente/App/Modules/Comptable/Controller/AbstractController.php</file>
-            <file>file:/home/wassime/projetPHP/achatvente/App/TEMPLETE/navigation/static/NAVBAR.twig</file>
-            <file>file:/home/wassime/projetPHP/achatvente/Kernel/html/element/TableHTML.php</file>
+            <file>file:/home/wassime/projetPHP/achatvente/App/Modules/Comptable/Controller/StatistiqueController.php</file>
+            <file>file:/home/wassime/projetPHP/achatvente/App/Modules/Comptable/views/message/message_ajouter.twig</file>
+            <file>file:/home/wassime/projetPHP/achatvente/App/Modules/Comptable/Controller/PostController.php</file>
+            <file>file:/home/wassime/projetPHP/achatvente/App/Modules/Comptable/Controller/TraitementController.php</file>
         </group>
     </open-files>
 </project-private>
