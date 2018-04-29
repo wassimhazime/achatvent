@@ -21,8 +21,8 @@ class controle_Table extends \Twig_Extension
     public function input_tableHtml(array $context, string $nameroute): array
     {
        
-        $page = $context["page"];
-        $router = $context["router"];
+        $page = $context["_page"];// class controller main
+        $router = $context["router"]; // class App
 
         $supprimer = $router->generateUri($nameroute, ["controle" => $page,
             "action" => "supprimer",

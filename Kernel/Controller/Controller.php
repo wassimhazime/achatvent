@@ -2,78 +2,61 @@
 
 namespace Kernel\Controller;
 
-use core\html\TAG;
-use core\MVC\MODEL\Model;
-use core\INTENT\Intent;
-
-
-use Psr\Http\Message\ServerRequestInterface;
+use Kernel\html\File_Upload;
+use Kernel\Renderer\TwigRenderer;
+use Kernel\Router\Router;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
-class Controller
-{
+abstract class Controller {
 
     protected $model;
-    protected $Request;
-    protected $Response;
-    protected $name;
-    protected $action;
-    protected $param;
+    protected $File_Upload;
+    protected $renderer;
+    protected $controller;
+    protected $router;
+    protected $page;
+    protected $request;
+    protected $response;
+    private $InfoTemplete = [];
 
-    function __construct(ServerRequestInterface $Request, ResponseInterface $Response)
-    {
-        $this->Request = $Request;
-        $this->Response = $Response;
-
-        $this->name = $Request->getAttribute('MVC')["controller"];
-        $this->action = $Request->getAttribute('MVC')["action"];
-        $this->param = $Request->getAttribute('MVC')["param"];
+    function getInfoTemplete() {
+        return $this->InfoTemplete;
     }
 
-    protected function setModel(Model $model)
-    {
-        $this->model = $model;
+    function setInfoTemplete(array $InfoTemplete) {
+
+        $this->InfoTemplete = array_merge($this->InfoTemplete, $InfoTemplete);
+        return $this->InfoTemplete;
     }
 
-    protected function show(array $mode = Intent::MODE_SELECT_MASTER_MASTER, $condition = 1)
-    {
-       
+    function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
 
-        $intent = $this->model->show($mode, $condition);
+        $this->router = $container->get(Router::class);
+        $this->renderer = $container->get(TwigRenderer::class);
+        $this->File_Upload = $container->get(File_Upload::class);
+        $this->request = $request;
+        $this->response = $response;
 
-        return (new TAG())->tableHTML($intent);
+
+        $route = $this->router->match($request);
+        $params = $route->getParams();
+        $this->page = $params[$page];
+        $this->renderer->addGlobal("_page", $this->page);
     }
 
-    protected function getFormHTML(array $mode = Intent::MODE_FORM)
-    {
-       
-        $intent = $this->model->form($mode);
+    abstract function exec(): ResponseInterface;
 
-        return (new TAG())->FormHTML($intent);
+    public function render($view, array $data = []): ResponseInterface {
+
+
+        $result = $this->setInfoTemplete($data);
+
+        $render = $this->renderer->render($view, $result);
+
+        $this->response->getBody()->write($render);
+        return $this->response;
     }
 
-    protected function setData($data, $mode = Intent::MODE_INSERT)
-    {
-        
-
-        $intent = $this->model->setData($data, $mode);
-    }
-
-    public function run(Model $model)
-    {
-        
-
-        $this->setModel($model);
-
-        if (is_callable(array($this, $this->action), $this->param)) {
-            return call_user_func(array($this, $this->action), $this->param);
-        } else {
-            return $this->NotFound();
-        }
-    }
-
-    protected function NotFound()
-    {
-        return [];
-    }
 }

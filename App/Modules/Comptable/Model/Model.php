@@ -27,7 +27,7 @@ class Model extends kernelModel
             throw new TypeError(" set table ==> call function setStatement() ");
         }
         if (isset($data) && !empty($data)) {
-            unset($data["ajout_data"]);
+          
 
             if ($data['id'] == "") {
                 $id_parent = $this->setData->insert($data, Intent::MODE_INSERT);
@@ -106,49 +106,6 @@ class Model extends kernelModel
         return $intent;
     }
 
-    function is_null()
-    {
-        return $this->is_null;
-    }
 
-//statistique
-    public function Facture_achat_HT($date)
-    {
-    }
 
-    public function Facture_vente_HT($date)
-    {
-    }
-
-    public function Avoirs_HT($date)
-    {
-    }
-
-    public function Depenses($date)
-    {
-    }
-
-    public function Recettes($date)
-    {
-    }
-
-    public function Creances($date)
-    {
-    }
-
-    public function Dettes($date)
-    {
-    }
-
-    public function TVA_collectee($date)
-    {
-    }
-
-    public function TVA_deductible($date)
-    {
-    }
-
-    public function TVA_due($date)
-    {
-    }
 }

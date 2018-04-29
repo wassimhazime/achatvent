@@ -1,0 +1,22 @@
+{% extends "themes.twig" %}
+{% use "@statistique/plugins/formqueryDataAjax.twig" %}
+{% use "@statistique/plugins/message_global.twig" %}
+{% use "@statistique/plugins/graph.twig" %}
+
+{% block headcss %}
+    <link href="/public/statistitique/global/css/daterangepicker.min.css" rel="stylesheet" type="text/css"/>
+    <!-- Bootstrap-select Custom CSS -->
+    <link href="/public/statistitique/global/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+
+
+{% block container %}
+    {{ block('formqueryDataAjax') }}
+    {{ block('message_global') }}
+    {{ block('graph') }}
+{% endblock %}
+
+
+
+

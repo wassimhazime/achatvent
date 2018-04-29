@@ -14,41 +14,53 @@
 
 namespace App\Modules\Statistique;
 
-use App\Modules\Comptable\Controller\StatistiqueController;
+use App\Modules\Statistique\Controller\globalController;
+use Kernel\AWA_Interface\InterfaceRenderer;
+use Kernel\AWA_Interface\RouterInterface;
+use Kernel\Router\Router;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use const D_S;
 
-class StatistiqueModule
-{
+class StatistiqueModule {
 
     private $container;
+    private $router;
 
-    public function __construct(ContainerInterface $container)
-    {
+    public function __construct(ContainerInterface $container) {
         $this->container = $container;
+        $this->router = $this->container->get(Router::class);
     }
 
-    public function addPathRenderer($renderer, $pathModules)
-    {
+    public function addPathRenderer(InterfaceRenderer $renderer, $pathModules) {
 
         $renderer->addPath($pathModules . "Statistique" . D_S . "views" . D_S . "statistique", "statistique");
     }
 
-    public function addRoute($router)
-    {
+    public function dataMenu() {
+        return  [
+            "_login" => [['devis'=>"y"], ['factures$ventes'=>"kkkk"]],
+            "_rapports" => [],
+            "_recherche" => [],
+            "_statistique" => [],
+            "_transactions" => [],
+            "_tva" => []
+        ];
+    }
+
+    public function addRoute(RouterInterface $router) {
 
         $router->get("/{controle:[a-z\$]*}", [$this, "Statistique"], "home.get");
 
         $router->get("/st/{controle:[a-z\$]*}", [$this, "Statistique"], "st.get");
     }
 
-    public function Statistique(ServerRequestInterface $request, ResponseInterface $response)
-    {
+    public function Statistique(ServerRequestInterface $request, ResponseInterface $response) {
 
-        $controller = new StatistiqueController($request, $response, $this->container, "controle");
+        $controller = new globalController($request, $response, $this->container, "controle");
 
         return $controller->exec();
     }
+
 }

@@ -1,187 +1,49 @@
 {% extends "themes.twig" %}
+{% use "@traitement/plugins/progress.twig" %}
 
 
 {% block headcss %}
     <!-- Bootstrap-select Custom CSS -->
-    <link href="/public/src/css/Bootstrap-select.css" rel="stylesheet" type="text/css"/>
-
+    <link href="/public/comptable/traitement/ajouter/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
     <!-- multi-select Custom CSS -->
-    <link href="/public/src/css/multi-select.dev.css" rel="stylesheet" type="text/css"/>
-
+    <link href="/public/comptable/traitement/ajouter/css/multi-select.dev.css" rel="stylesheet" type="text/css"/>
 
 {% endblock %}
-
-
-
-
-
-{% block headjs %}
-    
-
-    <script>
-        
-        function _(el) {
-          return document.getElementById(el);
-        }
-
-        function uploadFile() {
-          /*
-           * code base class formHTML php
-           * voir class formHTML
-           */
-          // new form ajax
-          var formdata = new FormData();
-
-          // select input  form html type string =>>> darori class form-control-file
-          var formdatahtml = document.getElementsByClassName("form-string");
-          // add data string to from ajax (name value)
-          for (var i = 0; i < formdatahtml.length; i++) {
-
-            formdata.append(formdatahtml[i].name, formdatahtml[i].value);
-          }
-          // select input  form html type string childs =>>> darori class form-childs
-          var formdatahtmlchilds = document.getElementsByClassName("form-childs");
-          // add data string to from ajax (childs value,value,value,value)
-          for (var i = 0; i < formdatahtmlchilds.length; i++) {
-
-
-            var formdatahtmlchild = (formdatahtmlchilds[i]);
-            var name = formdatahtmlchild.name;
-
-            for (i = 0; i < formdatahtmlchild.length; i++) {
-              //examine current option
-              var currentOption = formdatahtmlchild[i];
-              //print it if it has been selected
-              if (currentOption.selected == true) {
-                formdata.append(name, currentOption.value);
-
-              }
-
-            }
-
-          }
-          // select input from html type file =>>> darori class form-control-file
-          var formdatafileshtml = document.getElementsByClassName("form-file");
-          // add data file to from ajax (name[] value1,value2,....)
-          for (var i = 0; i < formdatafileshtml.length; i++) {
-            var files = formdatafileshtml[i].files;
-            var name = (formdatafileshtml[i].name);
-            for (var l = 0; l < files.length; l++) {
-              // add data file to from ajax (name[] value1,value2,....) 
-              formdata.append(name, files[l]);
-
-            }
-          }
-
-
-
-
-          _("progresshidden").classList.remove("hidden");
-          _("formphp").classList.add("hidden");
-          //sen formdata par ajax
-          var ajax = new XMLHttpRequest();
-
-          ajax.upload.addEventListener("progress", progressHandler, false);
-          ajax.addEventListener("load", completeHandler, false);
-          ajax.addEventListener("error", errorHandler, false);
-          ajax.addEventListener("abort", abortHandler, false);
-          ajax.open("POST", "#");
-
-          ajax.send(formdata);
-        }
-
-
-        function precisionRound(number, precision) {
-          var factor = Math.pow(10, precision);
-          return Math.round(number * factor) / factor;
-        }
-        function progressHandler(event) {
-
-          var percent = (event.loaded / event.total) * 100;
-          _("progressBar").style.width = Math.round(percent) + "%";
-          _("etat").innerHTML = "<h3>" + Math.round(percent) + "%</h3>";
-          var load = precisionRound(event.loaded * 0.000001, 2);
-          var total = precisionRound(event.total * 0.000001, 2);
-          _("messageprogressBar").innerHTML = "Uploaded " + load + " MB of " + total;
-        }
-
-        function completeHandler(event) {
-          _("status").innerHTML = event.target.responseText;
-
-        }
-
-        function errorHandler(event) {
-
-          _("messageprogressBar").innerHTML = "Upload Failed";
-        }
-
-        function abortHandler(event) {
-          _("messageprogressBar").innerHTML = "Upload Aborted";
-        }
-
-    </script>
-    
-    
-{% endblock %}
-
-
 
 
 {% block container %}
- <div id="status">
-
-
-   <div class="row" style="margin: 5px">
+    <div id="status">
+      <div class="row" style="margin: 5px">
         <div id="wform" >
           <form  action="#"  method='POST'  enctype="multipart/form-data" class="form-horizontal">
-
             <div id="formphp">
-            {{form(intent)}}   
+              {{form(intent)}}   
 
-              <div class="col-sm-12">    
-                <label for="ajoutdata"> AJOUTER </label> 
+              <div class="col-sm-12"> 
                 <!-- par methode ajax -->
-                <input type="button" value="ajouter" name="ajoutdata" class="btn btn-primary btn-lg" onclick="uploadFile()">
+                <label for="ajoutdata"> AJOUTER </label> 
+                <input type="button" value="ajouter"  class="btn btn-primary btn-lg" id="setdataparAjax">
 
                 <label for="reset"> VIDE </label>    
                 <input type="reset" name="reset"  class="btn btn-success btn-lg">
                 <!-- si methode simple form submit
-                <input type="submit" name="ajout_data"  class="btn btn-success btn-lg"> -->
+                <input type="submit"   class="btn btn-success btn-lg"> -->
               </div>
             </div>
-
-
-            <div class=" hidden" id="progresshidden" >
-              <spam id="messageprogressBar"></spam>
-              <spam id="etat"></spam>
-              <div class="progress " >
-                <div class="progress-bar" id="progressBar"role="progressbar"  aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-                </div>
-              </div>
-            </div>
-
-
+            {{ block('progress') }}
           </form>
         </div>      
       </div>
-
-
-
     </div>
-
-
-
-
 
 {% endblock %}
 
 
 {% block footer %}
-
+    <script src="/public/comptable/traitement/ajouter/code.js" type="text/javascript"></script>
     <!-- Custom multi select -->
-    <script src="/public/src/js/jquery.quicksearch.js" type="text/javascript"></script>
-    <script src="/public/src/js/jquery.multi-select.js" type="text/javascript"></script>
-    <script src="/public/src/js/app.elementHTML.js" type="text/javascript"></script>
-    <script src="/public/src/js/app.multi-select.js" type="text/javascript"></script>
-
+    <script src="/public/comptable/traitement/ajouter/js/jquery.quicksearch.js" type="text/javascript"></script>
+    <script src="/public/comptable/traitement/ajouter/js/jquery.multi-select.js" type="text/javascript"></script>
+    <script src="/public/comptable/traitement/ajouter/js/app.elementHTML.js" type="text/javascript"></script>
+    <script src="/public/comptable/traitement/ajouter/js/app.multi-select.js" type="text/javascript"></script>
 {% endblock %}

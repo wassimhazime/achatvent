@@ -25,6 +25,10 @@ class Model
         $this->PathJsonConfig = $PathConfigJsone;
         $this->ToolsDB = new ToolsDB($PathConfigJsone);
     }
+        function is_null()
+    {
+        return $this->is_null;
+    }
 
     function setStatement($table)
     {

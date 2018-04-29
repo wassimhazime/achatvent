@@ -1,0 +1,18 @@
+{% block showmode %}
+    <form action="#" method="get">
+      <select class="selectpicker" id="modeShowSelect" name="s">
+        <option value="dm" >DEFAULT_MASTER</option>
+        <option value="da" >DEFAULT_ALL </option>
+        <option value="dd" >DEFAULT_DEFAULT </option>
+
+        <option value="mm" >MASTER_MASTER</option>
+        <option value="ma" >MASTER_ALL </option>
+        <option href="mn" >MASTER_NULL</option>
+
+        <option value="am" >ALL_MASTER</option>
+        <option value="aa" >ALL_ALL</option>
+        <option value="an" >ALL_NULL</option>
+      </select>
+      <button type="submit">ok</button>
+    </form>
+{% endblock %}

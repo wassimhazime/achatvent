@@ -4,7 +4,7 @@ namespace Kernel\Router;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Expressive\Router\FastRouteRouter;
 
-class Router
+class Router implements \Kernel\AWA_Interface\RouterInterface
 {
     
     private $router;

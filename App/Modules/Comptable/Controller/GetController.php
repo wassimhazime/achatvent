@@ -23,7 +23,9 @@ class GetController extends AbstractController
         if (isset($query["s"])) {
             $mode = $this->converteMode($query["s"]);
             $intentshow = $this->model->show($mode, true);
-            return $this->render("@show/show", ["intent" => $intentshow]);
+            
+            return $this->render("@show/showHtml", ["intent" => $intentshow]);
+            
         } elseif (isset($query["imageview"])) {
             $id_image = $query["imageview"];
             return $this->File_Upload->get($id_image);

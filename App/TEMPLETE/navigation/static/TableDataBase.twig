@@ -6,70 +6,31 @@
 {% block TableDataBase %}
     {% import "macro/item.twig" as item %}
 
-    <li>
-      <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> entreprise<span class="fa arrow"></span></a>
-      <ul class="nav nav-second-level">
 
-        
-  
-        
-        {% for entreprise in _tableDataBase._entreprise %}
 
-            {% for label, url in entreprise %}
 
-                {{ item.li_a(url,label) }}
+    {% for titre,tableDataBas in _menu   %}
+
+
+        <li>
+          <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>  {{ titre }}<span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+            {% for group in tableDataBas%}
+
+                {% for label, url in group %}
+
+                    {{ item.li_a(url,label) }}
+
+                {% endfor %}
+
 
             {% endfor %}
+          </ul>
+        </li> 
 
 
-        {% endfor %}
+    {% endfor %}
 
 
-
-
-      </ul>
-    </li>
-
-    <li>
-      <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> ACHATS<span class="fa arrow"></span></a>
-      <ul class="nav nav-second-level">
-
-        {% for achat in _tableDataBase._achats %}
-
-            {% for label, url in achat %}
-
-                {{ item.li_a(url,label) }}
-
-            {% endfor %}
-
-
-        {% endfor %}
-
-
-
-
-      </ul>
-    </li>
-
-    <li>
-      <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> VENTES<span class="fa arrow"></span></a>
-      <ul class="nav nav-second-level">
-
-        {% for ventes in _tableDataBase._ventes %}
-
-            {% for label, url in ventes %}
-
-                {{ item.li_a(url,label) }}
-
-            {% endfor %}
-
-
-        {% endfor %}
-
-
-
-
-      </ul>
-    </li>
 
 {% endblock %}
