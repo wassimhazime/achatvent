@@ -39,14 +39,14 @@ class StatistiqueModule {
     }
 
     public function dataMenu() {
-        return  [
-            "_login" => [['devis'=>"y"], ['factures$ventes'=>"kkkk"]],
-            "_rapports" => [],
-            "_recherche" => [],
-            "_statistique" => [],
-            "_transactions" => [],
-            "_tva" => []
+        $nav1 = $this->generateUriMenu("home.get", ["clients", 'raison$sociale', 'contacts', 'mode$paiement']);
+
+
+        $menu = [
+            ["nav_title" => "statistique", "nav_icon" => ' fa fa-fw fa-bar-chart-o ', "nav" => $nav1]
         ];
+
+        return $menu;
     }
 
     public function addRoute(RouterInterface $router) {
@@ -61,6 +61,21 @@ class StatistiqueModule {
         $controller = new globalController($request, $response, $this->container, "controle");
 
         return $controller->exec();
+    }
+
+    private function generateUriMenu(string $route, array $info): array {
+
+        $infogenerate = [];
+        foreach ($info as $controle) {
+
+
+            $label = str_replace("$", "  ", $controle);
+            $url = $this->router->generateUri($route, ["controle" => $controle]);
+
+            $infogenerate[$label] = $url;
+        }
+
+        return $infogenerate;
     }
 
 }

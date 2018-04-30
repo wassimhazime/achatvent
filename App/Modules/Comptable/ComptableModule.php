@@ -40,15 +40,20 @@ class ComptableModule {
     }
 
     public function dataMenu() {
-        return $this->generateUriMenu("actionGET", [
-            "entreprise" => ["clients", 'raison$sociale', 'contacts', 'mode$paiement'],
-            "achats" => ['commandes', 'bons$achats', 'avoirs$achats', 'factures$achats', "achats"],
-            "ventes" => ['devis', 'factures$ventes', 'ventes'],
-        ]);
+
+
+        $nav1 = $this->generateUriMenu("actionGET", ["clients", 'raison$sociale', 'contacts', 'mode$paiement']);
+        $nav2 = $this->generateUriMenu("actionGET", ['commandes', 'bons$achats', 'avoirs$achats', 'factures$achats', "achats"]);
+        $nav3 = $this->generateUriMenu("actionGET", ['devis', 'factures$ventes', 'ventes']);
+
+        $menu = [
+            ["nav_title" => "CRM", "nav_icon" => ' fa fa-fw fa-stack-overflow ', "nav" => $nav1],
+            ["nav_title" => "achats", "nav_icon" => ' fa fa-fw fa-shopping-cart ', "nav" => $nav2],
+            ["nav_title" => "ventes", "nav_icon" => ' fa fa-fw fa-usd   ', "nav" => $nav3]
+        ];
+       
+        return $menu;
 //// "group"=> [[lable,url],....]
-     
-        
-        
     }
 
     public function addRoute($router) {
@@ -85,14 +90,13 @@ class ComptableModule {
     private function generateUriMenu(string $route, array $info): array {
 
         $infogenerate = [];
-        foreach ($info as $key => $group) {
-            foreach ($group as $controle) {
+        foreach ($info as $controle) {
 
-                $label = str_replace("$", "  ", $controle);
-                $url = $this->router->generateUri($route, ["controle" => $controle, "action" => "voir"]);
 
-                $infogenerate[$key][] = [$label => $url];
-            }
+            $label = str_replace("$", "  ", $controle);
+            $url = $this->router->generateUri($route, ["controle" => $controle, "action" => "voir"]);
+
+            $infogenerate[$label] = $url;
         }
 
         return $infogenerate;
