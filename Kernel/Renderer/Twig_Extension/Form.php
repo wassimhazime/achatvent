@@ -8,64 +8,58 @@
 
 namespace Kernel\Renderer\Twig_Extension;
 
+use Kernel\html\ConfigExternal;
+use Kernel\html\element\Form\Form_child_HTML;
+use Kernel\html\element\Form\Form_Select;
+use Kernel\html\element\Form\Form_view;
+use Kernel\html\element\Form\FormHTML;
+use Kernel\INTENT\Intent_Form;
+use \Twig_Extension;
+use \Twig_SimpleFunction;
+
 /**
  * Description of Form
  *
  * @author wassime
  */
-use Exception;
-use Kernel\html\ConfigExternal;
-use Kernel\html\element\FormHTML;
-use Kernel\html\element\ShowItem;
-use Kernel\html\element\TableHTML;
-use Kernel\INTENT\Intent;
-use Kernel\Router\Router;
-use Kernel\Tools\Tools;
-
-class Form extends \Twig_Extension
-{
+class Form extends Twig_Extension {
 
     private $ConfigExternal;
+    private $conevert;
 
-    public function __construct($PathConfigJsone)
-    {
+    public function __construct($PathConfigJsone) {
         $this->ConfigExternal = new ConfigExternal($PathConfigJsone);
+        ///Conevert_TypeClomunSQL_to_TypeInputHTML
+        $this->conevert = ($this->ConfigExternal->getConevert());
     }
 
-    public function getFunctions()
-    {
+    public function getFunctions() {
         return [
-            new \Twig_SimpleFunction("form", [$this, "form"], ['is_safe' => ['html']]),
+            new Twig_SimpleFunction("form", [$this, "form"], ['is_safe' => ['html']]),
+            new Twig_SimpleFunction("form_child", [$this, "form_child"], ['is_safe' => ['html']]),
+            new Twig_SimpleFunction("form_select", [$this, "form_select"], ['is_safe' => ['html']]),
+            new Twig_SimpleFunction("Form_view", [$this, "Form_view"], ['is_safe' => ['html']]),
         ];
     }
 
-    public function form(Intent $intent)
-    {
-        if ($intent->getMode() != Intent::MODE_FORM) {
-            throw new Exception("methode call  ERROR ==>  mode != MODE_FORM ");
-        }
-
-        $entitysDataTable = $intent->getEntitysDataTable();
-        $old = $entitysDataTable["Default"];
-        if ($old != []) {
-            $DataJOIN = $old[0]->getDataJOIN();
-            $DefaultData = Tools::entitys_TO_array($old[0]);
-
-            $DefaultData["DataJOIN"] = $DataJOIN;
-        } else {
-            $DefaultData = [];
-        }
-
-
-        $Conevert = ($this->ConfigExternal->getConevert_TypeClomunSQL_to_TypeInputHTML());
-
-        $COLUMNS_META_object = $intent->getEntitysSchema()->getCOLUMNS_META();
-
-
-
-
-        $formhtml = new FormHTML($COLUMNS_META_object, $Conevert, $entitysDataTable, $DefaultData);
-
+    public function form(Intent_Form $Intent_Form) {
+        $formhtml = new FormHTML($this->conevert, $Intent_Form);
         return $formhtml->builder();
     }
+
+    public function form_select(Intent_Form $Intent_Form) {
+        $formhtml = new Form_Select($this->conevert, $Intent_Form);
+        return $formhtml->builder();
+    }
+
+    public function form_child(Intent_Form $Intent_Form, string $type = "child") {
+        $formhtml = new Form_child_HTML($this->conevert, $Intent_Form);
+        return $formhtml->builder()[$type];
+    }
+
+    public function Form_view(Intent_Form $Intent_Form) {
+        $formhtml = new Form_view($this->conevert, $Intent_Form);
+        return $formhtml->builder();
+    }
+
 }

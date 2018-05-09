@@ -14,10 +14,12 @@
 
 namespace App\Modules\Comptable;
 
-use App\Modules\Comptable\Controller\AjaxController;
+
+
 use App\Modules\Comptable\Controller\TraitementController;
 use App\Modules\Comptable\Controller\GetController;
 use App\Modules\Comptable\Controller\PostController;
+
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,31 +41,19 @@ class ComptableModule {
         $renderer->addPath($pathModules . "Comptable" . D_S . "views" . D_S . "traitement", "traitement");
     }
 
-    public function dataMenu() {
-
-
-        $nav1 = $this->generateUriMenu("actionGET", ["clients", 'raison$sociale', 'contacts', 'mode$paiement']);
-        $nav2 = $this->generateUriMenu("actionGET", ['commandes', 'bons$achats', 'avoirs$achats', 'factures$achats', "achats"]);
-        $nav3 = $this->generateUriMenu("actionGET", ['devis', 'factures$ventes', 'ventes']);
-
-        $menu = [
-            ["nav_title" => "CRM", "nav_icon" => ' fa fa-fw fa-stack-overflow ', "nav" => $nav1],
-            ["nav_title" => "achats", "nav_icon" => ' fa fa-fw fa-shopping-cart ', "nav" => $nav2],
-            ["nav_title" => "ventes", "nav_icon" => ' fa fa-fw fa-usd   ', "nav" => $nav3]
-        ];
-       
-        return $menu;
-//// "group"=> [[lable,url],....]
-    }
-
+  
     public function addRoute($router) {
+        
         $router->get("/{action:[a-z]+}-{controle:[a-z\$]+}", [$this, "GET"], "actionGET");
         $router->get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitement"], "traitement");
 
         $router->post("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "POST"], "posttraitement");
+        
         $router->post("/{controle:[a-z]+}", [$this, "POST"], "post.post");
+        
     }
 
+    //// controller
     public function GET(ServerRequestInterface $request, ResponseInterface $response) {
 
         $controller = new GetController($request, $response, $this->container, "controle");
@@ -87,6 +77,25 @@ class ComptableModule {
 
     ////////////////////////
 
+    
+    public function dataMenu() {
+
+
+        $nav1 = $this->generateUriMenu("actionGET", ["clients", 'raison$sociale', 'contacts', 'mode$paiement']);
+        $nav2 = $this->generateUriMenu("actionGET", ['commandes', 'bons$achats', 'factures$achats', 'avoirs$achats']);
+        $nav3 = $this->generateUriMenu("actionGET", ['devis', 'factures$ventes']);
+
+        $menu = [
+            ["nav_title" => "CRM", "nav_icon" => ' fa fa-fw fa-stack-overflow ', "nav" => $nav1],
+            ["nav_title" => "achats", "nav_icon" => ' fa fa-fw fa-shopping-cart ', "nav" => $nav2],
+            ["nav_title" => "ventes", "nav_icon" => ' fa fa-fw fa-usd   ', "nav" => $nav3]
+        ];
+       
+        return $menu;
+//// "group"=> [[lable,url],....]
+    }
+
+    
     private function generateUriMenu(string $route, array $info): array {
 
         $infogenerate = [];

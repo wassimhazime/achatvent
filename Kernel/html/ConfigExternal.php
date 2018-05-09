@@ -26,7 +26,7 @@ class ConfigExternal
         $this->file = new File($PathConfigJsone, File::JSON, []);
     }
 
-    public function getConevert_TypeClomunSQL_to_TypeInputHTML(): array
+    public function getConevert(): array
     {
         $Conevert_Type = $this->file->get('Conevert_TypeClomunSQL_to_TypeInputHTML');
         if ($Conevert_Type == []) {

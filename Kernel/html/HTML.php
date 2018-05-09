@@ -55,7 +55,7 @@ class HTML
         if (in_array($this->tag, $this->BaliseOrpheline)) {
             $builder = "<$this->tag $params>";
         } else {
-            $builder = "<$this->tag $params>$this->data</$this->tag>\n";
+            $builder = "<$this->tag $params>$this->data</$this->tag>";
         }
         
         return $builder;
@@ -79,7 +79,7 @@ class HTML
             if (is_string($data)) {
                 $this->data = $data;
             }if (is_array($data)) {
-                $this->data = implode("\n", $data);
+                $this->data = implode(" ", $data);
             }
         }
         
@@ -108,6 +108,11 @@ class HTML
         return $this;
     }
 
+     function setId(string $id): self
+    {
+        $this->html['id'] = trim($id);
+        return $this;
+    }
     function setName(string $name): self
     {
         $this->html['name'] = trim($name);

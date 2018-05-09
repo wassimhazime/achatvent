@@ -1,0 +1,77 @@
+   
+{% extends "themes.twig" %}
+{% use "@traitement/plugins/progress.twig" %}
+
+
+{% block headcss %}
+
+{% endblock %}
+
+
+{% block container %}
+
+<div class="container1">
+  
+   
+
+      <button class="add_form_field">Add New Field 
+        <span style="font-size:16px; font-weight:bold;">+ </span>
+      </button>
+
+
+
+
+    </div>
+    <form action="child_add"  method='POST'  enctype="multipart/form-data" class="form-inline">
+      {{form_child(intent,"parent")}}
+      <div class="input-add row"> 
+        <div>
+         
+           {{form_child(intent)}}
+          
+    </div>
+
+
+      </div>
+
+      <input type="submit" value="ok" name="ok" >
+    </form>
+
+
+
+
+
+    <script>
+
+        $(document).ready(function () {
+          var max_fields = 10;
+          var wrapper = $(".input-add");
+          var add_button = $(".add_form_field");
+
+          var x = 1;
+          $(add_button).click(function (e) {
+            e.preventDefault();
+            if (x < max_fields) {
+              x++;
+              $(wrapper).append('{{form_child(intent)}}'); //add input box
+            } else
+            {
+              alert('You Reached the limits');
+            }
+          });
+
+          $(wrapper).on("click", ".delete", function (e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+          });
+        });
+
+    </script>
+    
+    {% endblock %}
+
+
+{% block footer %}
+  
+{% endblock %}

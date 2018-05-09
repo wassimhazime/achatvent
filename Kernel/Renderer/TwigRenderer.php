@@ -49,7 +49,7 @@ class TwigRenderer implements InterfaceRenderer
         $this->twig->addExtension(new \Twig_Extension_Debug);
         $this->twig->addExtension(new Twig_Extension\controle_Table);
         $this->twig->addExtension(new Twig_Extension\Form($PathConfigJsone));
-        $this->twig->addExtension(new Twig_Extension\Show_Item($PathConfigJsone));
+       
     }
 
     public static function getRenderer(string $path = "")

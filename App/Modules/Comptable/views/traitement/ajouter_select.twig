@@ -15,16 +15,16 @@
 
 
 {% block container %}
-<div class="row">
+<div class="row" style="margin: 5px ">
+   <h1>select option</h1>
+            <br>
+      <div class="col-md-7 cadre " style="margin-left: 5px ;padding: -14px">
 
-      <div class="col-md-7 cadre " style="margin-left: 5px">
-
-        <form  action=""  method='GET'  enctype="multipart/form-data" class="form-group">
+        <form  action=""  method='GET'  enctype="multipart/form-data" class="form-horizontal">
 
           <div class="row"> 
-            <h1>select option</h1>
-            <br>
-         {{form(intent)}}  
+         
+         {{form_select(intent)}}  
 
           </div>
           <div class="row"> 

@@ -9,15 +9,20 @@
 
 {% endblock %}
 
+
+
+{% block controle %}
+   {{ block('controleAjoter') }}
+    {{ block('showmode') }} 
+{% endblock %}
+
 {% block container %}
 
 
-    {{ block('controleAjoter') }}
-    {{ block('showmode') }}
 
     <div class ="cadre">
    
-    <div class="row"  style="width:90% ; margin: auto ;">
+    <div class="row"  style="width:90% ; margin: auto ;    margin-top: 10px;">
 
           {{ table_intent('id="example" style="width:95% ; margin: auto ;" class="table table-striped table-bordered dt-responsive nowrap "',
           intent,

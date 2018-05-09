@@ -40,10 +40,10 @@ function chargeFormData() {
     var formdatahtmlchild = (formdatahtmlchilds[i]);
     var name = formdatahtmlchild.name;
 
-    for (i = 0; i < formdatahtmlchild.length; i++) {
-      //examine current option
-      var currentOption = formdatahtmlchild[i];
-      //print it if it has been selected
+    for (var h = 0; h < formdatahtmlchild.length; h++) {
+     
+      var currentOption = formdatahtmlchild[h];
+  
       if (currentOption.selected == true) {
         formdata.append(name, currentOption.value);
 
@@ -52,6 +52,7 @@ function chargeFormData() {
     }
 
   }
+  
   // select input from html type file =>>> darori class form-control-file
   var formdatafileshtml = document.getElementsByClassName("form-file");
   // add data file to from ajax (name[] value1,value2,....)

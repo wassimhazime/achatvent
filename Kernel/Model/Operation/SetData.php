@@ -66,6 +66,7 @@ class SetData extends AbstractOperatipn
 
         $intent = $this->parse($dataForm, $this->schema, $mode);
         $dataCHILDRENs = $this->charge_data_childe($intent);
+         
         $data_NameTable = $this->remove_childe_in_data($intent);
         unset($data_NameTable["id"]);   // remove id
         // exec query sql insert to NameTable table
@@ -82,12 +83,69 @@ class SetData extends AbstractOperatipn
         /**
          * code insert data to relation table
          */
+        
+       
+        
         $this->insert_data_childe($intent, $id_NameTable, $dataCHILDRENs);
 
 
         return $id_NameTable;
     }
 
+    
+     public function insert_inverse(array $dataForms,$id_parent ,$mode): int
+    {
+         
+         
+        if ($mode != Intent::MODE_INSERT) {
+            throw new TypeError(" ERROR mode Intent ==> mode!= MODE_INSERT ");
+        }
+        $id_cheldrns=[];
+        foreach ($dataForms as $dataForm) {
+              $intent = $this->parse($dataForm, $this->schema, $mode);
+        $dataCHILDRENs = $this->charge_data_childe($intent);
+        $data_NameTable = $this->remove_childe_in_data($intent);
+        unset($data_NameTable["id"]);   // remove id
+        // exec query sql insert to NameTable table
+        $datenow = date("Y-m-d-H-i-s");
+        $data_NameTable["date_ajoute"] = $datenow;
+        $data_NameTable["date_modifier"] = $datenow;
+
+        $querySQL = (new QuerySQL())
+                ->insertInto($this->getTable())
+                ->value($data_NameTable);
+        // return id rowe set data NameTable table
+        $id_cheldrns[] = $this->exec($querySQL);
+            
+        }
+        var_dump($id_cheldrns,$id_parent);
+        
+        foreach ($id_cheldrns as $id_cheld) {
+            
+            
+              $querySQL = (new QuerySQL())->
+                        insertInto("r_achats_achat")
+                        ->value([
+                    "id_achats"  => $id_parent,
+                    "id_achat"  => $id_cheld
+                        ]);
+
+                $this->exec($querySQL);
+            
+            
+            
+            
+        }
+
+        /**
+         * code insert data to relation table
+         */
+      //  $this->insert_data_childe($intent, $id_NameTable, $dataCHILDRENs);
+
+
+        return 0;
+    }
+    
 ////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -104,6 +162,7 @@ class SetData extends AbstractOperatipn
                 $dataCHILDRENs[$name_CHILDREN] = $data->$name_CHILDREN; // charge $dataCHILDREN
             }
         }
+      
         return $dataCHILDRENs;
     }
 

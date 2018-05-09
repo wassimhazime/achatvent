@@ -259,13 +259,18 @@
 
             <!-- begin .main-content -->
             <div class="main-content bg-clouds">
+              <div class="container-fluid p-t-15">
+              {% block controle %}
 
+              {% endblock %}
               <!-- begin .container-fluid -->
+                <div class="container-fluid p-t-15">
               {% block container %}
 
-              {% endblock %}   
+              {% endblock %}  
+                </div>
               <!-- END: .container-fluid -->
-
+  </div>
             </div>
             <!-- END: .main-content -->
 

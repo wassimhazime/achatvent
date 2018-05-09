@@ -16,16 +16,17 @@ namespace App\Modules\Comptable\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class PostController extends AbstractController
-{
+class PostController extends AbstractController {
 
-    public function exec(): ResponseInterface
-    {
-       
+    public function exec(): ResponseInterface {
+
         $this->File_Upload->setPreffix($this->page);
         $insert = $this->File_Upload->set($this->request);
+
+
         $this->model->setStatement($this->page);
         $intent = $this->model->setData($insert);
-         return $this->render("@show/show_item", ["intent" => $intent]);
+        return $this->render("@show/show_item", ["intent" => $intent]);
     }
+
 }

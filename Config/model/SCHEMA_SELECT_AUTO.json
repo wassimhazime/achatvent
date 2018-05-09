@@ -1,7 +1,7 @@
 
 {
     "COLUMNS_default": " WHERE  `Key`!='MUL' and `Type` !='datetime' ",
-    "COLUMNS_master": " WHERE (`null`='no' and `Type` !='datetime' and `Type` !='varchar(201)' and  `Type` !='varchar(20)' and `Key`!='MUL')or(`Type` ='varchar(250)') ",
+    "COLUMNS_master": " WHERE (`null`='no' and `Type` !='datetime' and `Type` !='varchar(201)' and  `Type` !='varchar(20)' and `Key`!='MUL')",
     "COLUMNS_all": " WHERE  `Key`!='MUL' ",
     "COLUMNS_META": " DESCRIBE ",
     "FOREIGN_KEY": " WHERE `Key`='MUL'",

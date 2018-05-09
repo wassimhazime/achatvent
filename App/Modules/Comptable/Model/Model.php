@@ -21,7 +21,7 @@ use TypeError;
 class Model extends kernelModel
 {
 
-    public function setData($data): Intent
+    public function setData($data)
     {
         if ($this->is_null) {
             throw new TypeError(" set table ==> call function setStatement() ");
@@ -50,10 +50,10 @@ class Model extends kernelModel
 
     public function show_id($id)
     {
-        return $this->gui->formDefault(Intent::MODE_FORM, ["{$this->table}.id" => $id]);
+        return $this->gui->formDefault( ["{$this->table}.id" => $id]);
     }
 
-    public function show(array $mode, $condition): Intent
+    public function show(array $mode, $condition)
     {
         if ($this->is_null) {
             throw new TypeError(" is_null==> show ");
@@ -62,7 +62,7 @@ class Model extends kernelModel
         return $intent;
     }
 
-    public function showAjax($condition): Intent
+    public function showAjax($condition)
     {
         if ($this->is_null) {
             throw new TypeError(" is_null==> show ");
@@ -73,36 +73,36 @@ class Model extends kernelModel
         return $intent;
     }
 
-    public function form(array $mode, $conditon = ""): Intent
+    public function form( $conditon = "")
     {
         if ($this->is_null) {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
 
-        $intent = $this->gui->form($mode, $conditon);
+        $intent = $this->gui->form( $conditon);
 
 
         return $intent;
     }
 
-    public function formDefault(array $mode, $conditon = ""): Intent
+    public function formDefault($conditon = "")
     {
         if ($this->is_null) {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
 
-        $intent = $this->gui->formDefault($mode, $conditon);
+        $intent = $this->gui->formDefault( $conditon);
 
 
         return $intent;
     }
 
-    public function formSelect(array $mode): Intent
+    public function formSelect()
     {
         if ($this->is_null) {
             throw new TypeError(" set table ==> call function setStatement() ");
         }
-        $intent = $this->gui->formSelect($mode);
+        $intent = $this->gui->formSelect();
         return $intent;
     }
 

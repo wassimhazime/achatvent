@@ -38,17 +38,6 @@ class StatistiqueModule {
         $renderer->addPath($pathModules . "Statistique" . D_S . "views" . D_S . "statistique", "statistique");
     }
 
-    public function dataMenu() {
-        $nav1 = $this->generateUriMenu("home.get", ["clients", 'raison$sociale', 'contacts', 'mode$paiement']);
-
-
-        $menu = [
-            ["nav_title" => "statistique", "nav_icon" => ' fa fa-fw fa-bar-chart-o ', "nav" => $nav1]
-        ];
-
-        return $menu;
-    }
-
     public function addRoute(RouterInterface $router) {
 
         $router->get("/{controle:[a-z\$]*}", [$this, "Statistique"], "home.get");
@@ -61,6 +50,17 @@ class StatistiqueModule {
         $controller = new globalController($request, $response, $this->container, "controle");
 
         return $controller->exec();
+    }
+
+    public function dataMenu() {
+        $nav1 = $this->generateUriMenu("home.get", ["clients", 'raison$sociale', 'contacts', 'mode$paiement']);
+
+
+        $menu = [
+            ["nav_title" => "statistique", "nav_icon" => ' fa fa-fw fa-bar-chart-o ', "nav" => $nav1]
+        ];
+
+        return $menu;
     }
 
     private function generateUriMenu(string $route, array $info): array {

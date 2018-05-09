@@ -100,41 +100,41 @@ class MetaDatabase extends ActionDataBase
     
     private function columns_default($table, array $config)
     {
-        if (isset($config['COLUMNS_default']) and ! empty($config['COLUMNS_default'])) {
+       
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['COLUMNS_default']);
-        }
+        
         return $this->getField($describe);
     }
     
     private function columns_master($table, array $config)
     {
-        if (isset($config['COLUMNS_master']) and ! empty($config['COLUMNS_master'])) {
+       
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['COLUMNS_master']);
-        }
+        
         return $this->getField($describe);
     }
 
     private function columns_all($table, array $config)
     {
-        if (isset($config['COLUMNS_all']) and ! empty($config['COLUMNS_all'])) {
+        
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['COLUMNS_all']);
-        }
+        
         return $this->getField($describe);
     }
 
     private function columns_META($table, array $config)
     {
 
-        if (isset($config['COLUMNS_META']) and ! empty($config['COLUMNS_META'])) {
+       
             $describe = $this->querySchema("  DESCRIBE   " .
                     $table->getNameTable());
-        }
+        
 
         return $describe;
     }
@@ -142,28 +142,28 @@ class MetaDatabase extends ActionDataBase
     private function columns_master_CHILDREN($table, array $config)
     {
 
-        if (isset($config['CHILDREN']['MASTER']) and ! empty($config['CHILDREN']['MASTER'])) {
+       
             $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
                     $config['CHILDREN']['MASTER']);
-        }
+    
         return $this->getField($describe);
     }
     private function columns_default_CHILDREN($table, array $config)
     {
 
-        if (isset($config['CHILDREN']['DEFAULT']) and ! empty($config['CHILDREN']['DEFAULT'])) {
+      
             $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
                     $config['CHILDREN']['DEFAULT']);
-        }
+        
         return $this->getField($describe);
     }
 
     private function columns_all_CHILDREN($table, array $config)
     {
-        if (isset($config['CHILDREN']['ALL']) and ! empty($config['CHILDREN']['ALL'])) {
+       
             $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
                     $config['CHILDREN']['ALL']);
-        }
+        
 
 
         return $this->getField($describe);
@@ -183,11 +183,11 @@ class MetaDatabase extends ActionDataBase
 
     private function STATISTIQUE($table, array $config)
     {
-        if (isset($config['STATISTIQUE']) and ! empty($config['STATISTIQUE'])) {
+       
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
                     $config['STATISTIQUE']);
-        }
+   
 
 
         return $this->getField($describe);
@@ -198,7 +198,7 @@ class MetaDatabase extends ActionDataBase
 
         $tables_relation = $this->querySchema('SELECT table_name as tables_relation FROM'
                 . ' INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" '
-                . 'and  table_name  LIKE("r\_' . $mainTable->getNameTable() . '%")  ');
+                . 'and  table_name  LIKE("r\_' . $mainTable->getNameTable() . '\_%")  ');
         $tables_CHILDREN['MASTER'] = [];
         $tables_CHILDREN['ALL'] = [];
         $tables_CHILDREN['DEFAULT'] = [];
