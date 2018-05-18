@@ -52,9 +52,9 @@ class Form extends Twig_Extension {
         return $formhtml->builder();
     }
 
-    public function form_child(Intent_Form $Intent_Form, string $type = "child") {
+    public function form_child(Intent_Form $Intent_Form) {
         $formhtml = new Form_child_HTML($this->conevert, $Intent_Form);
-        return $formhtml->builder()[$type];
+        return $formhtml->builder();
     }
 
     public function Form_view(Intent_Form $Intent_Form) {

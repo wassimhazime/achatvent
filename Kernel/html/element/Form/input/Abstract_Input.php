@@ -78,7 +78,7 @@ abstract class Abstract_Input {
                     ->builder();
         }
         $div = HTML::TAG("div")
-                ->setClass("form-group")
+                ->setClass("form-group ")
                 ->setData([$labelHTML, $inputHTML])
                 ->builder();
 

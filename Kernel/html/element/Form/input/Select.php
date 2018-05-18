@@ -59,7 +59,7 @@ class Select extends Abstract_Input {
 
         if (count($data_load) === 1) {
             $tag = HTML::TAG("select")
-                    ->setClass(" form-control form-string")
+                    ->setClass(" form-control form-string input-sm")
                     ->setData($optionTag)
                     ->setId($id_html)
                     ->setName($name.$this->child)
@@ -68,7 +68,7 @@ class Select extends Abstract_Input {
             return $this->div($tag);
         } else {
             $tag = HTML::TAG("select")
-                    ->setClass(" selectpicker form-control form-string ")
+                    ->setClass(" selectpicker form-control form-string input-sm")
                     ->setId($id_html)
                     ->setAtt(' data-live-search="true"  data-size="5" data-container="body" ')
                     ->setData($optionTag)

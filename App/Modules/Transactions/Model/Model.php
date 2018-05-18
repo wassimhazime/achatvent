@@ -77,6 +77,10 @@ class Model extends kernelModel {
 
         return $intent;
     }
+   public function show_id($id)
+    {
+        return $this->gui->formDefault( ["{$this->table}.id" => $id]);
+    }
 
     public function form( $conditon = "") {
         if ($this->is_null) {

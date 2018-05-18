@@ -25,7 +25,7 @@ class Textarea extends Abstract_Input {
         $Default = $this->Default;
         
         $tag = $inputHTML = HTML::TAG("textarea")
-                ->setClass(" form-control form-string")
+                ->setClass(" form-control form-string input-sm")
                 ->setId($id_html)
                 ->setName($name.$this->child)
                 ->setPlaceholder(str_replace("_", " ", $name))

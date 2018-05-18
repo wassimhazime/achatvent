@@ -30,12 +30,13 @@ class SetData extends AbstractOperatipn
 
         $data_NameTable["date_modifier"] = $datenow;
 
+
         $querySQL = (new QuerySQL())->
                 update($this->getTable())
                 ->set($data_NameTable)
-                ->where("id=$id_NameTable")
-                ->query();
-        $this->exec($querySQL);
+                ->where(["id"=>$id_NameTable])
+                ->prepareQuery();
+        $this->prepareQuerySQL($querySQL);
 
 
         /**
@@ -49,12 +50,14 @@ class SetData extends AbstractOperatipn
         return $id_NameTable;
     }
 
-    public function delete($condition)
-    {
+    public function delete(array $condition)
+    { // one  item
         $delete = (new QuerySQL())
                 ->delete($condition)
-                ->from($this->getTable());
-        $this->exec($delete);
+                ->from($this->getTable())
+                ->prepareQuery();
+        
+        $this->prepareQuerySQL($delete);
     }
 
     public function insert(array $dataForm, $mode): int
@@ -70,15 +73,19 @@ class SetData extends AbstractOperatipn
         $data_NameTable = $this->remove_childe_in_data($intent);
         unset($data_NameTable["id"]);   // remove id
         // exec query sql insert to NameTable table
-        $datenow = date("Y-m-d-H-i-s");
+        $datenow = date('Y-m-d H:i:s');
         $data_NameTable["date_ajoute"] = $datenow;
         $data_NameTable["date_modifier"] = $datenow;
+    
+
 
         $querySQL = (new QuerySQL())
                 ->insertInto($this->getTable())
-                ->value($data_NameTable);
+                ->value($data_NameTable)
+                ->prepareQuery();
         // return id rowe set data NameTable table
-        $id_NameTable = $this->exec($querySQL);
+     
+        $id_NameTable = $this->prepareQuerySQL($querySQL);
 
         /**
          * code insert data to relation table
@@ -194,9 +201,9 @@ class SetData extends AbstractOperatipn
                         ->value([
                     "id_" . $intent->getEntitysSchema()->getNameTable() => $id_NameTable,
                     "id_" . $name_table_CHILDREN => $id_CHILD
-                        ]);
+                        ])->prepareQuery();
 
-                $this->exec($querySQL);
+                $this->prepareQuerySQL($querySQL);
             }
         }
     }
@@ -209,8 +216,8 @@ class SetData extends AbstractOperatipn
             $sqlquery = (new QuerySQL())
                     ->delete(["id_" . $intent->getEntitysSchema()->getNameTable() => $id_NameTable])
                     ->from("r_" . $intent->getEntitysSchema()->getNameTable() . "_" . $name_table_CHILDREN)
-                    ->query();
-            $this->exec($sqlquery);
+                    ->prepareQuery();
+            $this->prepareQuerySQL($sqlquery);
         }
     }
 

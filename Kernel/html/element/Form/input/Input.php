@@ -31,11 +31,11 @@ class Input extends Abstract_Input {
                 ->setPlaceholder(str_replace("_", " ", str_replace("$", " ", $name)))
                 ->setValue($Default);
         if ($this->input['Type'] == "file") {
-            $tag->setClass(" form-file form-control")
+            $tag->setClass(" form-file form-control input-sm")
                     ->setAtt('multiple accept=" .jpg, .jpeg, .png"')
                     ->setName($name.$this->child. "[]");
         } else {
-            $tag->setClass(" form-string form-control")
+            $tag->setClass(" form-string form-control input-sm")
                     ->setName($name.$this->child);
         }
 

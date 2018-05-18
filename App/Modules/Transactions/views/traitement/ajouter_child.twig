@@ -10,29 +10,23 @@
 
 {% block container %}
 
-<div class="container1">
-  
-   
+    <div class="container1">
 
-      <button class="add_form_field">Add New Field 
-        <span style="font-size:16px; font-weight:bold;">+ </span>
-      </button>
+
+
+
 
 
 
 
     </div>
     <form action="child_add"  method='POST'  enctype="multipart/form-data" class="form-inline">
-      {{form_child(intent,"parent")}}
-      <div class="input-add row"> 
-        <div>
-         
-           {{form_child(intent)}}
-          
-    </div>
 
 
-      </div>
+      {{form_child(intent)}}
+      <button class="add_form_field">Add New Field 
+        <span style="font-size:16px; font-weight:bold;">+ </span>
+      </button>
 
       <input type="submit" value="ok" name="ok" >
     </form>
@@ -45,7 +39,10 @@
 
         $(document).ready(function () {
           var max_fields = 10;
-          var wrapper = $(".input-add");
+          var content_child = $(".content-child");
+
+          var inputs_child = $(".inputs-child");
+
           var add_button = $(".add_form_field");
 
           var x = 1;
@@ -53,14 +50,15 @@
             e.preventDefault();
             if (x < max_fields) {
               x++;
-              $(wrapper).append('{{form_child(intent)}}'); //add input box
+
+              $(content_child).append(inputs_child.clone()); //add input box
             } else
             {
               alert('You Reached the limits');
             }
           });
 
-          $(wrapper).on("click", ".delete", function (e) {
+          $(content_child).on("click", ".delete", function (e) {
             e.preventDefault();
             $(this).parent('div').remove();
             x--;
@@ -68,10 +66,10 @@
         });
 
     </script>
-    
-    {% endblock %}
+
+{% endblock %}
 
 
 {% block footer %}
-  
+
 {% endblock %}
