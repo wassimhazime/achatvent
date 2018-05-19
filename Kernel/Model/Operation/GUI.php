@@ -11,6 +11,7 @@ namespace Kernel\Model\Operation;
 use Kernel\INTENT\Intent_Form;
 use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Model\Query\QuerySQL;
+use Kernel\Tools\Tools;
 
 /**
  * Description of FORM
@@ -65,7 +66,8 @@ class GUI extends AbstractOperatipn {
                         ->from($schema->getNameTable())
                         ->join($schema->getFOREIGN_KEY())
                         ->where($conditionDefault)
-                         ->prepareQuery());
+                        ->prepareQuery());
+       
         $Entity = $Entitys[0];
         
         $conditionformSelect = $this->condition_formSelect_par_condition_Default($conditionDefault);
@@ -214,6 +216,9 @@ class GUI extends AbstractOperatipn {
                         ->where($condition)
                          ->prepareQuery());
         $Entity = $Entitys[0];
+       
+        if(empty(Tools::entitys_TO_array($Entity))){ return [];}
+        
         $cond = [];
         foreach ($FOREIGN_KEYs as $FOREIGN_KEY) {
             $id = $FOREIGN_KEY . "_id";

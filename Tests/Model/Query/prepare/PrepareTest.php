@@ -92,7 +92,7 @@ class PrepareTest extends TestCase {
     }
 
     public function testDelete() {
-        $query = (new QuerySQL())->delete(["id" => "2"])->from("client")->prepareQuery();
+        $query = (new QuerySQL())->delete("client")->where(["id" => "2"])->prepareQuery();
 
         $prepare = $query->getPrepare();
         $execute = $query->getExecute();
@@ -102,12 +102,12 @@ class PrepareTest extends TestCase {
     }
 
     public function testDelete_classique() {
-        $query = (new QuerySQL())->
-                delete(["id" => "2"])->
+        $query = (new QuerySQL())->  delete("client")->
+                where(["id" => "2"])->
                 where("age>8")->
                 where("t=66")->
-                from("client")
-                ->prepareQuery();
+              
+                prepareQuery();
 
         $prepare = $query->getPrepare();
         $execute = $query->getExecute();

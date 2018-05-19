@@ -38,13 +38,9 @@ class QuerySQL {
         return new Update($table);
     }
 
-    public function delete(): Delete {
+    public function delete(string $table): Delete {
 
-
-        if (isset(func_get_args()[0])) {
-            return new Delete(func_get_args()[0]);
-        }
-        return new Delete();
+        return new Delete($table);
     }
 
 }

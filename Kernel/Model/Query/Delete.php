@@ -15,25 +15,8 @@ namespace Kernel\Model\Query;
  */
 class Delete extends Abstract_Query {
 
-    function __construct() {
-
-        if (isset(func_get_args()[0])) {
-            $this->where(func_get_args()[0]);
-        }
-    }
-
-    public function from(string $table, string $alias = '') {
-        /// form query
-        //from("client_table")->from("adress_table")
-        //**** alias
-        //from("client_table","client")
-
-        if ($alias == '') {
-            $this->table[] = $table;
-        } else {
-            $this->table[] = "$table AS $alias";
-        }
-        return $this;
+    function __construct($table) {
+        $this->table[] = $table;
     }
 
     //traitement

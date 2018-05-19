@@ -15,6 +15,7 @@ namespace Kernel\Model\Query;
  */
 class Select extends Abstract_Query {
 
+    protected $column = ["*"];
     protected $join = [];
 
     function __construct() {
@@ -75,7 +76,6 @@ class Select extends Abstract_Query {
         $this->setColumn(func_get_args());
         return $this;
     }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 

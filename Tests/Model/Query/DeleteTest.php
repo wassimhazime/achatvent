@@ -14,69 +14,66 @@ use PHPUnit\Framework\TestCase;
  */
 use Kernel\Model\Query\QuerySQL;
 
-class DeleteTest extends TestCase
-{
+class DeleteTest extends TestCase {
 
-    public function testSimpleDelete()
-    {
+    public function testSimpleDelete() {
         $sql = 'DELETE FROM client WHERE ( id=2 )';
         $sqlquery = (new QuerySQL())
-                ->delete("id=2")
-                ->from("client")
-                ->query();
-        $this->assertEquals($sql, $sqlquery);
-    }
-
-    public function test_where_Delete()
-    {
-        $sql = 'DELETE FROM client WHERE ( id=2 )';
-        $sqlquery = (new QuerySQL())
-                ->delete()
-                ->from("client")
+                ->delete("client")
                 ->where("id=2")
                 ->query();
         $this->assertEquals($sql, $sqlquery);
     }
 
-    public function testSimpleDeleteArray()
-    {
+    public function test_where_Delete() {
         $sql = 'DELETE FROM client WHERE ( id=2 )';
         $sqlquery = (new QuerySQL())
-                ->delete(["id=2"])
-                ->from("client")
+                ->delete("client")
+                ->where("id=2")
                 ->query();
         $this->assertEquals($sql, $sqlquery);
     }
 
-    public function test_where_DeleteArray()
-    {
+    public function testSimpleDeleteArray() {
         $sql = 'DELETE FROM client WHERE ( id=2 )';
-        $sqlquery = (new QuerySQL())
-                ->delete()
-                ->from("client")
+        $sqlquery = (new QuerySQL())->delete("client")
                 ->where(["id=2"])
                 ->query();
         $this->assertEquals($sql, $sqlquery);
     }
 
-    public function testSimpleDeleteArrayAssoc()
-    {
-        $sql = 'DELETE FROM client WHERE ( id = 2 )';
+    public function test_where_DeleteArray() {
+        $sql = 'DELETE FROM client WHERE ( id=2 )';
         $sqlquery = (new QuerySQL())
-                ->delete(["id" => 2])
-                ->from("client")
+                ->delete("client")
+                ->where(["id=2"])
                 ->query();
         $this->assertEquals($sql, $sqlquery);
     }
 
-    public function test_where_DeleteArrayAssoc()
-    {
+    public function testSimpleDeleteArrayAssoc() {
         $sql = 'DELETE FROM client WHERE ( id = 2 )';
-        $sqlquery = (new QuerySQL())
-                ->delete()
-                ->from("client")
+        $sqlquery = (new QuerySQL())->delete("client")
                 ->where(["id" => 2])
                 ->query();
         $this->assertEquals($sql, $sqlquery);
     }
+
+    public function test_where_DeleteArrayAssoc() {
+        $sql = 'DELETE FROM client WHERE ( id = 2 )';
+        $sqlquery = (new QuerySQL())
+                ->delete("client")
+                ->where(["id" => 2])
+                ->query();
+        $this->assertEquals($sql, $sqlquery);
+    }
+
+    public function test_vide() {
+        $sql = 'DELETE FROM clients WHERE 1';
+        $sqlquery = (new QuerySQL())
+                ->delete("clients")
+                ->query();
+        $this->assertEquals($sql, $sqlquery);
+    }
+
 }

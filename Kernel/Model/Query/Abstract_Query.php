@@ -17,7 +17,7 @@ use Kernel\Tools\Tools;
  */
 abstract class Abstract_Query {
 
-    protected $column = ["*"];
+    
     protected $table = [];
     //where  == SIMPLE
     protected $conditionsSimple = ["1"];
