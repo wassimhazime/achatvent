@@ -23,10 +23,7 @@ class ActionDataBase extends Connection {
             $Statement->execute($params_execute);
             $Statement->setFetchMode(\PDO::FETCH_CLASS, EntitysDataTable::class);
             $results = $Statement->fetchAll();
-            if (empty($results)) {
-                $results = [new EntitysDataTable()
-                ];
-            }
+
             return $results;
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");

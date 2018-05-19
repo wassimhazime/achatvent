@@ -30,6 +30,7 @@ class MultiSelect extends Abstract_Input {
                 $ligne .= $column . '$$$' . $value . ' £££ ';
                 $att_data_html .= " data-content_" . $column . '="' . $value . '" ';
             }
+        
             $data_load[$row->id] = ["value" => $ligne, "att" => $att_data_html];
         }
         return $data_load;

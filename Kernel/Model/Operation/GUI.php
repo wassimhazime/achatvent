@@ -218,7 +218,7 @@ class GUI extends AbstractOperatipn {
         $Entity = $Entitys[0];
        
         /// si voir-table-68765868769698 => row note exist
-        if(empty(Tools::entitys_TO_array($Entity))){ return [];}
+     ///   if(empty(Tools::entitys_TO_array($Entity))){ return [];}
         
         $cond = [];
         foreach ($FOREIGN_KEYs as $FOREIGN_KEY) {
