@@ -5,43 +5,39 @@ namespace Kernel\Model\Base_Donnee;
 use Kernel\Model\Base_Donnee\Connection;
 use Kernel\Model\Entitys\EntitysDataTable;
 use Kernel\Model\Entitys\EntitysSchema;
+use Kernel\Model\Query\Prepare;
 use \PDO;
 use \PDOException;
 
 class ActionDataBase extends Connection {
 
     ///////////////////////////////////////////////////
+    /// getData
+    protected function prepareQuery(Prepare $query) {
 
-
-    protected function prepareQuerySQL(array $query) {
-        $sqlprepare = $query["prepare"];
-        $params_execute = $query["execute"];
-
-
-
-        /* Exécute une requête préparée en passant un tableau de valeurs */
-        var_dump($sqlprepare, $params_execute);
+        $sqlprepare = $query->getPrepare();
+        $params_execute = $query->getExecute();
+      
         try {
-            $p = $this->getDataBase()->prepare($sqlprepare);
-            $p->execute($params_execute);
+            $Statement = $this->getDataBase()->prepare($sqlprepare);
+            $Statement->execute($params_execute);
+            $Statement->setFetchMode(\PDO::FETCH_CLASS, EntitysDataTable::class);
+            return $Statement->fetchAll();
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
             echo $exc->getMessage();
-            die();
-         
+            die($sqlprepare);
         }
-        return $this->getDataBase()->lastInsertId();
+       
     }
 
-    /// getData
-    protected function query($sql): array {
+    protected function query(string $sql): array {
 
         try {
             $Statement = $this->getDataBase()->query($sql);
-
-            $Statement->setFetchMode(PDO::FETCH_CLASS, EntitysDataTable::class);
+             $Statement->setFetchMode(\PDO::FETCH_CLASS, EntitysDataTable::class);
             return $Statement->fetchAll();
-        } catch (PDOException $exc) {
+        } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
             echo $exc->getMessage();
             echo '<br><hr>';
@@ -50,6 +46,23 @@ class ActionDataBase extends Connection {
     }
 
     /// setdata
+    protected function prepareQueryEXEC(Prepare $query) {
+
+        $sqlprepare = $query->getPrepare();
+        $params_execute = $query->getExecute();
+
+        try {
+            $Statement = $this->getDataBase()->prepare($sqlprepare);
+            $Statement->execute($params_execute);
+            return $this->getDataBase()->lastInsertId();
+        } catch (\PDOException $exc) {
+            //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
+            echo $exc->getMessage();
+            die();
+        }
+        
+    }
+
     protected function exec($sql): string {
         var_dump($sql);
         echo 'errrrr <br><hr>';
@@ -95,7 +108,7 @@ class ActionDataBase extends Connection {
 
             $Statement->setFetchMode(PDO::FETCH_ASSOC);
             return $Statement->fetchAll();
-        } catch (PDOException $exc) {
+        } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
             echo $exc->getMessage();
             echo '<br><hr>';

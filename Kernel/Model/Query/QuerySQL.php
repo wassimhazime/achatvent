@@ -23,12 +23,11 @@ namespace Kernel\Model\Query;
  */
 class QuerySQL {
 
-    public function select() : Select{
-       if (func_get_args()===[]){
-             return new Select();  
+    public function select(): Select {
+        if (isset(func_get_args()[0])) {
+            return new Select(func_get_args());
         }
- 
-        return new Select(func_get_args());  
+        return new Select();
     }
 
     public function insertInto(string $table): Insert {
@@ -39,8 +38,13 @@ class QuerySQL {
         return new Update($table);
     }
 
-    public function delete($conditions=[]): Delete {
-        return new Delete($conditions);
+    public function delete(): Delete {
+
+
+        if (isset(func_get_args()[0])) {
+            return new Delete(func_get_args()[0]);
+        }
+        return new Delete();
     }
 
 }

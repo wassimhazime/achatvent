@@ -16,16 +16,10 @@ namespace Kernel\Model\Query;
 class Delete extends Abstract_Query {
 
     function __construct() {
-        $condition = func_get_args();
-        if (isset($condition[0])) {
-            if (is_array($condition[0])) {
-                $condition = $condition[0];
-            }
+
+        if (isset(func_get_args()[0])) {
+            $this->where(func_get_args()[0]);
         }
-
-
-        $this->action = "delete";
-        $this->where($condition);
     }
 
     public function from(string $table, string $alias = '') {
@@ -46,31 +40,17 @@ class Delete extends Abstract_Query {
 
     public function query(): string {
         $table = implode(', ', $this->table);
-
-        $where = ' WHERE ' . implode(' AND ', $this->conditions);
-
-        $action = 'DELETE FROM ';
-        return $action . $table . $where;
+        $where = ' WHERE ' . implode(' AND ', $this->conditionsSimple);
+        return 'DELETE FROM ' . $table . $where;
     }
 
-    public function prepareQuery(): array {
-
+    public function prepareQuery(): Prepare {
         $table = implode(', ', $this->table);
-
-
-        if (empty($this->conditionsPrepare)) {
-            $where = " where " . implode(' AND ', $this->conditions);
-        } else {
-            $conditonsprepare = $this->conditionsPrepare["conditions"];
-            $where = " where " . implode(' AND ', $this->conditionsPrepare["sql"]);
-        }
-
-
-        $action = 'DELETE FROM ';
-        $prepare = $action . $table . $where;
-        $execute = ($conditonsprepare);
-        return["prepare" => $prepare,
-            "execute" => $execute];
+        $execute = $this->conditionsValues;
+        $condition = array_merge($this->conditionsPrepares, $this->conditionsPrepares_values);
+        $where = " where " . implode(' AND ', $condition);
+        $prepare = 'DELETE FROM ' . $table . $where;
+        return new Prepare($prepare, $execute);
     }
 
 }

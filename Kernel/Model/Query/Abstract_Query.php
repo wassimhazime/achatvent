@@ -8,6 +8,8 @@
 
 namespace Kernel\Model\Query;
 
+use Kernel\Tools\Tools;
+
 /**
  * Description of abstract_Query
  *
@@ -17,21 +19,15 @@ abstract class Abstract_Query {
 
     protected $column = ["*"];
     protected $table = [];
-    protected $conditions = ["1"];
-    protected $conditionsPrepare = [];
-    protected $join = [];
-    protected $action = "";
+    //where  == SIMPLE
+    protected $conditionsSimple = ["1"];
+    //where  == PREPARE
+    protected $conditionsPrepares = [];
+    protected $conditionsPrepares_values = ["1"];
+    protected $conditionsValues = [];
+    /// inset and update
     protected $value;
     protected $valuePrepare = ["sql" => "", "value" => ""];
-
-    // outils
-    protected function isAssoc(array $arr): bool {
-        if (array() === $arr) {
-            return false;
-        }
-        return array_keys($arr) !== range(0, count($arr) - 1);
-    }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function where() {
@@ -54,53 +50,53 @@ abstract class Abstract_Query {
 //                        
 //
 
-        if (func_get_args() != null or ! empty(func_get_args())) {
-            foreach (func_get_args() as $args) {
-                if ($args != null or ! empty($args)) {
-                    /// vide condition instial
-                    if ($this->conditions == ["1"]) {
-                       
-                        $this->conditions = [];
-                    }
+        foreach (func_get_args() as $args) {
 
-                    if (is_array($args)) {
-                        if ($this->isAssoc($args)) {
-                            $columns = [];
-                            $conditions = [];
-                            foreach ($args as $column => $condition) {
-
-                                $this->conditions[] = "( $column = $condition )";
-
-                                $columns[] = "( $column  = ? )";
-                                $conditions[] = $condition;
-                            }
-                            $this->conditionsPrepare = ["sql" => $columns, "conditions" => $conditions];
-                        } else {
-                            foreach ($args as $arg) {
-                                $this->conditions[] = "( $arg )";
-                            }
-                        }
-                    } else {
-
-                        $this->conditions[] = "( $args )";
-                    }
-                }
+            /// vide condition instial
+            if ($this->conditionsSimple == ["1"]) {
+                $this->conditionsSimple = [];
+                $this->conditionsPrepares_values = [];
             }
+            $this->setConditionWhere($args);
         }
-
         return $this;
     }
 
+    private function setConditionWhere($args) {
+
+        if (is_array($args) && $this->isAssoc($args)) {
+            // ->where([id=>44])
+            foreach ($args as $column => $value) {
+                $this->conditionsSimple[] = "( $column = $value )";
+                $this->conditionsValues[] = $value;
+                $this->conditionsPrepares[] = "( $column  = ? )";
+            }
+        } elseif (is_array($args) && !$this->isAssoc($args)) {
+            // ->where(["id>7","nom!=wassim"])
+            foreach ($args as $arg) {
+                $this->conditionsSimple[] = "( $arg )";
+                $this->conditionsPrepares_values[] = "( $arg )";
+            }
+        } elseif (is_string($args) || is_bool($args)) {
+            // ->where("id=33") || ->where(true)
+            $this->conditionsSimple[] = "( $args )";
+            $this->conditionsPrepares_values[] = "( $args )";
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////
     //traitement
 
     abstract public function query(): string;
 
-    abstract public function prepareQuery(): array;
+    abstract public function prepareQuery(): Prepare;
 
-    public function __toString() {
-        return $this->query();
+//    public function __toString() {
+//        return $this->query();
+//    }
+    //// outils
+    protected function isAssoc(array $arr): bool {
+        return Tools::isAssoc($arr);
     }
 
 }

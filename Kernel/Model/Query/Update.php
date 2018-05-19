@@ -17,12 +17,12 @@ class Update extends Abstract_Query {
 
 //update
     function __construct(string $table) {
-        $this->action = "update";
-        $this->table = [];
+
+
         $this->table[] = $table;
     }
 
-   public function value(array $data) {
+    public function value(array $data) {
 
         if ($this->isAssoc($data)) {
             // sql simple
@@ -90,31 +90,25 @@ class Update extends Abstract_Query {
 
     public function query(): string {
         $table = implode(', ', $this->table);
-      
-        $where = ' WHERE ' . implode(' AND ', $this->conditions);
+
+        $where = ' WHERE ' . implode(' AND ', $this->conditionsSimple);
 
         $action = 'UPDATE  ';
         $set = " " . $this->value;
         return $action . $table . $set . $where;
     }
 
-    public function prepareQuery(): array {
+    public function prepareQuery(): Prepare {
 
         $table = implode(', ', $this->table);
-
-
-        if (empty($this->conditionsPrepare)) {
-            $where = " WHERE " . implode(' AND ', $this->conditions);
-        } else {
-            $conditonsprepare = $this->conditionsPrepare["conditions"];
-            $where = " WHERE " . implode(' AND ', $this->conditionsPrepare["sql"]);
-        }
-        $action = 'UPDATE  ';
+        $condition = array_merge($this->conditionsPrepares, $this->conditionsPrepares_values);
+        $where = " WHERE " . implode(' AND ', $condition);
         $set = " " . $this->valuePrepare["sql"];
-        $prepare = $action . $table . $set . $where;
+        $prepare = "UPDATE  " . $table . $set . $where;
+        $conditonsprepare = $this->conditionsValues;
         $execute = array_merge($this->valuePrepare["value"], $conditonsprepare);
-        return["prepare" => $prepare,
-            "execute" => $execute];
+
+        return new Prepare($prepare, $execute);
     }
 
 }

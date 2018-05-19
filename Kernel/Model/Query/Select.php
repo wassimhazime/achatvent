@@ -15,6 +15,8 @@ namespace Kernel\Model\Query;
  */
 class Select extends Abstract_Query {
 
+    protected $join = [];
+
     function __construct() {
         /// select query
         //(new QuerySQL())->
@@ -26,8 +28,9 @@ class Select extends Abstract_Query {
         //**** alias
         //->select("nom",["age"=>"age Client"],["adress"])
         //->select("nom",["age as `age Client`"],["adress"])
-        $this->action = "select";
-        if (!empty(func_get_args())) {
+
+
+        if (isset(func_get_args()[0])) {
             $this->setColumn(func_get_args()[0]);
         }
     }
@@ -73,21 +76,7 @@ class Select extends Abstract_Query {
         return $this;
     }
 
-//    public function select() {
-//        /// select query
-//        //(new QuerySQL())->
-//        // ->select("nom,age,adress as ADRESS ") or
-//        // ->select("nom) ->select("age") ->select("adress as ADRESS") or
-//        // ->select("nom","age","adress") or
-//        // ->select(["nom","age","adress"])or
-//        // ->select(["nom","age"],["adress"],"prenom")
-//        //**** alias
-//        //->select("nom",["age"=>"age Client"],["adress"])
-//        //->select("nom",["age as `age Client`"],["adress"])
-//        $this->action = "select";
-//        $this->setColumn(func_get_args());
-//        return $this;
-//    }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function from(string $table, string $alias = '') {
@@ -346,15 +335,22 @@ class Select extends Abstract_Query {
     public function query(): string {
         $table = implode(', ', $this->table);
         $join = implode('  ', $this->join);
-        $where = ' WHERE ' . implode(' AND ', $this->conditions);
+        $where = ' WHERE ' . implode(' AND ', $this->conditionsSimple);
 
         $action = ' SELECT ' . implode(', ', $this->column) . "  FROM  ";
 
         return $action . $table . $join . $where;
     }
 
-    public function prepareQuery(): array {
-        return [];
+    public function prepareQuery(): Prepare {
+        $table = implode(', ', $this->table);
+        $join = implode('  ', $this->join);
+        $condition = array_merge($this->conditionsPrepares, $this->conditionsPrepares_values);
+        $where = " WHERE " . implode(' AND ', $condition);
+        $action = ' SELECT ' . implode(', ', $this->column) . "  FROM  ";
+        $prepare = $action . $table . $join . $where;
+        $execute = $this->conditionsValues;
+        return new Prepare($prepare, $execute);
     }
 
 }

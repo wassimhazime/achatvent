@@ -15,7 +15,18 @@ use Kernel\Model\Query\QuerySQL;
 
 class WhereTest extends \PHPUnit\Framework\TestCase
 {
+   public function testWheresimplevide()
+    {
+        $sql = ' SELECT nom, prenom, ville, age AS `age Client`  FROM  client WHERE 1';
 
+        $sqlquery = (new QuerySQL())->select("nom", "prenom")
+                ->column("ville")
+                ->column(["age" => "age Client"])
+                ->from("client")
+                ->where()
+                ->query();
+        $this->assertEquals($sql, $sqlquery);
+    }
 ///test simple where
     public function testWheresimple()
     {

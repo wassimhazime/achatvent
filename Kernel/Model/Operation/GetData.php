@@ -32,9 +32,9 @@ class GetData extends AbstractOperatipn {
                 ->from($schema->getNameTable())
                 ->join($schema->getFOREIGN_KEY())
                 ->where($condition)
-                ->query();
+                ->prepareQuery();
 
-        $Entitys = $this->query($sql);
+        $Entitys = $this->prepareQuery($sql);
 
         $this->setDataJoins($Entitys, $mode);
 
@@ -46,12 +46,12 @@ class GetData extends AbstractOperatipn {
 
         $condition = ["{$schema->getNameTable()}.id" => $id];
 
-        $Entitys = $this->query((new QuerySQL())
+        $Entitys = $this->prepareQuery((new QuerySQL())
                         ->select($schema->getCOLUMNS_master())
                         ->column($schema->getFOREIGN_KEY())
                         ->from($schema->getNameTable())
                       
-                        ->where($condition));
+                        ->where($condition)->prepareQuery());
 
 
         return \Kernel\Tools\Tools::entitys_TO_array($Entitys[0]);
@@ -68,9 +68,9 @@ class GetData extends AbstractOperatipn {
                             ->from($schema->getNameTable())
                             ->join($tablechild, " INNER ", true)
                             ->where($schema->getNameTable() . ".id = " . $Entity->id)
-                            ->query();
+                            ->prepareQuery();
 
-                    $Entity->setDataJOIN($tablechild, $this->query($sql));
+                    $Entity->setDataJOIN($tablechild, $this->prepareQuery($sql));
                 }
             } else {
                 $Entity->setDataJOIN("empty", []);

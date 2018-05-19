@@ -60,11 +60,12 @@ class GUI extends AbstractOperatipn {
         $schema = $this->schema;
         
         // data Default
-        $Entitys = $this->query((new QuerySQL())
+        $Entitys = $this->prepareQuery((new QuerySQL())
                         ->select($schema->select_all())
                         ->from($schema->getNameTable())
                         ->join($schema->getFOREIGN_KEY())
-                        ->where($conditionDefault));
+                        ->where($conditionDefault)
+                         ->prepareQuery());
         $Entity = $Entitys[0];
         
         $conditionformSelect = $this->condition_formSelect_par_condition_Default($conditionDefault);
@@ -122,17 +123,21 @@ class GUI extends AbstractOperatipn {
         foreach ($nameTable_FOREIGNs as $nameTable_FOREIGN) {
             $schem_Table_FOREIGN = $this->getschema($nameTable_FOREIGN);
 
-            $querydataCharge = new QuerySQL();
+           
 
-            $querydataCharge->select($schem_Table_FOREIGN->select_master())
+            $querydataCharge =( new QuerySQL())
+                    ->select($schem_Table_FOREIGN->select_master())
                     ->from($schem_Table_FOREIGN->getNameTable())
                     ->join($schem_Table_FOREIGN->getFOREIGN_KEY());
+            
             if (!empty($condition) && isset($condition[$nameTable_FOREIGN])) {
-                $querydataCharge->where($nameTable_FOREIGN . ".id=" . $condition[$nameTable_FOREIGN]);
+                $con=[$nameTable_FOREIGN . ".id"=> $condition[$nameTable_FOREIGN]];
+                
+                $querydataCharge->where($con);
             }
 
 
-            $Entitys_FOREIGNs[$nameTable_FOREIGN] = $this->query($querydataCharge);
+            $Entitys_FOREIGNs[$nameTable_FOREIGN] = $this->prepareQuery($querydataCharge->prepareQuery());
         }
         return $Entitys_FOREIGNs;
     }
@@ -150,17 +155,17 @@ class GUI extends AbstractOperatipn {
             $schem_Table_CHILDREN = $this->getschema($table_CHILDREN);
             $FOREIGN_KEY_CHILDRENs = $schem_Table_CHILDREN->getFOREIGN_KEY();
 
-            $querydataCharge = new QuerySQL();
+           
 
 
-            $querydataCharge->select($schem_Table_CHILDREN->select_NameTable())
+            $querydataCharge=(new QuerySQL())->select($schem_Table_CHILDREN->select_NameTable())
                     ->from($schem_Table_CHILDREN->getNameTable())
                     ->join($FOREIGN_KEY_CHILDRENs)
                     ->independent($schema->getNameTable());
 
             $query = $this->query_enfant_lier_formSelect($querydataCharge, $condition, $FOREIGN_KEY_CHILDRENs);
 
-            $Entitys_CHILDRENs[$table_CHILDREN] = $this->query($query);
+            $Entitys_CHILDRENs[$table_CHILDREN] = $this->prepareQuery($query->prepareQuery());
         }
 
         return $Entitys_CHILDRENs;
@@ -169,15 +174,16 @@ class GUI extends AbstractOperatipn {
     private function dataChargeMultiSelectDependent($tablechild, array $condition) {
         $schema = $this->schema;
         $schem_Table_CHILDREN = $this->getschema($tablechild);
-        return $this->query((
+        return $this->prepareQuery((
                                 new QuerySQL())
                                 ->select($schem_Table_CHILDREN->select_NameTable())
                                 ->from($schema->getNameTable())
                                 ->join($tablechild, " INNER ", true)
-                                ->where($condition));
+                                ->where($condition)
+                                ->prepareQuery());
     }
 
-    private function query_enfant_lier_formSelect(QuerySQL $query, array $condition, array $FOREIGN_KEY_CHILDRENs) {
+    private function query_enfant_lier_formSelect( $query, array $condition, array $FOREIGN_KEY_CHILDRENs) {
 
 
         if (!empty($condition) and ! empty($FOREIGN_KEY_CHILDRENs)) {
@@ -201,11 +207,12 @@ class GUI extends AbstractOperatipn {
         foreach ($FOREIGN_KEYs as $FOREIGN_KEY) {
             $columnFOREIGN_KEY[] = "$FOREIGN_KEY.id as $FOREIGN_KEY" . "_id";
         }
-        $Entitys = $this->query((new QuerySQL())
+        $Entitys = $this->prepareQuery((new QuerySQL())
                         ->select($columnFOREIGN_KEY)
                         ->from($schema->getNameTable())
                         ->join($schema->getFOREIGN_KEY())
-                        ->where($condition));
+                        ->where($condition)
+                         ->prepareQuery());
         $Entity = $Entitys[0];
         $cond = [];
         foreach ($FOREIGN_KEYs as $FOREIGN_KEY) {

@@ -36,7 +36,7 @@ class SetData extends AbstractOperatipn
                 ->set($data_NameTable)
                 ->where(["id"=>$id_NameTable])
                 ->prepareQuery();
-        $this->prepareQuerySQL($querySQL);
+        $this->prepareQueryEXEC($querySQL);
 
 
         /**
@@ -57,7 +57,7 @@ class SetData extends AbstractOperatipn
                 ->from($this->getTable())
                 ->prepareQuery();
         
-        $this->prepareQuerySQL($delete);
+        $this->prepareQueryEXEC($delete);
     }
 
     public function insert(array $dataForm, $mode): int
@@ -85,7 +85,7 @@ class SetData extends AbstractOperatipn
                 ->prepareQuery();
         // return id rowe set data NameTable table
      
-        $id_NameTable = $this->prepareQuerySQL($querySQL);
+        $id_NameTable = $this->prepareQueryEXEC($querySQL);
 
         /**
          * code insert data to relation table
@@ -203,7 +203,7 @@ class SetData extends AbstractOperatipn
                     "id_" . $name_table_CHILDREN => $id_CHILD
                         ])->prepareQuery();
 
-                $this->prepareQuerySQL($querySQL);
+                $this->prepareQueryEXEC($querySQL);
             }
         }
     }
@@ -217,7 +217,7 @@ class SetData extends AbstractOperatipn
                     ->delete(["id_" . $intent->getEntitysSchema()->getNameTable() => $id_NameTable])
                     ->from("r_" . $intent->getEntitysSchema()->getNameTable() . "_" . $name_table_CHILDREN)
                     ->prepareQuery();
-            $this->prepareQuerySQL($sqlquery);
+            $this->prepareQueryEXEC($sqlquery);
         }
     }
 
