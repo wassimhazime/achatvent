@@ -17,14 +17,15 @@ class ActionDataBase extends Connection {
 
         $sqlprepare = $query->getPrepare();
         $params_execute = $query->getExecute();
-      
+
         try {
             $Statement = $this->getDataBase()->prepare($sqlprepare);
             $Statement->execute($params_execute);
             $Statement->setFetchMode(\PDO::FETCH_CLASS, EntitysDataTable::class);
-            $results=$Statement->fetchAll();
-            if(empty($results)){
-                $results=[new EntitysDataTable()];
+            $results = $Statement->fetchAll();
+            if (empty($results)) {
+                $results = [new EntitysDataTable()
+                ];
             }
             return $results;
         } catch (\PDOException $exc) {
@@ -32,14 +33,13 @@ class ActionDataBase extends Connection {
             echo $exc->getMessage();
             die($sqlprepare);
         }
-       
     }
 
     protected function query(string $sql): array {
 
         try {
             $Statement = $this->getDataBase()->query($sql);
-             $Statement->setFetchMode(\PDO::FETCH_CLASS, EntitysDataTable::class);
+            $Statement->setFetchMode(\PDO::FETCH_CLASS, EntitysDataTable::class);
             return $Statement->fetchAll();
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
@@ -64,7 +64,6 @@ class ActionDataBase extends Connection {
             echo $exc->getMessage();
             die();
         }
-        
     }
 
     protected function exec($sql): string {
