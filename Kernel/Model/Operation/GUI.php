@@ -217,6 +217,7 @@ class GUI extends AbstractOperatipn {
                          ->prepareQuery());
         $Entity = $Entitys[0];
        
+        /// si voir-table-68765868769698 => row note exist
         if(empty(Tools::entitys_TO_array($Entity))){ return [];}
         
         $cond = [];
