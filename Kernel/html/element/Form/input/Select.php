@@ -63,7 +63,7 @@ class Select extends Abstract_Input {
                     ->setData($optionTag)
                     ->setId($id_html)
                     ->setName($name.$this->child)
-                    ->setAtt(" readonly ")
+                    ->setAtt(" readonly  ")
                     ->builder();
             return $this->div($tag);
         } else {

@@ -25,7 +25,13 @@ class File
 
     function __construct(string $path, string $type = self::JSON, $is_null = null)
     {
-        if ($path[-1] != DIRECTORY_SEPARATOR) {
+         // php >=7.1 => $fin_path= $path[-1]
+         // php <7.1  => $fin_path=(str_split($path)[count(str_split($path))-1])
+         //           or =>  $fin_path=(str_split($path)[strlen($path)-1]);
+         //           or =>   $a=str_split($path);
+         //                $fin_path=(array_pop($a));
+         
+        if ($path[-1]!= DIRECTORY_SEPARATOR) {
             $path = $path . DIRECTORY_SEPARATOR;
         }
 

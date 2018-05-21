@@ -8,30 +8,27 @@ use Kernel\Model\Operation\SetData;
 use Kernel\Model\Operation\Statistique;
 use Kernel\Model\Operation\ToolsDB;
 
-class Model
-{
+class Model {
 
-    protected $setData = null;
-    protected $table = null;
-    protected $gui = null;
-    protected $getData = null;
-    protected $statistique = null;
-    protected $is_null = true;
-    protected $PathJsonConfig;
-    protected $ToolsDB;
+    private $setData = null;
+    private $table = null;
+    private $gui = null;
+    private $getData = null;
+    private $statistique = null;
+    private $is_null = true;
+    private $PathJsonConfig;
+    private $ToolsDB;
 
-    public function __construct($PathConfigJsone)
-    {
+    public function __construct($PathConfigJsone) {
         $this->PathJsonConfig = $PathConfigJsone;
         $this->ToolsDB = new ToolsDB($PathConfigJsone);
     }
-        function is_null()
-    {
+
+    function is_null(): bool {
         return $this->is_null;
     }
 
-    function setStatement($table)
-    {
+    function setStatement(string $table) {
 
         if ($table == "statistique") {
             return new Statistique($this->PathJsonConfig);
@@ -45,9 +42,33 @@ class Model
             }
         }
     }
-    
-    public function getAllTables()
-    {
+
+    public function getAllTables() {
         return $this->ToolsDB->getAllTables();
     }
+
+    function get_setData(): SetData {
+        return $this->setData;
+    }
+
+    function getTable(): string {
+        return $this->table;
+    }
+
+    function getGui(): GUI {
+        return $this->gui;
+    }
+
+    function getData(): GetData {
+        return $this->getData;
+    }
+
+    function getStatistique(): Statistique {
+        return $this->statistique;
+    }
+
+    function getToolsDB(): ToolsDB {
+        return $this->ToolsDB;
+    }
+
 }
