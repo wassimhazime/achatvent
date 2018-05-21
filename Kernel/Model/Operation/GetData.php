@@ -40,6 +40,22 @@ class GetData extends AbstractOperatipn {
 
         return new Intent($schema, $Entitys, $mode);
     }
+    
+    public function is_id($id): bool {
+       $schema = $this->schema;
+
+        $condition = ["{$schema->getNameTable()}.id" => $id];
+
+        $Entitys = $this->prepareQuery((new QuerySQL())
+                        ->select()
+                         ->from($schema->getNameTable())
+                         ->where($condition)
+                         ->prepareQuery());
+        
+         return (!empty($Entitys));
+
+
+    }
 
     public function find_by_id($id): array {
         $schema = $this->schema;

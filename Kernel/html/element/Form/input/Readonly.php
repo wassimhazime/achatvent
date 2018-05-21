@@ -14,6 +14,7 @@ namespace Kernel\html\element\Form\input;
  * @author wassime
  */
 use Kernel\html\HTML;
+
 class Readonly extends Abstract_Input {
 
     //put your code here
@@ -21,34 +22,31 @@ class Readonly extends Abstract_Input {
         $name = $this->name;
         $id_html = $this->id_html;
         $Default = $this->Default;
-        $type = $this->type;
-        $label = str_replace("parent", " ", str_replace("$", " ",  str_replace("_", " ", $name)));;
+       
+        $label = str_replace("parent", " ", str_replace("$", " ", str_replace("_", " ", $name)));
         
 
-        $inputehiddenperent= HTML::TAG('input')
+
+        $inputehiddenperent = HTML::TAG('input')
                 ->setClass(" form-control ")
                 ->setId($id_html)
                 ->setType("hidden")
-                 ->setValue($Default)
-                ->setName($name )
+                ->setValue($Default)
+                ->setName($name)
                 ->builder()
-                ;
+        ;
 
 
-        
-        
-     $show='    <li class="list-group-item" style="    max-width: 278px;">
-    <span class="badge">'."   ".$Default.'</span>
-   '.$label.'
+
+
+        $show = '    <li class="list-group-item" style="    max-width: 278px;">
+    <span class="badge">' . "   " . $Default . '</span>
+   ' . $label . '
   </li>'
-           ;
+        ;
 
 
-     return $inputehiddenperent.$show;
-       
+        return $inputehiddenperent . $show;
     }
 
-    
-    
-    
 }

@@ -52,6 +52,8 @@ class SetData extends AbstractOperatipn
 
     public function delete(array $condition)
     { // one  item
+        echo 'delete item';
+        sleep(10);
         $delete = (new QuerySQL())
                 ->delete($this->getTable())
                 ->where($condition)

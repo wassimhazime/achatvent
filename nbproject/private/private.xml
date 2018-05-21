@@ -3,7 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/home/wassim/php/achatvent/index.php</file>
+=======
+            <file>file:/home/wassime/projetPHP/achatvente/Kernel/html/element/Form/input/Readonly.php</file>
+            <file>file:/home/wassime/projetPHP/achatvente/Kernel/html/element/Form/Form_child_HTML.php</file>
+            <file>file:/home/wassime/projetPHP/achatvente/App/Modules/Transactions/views/traitement/ajouter_child.twig</file>
+>>>>>>> 579e8c334020379408a37d70a65f0aaea73663c1
         </group>
     </open-files>
 </project-private>
