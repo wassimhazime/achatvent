@@ -1,66 +1,325 @@
-   
 {% extends "themes.twig" %}
 {% use "@traitement/plugins/progress.twig" %}
 
 
 {% block headcss %}
-
+    <link href="/public/comptable/traitement/select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 
 {% block container %}
 
-    <form action="child_add"  method='POST'  enctype="multipart/form-data" class="form-inline">
+    <style>
+
+    </style>
+    <div class="row" style="margin: 0px">
+        <div class="col-lg-8"  style="margin: 0px; padding: 0px;">
+            <div class="panel panel-default box shadow-4dp" style="    padding: 0px;">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                Actions
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li><a href="#">Action</a>
+                                </li>
+                                <li><a href="#">Another action</a>
+                                </li>
+                                <li><a href="#">Something else here</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="row clearfix" style="margin:5px">
+                    <div class="col-md-12 table-responsive"  style="font-size: 11px;     overflow-x: visible;">
+                        <table class="table table-bordered table-hover table-sortable" id="tab_logic">
+                            <thead>
+                                <tr >
+                                    <th class="text-center">
+                                        Name
+                                    </th>
+                                    <th class="text-center">
+                                        Name
+                                    </th>
+                                    <th class="text-center">
+                                        Email
+                                    </th>
+                                    <th class="text-center">
+                                        Notes
+                                    </th>
+                                    <th class="text-center">
+                                        Option
+                                    </th>
+
+                                    <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id='addr0' data-id="0" class="hidden">
+                                    <td data-name="name">
+                                        <input type="text" name='name0'  placeholder='Name' class="form-control input-sm"/>
+                                    </td>
+                                    <td data-name="name">
+                                        <input type="text" name='name0'  placeholder='Name' class="form-control input-sm"/>
+                                    </td>
+                                    <td data-name="mail">
+                                        <input type="text" name='mail0' placeholder='Email' class="form-control input-sm"/>
+                                    </td>
+                                    <td data-name="desc">
+                                        <textarea name="desc0" placeholder="Description" class="form-control input-sm"  style="resize:vertical;"></textarea>
+                                    </td>
+                                    <td data-name="sel">
+                                        <select name="sel0" class=" form-control input-sm " data-container=".table-responsive">
+                                            <option value="">Select Option</option>
+                                            <option value="1">Option 1</option>
+                                            <option value="2">Option 2</option>
+                                            <option value="3">Option 3</option>
+                                        </select>
+                                    </td>
+
+                                    <td data-name="del">
+                                        <button name="del0" class='btn btn-xs glyphicon glyphicon-trash row-remove' style="font-size: 16px">
+
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <a id="add_row" class="btn btn-default pull-right">Add Row</a>
+
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+
+        </div>
+        <!-- /.col-lg-8 -->
+        <div class="col-lg-4">
+            <div class="panel panel-default box shadow-4dp" style="    padding: 0px;">
+                <div class="panel-heading">
+                    <i class="fa fa-bell fa-fw"></i> Notifications Panel
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-comment fa-fw"></i> New Comment
+                            <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                            </span>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                            <span class="pull-right text-muted small"><em>12 minutes ago</em>
+                            </span>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-envelope fa-fw"></i> Message Sent
+                            <span class="pull-right text-muted small"><em>27 minutes ago</em>
+                            </span>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-tasks fa-fw"></i> New Task
+                            <span class="pull-right text-muted small"><em>43 minutes ago</em>
+                            </span>
+                        </a>
+                        <canvas id="myChart"></canvas>
+                    </div>
+                    <!-- /.list-group -->
+                    <button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal">
+View All Alerts
+</button>
+              
+                </div>
+                <!-- /.panel-body -->
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                            </div>
+                            <div class="modal-body">
+                             <canvas id="myChart2"></canvas>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
-      {{form_child(intent)}}
-      
-      <button class="add_form_field">Add New Field 
-        <span style="font-size:16px; font-weight:bold;">+ </span>
-      </button>
-
-      <input type="submit" value="ok" name="ok" >
-    </form>
-
-
-
-
-
-    <script>
-
-        $(document).ready(function () {
-          var max_fields = 10;
-          var content_child = $(".content-child");
-
-          var inputs_child = $(".inputs-child");
-
-          var add_button = $(".add_form_field");
-
-          var x = 1;
-          $(add_button).click(function (e) {
-            e.preventDefault();
-            if (x < max_fields) {
-              x++;
-
-              $(content_child).append(inputs_child.clone()); //add input box
-            } else
-            {
-              alert('You Reached the limits');
-            }
-          });
-
-          $(content_child).on("click", ".delete", function (e) {
-            e.preventDefault();
-            $(this).parent('div').remove();
-            x--;
-          });
-        });
-
-    </script>
+        </div>
+        <!-- /.col-lg-4 -->
+    </div>
 
 {% endblock %}
 
 
 {% block footer %}
+    <script src="/public/comptable/traitement/select/js/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/public/statistitique/global/js/Chart.min.js" type="text/javascript"></script>
 
+    <script>
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+            },
+
+        });
+    </script>
+       <script>
+        var ctx = document.getElementById("myChart2").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+            },
+
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#add_row").on("click", function() {
+                // Dynamic Rows Code
+
+                // Get max row id and set new id
+                var newid = 0;
+                $.each($("#tab_logic tr"), function() {
+                    if (parseInt($(this).data("id")) > newid) {
+                        newid = parseInt($(this).data("id"));
+                    }
+                });
+                newid++;
+
+                var tr = $("<tr></tr>", {
+                    id: "addr" + newid,
+                    "data-id": newid
+                });
+
+                // loop through each td and create new elements with name of newid
+                $.each($("#tab_logic tbody tr:nth(0) td"), function() {
+                    var cur_td = $(this);
+
+                    var children = cur_td.children();
+
+                    // add new td and element if it has a nane
+                    if ($(this).data("name") != undefined) {
+                        var td = $("<td></td>", {
+                            "data-name": $(cur_td).data("name")
+                        });
+
+                        var c = $(cur_td).find($(children[0]).prop('tagName')).clone().val("");
+                        c.attr("name", $(cur_td).data("name") + newid);
+                        c.appendTo($(td));
+                        td.appendTo($(tr));
+                    } else {
+                        var td = $("<td></td>", {
+                            'text': $('#tab_logic tr').length
+                        }).appendTo($(tr));
+                    }
+                });
+
+                // add delete button and td
+                /*
+                 $("<td></td>").append(
+                 $("<button class='btn btn-danger glyphicon glyphicon-remove row-remove'></button>")
+                 .click(function() {
+                 $(this).closest("tr").remove();
+                 })
+                 ).appendTo($(tr));
+                 */
+
+                // add the new row
+                $(tr).appendTo($('#tab_logic'));
+
+                $(tr).find("td button.row-remove").on("click", function() {
+                    $(this).closest("tr").remove();
+                });
+            });
+
+
+
+
+            // Sortable Code
+            var fixHelperModified = function(e, tr) {
+                var $originals = tr.children();
+                var $helper = tr.clone();
+
+                $helper.children().each(function(index) {
+                    $(this).width($originals.eq(index).width())
+                });
+
+                return $helper;
+            };
+
+            $(".table-sortable tbody").sortable({
+                helper: fixHelperModified
+            }).disableSelection();
+
+            $(".table-sortable thead").disableSelection();
+
+
+
+            $("#add_row").trigger("click");
+        });
+    </script>
 {% endblock %}

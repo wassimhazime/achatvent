@@ -1,0 +1,43 @@
+
+    <form action="child_add"  method='POST'  enctype="multipart/form-data" class="form-inline">
+
+
+      {{form_child(intent)}}
+      
+      <button class="add_form_field">Add New Field 
+        <span style="font-size:16px; font-weight:bold;">+ </span>
+      </button>
+
+      <input type="submit" value="ok" name="ok" >
+    </form>
+    <script>
+
+        $(document).ready(function () {
+          var max_fields = 10;
+          var content_child = $(".content-child");
+
+          var inputs_child = $(".inputs-child");
+
+          var add_button = $(".add_form_field");
+
+          var x = 1;
+          $(add_button).click(function (e) {
+            e.preventDefault();
+            if (x < max_fields) {
+              x++;
+
+              $(content_child).append(inputs_child.clone()); //add input box
+            } else
+            {
+              alert('You Reached the limits');
+            }
+          });
+
+          $(content_child).on("click", ".delete", function (e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+          });
+        });
+
+    </script>
