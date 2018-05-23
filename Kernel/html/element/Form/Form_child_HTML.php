@@ -22,7 +22,10 @@ class Form_child_HTML extends FormAbstract {
             $form_grop_child[] = $this->InputTage($input, "form-inline", "[]");
         }
 
+
+
         $parent = implode(" ", $form_grop_PARENT);
+
         $child = implode(" ", $form_grop_child);
 
 
@@ -31,20 +34,11 @@ class Form_child_HTML extends FormAbstract {
 
     protected function merge_form(string $parent, string $child) {
 
-
-        $deleterow = HTML::TAG("a")->setAtt('href="#"')->setClass("delete")->setData("delete")->builder();
-        $divrom = HTML::TAG('div')->setClass("inputs-child row")->setAtt(' style="margin: 0px" ')->setData($child . $deleterow)->builder();
-        $divcontent = HTML::TAG("div")->setClass("content-child")->setAtt('style="margin: 0px"')->setData($divrom)->builder();
-        $p = '<div class="jumbotron" style="padding-left: 21px;">
-  <h1>Modification du document </h1>
-  <ul class="list-group">
-  ' . $parent . '
-      </ul>
-  <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
-</div>';
+        $panelchild =" ";
+        $panelperent = '  ';
 
 
-        return $p . $divcontent;
+        return $panelchild . $panelperent;
     }
 
     protected function setInput($META_data, $Charge_data, $Default_Data = []) {

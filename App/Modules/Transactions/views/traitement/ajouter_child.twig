@@ -11,29 +11,37 @@
 
     <style>
 
+
+
+        @media (min-width: 1200px){
+            .row {
+                margin-right: -26px;
+                margin-left: -42px;
+            }
+            .col-lg-12  {     padding-right: 0px; }
+            .col-lg-4 {
+                width: 28%;
+            }
+            .col-lg-8 {
+                width: 72%;
+            }
+        }
+
+
     </style>
     <div class="row" style="margin: 0px">
+
+
         <div class="col-lg-8"  style="margin: 0px; padding: 0px;">
             <div class="panel panel-default box shadow-4dp" style="    padding: 0px;">
                 <div class="panel-heading">
-                    <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                    <i class=" glyphicon glyphicon-usd"></i>Les  Details - Les  Échéances 
                     <div class="pull-right">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                Actions
-                                <span class="caret"></span>
+                            <button type="button" class="btn btn-default  " id="btnpanelperentstatistiqe">
+                                <span class="glyphicon glyphicon-floppy-saved" style="    color: #337ab7;"></span>
                             </button>
-                            <ul class="dropdown-menu pull-right" role="menu">
-                                <li><a href="#">Action</a>
-                                </li>
-                                <li><a href="#">Another action</a>
-                                </li>
-                                <li><a href="#">Something else here</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a>
-                                </li>
-                            </ul>
+
                         </div>
                     </div>
                 </div>
@@ -56,6 +64,9 @@
                                         Notes
                                     </th>
                                     <th class="text-center">
+                                        Notes
+                                    </th>
+                                    <th class="text-center">
                                         Option
                                     </th>
 
@@ -64,15 +75,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id='addr0' data-id="0" class="hidden">
+                                <tr id="addr0" data-id="0" >
                                     <td data-name="name">
-                                        <input type="text" name='name0'  placeholder='Name' class="form-control input-sm"/>
+                                        <input type="text" name="name0"  placeholder="Name" class="form-control input-sm"/>
                                     </td>
                                     <td data-name="name">
-                                        <input type="text" name='name0'  placeholder='Name' class="form-control input-sm"/>
+                                        <input type="numbre" name="name0"  placeholder="Name" class="form-control input-sm"/>
+                                    </td>
+                                    <td data-name="name">
+                                        <input type="date" name="name0"  placeholder="Name" class="form-control input-sm"/>
                                     </td>
                                     <td data-name="mail">
-                                        <input type="text" name='mail0' placeholder='Email' class="form-control input-sm"/>
+                                        <div name="namfe0">
+                                            <input type="file" name="file   " id="file" class="inputfile"  multiple />
+                                            <label for="file"  ><span class="glyphicon glyphicon-paperclip btn btn-xs " style="font-size: 16px ;    background-color: #dcecfb;" ></span></label>
+                                        </div>   
                                     </td>
                                     <td data-name="desc">
                                         <textarea name="desc0" placeholder="Description" class="form-control input-sm"  style="resize:vertical;"></textarea>
@@ -87,7 +104,7 @@
                                     </td>
 
                                     <td data-name="del">
-                                        <button name="del0" class='btn btn-xs glyphicon glyphicon-trash row-remove' style="font-size: 16px">
+                                        <button name="del0" class="btn btn-xs glyphicon glyphicon-trash row-remove" style="font-size: 16px ;    background-color: #f1a1c2;">
 
                                         </button>
                                     </td>
@@ -104,41 +121,49 @@
 
         </div>
         <!-- /.col-lg-8 -->
-        <div class="col-lg-4">
-            <div class="panel panel-default box shadow-4dp" style="    padding: 0px;">
+
+        <div class="col-lg-4" style="padding-right:0px" id="panelperentstatistiqe">
+            <div class="panel panel-default box shadow-4dp" style="    padding: 0px ">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Notifications Panel
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Notifications Panel
+
                 </div>
+
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div class="list-group">
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-comment fa-fw"></i> New Comment
-                            <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                    <div class="list-group"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                        <input class="form-control" id="id_html_id" type="hidden" value="470" name="parent_id"><a href="#" class="list-group-item">
+                            <i class="glyphicon glyphicon-paste"></i>      id
+                            <span class="pull-right text-muted "><em><b><mark class=" ">   470</mark></b></em>
+                            </span>
+                        </a> <input class="form-control" id="id_html_id" type="hidden" value="2018-05-23" name="parent_date_negociation">           <a href="#" class="list-group-item">
+                            <i class="glyphicon glyphicon-paste"></i>      date negociation
+                            <span class="pull-right text-muted "><em><b><mark class=" ">   2018-05-23</mark></b></em>
+                            </span>
+                        </a> <input class="form-control" id="id_html_id" type="hidden" value="1113" name="parent_montant_factures_TTC">           <a href="#" class="list-group-item">
+                            <i class="glyphicon glyphicon-paste"></i>      montant factures TTC
+                            <span class="pull-right text-muted "><em><b><mark class=" ">   1113</mark></b></em>
+                            </span>
+                        </a> <input class="form-control" id="id_html_id" type="hidden" value="333" name="parent_montant_avoirs_TTC">           <a href="#" class="list-group-item">
+                            <i class="glyphicon glyphicon-paste"></i>      montant avoirs TTC
+                            <span class="pull-right text-muted "><em><b><mark class=" ">   333</mark></b></em>
+                            </span>
+                        </a> <input class="form-control" id="id_html_id" type="hidden" value="780" name="parent_Reglement_TTC">           <a href="#" class="list-group-item">
+                            <i class="glyphicon glyphicon-paste"></i>      Reglement TTC
+                            <span class="pull-right text-muted "><em><b><mark class=" ">   780</mark></b></em>
+                            </span>
+                        </a> <input class="form-control" id="id_html_id" type="hidden" value="24" name="parent_raison$sociale">           <a href="#" class="list-group-item">
+                            <i class="glyphicon glyphicon-paste"></i>      raison sociale
+                            <span class="pull-right text-muted "><em><b><mark class=" ">   24</mark></b></em>
                             </span>
                         </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                            <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                            </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-envelope fa-fw"></i> Message Sent
-                            <span class="pull-right text-muted small"><em>27 minutes ago</em>
-                            </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-tasks fa-fw"></i> New Task
-                            <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                            </span>
-                        </a>
-                        <canvas id="myChart"></canvas>
+                        <canvas id="myChart" style="display: block; width: 254px; height: 127px;" width="254" height="127" class="chartjs-render-monitor"></canvas>
                     </div>
                     <!-- /.list-group -->
                     <button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal">
-View All Alerts
-</button>
-              
+                        View All Alerts
+                    </button>
+
                 </div>
                 <!-- /.panel-body -->
 
@@ -151,7 +176,7 @@ View All Alerts
                                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                             </div>
                             <div class="modal-body">
-                             <canvas id="myChart2"></canvas>
+                                <canvas id="myChart2"></canvas>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -160,11 +185,17 @@ View All Alerts
                         </div>
                     </div>
                 </div>
+
             </div>
 
 
         </div>
-        <!-- /.col-lg-4 -->
+
+
+
+
+
+
     </div>
 
 {% endblock %}
@@ -173,16 +204,20 @@ View All Alerts
 {% block footer %}
     <script src="/public/comptable/traitement/select/js/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/public/statistitique/global/js/Chart.min.js" type="text/javascript"></script>
-
+    <script>
+        $("#btnpanelperentstatistiqe").click(function() {
+            $("#panelperentstatistiqe").hide("500");
+        });
+    </script>
     <script>
         var ctx = document.getElementById("myChart").getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                labels: ["Red", "Blue", "Yellow"],
                 datasets: [{
                         label: '# of Votes',
-                        data: [12, 19, 3, 5, 2, 3],
+                        data: [12, 19, 3],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -202,10 +237,9 @@ View All Alerts
                         borderWidth: 1
                     }]
             },
-
         });
     </script>
-       <script>
+    <script>
         var ctx = document.getElementById("myChart2").getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'pie',
@@ -233,7 +267,6 @@ View All Alerts
                         borderWidth: 1
                     }]
             },
-
         });
     </script>
     <script>
@@ -249,24 +282,19 @@ View All Alerts
                     }
                 });
                 newid++;
-
                 var tr = $("<tr></tr>", {
                     id: "addr" + newid,
                     "data-id": newid
                 });
-
                 // loop through each td and create new elements with name of newid
                 $.each($("#tab_logic tbody tr:nth(0) td"), function() {
                     var cur_td = $(this);
-
                     var children = cur_td.children();
-
-                    // add new td and element if it has a nane
+                    // add new td and element if it has a name
                     if ($(this).data("name") != undefined) {
                         var td = $("<td></td>", {
                             "data-name": $(cur_td).data("name")
                         });
-
                         var c = $(cur_td).find($(children[0]).prop('tagName')).clone().val("");
                         c.attr("name", $(cur_td).data("name") + newid);
                         c.appendTo($(td));
@@ -277,7 +305,6 @@ View All Alerts
                         }).appendTo($(tr));
                     }
                 });
-
                 // add delete button and td
                 /*
                  $("<td></td>").append(
@@ -290,36 +317,50 @@ View All Alerts
 
                 // add the new row
                 $(tr).appendTo($('#tab_logic'));
-
                 $(tr).find("td button.row-remove").on("click", function() {
                     $(this).closest("tr").remove();
                 });
             });
-
-
-
-
             // Sortable Code
             var fixHelperModified = function(e, tr) {
                 var $originals = tr.children();
                 var $helper = tr.clone();
-
                 $helper.children().each(function(index) {
                     $(this).width($originals.eq(index).width())
                 });
-
                 return $helper;
             };
-
             $(".table-sortable tbody").sortable({
                 helper: fixHelperModified
             }).disableSelection();
-
             $(".table-sortable thead").disableSelection();
-
-
-
             $("#add_row").trigger("click");
         });
+
+
+
+
+
+        var inputs = document.querySelectorAll('.inputfile');
+        $(inputs).appendTo();
+        $(inputs).css({
+            "width": "0.1px",
+            "height": "0.1px",
+            "opacity": "0",
+            "overflow": "hidden",
+            "position": "absolute",
+            " z-index": "-1"
+        })
+
+        Array.prototype.forEach.call(inputs, function(input)
+        {
+            var label = input.nextElementSibling;
+            input.addEventListener('change', function(e)
+            {
+                label.querySelector('span').innerHTML = this.files.length;
+            }
+            );
+        });
+
     </script>
 {% endblock %}

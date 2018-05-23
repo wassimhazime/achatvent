@@ -39,12 +39,13 @@ class Readonly extends Abstract_Input {
 
 
 
-        $show = '    <li class="list-group-item" style="    max-width: 278px;">
-    <span class="badge">' . "   " . $Default . '</span>
-   ' . $label . '
-  </li>'
-        ;
+ 
 
+        $show='           <a href="#" class="list-group-item">
+                            <i class="glyphicon glyphicon-paste"></i>    ' . $label . '
+                            <span class="pull-right text-muted "><em><b><mark class=" ">' . "   " . $Default . '</mark></b></em>
+                            </span>
+                        </a>';
 
         return $inputehiddenperent . $show;
     }
