@@ -48,7 +48,7 @@
                 <!-- /.panel-heading -->
                 <div class="row clearfix" style="margin:5px">
                     <div class="col-md-12 table-responsive"  style="font-size: 11px;     overflow-x: visible;">
-                        <table class="table table-bordered table-hover table-sortable" id="tab_logic">
+                        <table class="table table-bordered table-hover table-sortable" >
                             <thead>
                                 <tr >
                                     <th class="text-center">
@@ -74,27 +74,36 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr id="addr0" data-id="0" >
-                                    <td data-name="name">
-                                        <input type="text" name="name0"  placeholder="Name" class="form-control input-sm"/>
+
+
+
+
+
+
+
+
+
+
+
+
+                            <tbody id="content-child">
+                                <tr   class="inputs-child">
+                                    <td >
+                                        <input type="text" name="name"  placeholder="Name" class="form-control input-sm"/>
                                     </td>
-                                    <td data-name="name">
+                                    <td >
                                         <input type="numbre" name="name0"  placeholder="Name" class="form-control input-sm"/>
                                     </td>
-                                    <td data-name="name">
+                                    <td >
                                         <input type="date" name="name0"  placeholder="Name" class="form-control input-sm"/>
                                     </td>
-                                    <td data-name="mail">
-                                        <div name="namfe0">
-                                            <input type="file" name="file   " id="file" class="inputfile"  multiple />
-                                            <label for="file"  ><span class="glyphicon glyphicon-paperclip btn btn-xs " style="font-size: 16px ;    background-color: #dcecfb;" ></span></label>
-                                        </div>   
-                                    </td>
-                                    <td data-name="desc">
+                                    <td >
+                               <input type="file" name="hu"   class="inputfile"  multiple />
+                               </td>
+                                    <td >
                                         <textarea name="desc0" placeholder="Description" class="form-control input-sm"  style="resize:vertical;"></textarea>
                                     </td>
-                                    <td data-name="sel">
+                                    <td >
                                         <select name="sel0" class=" form-control input-sm " data-container=".table-responsive">
                                             <option value="">Select Option</option>
                                             <option value="1">Option 1</option>
@@ -103,13 +112,25 @@
                                         </select>
                                     </td>
 
-                                    <td data-name="del">
-                                        <button name="del0" class="btn btn-xs glyphicon glyphicon-trash row-remove" style="font-size: 16px ;    background-color: #f1a1c2;">
-
-                                        </button>
+                                    <td >
+                                        <button class="delete btn btn-xs glyphicon glyphicon-trash row-remove" style="font-size: 16px ;    background-color: #f1a1c2;"> </button>
                                     </td>
+                                    
+                                    
                                 </tr>
                             </tbody>
+
+
+
+
+
+
+
+
+
+
+
+
                         </table>
                     </div>
                 </div>
@@ -204,11 +225,7 @@
 {% block footer %}
     <script src="/public/comptable/traitement/select/js/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/public/statistitique/global/js/Chart.min.js" type="text/javascript"></script>
-    <script>
-        $("#btnpanelperentstatistiqe").click(function() {
-            $("#panelperentstatistiqe").hide("500");
-        });
-    </script>
+
     <script>
         var ctx = document.getElementById("myChart").getContext('2d');
         var myChart = new Chart(ctx, {
@@ -269,98 +286,6 @@
             },
         });
     </script>
-    <script>
-        $(document).ready(function() {
-            $("#add_row").on("click", function() {
-                // Dynamic Rows Code
-
-                // Get max row id and set new id
-                var newid = 0;
-                $.each($("#tab_logic tr"), function() {
-                    if (parseInt($(this).data("id")) > newid) {
-                        newid = parseInt($(this).data("id"));
-                    }
-                });
-                newid++;
-                var tr = $("<tr></tr>", {
-                    id: "addr" + newid,
-                    "data-id": newid
-                });
-                // loop through each td and create new elements with name of newid
-                $.each($("#tab_logic tbody tr:nth(0) td"), function() {
-                    var cur_td = $(this);
-                    var children = cur_td.children();
-                    // add new td and element if it has a name
-                    if ($(this).data("name") != undefined) {
-                        var td = $("<td></td>", {
-                            "data-name": $(cur_td).data("name")
-                        });
-                        var c = $(cur_td).find($(children[0]).prop('tagName')).clone().val("");
-                        c.attr("name", $(cur_td).data("name") + newid);
-                        c.appendTo($(td));
-                        td.appendTo($(tr));
-                    } else {
-                        var td = $("<td></td>", {
-                            'text': $('#tab_logic tr').length
-                        }).appendTo($(tr));
-                    }
-                });
-                // add delete button and td
-                /*
-                 $("<td></td>").append(
-                 $("<button class='btn btn-danger glyphicon glyphicon-remove row-remove'></button>")
-                 .click(function() {
-                 $(this).closest("tr").remove();
-                 })
-                 ).appendTo($(tr));
-                 */
-
-                // add the new row
-                $(tr).appendTo($('#tab_logic'));
-                $(tr).find("td button.row-remove").on("click", function() {
-                    $(this).closest("tr").remove();
-                });
-            });
-            // Sortable Code
-            var fixHelperModified = function(e, tr) {
-                var $originals = tr.children();
-                var $helper = tr.clone();
-                $helper.children().each(function(index) {
-                    $(this).width($originals.eq(index).width())
-                });
-                return $helper;
-            };
-            $(".table-sortable tbody").sortable({
-                helper: fixHelperModified
-            }).disableSelection();
-            $(".table-sortable thead").disableSelection();
-            $("#add_row").trigger("click");
-        });
-
-
-
-
-
-        var inputs = document.querySelectorAll('.inputfile');
-        $(inputs).appendTo();
-        $(inputs).css({
-            "width": "0.1px",
-            "height": "0.1px",
-            "opacity": "0",
-            "overflow": "hidden",
-            "position": "absolute",
-            " z-index": "-1"
-        })
-
-        Array.prototype.forEach.call(inputs, function(input)
-        {
-            var label = input.nextElementSibling;
-            input.addEventListener('change', function(e)
-            {
-                label.querySelector('span').innerHTML = this.files.length;
-            }
-            );
-        });
-
-    </script>
+    <script src="/public/transactions/traitement/childe_add_row.js" type="text/javascript"></script>
+    <script src="/public/transactions/traitement/stylefile.js" type="text/javascript"></script>
 {% endblock %}
