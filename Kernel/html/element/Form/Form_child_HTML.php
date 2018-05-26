@@ -42,7 +42,7 @@ class Form_child_HTML extends FormAbstract {
         foreach ($label as $l) {
             $Thead[]='   <th class="text-center"> '.$l.'</th>';
         }
-        $Thead[]='    <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;"> </th>     </thead>';
+         $Thead[]='    <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;"> </th>     </thead>';
        
        $Tbody[]=' <tbody id="content-child"> <tr   class="inputs-child">';
        foreach ($input as $b) {
