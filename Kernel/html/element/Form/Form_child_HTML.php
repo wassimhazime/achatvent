@@ -1,6 +1,11 @@
 <?php
 
 namespace Kernel\html\element\Form;
+use Kernel\html\element\Form\input\Input;
+use Kernel\html\element\Form\input\MultiSelect;
+use Kernel\html\element\Form\input\Select;
+use Kernel\html\element\Form\input\Textarea;
+use Kernel\INTENT\Intent_Form;
 
 use Kernel\html\element\Form\input\Readonly;
 use Kernel\html\HTML;
@@ -8,57 +13,54 @@ use Kernel\html\HTML;
 class Form_child_HTML extends FormAbstract {
 
     protected $input = [];
-    protected $input_PARENT = [];
+    
 
     public function builder() {
-        $form_grop_PARENT = [];
+       
         $form_grop_child = [];
-        foreach ($this->input_PARENT as $input) {
-
-            $form_grop_PARENT[] = (new Readonly($input))->builder();
+            foreach ($this->input as $input) {
+            $form_grop_child[] = $this->InputTage($input, "form-table", "[]");
         }
-
-        foreach ($this->input as $input) {
-            $form_grop_child[] = $this->InputTage($input, "form-inline", "[]");
+        
+        
+        $label=[];
+        $input=[];
+        foreach ($form_grop_child as $row) {
+            $input[]=$row["input"];
+            $label[]=$row["label"];
+            
         }
-
-
-
-        $parent = implode(" ", $form_grop_PARENT);
-
-        $child = implode(" ", $form_grop_child);
-
-
-        return $this->merge_form($parent, $child);
+        return $this->form_table($label, $input);
+     
+    }
+    
+    protected function form_table($label, $input) {
+        $Thead=[];
+        $Tbody=[];
+        
+          $Thead[]=' <thead>  <tr >';
+        foreach ($label as $l) {
+            $Thead[]='   <th class="text-center"> '.$l.'</th>';
+        }
+        $Thead[]='    <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;"> </th>     </thead>';
+       
+       $Tbody[]=' <tbody id="content-child"> <tr   class="inputs-child">';
+       foreach ($input as $b) {
+             $Tbody[]='   <td > '. $b.' </td>';
+        }
+         $Tbody[]='     <td > <button class="delete btn btn-xs glyphicon glyphicon-trash row-remove" style="font-size: 16px ;    background-color: #f1a1c2;"> </button>
+                                    </td> </tr> </tbody>';
+         return implode(" ", $Thead).implode(" ", $Tbody);
     }
 
-    protected function merge_form(string $parent, string $child) {
-
-        $panelchild =" ";
-        $panelperent = '  ';
-
-
-        return $panelchild . $panelperent;
-    }
 
     protected function setInput($META_data, $Charge_data, $Default_Data = []) {
         /// charge input child
         $this->charge_input($META_data, $Charge_data);
-        ///charge input show parent
-        $this->charge_input_PARENT($Charge_data);
+        
+       
     }
 
-    protected function charge_input_PARENT($Charge_data) {
-        foreach ($Charge_data["PARENT"] as $key => $value) {
-            $this->input_PARENT ["parent_" . $key] = [
-                'Field' => "parent_" . $key,
-                'Type' => 'text',
-                'Null' => 'NO',
-                'Key' => 'PRI',
-                'Default' => $value,
-                'Extra' => '',
-                'id_html' => 'id_html_id '];
-        }
-    }
+
 
 }

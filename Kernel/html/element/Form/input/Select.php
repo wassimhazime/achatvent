@@ -21,7 +21,7 @@ use Kernel\Tools\Tools;
 class Select extends Abstract_Input {
 
     //put your code here
-    public function builder(): string {
+    public function builder() {
         $name = $this->name;
         $id_html = $this->id_html;
         $Default = $this->Default;
@@ -63,8 +63,13 @@ class Select extends Abstract_Input {
                     ->setData($optionTag)
                     ->setId($id_html)
                     ->setName($name.$this->child)
-                    ->setAtt(" readonly  ")
-                    ->builder();
+                    ->setAtt(" readonly  ");
+                  
+            if($this->child==="[]"){
+            $tag=    $tag->setClass(" hidden ");
+            $this->lable="";
+         }
+          $tag=    $tag->builder();
             return $this->div($tag);
         } else {
             $tag = HTML::TAG("select")

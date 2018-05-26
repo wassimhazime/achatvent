@@ -13,6 +13,7 @@ use Kernel\html\element\Form\Form_child_HTML;
 use Kernel\html\element\Form\Form_Select;
 use Kernel\html\element\Form\Form_view;
 use Kernel\html\element\Form\FormHTML;
+use Kernel\html\element\Form\View_Data_Parent;
 use Kernel\INTENT\Intent_Form;
 use \Twig_Extension;
 use \Twig_SimpleFunction;
@@ -39,6 +40,7 @@ class Form extends Twig_Extension {
             new Twig_SimpleFunction("form_child", [$this, "form_child"], ['is_safe' => ['html']]),
             new Twig_SimpleFunction("form_select", [$this, "form_select"], ['is_safe' => ['html']]),
             new Twig_SimpleFunction("Form_view", [$this, "Form_view"], ['is_safe' => ['html']]),
+            new Twig_SimpleFunction("View_Data_Parent", [$this, "View_Data_Parent"], ['is_safe' => ['html']]),
         ];
     }
 
@@ -49,6 +51,10 @@ class Form extends Twig_Extension {
 
     public function form_select(Intent_Form $Intent_Form) {
         $formhtml = new Form_Select($this->conevert, $Intent_Form);
+        return $formhtml->builder();
+    }
+    public function View_Data_Parent(Intent_Form $Intent_Form) {
+        $formhtml = new View_Data_Parent($this->conevert, $Intent_Form);
         return $formhtml->builder();
     }
 

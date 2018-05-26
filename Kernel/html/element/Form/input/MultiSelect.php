@@ -61,7 +61,7 @@ class MultiSelect extends Abstract_Input {
         return $optionTag;
     }
 
-    public function builder(): string {
+    public function builder() {
         $name = $this->name;
         $id_html = $this->id_html;
         $Default = $this->Default;

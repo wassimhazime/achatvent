@@ -121,7 +121,7 @@ class SetData extends AbstractOperatipn
 
         $querySQL = (new QuerySQL())
                 ->insertInto($this->getTable())
-                ->value($data_NameTable);
+                ->value($data_NameTable)->query();
         // return id rowe set data NameTable table
         $id_cheldrns[] = $this->exec($querySQL);
             
@@ -136,7 +136,7 @@ class SetData extends AbstractOperatipn
                         ->value([
                     "id_achats"  => $id_parent,
                     "id_achat"  => $id_cheld
-                        ]);
+                        ])->query();
 
                 $this->exec($querySQL);
             

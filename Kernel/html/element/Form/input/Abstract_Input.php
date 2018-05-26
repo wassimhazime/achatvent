@@ -23,20 +23,19 @@ abstract class Abstract_Input {
     protected $Default;
     protected $type;
     protected $null;
-    protected $lable;
-    
+    protected $lable="";
     protected $styleGroup;
-      protected $child;
+    protected $child;
 
-    function __construct(array $input, string $styleGroup = "form-horizonta",string $child="") {
-        
+    function __construct(array $input, string $styleGroup = "form-horizonta", string $child = "") {
+
         $this->child = $child;
         $this->styleGroup = $styleGroup;
-      
-        
+
+
         $this->name = $input['Field'];
         $this->input = $input;
-        
+
         $this->id_html = $input['id_html'];
         $this->Default = $input['Default'];
         $this->type = $input['Type'];
@@ -49,42 +48,59 @@ abstract class Abstract_Input {
         }
     }
 
-    abstract function builder(): string;
+    abstract function builder();
 
     protected function div($input, $badge = "") {
         if ($this->styleGroup === "form-horizonta") {
-            $labelHTML = HTML::TAG('label')
-                    ->setClass("col-sm-2 control-label")
-                    ->setAtt(' style="text-align: left;"')
-                    ->setData($this->lable)
-                    ->setFor($this->name)
-                    ->builder();
-
-            $inputHTML = HTML::TAG("div")
-                    ->setClass("col-sm-8")
-                    ->setData($input)
-                    ->builder();
+            return $this->form_horizonta($input, $badge);
         } elseif ($this->styleGroup === "form-inline") {
-            $labelHTML = HTML::TAG('label')
-                    ->setClass("control-label")
-                    ->setAtt(' style="text-align: left;"')
-                    ->setData($this->lable)
-                    ->setFor($this->name)
-                    ->builder();
-
-            $inputHTML = HTML::TAG("div")
-                    
-                    ->setData($input)
-                    ->builder();
+            return $this->form_inline($input, $badge);
+        } elseif ($this->styleGroup === "form-table") {
+            return $this->form_table($input, $badge);
         }
+    }
+
+    protected function form_horizonta($input, $badge = "") {
+        $labelHTML = HTML::TAG('label')
+                ->setClass("col-sm-2 control-label")
+                ->setAtt(' style="text-align: left;"')
+                ->setData($this->lable)
+                ->setFor($this->name)
+                ->builder();
+
+        $inputHTML = HTML::TAG("div")
+                ->setClass("col-sm-8")
+                ->setData($input)
+                ->builder();
+
         $div = HTML::TAG("div")
                 ->setClass("form-group ")
                 ->setData([$labelHTML, $inputHTML])
                 ->builder();
-
-
-
         return $div;
+    }
+
+    protected function form_inline($input, $badge = "") {
+        $labelHTML = HTML::TAG('label')
+                ->setClass("control-label")
+                ->setAtt(' style="text-align: left;"')
+                ->setData($this->lable)
+                ->setFor($this->name)
+                ->builder();
+
+        $inputHTML = HTML::TAG("div")
+                ->setData($input)
+                ->builder();
+
+        $div = HTML::TAG("div")
+                ->setClass("form-group ")
+                ->setData([$labelHTML, $inputHTML])
+                ->builder();
+        return $div;
+    }
+
+    protected function form_table($input, $badge = "") {
+        return ["label"=> $this->lable,"input"=>$input];
     }
 
 }

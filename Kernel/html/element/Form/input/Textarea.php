@@ -18,7 +18,7 @@ use Kernel\html\HTML;
  */
 class Textarea extends Abstract_Input {
 
-    public function builder(): string {
+    public function builder() {
 
         $name = $this->name;
         $id_html = $this->id_html;

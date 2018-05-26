@@ -65,8 +65,7 @@ class ActionDataBase extends Connection {
 
     protected function exec($sql): string {
         var_dump($sql);
-        echo 'errrrr <br><hr>';
-        die($sql);
+    
 
         try {
             //$getDataBase()->beginTransaction();

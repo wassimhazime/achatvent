@@ -19,7 +19,7 @@ use Kernel\html\HTML;
 class Input extends Abstract_Input {
 
     //put your code here
-    public function builder(): string {
+    public function builder() {
         $name = $this->name;
         $id_html = $this->id_html;
         $Default = $this->Default;
@@ -31,7 +31,7 @@ class Input extends Abstract_Input {
                 ->setPlaceholder(str_replace("_", " ", str_replace("$", " ", $name)))
                 ->setValue($Default);
         if ($this->input['Type'] == "file") {
-            $tag->setClass(" form-file form-control input-sm")
+            $tag->setClass(" form-file form-control input-sm inputfile")
                     ->setAtt('multiple accept=" .jpg, .jpeg, .png"')
                     ->setName($name.$this->child. "[]");
         } else {
