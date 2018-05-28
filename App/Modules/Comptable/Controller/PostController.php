@@ -22,7 +22,7 @@ class PostController extends AbstractController {
 
         $this->File_Upload->setPreffix($this->page);
         $insert = $this->File_Upload->set($this->request);
-
+        var_dump($insert);
 
         $this->model->setStatement($this->page);
         $intent = $this->model->setData($insert);
