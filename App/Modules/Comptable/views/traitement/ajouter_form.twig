@@ -16,20 +16,21 @@
       <div class="row" style="margin: 5px">
         <div id="wform" >
           <form  action="#"  method='POST'  enctype="multipart/form-data" class="form-horizontal">
-            <div id="formphp">
+  
               {{form(intent)}}   
-
               <div class="col-sm-12"> 
                 <!-- par methode ajax -->
                 <label for="ajoutdata"> AJOUTER </label> 
                  <input type="submit"   class="btn btn-success btn-lg">
                    <label for="reset"> VIDE </label>    
                 <input type="reset" name="reset"  class="btn btn-success btn-lg">
-              </div>
+         
             </div>
-            {{ block('progress') }}
+          
           </form>
+                {{ block('progress') }}
         </div>      
+          
       </div>
     </div>
 
