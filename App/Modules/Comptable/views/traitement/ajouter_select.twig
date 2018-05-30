@@ -2,45 +2,31 @@
 
 {% block headcss %}
     <!-- Bootstrap-select Custom CSS -->
-    <link href="/public/comptable/traitement/select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/public/comptable/traitement/css/bootstrap-select-css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
 
 {% endblock %}
 
-
-
-
-
-
-
-
-
 {% block container %}
-<div class="row" style="margin: 5px ">
-   <h1>select option</h1>
-            <br>
-      <div class="col-md-7 cadre " style="margin-left: 5px ;padding: -14px">
+    <div class="row" style="margin: 5px ">
+        <h1>select option</h1>
+        <br>
+        <div class="col-md-8 cadre " >
 
-        <form  action=""  method='GET'  enctype="multipart/form-data" class="form-horizontal">
+            <form  action=""  method='GET'  enctype="multipart/form-data" class="form-horizontal">
+                <div class="row"> 
+                    {{form_select(intent)}}  
+                </div>
+                <div class="row"> 
+                    <input type="submit" name="ajouter" class="btn btn-primary center-block" value="Valider">
+                </div>
+            </form>
+        </div> 
 
-          <div class="row"> 
-         
-         {{form_select(intent)}}  
+        <div class="col-md-4 " >
 
-          </div>
-          <div class="row"> 
-
-            <label for="ok">  </label>          
-            <input type="submit" name="ajouter" class="btn btn-primary center-block" value="Valider">
-          </div>
-        </form>
-      </div> 
-
-      <div class="col-md-4 center-block" >
-
-        <div id="affiche" class=" alert alert-info">
-
-        </div>
-      </div>     
+            <div id="affiche" class=" alert alert-info">
+            </div>
+        </div>     
 
 
     </div>
@@ -49,8 +35,9 @@
 {% endblock %}
 
 {% block footer %}
-     <!-- bootstrap-select Core JavaScript -->
-    <script src="/public/comptable/traitement/select/js/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="/public/comptable/traitement/select/code.js" type="text/javascript"></script>
+    <!-- bootstrap-select Core JavaScript -->
+    <script src="/public/comptable/traitement/js/bootstrap-select-js/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/public/comptable/traitement/js/bootstrap-select-js/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
+    <script src="/public/comptable/traitement/show_label_info_select.js" type="text/javascript"></script>
 
 {% endblock %}

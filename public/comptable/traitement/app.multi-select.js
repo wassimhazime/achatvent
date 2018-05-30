@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
 
-  $.each($('.multiSelectItemwassim'), function () {
+  $.each($('select[multiple]'), function () {
     (function ($this) {
       $($this).multiSelect(
               {

@@ -25,11 +25,11 @@ class Model extends kernelModel
 
     public function showAjax($condition): Intent
     {
-        if ($this->is_null) {
+        if ($this->is_null()) {
             throw new TypeError(" is_null==> show ");
         }
 
-        $intent = $this->getData->select(Intent::MODE_SELECT_ALL_NULL, $condition);
+        $intent = $this->getData()->select(Intent::MODE_SELECT_ALL_NULL, $condition);
 
         return $intent;
     }

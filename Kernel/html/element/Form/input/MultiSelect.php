@@ -70,9 +70,10 @@ class MultiSelect extends Abstract_Input {
 //////////////////////////////////////////////////////
         $optionTag = $this->chargeOption($data_load, $Default);
         $Multiselecttag = HTML::TAG("select")
-                ->setAtt('multiple')
-                ->setClass(" multiSelectItemwassim form-control form-childs")
-                ->setId($id_html)
+                ->setAtt('multiple ')
+                ->setAtt('  data-set_null="'.$this->null.'" ')
+                ->setClass("  form-control ")
+                 ->setId($id_html)
                 ->setName($name . '[]')
                 ->setData($optionTag)
                 ->builder();

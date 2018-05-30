@@ -73,9 +73,10 @@ class Select extends Abstract_Input {
             return $this->div($tag);
         } else {
             $tag = HTML::TAG("select")
-                    ->setClass(" selectpicker form-control form-string input-sm")
+                    ->setClass(" selectpicker form-control input-sm")
                     ->setId($id_html)
                     ->setAtt(' data-live-search="true"  data-size="5" data-container="body" ')
+                    ->setAtt('  data-set_null="'.$this->null.'" ')
                     ->setData($optionTag)
                     ->setName($name.$this->child)
                     ->builder();

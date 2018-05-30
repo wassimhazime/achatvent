@@ -62,7 +62,10 @@ class AjaxController extends AbstractController {
 
         $json = \Kernel\Tools\Tools::json(["data" => $data, "titles" => $titles, "dataSet" => $dataSets]);
         $this->response->getBody()->write($json);
-        return $this->response;
+    
+
+        return $this->response->withHeader('Content-Type', 'application/json; charset=utf-8');
+
     }
 
 }

@@ -215,9 +215,9 @@ class SetData extends AbstractOperatipn
         $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array
         foreach ($name_CHILDRENs as $name_table_CHILDREN) {
             $sqlquery = (new QuerySQL())
-                    ->delete(["id_" . $intent->getEntitysSchema()->getNameTable() => $id_NameTable])
-                    ->from("r_" . $intent->getEntitysSchema()->getNameTable() . "_" . $name_table_CHILDREN)
-                    ->prepareQuery();
+                    ->delete("r_" . $intent->getEntitysSchema()->getNameTable() . "_" . $name_table_CHILDREN)
+                    ->where(["id_" . $intent->getEntitysSchema()->getNameTable() => $id_NameTable])
+                   ->prepareQuery();
             $this->prepareQueryEXEC($sqlquery);
         }
     }
