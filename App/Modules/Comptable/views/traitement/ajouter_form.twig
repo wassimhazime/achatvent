@@ -14,6 +14,7 @@
 
 {% block container %}
     <div id="status">
+<<<<<<< HEAD
         <div class="row" style="margin: 5px">
             <div id="wform" >
 
@@ -35,6 +36,27 @@
 
             </div>      
         </div>
+=======
+      <div class="row" style="margin: 5px">
+        <div id="wform" >
+          <form  action="#"  method='POST'  enctype="multipart/form-data" class="form-horizontal">
+  
+              {{form(intent)}}   
+              <div class="col-sm-12"> 
+                <!-- par methode ajax -->
+                <label for="ajoutdata"> AJOUTER </label> 
+                 <input type="submit"   class="btn btn-success btn-lg">
+                   <label for="reset"> VIDE </label>    
+                <input type="reset" name="reset"  class="btn btn-success btn-lg">
+         
+            </div>
+          
+          </form>
+                {{ block('progress') }}
+        </div>      
+          
+      </div>
+>>>>>>> 8ec64da578871dd99fa608b8b2a6bc2c10e256f7
     </div>
 
 {% endblock %}

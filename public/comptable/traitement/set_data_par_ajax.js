@@ -4,13 +4,10 @@
     }
     $("form").submit(function(e) {
         e.preventDefault();
-        /*
-         * code base class formHTML php
-         * voir class formHTML
-         */
         var formdata = chargeFormData();
-        cacheFormHtml();
-//send formdata par ajax
+        $("#progresshidden").removeClass("hidden")
+        $("form").addClass("hidden")
+        //send formdata par ajax
         ajaxSendData(formdata);
     });
     function gestion_errer(elment){
@@ -47,33 +44,19 @@
             $(this.files).each(function() {
                 formdata.append(name, this);
             })
-
         });
         return formdata;
     }
-
-    /**
-     * cache form and show progressbar
+ /**
+      send data par ajax
      */
-    function cacheFormHtml() {
-        _("progresshidden").classList.remove("hidden");
-        _("formphp").classList.add("hidden");
-    }
-
-    /**
-     * send data par ajax
-     */
-
-
-    function ajaxSendData(formdata) {
+  function ajaxSendData(formdata) {
         var ajax = new XMLHttpRequest();
-
         ajax.upload.addEventListener("progress", progressHandler, false);
         ajax.addEventListener("load", completeHandler, false);
         ajax.addEventListener("error", errorHandler, false);
         ajax.addEventListener("abort", abortHandler, false);
         ajax.open("POST", "#");
-
         ajax.send(formdata);
     }
 
@@ -98,9 +81,12 @@
     function errorHandler(event) {
 
         _("messageprogressBar").innerHTML = "Upload Failed";
+        
     }
     function abortHandler(event) {
         _("messageprogressBar").innerHTML = "Upload Aborted";
     }
 }
+
+
 )()
