@@ -21,19 +21,18 @@ class MultiSelect extends Abstract_Input {
 
     //put your code here
 
-    private function data_load() {
-        $data_load = [];
-        foreach ($this->input['Data_load'] as $row) {
+    private function value_att($data) {
+        $data_value_att = [];
+        foreach ($data as $row) {
             $ligne = "";
             $att_data_html = "";
             foreach ($row as $column => $value) {
                 $ligne .= $column . '$$$' . $value . ' £££ ';
                 $att_data_html .= " data-content_" . $column . '="' . $value . '" ';
             }
-        
-            $data_load[$row->id] = ["value" => $ligne, "att" => $att_data_html];
+            $data_value_att[$row->id] = ["value" => $ligne, "att" => $att_data_html];
         }
-        return $data_load;
+        return $data_value_att;
     }
 
     private function chargeOption($data_load, $Default) {
@@ -44,46 +43,40 @@ class MultiSelect extends Abstract_Input {
                             ->setAtt($data["att"])
                             ->setData($data["value"])->builder();
         }
-
-        foreach ($Default as $row) {
-            $dataOption = "";
-            foreach ($row as $column => $value) {
-                $dataOption .= $column . '$$$' . $value . ' £££ ';
-            }
+        foreach ($Default as $id => $data) {
             $optionTag [] = HTML::TAG('option')
-                            ->setValue($row->id)
-                            ->setAtt(' data-container="body" '
-                                    . 'data-toggle="popover"'
-                                    . ' data-placement="top"'
-                                    . ' data-content="' . $dataOption . ' " selected ')
-                            ->setData($dataOption)->builder();
+                            ->setValue($id)
+                            ->setAtt($data["att"] . '  selected ')
+                            ->setData($data["value"])->builder();
         }
+
         return $optionTag;
     }
 
     public function builder() {
         $name = $this->name;
         $id_html = $this->id_html;
-        $Default = $this->Default;
-        $data_load = $this->data_load();
+
+        $Default = $this->value_att($this->Default);
+        $data_load = $this->value_att($this->input['Data_load']);
 
 //////////////////////////////////////////////////////
         $optionTag = $this->chargeOption($data_load, $Default);
         $Multiselecttag = HTML::TAG("select")
-                ->setAtt('multiple ')
-                ->setAtt('  data-set_null="'.$this->null.'" ')
+                ->setAtt(' multiple ')
+                ->setAtt('  data-set_null="' . $this->null . '" ')
                 ->setClass("  form-control ")
-                 ->setId($id_html)
+                ->setId($id_html)
                 ->setName($name . '[]')
                 ->setData($optionTag)
                 ->builder();
 
-        return $this->div($Multiselecttag,count($optionTag));
+        return $this->div($Multiselecttag, count($optionTag));
     }
 
-    protected function div($Multiselecttag,$badge="") {
-        
-        $modal = new Modals($this->lable, $Multiselecttag,"",$badge);
+    protected function div($Multiselecttag, $badge = "") {
+
+        $modal = new Modals($this->lable, $Multiselecttag, "", $badge);
 
         return $modal->builder();
     }
