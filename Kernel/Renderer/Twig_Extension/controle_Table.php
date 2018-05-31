@@ -36,9 +36,9 @@ class controle_Table extends \Twig_Extension
 
         $input = ["title" => 'LES ACTIONS',
             "body" => '<spam style="display: inline-block;    width: max-content;">'
-            . '<a class="btn btn-danger  "   href="' . $supprimer . '" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>'
-            . '<a class="btn btn-success"    href="' . $modifier . '" ><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></a>'
-            . '<a class="btn btn-primary"    href="' . $voir . '" ><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>'
+            . '<button class="btn btn-danger   supprimer"   data-urlsup="' . $supprimer . '" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
+            . '<a class="btn btn-success  modifier"    href="' . $modifier . '" ><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></a>'
+            . '<a class="btn btn-primary  voir"    href="' . $voir . '" ><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>'
             . '</spam>'
         ];
         return $input;

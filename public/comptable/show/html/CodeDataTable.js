@@ -116,11 +116,11 @@
  
         $(document).ready(function () {
           var table = $('#example').DataTable(
-                  {columnDefs: [{
+                  {
+                      columnDefs: [{
                         targets: 2, /// order de champ
                         render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY', 'fr')
                       }],
-
                     lengthChange: false,
                     buttons: ['excel', 'pdf', 'colvis'],
                     language: {
