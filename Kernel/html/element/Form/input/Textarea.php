@@ -26,11 +26,11 @@ class Textarea extends Abstract_Input {
         
         $tag = $inputHTML = HTML::TAG("textarea")
                 ->setClass(" form-control input-sm")
-                ->setAtt('  data-set_null="'.$this->null.'" ')
+                ->setAtt('  data-set_null="'.$this->null.'"  autocomplete="text"')
                 ->setId($id_html)
                 ->setName($name.$this->child)
                 ->setPlaceholder(str_replace("_", " ", $name))
-                ->setValue($Default)
+               ->setValue($Default)
                 ->setData($Default)
                 ->setTag("textarea")
                 ->builder();
