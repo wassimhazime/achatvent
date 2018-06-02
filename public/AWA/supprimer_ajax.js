@@ -1,6 +1,29 @@
 
 $(document).ready(function() {
-    var table = $('#example');
+
+    var table = $('#DataTableJs');
+    var ajax_sup = function(url, row) {
+        $.get(url)
+         .done( function(data) {
+            $.alert({
+                icon: 'glyphicon glyphicon-ok',
+                closeIcon: true,
+                type: 'green',
+                title: 'message!',
+                content: data,
+            });
+            hide_row(row);
+        })
+         .fail(function(data) {
+            $.alert({
+                icon: 'glyphicon glyphicon-warning-sign',
+                closeIcon: true,
+                type: 'red',
+                title: 'message!',
+                content: data.responseText,
+            });
+        });
+    };
     var hide_row = function(row) {
         table.DataTable().row(row).remove().draw(false);
     }
@@ -11,32 +34,37 @@ $(document).ready(function() {
         }
         return row;
     }
-    var get_data = function(row) {
-
-        row.find("td").each(function(index) {
-            console.log(index + ": " + $(this).text());
+    var traitement_sup = function(urlmessage, urlsup, row) {
+        $.get(urlmessage).done(
+        function(data) {
+            $.confirm({
+                closeIcon: true,
+                backgroundDismiss: false,
+                backgroundDismissAnimation: 'glow',
+                columnClass: 'col-md-12',
+                icon: 'fa fa-spinner fa-spin',
+                title: ' Faut-il vraiment supprimer les donnees!',
+                content: data,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: function() {
+                        ajax_sup(urlsup, row);
+                    },
+                    cancel: function() {
+                    }
+                }
+            });
         });
-        ;
     }
-    var ajax = function(url) {
-        var ajax = new XMLHttpRequest();
-        ajax.addEventListener("load", function() {
-        }, false);
-        ajax.open("GET", url);
-        ajax.send();
-    };
+
     table.on("click", ".supprimer", function(e) {
         e.preventDefault();
         var elem = $(this);
-        var url = (elem.data("urlsup"));
+        var urlsup = elem.data("urlsup");
+        var urlmessage = elem.data("urlmessage");
         var row = get_row(elem);
-        var data = get_data(row);
-        var confirmation = window.confirm(" supprimer message ")
-        if (confirmation) {
-            hide_row(row);
-            ajax(url)
-        }
-
+        traitement_sup(urlmessage, urlsup, row);
     })
 
 });

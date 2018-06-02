@@ -58,8 +58,9 @@ class ActionDataBase extends Connection {
             return $this->getDataBase()->lastInsertId();
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-            echo $exc->getMessage();
-            die();
+       //     echo $exc->getMessage();
+            return -1;
+         
         }
     }
 

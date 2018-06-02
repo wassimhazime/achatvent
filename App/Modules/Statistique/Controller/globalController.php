@@ -30,6 +30,6 @@ class globalController extends AbstractController
           
             var_dump($_GET);
 
-            return $this->render("@statistique/test", ["charge" => $charge]);
+            return $this->render("@statistique/global", ["charge" => $charge]);
     }
 }

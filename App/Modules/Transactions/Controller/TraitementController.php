@@ -40,15 +40,23 @@ class TraitementController extends AbstractController
             return $this->ajouter($id);
         } elseif ($action == "voir") {
             return $this->show($id);
+        }elseif ($action == "message") {
+            return $this->message($id);
         }
     }
 
     public function supprimer($id)
     {
-        $conditon = ['id' => $id];
-        $this->model->delete($conditon);
-        $url = $this->router->generateUri("T_actionGET", ["controle" => $this->page, "action" => "suprim"]);
-        return $this->response->withStatus(301)->withHeader('Location', $url);
+           $conditon = ['id' => $id];
+        $etat = $this->model->delete($conditon);
+        if ($etat == -1) {
+            $r = new \GuzzleHttp\Psr7\Response(404);
+            $r->getBody()->write("accès refusé  de supprimer ID  $id");
+            return $r;
+        } else {
+            $this->response->getBody()->write("les données a supprimer de ID  $id");
+        }
+        return $this->response;
     }
 
     public function modifier($id)
@@ -83,5 +91,12 @@ class TraitementController extends AbstractController
     {
         $intent = $this->model->show_id($id);
         return $this->render("@T_show/show_id", ["intent" => $intent]);
+    }
+        public function message($id)
+    {
+             $mode = Intent::MODE_SELECT_DEFAULT_NULL;
+            $intentshow = $this->model->show($mode, $id);
+            return $this->render("@T_show/show_message_id", ["intent" => $intentshow]);
+
     }
 }

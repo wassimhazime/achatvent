@@ -33,10 +33,13 @@ class controle_Table extends \Twig_Extension
         $voir = $router->generateUri($nameroute, ["controle" => $page,
             "action" => "voir",
             "id" => 0]);
+          $message = $router->generateUri($nameroute, ["controle" => $page,
+            "action" => "message",
+            "id" => 0]);
 
         $input = ["title" => 'LES ACTIONS',
             "body" => '<spam style="display: inline-block;    width: max-content;">'
-            . '<button class="btn btn-danger   supprimer"   data-urlsup="' . $supprimer . '" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
+            . '<button class="btn btn-danger   supprimer" data-urlmessage="' . $message . '"   data-urlsup="' . $supprimer . '" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
             . '<a class="btn btn-success  modifier"    href="' . $modifier . '" ><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></a>'
             . '<a class="btn btn-primary  voir"    href="' . $voir . '" ><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>'
             . '</spam>'

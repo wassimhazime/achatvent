@@ -51,6 +51,7 @@
       send data par ajax
      */
   function ajaxSendData(formdata) {
+      
         var ajax = new XMLHttpRequest();
         ajax.upload.addEventListener("progress", progressHandler, false);
         ajax.addEventListener("load", completeHandler, false);

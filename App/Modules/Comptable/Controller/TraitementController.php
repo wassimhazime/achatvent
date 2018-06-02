@@ -38,20 +38,28 @@ class TraitementController extends AbstractController {
             return $this->ajouter($id);
         } elseif ($action == "voir") {
             return $this->show($id);
+        } elseif ($action == "message") {
+            return $this->message($id);
         }
     }
 
     public function supprimer($id) {
         $conditon = ['id' => $id];
-        $this->model->delete($conditon);
-        $url = $this->router->generateUri("actionGET", ["controle" => $this->page, "action" => "suprim"]);
-        return $this->response->withStatus(301)->withHeader('Location', $url);
+        $etat = $this->model->delete($conditon);
+        if ($etat == -1) {
+            $r = new \GuzzleHttp\Psr7\Response(404);
+            $r->getBody()->write("accès refusé  de supprimer ID  $id");
+            return $r;
+        } else {
+            $this->response->getBody()->write("les données a supprimer de ID  $id");
+        }
+        return $this->response;
     }
 
     public function modifier($id) {
         $page = $this->page;
         $conditon = ["$page.id" => $id];
-        $intentform = $this->model->formDefault( $conditon);
+        $intentform = $this->model->formDefault($conditon);
         return $this->render("@traitement/modifier_form", ["intent" => $intentform]);
     }
 
@@ -66,13 +74,19 @@ class TraitementController extends AbstractController {
         }
 
         unset($getInfo["ajouter"]);
-        $intentform = $this->model->form( $getInfo);
+        $intentform = $this->model->form($getInfo);
         return $this->render("@traitement/ajouter_form", ["intent" => $intentform]);
     }
 
     public function show($id) {
         $intent = $this->model->show_id($id);
         return $this->render("@show/show_id", ["intent" => $intent]);
+    }
+
+    public function message($id) {
+        $mode = Intent::MODE_SELECT_DEFAULT_NULL;
+        $intentshow = $this->model->show($mode, $id);
+        return $this->render("@show/show_message_id", ["intent" => $intentshow]);
     }
 
 }

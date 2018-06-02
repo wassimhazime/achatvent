@@ -115,7 +115,7 @@
         }));
  
         $(document).ready(function () {
-          var table = $('#example').DataTable(
+          var table = $('#DataTableJs').DataTable(
                   {
                       columnDefs: [{
                         targets: 2, /// order de champ

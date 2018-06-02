@@ -53,14 +53,15 @@ class Model extends kernelModel {
 
     public function delete($condition) {
 
-        $intent = $this->get_setData()->delete($condition);
-
-        return $intent;
+       return  $this->get_setData()->delete($condition);
     }
 
-    public function show(array $mode, $condition) {
+    public function show(array $mode, $condition=true) {
         if ($this->is_null()) {
             throw new TypeError(" is_null==> show ");
+        }
+        if($condition!==true){
+        $condition=    ["{$this->getTable()}.id" => $condition];
         }
         $intent = $this->getData()->select($mode, $condition);
         return $intent;
@@ -77,8 +78,10 @@ class Model extends kernelModel {
     }
 
     public function show_id($id) {
-        return $this->getGui()->formDefault(["{$this->table}.id" => $id]);
+        return $this->getGui()->formDefault(["{$this->getTable()}.id" => $id]);
     }
+    
+
 
     public function form($conditon = "") {
         if ($this->is_null()) {

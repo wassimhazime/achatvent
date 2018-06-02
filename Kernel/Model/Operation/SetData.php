@@ -57,8 +57,7 @@ class SetData extends AbstractOperatipn
                 ->delete($this->getTable())
                 ->where($condition)
                 ->prepareQuery();
-        
-        $this->prepareQueryEXEC($delete);
+        return     $this->prepareQueryEXEC($delete);
     }
 
     public function insert(array $dataForm, $mode): int

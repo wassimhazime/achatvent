@@ -4,8 +4,8 @@
 
 
 {% block headcss %}
-    <link href="/public/transactions/show/json/DatatableRapide/datatables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/public/transactions/show/json/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/public/Framework/DatatableRapide/datatables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/public/Framework/BootstrapSelect/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block controle %}
@@ -31,12 +31,10 @@
 
 {% block footer %}
     <!-- Custom datatables -->
-    <script src="/public/transactions/show/json/DatatableRapide/datatables.min.js" type="text/javascript"></script>
-    <script src="/public/transactions/show/json/CodeDataTable.js" type="text/javascript"></script>
+    <script src="/public/Framework/DatatableRapide/datatables.min.js" type="text/javascript"></script>
+   <script src="/public/AWA/JsonDataTable.js" type="text/javascript"></script>
     <script>DataTableJson('#tableshowajax',{{table_json_intent(intent)}} );</script>
-
-    <!-- end dataTables -->  
-
-    <script src="/public/transactions/show/json/js/moment.js" type="text/javascript"></script>
-    <script src="/public/transactions/show/json/js/bootstrap-select.min.js" type="text/javascript"></script>
+  <!-- end dataTables -->  
+    <script src="/public/Framework/Moment/moment.js" type="text/javascript"></script>
+    <script src="/public/Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
 {% endblock %}
