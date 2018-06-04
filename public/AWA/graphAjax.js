@@ -1,3 +1,4 @@
+"use strict";
 function graphAjax($url) {
   $.getJSON($url, function (datajson) {
 

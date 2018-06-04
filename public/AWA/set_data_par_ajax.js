@@ -1,3 +1,4 @@
+"use strict";
 (function() {
     function _(el) {
         return document.getElementById(el);
@@ -10,15 +11,22 @@
         //send formdata par ajax
         ajaxSendData(formdata);
     });
-    function gestion_errer(elment){
-        var not_hidden=elment.type!="hidden";
-        var not_null= $(elment).data("set_null")=="NO";
-        var is_null=$(elment).val()=="";
-         if(not_null&&is_null&&not_hidden){
-             
-             alert("SVP veuillez remplir le champ " +elment.name+" ");
-              exit ();
-      }
+    function gestion_errer(elment) {
+        var not_hidden = elment.type != "hidden";
+        var not_null = $(elment).data("set_null") == "NO";
+        var is_null = $(elment).val() == "";
+        if (not_null && is_null && not_hidden) {
+            $(elment).focus();
+            $.alert({
+                icon: 'glyphicon glyphicon-ok',
+                closeIcon: true,
+                type: 'red',
+                title: 'message!',
+                content: "SVP veuillez remplir le champ <strong>" + elment.name + " </strong>",
+            });
+            throw "erreur";
+        }
+        return true;
     }
     /**
      * charge form ajax 
@@ -27,11 +35,11 @@
         // new form ajax
         var formdata = new FormData();
         $("input:not([type='submit'],[type='reset'],[type='button'],[type='file']) ,textarea,select:not([multiple])").each(function(  ) {
-         gestion_errer(this);
-          formdata.append(this.name, $(this).val());
+            gestion_errer(this);
+            formdata.append(this.name, $(this).val());
         });
         $("select[multiple]").each(function() {
-                gestion_errer(this);
+            gestion_errer(this);
             var name = this.name;
             $($(this).val()).each(function() {
                 formdata.append(name, this);
@@ -39,7 +47,7 @@
 
         });
         $("input[type='file']").each(function() {
-                gestion_errer(this);
+            gestion_errer(this);
             var name = this.name;
             $(this.files).each(function() {
                 formdata.append(name, this);
@@ -47,11 +55,11 @@
         });
         return formdata;
     }
- /**
-      send data par ajax
+    /**
+     send data par ajax
      */
-  function ajaxSendData(formdata) {
-      
+    function ajaxSendData(formdata) {
+
         var ajax = new XMLHttpRequest();
         ajax.upload.addEventListener("progress", progressHandler, false);
         ajax.addEventListener("load", completeHandler, false);
@@ -82,7 +90,7 @@
     function errorHandler(event) {
 
         _("messageprogressBar").innerHTML = "Upload Failed";
-        
+
     }
     function abortHandler(event) {
         _("messageprogressBar").innerHTML = "Upload Aborted";

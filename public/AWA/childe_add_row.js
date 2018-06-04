@@ -1,3 +1,4 @@
+"use strict";
 $(document).ready(function() {
     var content_child = $("#content-child");
     var inputs_child = $(".inputs-child");

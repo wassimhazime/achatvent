@@ -1,3 +1,4 @@
+"use strict";
 $(document).ready(function() {
     /// class calcul
     var Calcule = function(HT, TVA, TTC) {

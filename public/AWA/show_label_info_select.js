@@ -1,3 +1,4 @@
+"use strict";
 var affiche = document.getElementById("affiche");
 
 $("select")

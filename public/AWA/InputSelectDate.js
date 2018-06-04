@@ -1,4 +1,5 @@
- // block option date inculd moment() fram work
+"use strict";
+// block option date inculd moment() fram work
 
         /// pour set date in option select dans InputSelectDate
         

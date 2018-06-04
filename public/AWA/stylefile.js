@@ -1,3 +1,4 @@
+"use strict";
 /// class .inputfile
 var inputs = document.querySelectorAll('.inputfile');
 var id_math="id_math"+Math.ceil(Math.random() * 1000);

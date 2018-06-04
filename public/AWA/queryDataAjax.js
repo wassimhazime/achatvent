@@ -1,3 +1,4 @@
+"use strict";
 function queryDataAjax($url) {
   /*
    * code base class formHTML php

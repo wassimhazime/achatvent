@@ -1,4 +1,5 @@
-   /**
+"use strict";
+/**
          * Date / time formats often from back from server APIs in a format that you
          * don't wish to display to your end users (ISO8601 for example). This rendering
          * helper can be used to transform any source date / time format into something
