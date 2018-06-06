@@ -4,8 +4,8 @@
     $("form").submit(function(e) {
         e.preventDefault();
         var formdata = chargeFormData();
-        //$("#progresshidden").removeClass("hidden")
-       // $("form").addClass("hidden")
+        $("#refresh").removeClass("hidden")
+         $("form").addClass("hidden")
         //send formdata par ajax
         $('#ModalProgress').modal('show');
         ajaxSendData(formdata);
