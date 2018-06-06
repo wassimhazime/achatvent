@@ -1,10 +1,18 @@
+menu
+    show mode
+    recherche global
+    select interval
 
+autocompliteajax
+uplode file
 filtre php
 session
 message flash
 email admin notification
 gestion notification
+gestion compte
 java script 
+show item ==> btn ajoter auter  btn modifier  btn sup  bte retour
 
 voir image and pdf
 datatable size
