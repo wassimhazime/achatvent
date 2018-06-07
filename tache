@@ -2,8 +2,9 @@ menu
     show mode
     recherche global
     select interval
-
+title html
 autocompliteajax
+show  table child all
 uplode file
 filtre php
 session

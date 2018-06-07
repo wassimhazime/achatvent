@@ -1,25 +1,40 @@
 {% block showmode %}
+    <a href="" id="showMode" style="display: none" class="pull-right">
 
+        <i class="glyphicon glyphicon-th-list " style="font-size:35px ; color:#3665B0">
 
+        </i></a> 
 
+    <div class="box shadow-4dp  "  id="boxSelectMode"  style="width: max-content">
+        <button type="button" class="close" aria-label="Close" >
+            <span aria-hidden="true" class=" pull-right" id="hideMode">&times;</span></button>
+        <form action="" method="GET" class="">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="control"> controle donnee(modifier supprimer)
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="control"> data export select print
+                </label>
+            </div>
+            <select class="selectpicker show-tick" data-style="btn-success"  data-width="115px" name="pere">
+                <option data-subtext="De père" selected value="resume">voir résumé des information</option>
+                <option data-subtext="De père" value="defaut">voir defaut des information</option>
+                <option data-subtext="De père" value="tous">voir tous les information</option>
+            </select>
+            <select class="selectpicker show-tick" data-style="btn-info"  data-width="115px" name="fils">
+                <option data-subtext="Des Fils" selected value="rien">voir rien</option>
+                <option data-subtext="Des Fils" value="resume">voir résumé des information</option>
+                <option data-subtext="Des Fils" value="defaut">voir defaut des information</option>
+                <option data-subtext="Des Fils" value="tous">voir tous les information</option>
+            </select>
+            <button type="submit"  class="btn-primary btn"> <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
+        </form>
 
-    <div class=" clearfix btn-group"role="dropdown">
-      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        mode
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
-        <li><a href="?s=dm" >DEFAULT_MASTER</a></li>
-        <li><a href="?s=da" >DEFAULT_ALL </a></li>
-        <li><a href="?s=dd" >DEFAULT_DEFAULT </a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="?s=mm" >MASTER_MASTER</a></li>
-        <li><a href="?s=ma" >MASTER_ALL </a></li>
-        <li><a href="?s=mn" >MASTER_NULL</a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="?s=am" >ALL_MASTER</a></li>
-        <li><a href="?s=aa" >ALL_ALL</a></li>
-        <li><a href="?s=an" >ALL_NULL</a></li>
-      </ul>
     </div>
+
+
+
 {% endblock %}
