@@ -1,7 +1,12 @@
+show mode
+ select interval
+show item ==> btn ajoter auter  btn modifier  btn sup  bte retour
+datatable size
+perant childe
+
 menu
-    show mode
-    recherche global
-    select interval
+recherche global
+get controler php
 title html
 autocompliteajax
 show  table child all
@@ -12,33 +17,16 @@ message flash
 email admin notification
 gestion notification
 gestion compte
-java script 
-show item ==> btn ajoter auter  btn modifier  btn sup  bte retour
-
 voir image and pdf
-datatable size
-perant childe
 statistique
 gestion compte
 midlware
-
-
-
-
-
-
-
 scc || gestion erreur sql
- 
-
 statistique simple Tableau de bord
 statistique  detail
-
 gestion compte
-
 query prepart dans action data table and 
 querysql
-
 message erreur si date erreur
 Gestion erreur
 css

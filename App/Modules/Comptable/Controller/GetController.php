@@ -11,26 +11,26 @@ class GetController extends AbstractController
 
     public function exec(): ResponseInterface
     {
-
-        $query = $this->request->getQueryParams();
+     $query = $this->request->getQueryParams();
         return $this->show($query);
     }
 
     public function show($query)
-    {
-        $this->model->setStatement($this->page);
+    { $this->getModel()->setStatement($this->page);
+        if( $this->getModel()->is_null()){
+            die("erre");
+        }
 
         if (isset($query["s"])) {
             $mode = $this->converteMode($query["s"]);
-            $intentshow = $this->model->show($mode, true);
-            
-            return $this->render("@show/showHtml", ["intent" => $intentshow]);
+            $intentshow = $this->getModel()->show($mode, true);
+          return $this->render("@show/showHtml", ["intent" => $intentshow]);
             
         } elseif (isset($query["imageview"])) {
             $id_image = $query["imageview"];
             return $this->File_Upload->get($id_image);
         } else {
-            $intentshow = $this->model->show(Intent::MODE_SELECT_DEFAULT_NULL, true);
+            $intentshow = $this->getModel()->show(Intent::MODE_SELECT_DEFAULT_NULL, true);
             return $this->render("@show/showJson", ["intent" => $intentshow]);
         }
     }

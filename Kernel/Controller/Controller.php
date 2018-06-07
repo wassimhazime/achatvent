@@ -58,5 +58,37 @@ abstract class Controller {
         $this->response->getBody()->write($render);
         return $this->response;
     }
+    function getModel(): \Kernel\Model\Model {
+        return $this->model;
+    }
+
+    function getFile_Upload() {
+        return $this->File_Upload;
+    }
+
+    function getRenderer() {
+        return $this->renderer;
+    }
+
+    function getController() {
+        return $this->controller;
+    }
+
+    function getRouter() {
+        return $this->router;
+    }
+
+    function getPage() {
+        return $this->page;
+    }
+
+    function getRequest() {
+        return $this->request;
+    }
+
+    function getResponse() {
+        return $this->response;
+    }
+
 
 }
