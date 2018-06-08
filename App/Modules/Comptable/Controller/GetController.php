@@ -6,78 +6,102 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Kernel\INTENT\Intent;
 
-class GetController extends AbstractController
-{
+class GetController extends AbstractController {
 
-    public function exec(): ResponseInterface
-    {
-     $query = $this->request->getQueryParams();
+    public function exec(): ResponseInterface {
+        $query = $this->request->getQueryParams();
+
         return $this->show($query);
     }
 
-    public function show($query)
-    { $this->getModel()->setStatement($this->page);
-        if( $this->getModel()->is_null()){
+    public function show($query) {
+        $this->getModel()->setStatement($this->page);
+
+        if ($this->getModel()->is_null()) {
             die("erre");
         }
-
-        if (isset($query["s"])) {
-            $mode = $this->converteMode($query["s"]);
-            $intentshow = $this->getModel()->show($mode, true);
-          return $this->render("@show/showHtml", ["intent" => $intentshow]);
-            
-        } elseif (isset($query["imageview"])) {
+        if (isset($query["imageview"])) {
             $id_image = $query["imageview"];
             return $this->File_Upload->get($id_image);
-        } else {
-            $intentshow = $this->getModel()->show(Intent::MODE_SELECT_DEFAULT_NULL, true);
-            return $this->render("@show/showJson", ["intent" => $intentshow]);
+        }
+
+        
+        $optiondatatable = $this->getOptionDataTable($query);
+        $modeshow = $this->getModeShow($query);
+        $modeintent = $modeshow["modeIntent"];
+        $modetype = $modeshow["type"];
+        $intentshow = $this->getModel()->show($modeintent, true);
+        $data=[
+            "intent" => $intentshow,
+            "optiondatatable"=>$optiondatatable
+                ];
+
+       
+
+
+        if ($modetype=="HTML") {
+          return $this->render("@show/showHtml", $data);
+        } elseif(($modetype=="json")) {
+          return $this->render("@show/showJson", $data);
         }
     }
 
-    private function converteMode($modeHTTP)
-    {
-        switch ($modeHTTP) {
-            case "dm":
-                $mode = Intent::MODE_SELECT_DEFAULT_MASTER;
-
-                break;
-            case "da":
-                $mode = Intent::MODE_SELECT_DEFAULT_ALL;
-                break;
-            case "dd":
-                $mode = Intent::MODE_SELECT_DEFAULT_DEFAULT;
-                break;
-            case "dn":
-                $mode = Intent::MODE_SELECT_DEFAULT_NULL;
-                break;
+    private function getModeShow(array $modeHTTP): array {
+        $parent = "MASTER";
+        $child = "EMPTY";
+        $type = "json";
+        if (isset($modeHTTP["pere"])) {
+            $parent = $this->parseMode($modeHTTP["pere"], "MASTER");
+        }
+        if (isset($modeHTTP["fils"])) {
+            $child = $this->parseMode($modeHTTP["fils"], "EMPTY");
+            if ($child != "EMPTY") {
+                $type = "HTML";
+            }
+        }
 
 
-            case "mm":
-                $mode = Intent::MODE_SELECT_MASTER_MASTER;
+        return ["type" => $type, "modeIntent" => [$parent, $child]];
+    }
+
+    private function parseMode(string $modefr, $default): string {
+        switch ($modefr) {
+            case "rien":
+                $mode = "EMPTY";
 
                 break;
-            case "ma":
-                $mode = Intent::MODE_SELECT_MASTER_ALL;
+            case "resume":
+                $mode = "MASTER";
                 break;
-            case "am":
-                $mode = Intent::MODE_SELECT_ALL_MASTER;
+            case "defaut":
+                $mode = "DEFAULT";
                 break;
-            case "aa":
-                $mode = Intent::MODE_SELECT_ALL_ALL;
+            case "tous":
+                $mode = "ALL";
+                break;
 
-                break;
-            case "an":
-                $mode = Intent::MODE_SELECT_ALL_NULL;
-
-                break;
-            case "mn":
-                $mode = Intent::MODE_SELECT_MASTER_NULL;
-                break;
             default:
-                $mode = Intent::MODE_SELECT_DEFAULT_DEFAULT;
+                $mode = $default;
                 break;
         }
         return $mode;
     }
+
+    private function getOptionDataTable(array $modeHTTP): string {
+        $option = [];
+        if (isset($modeHTTP["copier"])) {
+            $option[] = "copyHtml5";
+        }
+        if (isset($modeHTTP["pdf"])) {
+            $option[] = "pdfHtml5";
+        }
+        if (isset($modeHTTP["excelHtml5"])) {
+            $option[] = "excel";
+        }
+        if (isset($modeHTTP["impression"])) {
+            $option[] = "print";
+        }
+        return implode(" ", $option);
+    }
+
 }

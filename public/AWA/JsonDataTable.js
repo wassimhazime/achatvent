@@ -3,14 +3,58 @@
 /**
  * voir table par json 
  */
-function DataTableJson(id,datajson) {
-    
-  $(id).DataTable({
-          data: datajson["dataSet"],
-          columns: datajson["titles"],
-          lengthChange: true,
+$.fn.dataTable.ext.buttons.alert = {
 
-          language: {
+    action: function(e, dt, node, config) {
+        alert(this.text());
+    }
+};
+
+
+
+function DataTableJson(id, datajson, optiondatatable) {
+    console.log(optiondatatable.split(" "));
+
+    var table = $(id).DataTable({
+        select: {
+            style: 'multi'
+        },
+
+        dom: 'Bfrtip',
+        lengthMenu: [
+            [10, 25, 50, -1],
+            ['10 éléments', '25 éléments', '50 éléments', 'tous éléments']
+        ]
+        ,
+        buttons: ['pageLength', 'colvis',
+            optiondatatable.split(" "),
+
+            {
+                text: 'My button',
+                className: 'btn btn-primary',
+                extend: 'alert',
+            },
+            {
+                text: 'Get selected data',
+                action: function() {
+                    var count = table.rows({selected: true}).count();
+
+                    console.log(table.rows({selected: true}).data().toArray());
+                    ;
+                }
+            }
+        ]
+
+
+
+        ,
+        data: datajson["dataSet"],
+
+        columns: datajson["titles"],
+
+        lengthChange: false,
+
+        language: {
             processing: "Traitement en cours...",
             search: "Rechercher&nbsp;:",
             lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
@@ -22,18 +66,27 @@ function DataTableJson(id,datajson) {
             zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
             emptyTable: "Aucune donnée disponible dans le tableau",
             paginate: {
-              first: "Premier",
-              previous: "Pr&eacute;c&eacute;dent",
-              next: "Suivant",
-              last: "Dernier"
+                first: "Premier",
+                previous: "Pr&eacute;c&eacute;dent",
+                next: "Suivant",
+                last: "Dernier"
             },
             aria: {
-              sortAscending: ": activer pour trier la colonne par ordre croissant",
-              sortDescending: ": activer pour trier la colonne par ordre décroissant"
+                sortAscending: ": activer pour trier la colonne par ordre croissant",
+                sortDescending: ": activer pour trier la colonne par ordre décroissant"
             }
             , buttons: {
-              colvis: "select les champs"
+                colvis: "select les champs"
+            },
+            select: {
+                rows: {
+                    _: "rak %d rows",
+                    0: "Click a row to hna it",
+                    1: "rir 1 row selected"
+                }
             }
-          }
-        });
+        }
+
+
+    });
 }

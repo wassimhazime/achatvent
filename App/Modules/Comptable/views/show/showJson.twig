@@ -4,7 +4,8 @@
 
 
 {% block headcss %}
-    <link href="/public/Framework/DatatableRapide/datatables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/public/Framework/DataTablesR/datatables.min.css" rel="stylesheet" type="text/css"/>
+    
     <link href="/public/Framework/BootstrapSelect/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
    
 {% endblock %}
@@ -35,9 +36,9 @@
 
 {% block footer %}
     <!-- Custom datatables -->
-    <script src="/public/Framework/DatatableRapide/datatables.min.js" type="text/javascript"></script>
-   <script src="/public/AWA/JsonDataTable.js" type="text/javascript"></script>
-    <script>DataTableJson('#tableshowajax',{{table_json_intent(intent)}} );</script>
+    <script src="/public/Framework/DataTablesR/datatables.min.js" type="text/javascript"></script>
+    <script src="/public/AWA/JsonDataTable.js" type="text/javascript"></script>
+    <script>DataTableJson('#tableshowajax',{{table_json_intent(intent)}} ,"{{optiondatatable}}");</script>
   <!-- end dataTables -->  
     <script src="/public/Framework/Moment/moment.js" type="text/javascript"></script>
     <script src="/public/Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
