@@ -95,8 +95,8 @@ class GetController extends AbstractController {
         if (isset($modeHTTP["pdf"])) {
             $option[] = "pdfHtml5";
         }
-        if (isset($modeHTTP["excelHtml5"])) {
-            $option[] = "excel";
+        if (isset($modeHTTP["excel"])) {
+            $option[] = "excelHtml5";
         }
         if (isset($modeHTTP["impression"])) {
             $option[] = "print";

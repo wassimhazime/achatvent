@@ -8,34 +8,33 @@
 
 namespace Kernel\Renderer\Twig_Extension;
 
-class controle_Table extends \Twig_Extension
-{
+class controle_Table extends \Twig_Extension {
 
-    public function getFunctions()
-    {
+    public function getFunctions() {
         return [
             new \Twig_SimpleFunction("input_tableHtml", [$this, "input_tableHtml"], ['is_safe' => ['html'], 'needs_context' => true]),
+            new \Twig_SimpleFunction("input_tableJson", [$this, "input_tableJson"], ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
 
-    public function input_tableHtml(array $context, string $nameroute): array
-    {
-       
-        $page = $context["_page"];// class controller main
-        $router = $context["router"]; // class App
+    public function input_tableJson(array $context, string $nameroute): string {
+        $url = $this->getUrl($context, $nameroute);
+        $message = "urlmessage|" . $url["message"];
+        $supprimer = "urlsupprimer|" . $url["supprimer"];
+        $modifier = "urlmodifier|" . $url["modifier"];
+        $voir = "urlvoir|" . $url["voir"];
 
-        $supprimer = $router->generateUri($nameroute, ["controle" => $page,
-            "action" => "supprimer",
-            "id" => 0]);
-        $modifier = $router->generateUri($nameroute, ["controle" => $page,
-            "action" => "modifier",
-            "id" => 0]);
-        $voir = $router->generateUri($nameroute, ["controle" => $page,
-            "action" => "voir",
-            "id" => 0]);
-          $message = $router->generateUri($nameroute, ["controle" => $page,
-            "action" => "message",
-            "id" => 0]);
+        return $message . "~" . $supprimer . "~" . $modifier . "~" . $voir;
+    }
+
+    public function input_tableHtml(array $context, string $nameroute): array {
+
+        $url = $this->getUrl($context, $nameroute);
+        $message = $url["message"];
+        $supprimer = $url["supprimer"];
+        $modifier = $url["modifier"];
+        $voir = $url["voir"];
+
 
         $input = ["title" => 'LES ACTIONS',
             "body" => '<spam style="display: inline-block;    width: max-content;">'
@@ -46,4 +45,27 @@ class controle_Table extends \Twig_Extension
         ];
         return $input;
     }
+
+    private function getUrl(array $context, string $nameroute) {
+
+        $page = $context["_page"]; // class controller main
+        $router = $context["router"]; // class App
+        $url = [];
+
+        $url["supprimer"] = $router->generateUri($nameroute, ["controle" => $page,
+            "action" => "supprimer",
+            "id" => 0]);
+        $url["modifier"] = $router->generateUri($nameroute, ["controle" => $page,
+            "action" => "modifier",
+            "id" => 0]);
+        $url["voir"] = $router->generateUri($nameroute, ["controle" => $page,
+            "action" => "voir",
+            "id" => 0]);
+        $url["message"] = $router->generateUri($nameroute, ["controle" => $page,
+            "action" => "message",
+            "id" => 0]);
+
+        return $url;
+    }
+
 }
