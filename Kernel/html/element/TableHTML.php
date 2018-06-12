@@ -36,11 +36,11 @@ class TableHTML {
         }
 
         $thead = [];
-        $thead[] = $this->th("S");// pour multi select datatable javascript
+        $thead[] = $this->th('<span class="glyphicon glyphicon-check" aria-hidden="true" style="    display: block;margin: auto;width: 15px;"></span>');// pour multi select datatable javascript
         foreach ($thead_columns as $column) {
             $str = (str_replace("_", " ", $column));
           
-            $thead[] = $this->th(strtoupper(str_replace("$", " ", $str)));
+            $thead[] = $this->th((str_replace("$", " ", $str)));
         }
         return "<thead >" . $this->tr(implode(" \n", $thead)) . " </thead > ";
     }

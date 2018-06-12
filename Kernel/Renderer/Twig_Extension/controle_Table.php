@@ -36,7 +36,7 @@ class controle_Table extends \Twig_Extension {
         $voir = $url["voir"];
 
 
-        $input = ["title" => 'LES ACTIONS',
+        $input = ["title" => '<i class="glyphicon glyphicon-edit  " style="color:#3665B0;display: block;margin: auto;width: 15px;"></i>',
             "body" => '<spam style="display: inline-block;    width: max-content;">'
             . '<button class="btn btn-danger   supprimer" data-urlmessage="' . $message . '"   data-urlsup="' . $supprimer . '" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
             . '<a class="btn btn-success  modifier"    href="' . $modifier . '" ><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></a>'

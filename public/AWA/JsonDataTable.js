@@ -6,7 +6,7 @@ function DataTableJson(id, btn_show_php, routes, urlAjax) {
 
     var table = $(id);
     var btn_remove_group_select = {
-        text: '<i id="btn_remove_group_select" class="glyphicon glyphicon-remove-circle   " style="color:#3665B0"></i>',
+        text: '<spam id="btn_remove_group_select" class="glyphicon glyphicon-trash  "></spam>',
         action: function() {
 
             // get data select
