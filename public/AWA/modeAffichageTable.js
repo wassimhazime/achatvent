@@ -1,16 +1,20 @@
 $("#showMode").click(function(event) {
-  event.preventDefault();
-    $(this).fadeOut(200,function() {
-       $("#boxSelectMode").fadeIn(200);  
-    });
-   
+    event.preventDefault();
+    if ($("#boxSelectMode").is(":visible")) {
+        $("#boxSelectMode").fadeOut(200);
+    } else {
+        $("#boxSelectMode").slideDown(200);
+    }
+
+
+
+
 });
+
 $("#hideMode").click(function(event) {
-     event.preventDefault();
-    $("#boxSelectMode").fadeOut(200,function() {
-       $("#showMode").fadeIn(200);  
-    });
-   
+    event.preventDefault();
+    $("#boxSelectMode").fadeOut(200);
+    
 });
 
 

@@ -1,11 +1,17 @@
 {% block showmode %}
-    <a href="" id="showMode" style="display: none" class="pull-right">
+    <a href="" id="showMode" class="pull-right">
 
-        <i class="glyphicon glyphicon-th-list " style="font-size:35px ; color:#3665B0"></i></a> 
+        <i class="glyphicon glyphicon-th-list btn btn-primary" style="margin-bottom: 10px;margin-right: 10px"></i></a> 
 
-    <div class="box shadow-4dp  "  id="boxSelectMode"  style="width: max-content">
-        <button type="button" class="close" aria-label="Close" >
-            <span aria-hidden="true" class=" pull-right" id="hideMode">&times;</span></button>
+    <div class="box shadow-4dp  "  id="boxSelectMode"   style="
+         width: max-content;
+         position: fixed;
+         z-index: 4;
+         background-color: white;
+         display: none; 
+         right: 4%;">
+        <button type="button" class="close pull-right" aria-label="Close" id="hideMode" style="display: block; width: 20px;margin-left: 93%;" >
+            <span aria-hidden="true" class=" " >&times;</span></button>
         <form action="" method="GET" class="">
 
             <div class="checkbox">
@@ -28,7 +34,7 @@
                     <input type="checkbox" name="control" value="ok"> controle donnee(modifier supprimer)
                 </label>
             </div>
-         
+
 
             <select class="selectpicker show-tick" data-style="btn-success"  data-width="115px" name="pere">
                 <option data-subtext="De père" selected value="resume">voir résumé des information</option>

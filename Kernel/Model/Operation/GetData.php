@@ -18,7 +18,32 @@ use Kernel\Model\Query\QuerySQL;
 
 class GetData extends AbstractOperatipn {
 
-    public function select(array $mode, $condition): Intent {
+    public function select_in(array $mode,$id, $condition): Intent {
+        
+        $schema = $this->schema;
+        if (Intent::is_show_MASTER($mode)) {
+            $champs = $schema->select_master();
+        } elseif (Intent::is_show_ALL($mode)) {
+            $champs = $schema->select_all();
+        } elseif (Intent::is_show_DEFAULT($mode)) {
+            $champs = $schema->select_default();
+        }
+        $sql = (new QuerySQL())
+                ->select($champs)
+                ->from($schema->getNameTable())
+                ->join($schema->getFOREIGN_KEY())
+                ->whereIn($id,$condition)
+                ->prepareQuery();
+
+        $Entitys = $this->prepareQuery($sql);
+
+        $this->setDataJoins($Entitys, $mode);
+
+        return new Intent($schema, $Entitys, $mode);
+    }
+    
+      public function select(array $mode, $condition): Intent {
+        
         $schema = $this->schema;
         if (Intent::is_show_MASTER($mode)) {
             $champs = $schema->select_master();

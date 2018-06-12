@@ -45,7 +45,7 @@ class ComptableModule {
     public function addRoute($router) {
         
         $router->get("/{action:[a-z]+}-{controle:[a-z\$]+}", [$this, "GET"], "actionGET");
-        $router->get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitement"], "traitement");
+        $router->get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}", [$this, "traitement"], "traitement");
 
         $router->post("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "POST"], "posttraitement");
         

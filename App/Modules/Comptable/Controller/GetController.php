@@ -88,7 +88,7 @@ class GetController extends AbstractController {
     }
 
     private function getOptionDataTable(array $modeHTTP): string {
-        $option = [];
+        $option = ['pageLength',"colvis"];
         if (isset($modeHTTP["copier"])) {
             $option[] = "copyHtml5";
         }
@@ -101,6 +101,7 @@ class GetController extends AbstractController {
         if (isset($modeHTTP["impression"])) {
             $option[] = "print";
         }
+      
         return implode(" ", $option);
     }
 

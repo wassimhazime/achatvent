@@ -57,17 +57,27 @@ class Model extends kernelModel
     }
 
 
+    public function show_in(array $mode, $condition=true) {
+        if ($this->is_null()) {
+            throw new TypeError(" is_null==> show ");
+        }
+        if($condition!==true){
+       $condition=explode(",", $condition);
+        }
+        $intent = $this->getData()->select_in($mode,"{$this->getTable()}.id", $condition);
+        return $intent;
+    }
     public function show(array $mode, $condition=true) {
         if ($this->is_null()) {
             throw new TypeError(" is_null==> show ");
         }
         if($condition!==true){
+            var_dump($condition);        die();
         $condition=    ["{$this->getTable()}.id" => $condition];
         }
         $intent = $this->getData()->select($mode, $condition);
         return $intent;
     }
-
     public function showAjax($condition)
     {
         if ($this->is_null()) {

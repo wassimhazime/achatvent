@@ -36,8 +36,10 @@ class TableHTML {
         }
 
         $thead = [];
+        $thead[] = $this->th("S");// pour multi select datatable javascript
         foreach ($thead_columns as $column) {
             $str = (str_replace("_", " ", $column));
+          
             $thead[] = $this->th(strtoupper(str_replace("$", " ", $str)));
         }
         return "<thead >" . $this->tr(implode(" \n", $thead)) . " </thead > ";
@@ -49,6 +51,7 @@ class TableHTML {
 
         foreach ($table as $index => $ROWS) {
             $row = [];
+            $row[] = $this->td(" "); // pour multi select datatable javascript
             $ID = "";
             //**********************ROWS***************************///
             foreach ($ROWS as $head => $body) {

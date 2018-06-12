@@ -84,8 +84,9 @@ class TraitementController extends AbstractController {
     }
 
     public function message($id) {
+        
         $mode = Intent::MODE_SELECT_DEFAULT_NULL;
-        $intentshow = $this->model->show($mode, $id);
+        $intentshow = $this->getModel()->show_in($mode, $id);
         return $this->render("@show/show_message_id", ["intent" => $intentshow]);
     }
 
