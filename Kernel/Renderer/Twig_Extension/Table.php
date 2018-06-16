@@ -27,7 +27,7 @@ class Table extends Twig_Extension
         ];
     }
 
-    public function table_intent(string $attrHtml, Intent $intent, array $input = [])
+    public function table_intent(Intent $intent, array $input = [])
     {
 
 
@@ -38,12 +38,12 @@ class Table extends Twig_Extension
         $DataTable = $metaTableHTML["DataTable"];
         $CHILD = $metaTableHTML["CHILD"];
 
-        return $this->tablehtml->builder($attrHtml, $columns, $DataTable, $CHILD, $input);
+        return $this->tablehtml->builder( $columns, $DataTable, $CHILD, $input);
     }
 
-    public function table_array(string $attrHtml, array $columns, array $DataTable, array $CHILD = [], array $input = [])
+    public function table_array(array $columns, array $DataTable, array $CHILD = [], array $input = [])
     {
-        return $this->tablehtml->builder($attrHtml, $columns, $DataTable, $CHILD, $input);
+        return $this->tablehtml->builder( $columns, $DataTable, $CHILD, $input);
     }
 
     public function table_json_intent(Intent $intent)

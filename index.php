@@ -21,7 +21,7 @@ $start = microtime(true);
 
 
 $app = new App(ROOT . "Config" . D_S . "Config_Container.php");
-$app->addModule(\App\Modules\Ajax\AjaxModule::class);
+
 $app->addModule(\App\Modules\Statistique\StatistiqueModule::class);
 $app->addModule(\App\Modules\Comptable\ComptableModule::class);
 $app->addModule(\App\Modules\Transactions\TransactionsModule::class);

@@ -22,9 +22,10 @@ class controle_Table extends \Twig_Extension {
         $message = "urlmessage|" . $url["message"];
         $supprimer = "urlsupprimer|" . $url["supprimer"];
         $modifier = "urlmodifier|" . $url["modifier"];
+        $ajouter = "urlajouter|" . $url["ajouter"];
         $voir = "urlvoir|" . $url["voir"];
 
-        return $message . "~" . $supprimer . "~" . $modifier . "~" . $voir;
+        return $message . "~" . $supprimer . "~" . $modifier . "~" . $ajouter . "~" . $voir;
     }
 
     public function input_tableHtml(array $context, string $nameroute): array {
@@ -63,6 +64,9 @@ class controle_Table extends \Twig_Extension {
             "id" => 0]);
         $url["message"] = $router->generateUri($nameroute, ["controle" => $page,
             "action" => "message",
+            "id" => 0]);
+        $url["ajouter"] = $router->generateUri($nameroute, ["controle" => $page,
+            "action" => "ajouter",
             "id" => 0]);
 
         return $url;

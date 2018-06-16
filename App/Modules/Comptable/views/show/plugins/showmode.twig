@@ -9,24 +9,24 @@
          z-index: 4;
          background-color: white;
          display: none; 
-         right: 4%;">
+         right: 6%;">
         <button type="button" class="close pull-right" aria-label="Close" id="hideMode" style="display: block; width: 20px;margin-left: 93%;" >
             <span aria-hidden="true" class=" " >&times;</span></button>
         <form action="" method="GET" class="">
 
-            <div class="checkbox">
-                export    :
-                <label>
-                    <input type="checkbox" name="copier" value="ok"> copier
+            <div class="btn-group" data-toggle="buttons">
+
+                <label class="not_focus btn btn-primary {% if js.copier == true %} active {% endif %} " >
+                    <input type="checkbox" name="copier" {% if js.copier == true %} checked {% endif %}  autocomplete="off"  value="on"> <i class="fa fa-files-o"></i>'
                 </label>
-                <label>
-                    <input type="checkbox" name="pdf" value="ok"> pdf
+                <label class="not_focus btn btn-primary {% if js.pdf == true %} active {% endif %} ">
+                    <input type="checkbox" name="pdf" {% if js.pdf == true %} checked {% endif %}  autocomplete="off" value="on"> <i class="fa fa-file-pdf-o"></i>
                 </label>
-                <label>
-                    <input type="checkbox" name="excel" value="ok">  excel
+                <label class="not_focus btn btn-primary {% if js.excel == true %} active {% endif %}">
+                    <input type="checkbox" name="excel"  {% if js.excel == true %} checked {% endif %} autocomplete="off" value="on">  <i class="fa fa-file-excel-o"></i>
                 </label>
-                <label>
-                    <input type="checkbox" name="impression" value="ok">  impression
+                <label class="not_focus btn btn-primary {% if js.print == true %} active {% endif %}">
+                    <input type="checkbox" name="impression" {% if js.print == true %} checked {% endif %}  autocomplete="off" value="on">  <i class="glyphicon glyphicon-print"></i>
                 </label>
             </div>
             <div class="checkbox">

@@ -12,7 +12,7 @@ class TableHTML {
     
     
 
-    public function builder(string $att, array $heade, array $table, array $CHILD = [], array $input = []): string {
+    public function builder( array $heade, array $table, array $CHILD = [], array $input = []): string {
 
 
        
@@ -27,7 +27,7 @@ class TableHTML {
 
 
 
-        return "\n<table $att> $thead $tbody </table>";
+        return $thead . $tbody ;
     }
 
     protected function thead(array $thead_columns, string $input = ""): string {
@@ -56,13 +56,10 @@ class TableHTML {
             //**********************ROWS***************************///
             foreach ($ROWS as $head => $body) {
                 if (strtoupper($head) == "IMAGE") {
-                    if ($body == "'image.jpg'") {
+                    if ($body == "image.jpg") {
                         $body = " ";
-                        $id_image = "";
-                    } else {
-                        $id_image = str_replace("id_image=>", "", $body);
-                        $body = '<a class="btn btn-default"  role="button" href="?imageview=' . $id_image . '" >les fichies</a>';
-                    }
+                        
+                    } 
                 } elseif (strtoupper($head) == "ID") {
                     $ID = $body;
                 }

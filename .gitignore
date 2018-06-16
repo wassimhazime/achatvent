@@ -2,3 +2,5 @@ nbproject
 nbproject/*
 .directory
 
+/.metadata/
+/vendor/

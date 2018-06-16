@@ -28,8 +28,17 @@ class Model {
         return $this->is_null;
     }
 
-    function setStatement(string $table) {
+    public function showAjax($condition) {
+        if ($this->is_null()) {
+            throw new TypeError(" is_null==> show ");
+        }
 
+        $intent = $this->getData()->select(\Kernel\INTENT\Intent::MODE_SELECT_ALL_NULL, $condition);
+
+        return $intent;
+    }
+
+    function setStatement(string $table) {
         if ($table == "statistique") {
             return new Statistique($this->PathJsonConfig);
         } else {

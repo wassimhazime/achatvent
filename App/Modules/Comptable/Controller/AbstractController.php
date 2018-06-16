@@ -24,21 +24,7 @@ abstract class AbstractController extends Controller {
 
     function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
         parent::__construct($request, $response, $container, $page);
-        $this->model = new Model($container->get( "pathModel"));
-
-
-        $this->renderer->addGlobal("_URLaction", $this->generateUriAction());
-    }
-
-    public function generateUriAction() {
-        return ["_ajouter" => $this->generateUri("traitement", $this->page, "ajouter")];
-    }
-
-    public function generateUri($nomroute, $controle, $action = "voir", $id = 0) {
-        return $this->router->generateUri($nomroute, ["controle" => $controle,
-                    "action" => $action,
-                    "id" => $id
-        ]);
+         $this->setModel(new Model($container->get("pathModel")));
     }
 
 }

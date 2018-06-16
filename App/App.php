@@ -28,6 +28,7 @@ class App extends Kernel {
 
 
         $this->router = $this->container->get(Router::class);
+        
         $renderer = $this->container->get(TwigRenderer::class);
         $pathModules = $this->container->get("pathModules");
         $datamenu = [];

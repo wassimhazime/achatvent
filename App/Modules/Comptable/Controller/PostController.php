@@ -20,12 +20,12 @@ class PostController extends AbstractController {
 
     public function exec(): ResponseInterface {
 
-        $this->File_Upload->setPreffix($this->page);
-        $insert = $this->File_Upload->set($this->request);
-        var_dump($insert);
+        $this->getFile_Upload()->setPreffix($this->getPage());
+        $insert = $this->getFile_Upload()->set($this->getRequest());
+       
 
-        $this->model->setStatement($this->page);
-        $intent = $this->model->setData($insert);
+        $this->getModel()->setStatement($this->getPage());
+        $intent = $this->getModel()->setData($insert);
         return $this->render("@show/show_item", ["intent" => $intent]);
     }
 

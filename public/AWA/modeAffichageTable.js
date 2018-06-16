@@ -11,6 +11,7 @@ $("#showMode").click(function(event) {
 
 });
 
+
 $("#hideMode").click(function(event) {
     event.preventDefault();
     $("#boxSelectMode").fadeOut(200);
@@ -18,3 +19,8 @@ $("#hideMode").click(function(event) {
 });
 
 
+
+$(".not_focus").hover(function() {
+    $(this).removeClass("focus")
+    
+})

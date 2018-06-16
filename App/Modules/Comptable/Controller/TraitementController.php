@@ -19,10 +19,10 @@ use Psr\Http\Message\ResponseInterface;
 class TraitementController extends AbstractController {
 
     public function exec(): ResponseInterface {
-        $this->model->setStatement($this->page);
+        $this->getModel()->setStatement($this->getPage());
 
 
-        $route = $this->router->match($this->request);
+        $route = $this->getRouter()->match($this->getRequest());
         $params = $route->getParams();
         $action = $params["action"];
         $id = $params["id"];
@@ -45,48 +45,50 @@ class TraitementController extends AbstractController {
 
     public function supprimer($id) {
         $conditon = ['id' => $id];
-        $etat = $this->model->delete($conditon);
+        $etat = $this->getModel()->delete($conditon);
         if ($etat == -1) {
             $r = new \GuzzleHttp\Psr7\Response(404);
             $r->getBody()->write("accès refusé  de supprimer ID  $id");
             return $r;
         } else {
-            $this->response->getBody()->write("les données a supprimer de ID  $id");
+            $this->getResponse()->getBody()->write("les données a supprimer de ID  $id");
         }
-        return $this->response;
+        return $this->getResponse();
     }
 
     public function modifier($id) {
-        $page = $this->page;
+        $page = $this->getPage();
         $conditon = ["$page.id" => $id];
-        $intentform = $this->model->formDefault($conditon);
+        $intentform = $this->getModel()->formDefault($conditon);
         return $this->render("@traitement/modifier_form", ["intent" => $intentform]);
     }
 
     public function ajouter($id) {
-        $getInfo = $this->request->getQueryParams();
+        $getInfo = $this->getRequest()->getQueryParams();
 
         if (!isset($getInfo["ajouter"])) {
-            $intentformselect = $this->model->formSelect();
+            $intentformselect = $this->getModel()->formSelect();
             if (!empty($intentformselect->getMETA_data())) {
                 return $this->render("@traitement/ajouter_select", ["intent" => $intentformselect]);
             }
         }
 
         unset($getInfo["ajouter"]);
-        $intentform = $this->model->form($getInfo);
+        $intentform = $this->getModel()->form($getInfo);
         return $this->render("@traitement/ajouter_form", ["intent" => $intentform]);
     }
 
     public function show($id) {
-        $intent = $this->model->show_id($id);
+        $intent = $this->getModel()->show_id($id);
         return $this->render("@show/show_id", ["intent" => $intent]);
     }
 
     public function message($id) {
         
         $mode = Intent::MODE_SELECT_DEFAULT_NULL;
+        
         $intentshow = $this->getModel()->show_in($mode, $id);
+        
         return $this->render("@show/show_message_id", ["intent" => $intentshow]);
     }
 

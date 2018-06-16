@@ -36,7 +36,7 @@ class File_Upload
     {
       
         $images = [];
-        var_dump($this->path);
+        
         foreach (scandir(ROOT.$this->path) as $image) {
             $image = str_replace("$", " ", $image);
            
@@ -78,7 +78,9 @@ class File_Upload
                     return $insert;
                 }
             }
-            $insert[$key] = "id_image=>" . $id_image;
+            
+         
+            $insert[$key] = '<a class="btn btn-default"  role="button" href="?imageview=' . $id_image . '" >les fichies</a>';
         }
 
 

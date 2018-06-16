@@ -11,14 +11,14 @@ use Psr\Http\Message\ServerRequestInterface;
 
 abstract class Controller {
 
-    protected $model;
-    protected $File_Upload;
-    protected $renderer;
-    protected $controller;
-    protected $router;
-    protected $page;
-    protected $request;
-    protected $response;
+    private $model;
+    private $File_Upload;
+    private $renderer;
+    private $controller;
+    private $router;
+    private $page;
+    private $request;
+    private $response;
     private $InfoTemplete = [];
 
     function getInfoTemplete() {
@@ -43,6 +43,7 @@ abstract class Controller {
         $route = $this->router->match($request);
         $params = $route->getParams();
         $this->page = $params[$page];
+        
         $this->renderer->addGlobal("_page", $this->page);
     }
 
@@ -58,15 +59,16 @@ abstract class Controller {
         $this->response->getBody()->write($render);
         return $this->response;
     }
+
     function getModel(): \Kernel\Model\Model {
         return $this->model;
     }
 
-    function getFile_Upload() {
+    function getFile_Upload(): File_Upload {
         return $this->File_Upload;
     }
 
-    function getRenderer() {
+    function getRenderer(): TwigRenderer {
         return $this->renderer;
     }
 
@@ -74,21 +76,52 @@ abstract class Controller {
         return $this->controller;
     }
 
-    function getRouter() {
+    function getRouter(): Router {
         return $this->router;
     }
 
-    function getPage() {
+    function getPage(): string {
         return $this->page;
     }
 
-    function getRequest() {
+    function getRequest(): ServerRequestInterface {
         return $this->request;
     }
 
-    function getResponse() {
+    function getResponse(): ResponseInterface {
         return $this->response;
     }
 
+    function setModel($model) {
+        $this->model = $model;
+    }
+
+    function setFile_Upload($File_Upload) {
+        $this->File_Upload = $File_Upload;
+    }
+
+    function setRenderer($renderer) {
+        $this->renderer = $renderer;
+    }
+
+    function setController($controller) {
+        $this->controller = $controller;
+    }
+
+    function setRouter($router) {
+        $this->router = $router;
+    }
+
+    function setPage($page) {
+        $this->page = $page;
+    }
+
+    function setRequest($request) {
+        $this->request = $request;
+    }
+
+    function setResponse($response) {
+        $this->response = $response;
+    }
 
 }
