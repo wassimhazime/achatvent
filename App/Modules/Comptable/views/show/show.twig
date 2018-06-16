@@ -78,12 +78,12 @@
     {% if modetype=='json' %}
         <script>DataTable_awa('#DataTableJs',
                     "{{btndatatable}}",
-                    '{{input_tableJson("traitement")}}',
-                    "{{Ajax("ajax.get")}}");</script>
+                    '{{input_tableJson("traitementShow")}}',
+                    "{{Ajax("ajaxcomptable")}}");</script>
         {% elseif modetype=='HTML' %}
         <script>DataTable_awa('#DataTableJs',
                     "{{btndatatable}}",
-                    '{{input_tableJson("traitement")}}'
+                    '{{input_tableJson("traitementShow")}}'
                     );</script>
         {% endif %} 
     <!-- end dataTables -->  

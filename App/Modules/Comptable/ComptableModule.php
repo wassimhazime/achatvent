@@ -2,9 +2,9 @@
 
 namespace App\Modules\Comptable;
 
-use App\Modules\Comptable\Controller\TraitementController;
+use App\Modules\Comptable\Controller\TraitementShowController;
 use App\Modules\Comptable\Controller\VoirController;
-use App\Modules\Comptable\Controller\PostController;
+use App\Modules\Comptable\Controller\TraitementSendController;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,24 +27,11 @@ class ComptableModule {
     }
 
     public function addRoute($router) {
-        
-        $router->get("/voir-{controle:[a-z\$]+}", [$this, "Voir" ], "VoirGet");
-        
-        $router->get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}", [ $this,  "traitement" ], "traitement");
 
-        
-        
-        $router->post("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [
-            $this,
-            "POST"
-                ], "posttraitement");
-
-
-        $router->get("/ajax/{controle:[a-z\$]+}", [
-            $this,
-            "ajax"
-                ], "ajax.get");
-
+        $router->get("/voir-{controle:[a-z\$]+}", [$this, "Voir"], "VoirGet");
+        $router->get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}", [$this, "traitementShow"], "traitementShow");
+        $router->post("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitementSend"], "traitementSend");
+        $router->get("/ajaxcomptable/{controle:[a-z\$]+}", [$this, "ajax"], "ajaxcomptable");
     }
 
     // // controller
@@ -61,14 +48,14 @@ class ComptableModule {
         return $controller->exec();
     }
 
-    public function traitement(ServerRequestInterface $request, ResponseInterface $response) {
-        $controller = new TraitementController($request, $response, $this->container, "controle");
+    public function traitementShow(ServerRequestInterface $request, ResponseInterface $response) {
+        $controller = new TraitementShowController($request, $response, $this->container, "controle");
 
         return $controller->exec();
     }
 
-    public function POST(ServerRequestInterface $request, ResponseInterface $response) {
-        $controller = new PostController($request, $response, $this->container, "controle");
+    public function traitementSend(ServerRequestInterface $request, ResponseInterface $response) {
+        $controller = new TraitementSendController($request, $response, $this->container, "controle");
 
         return $controller->exec();
     }

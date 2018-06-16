@@ -16,7 +16,7 @@ namespace App\Modules\Comptable\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class PostController extends AbstractController {
+class TraitementSendController extends AbstractController {
 
     public function exec(): ResponseInterface {
 

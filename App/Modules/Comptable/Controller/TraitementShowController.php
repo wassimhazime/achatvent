@@ -16,7 +16,7 @@ namespace App\Modules\Comptable\Controller;
 use Kernel\INTENT\Intent;
 use Psr\Http\Message\ResponseInterface;
 
-class TraitementController extends AbstractController {
+class TraitementShowController extends AbstractController {
 
     public function exec(): ResponseInterface {
         $this->getModel()->setStatement($this->getPage());
