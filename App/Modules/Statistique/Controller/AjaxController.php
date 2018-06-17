@@ -19,20 +19,33 @@ class AjaxController extends AbstractController {
 
     //put your code here
     public function exec(): ResponseInterface {
-        $this->getModel()->setStatement($this->getPage());
+
+        if ($this->getPage() == "statistique") {
+            $query = $this->getRequest()->getParsedBody();
+            $st = $this->getModel()->setStatement('statistique');
+            $raport = ($st->statistique_pour($query));
+            $this->response->getBody()->write($raport);
+            return $this->getResponse();
+        }
+
+        if ($this->getPage() == "st" or $this->getPage() == "st") {
+            $st = $this->model->setStatement('statistique');
+            $this->response->getBody()->write($st->statistique_par('bons$achats', "2017-01-01", "2019-01-01"));
+
+            return $this->getResponse();
+        }
+
         $query = $this->getRequest()->getQueryParams();
 
-        $modeshow = $this->getModeShow($query);
-        $modeintent = $modeshow["modeIntent"];
 
-        $intentshow = $this->getModel()->showAjax($modeintent, true);
+
+
+
+        $this->getModel()->setStatement($this->getPage());
+        $intentshow = $this->getModel()->showAjax(true);
+
         $entity = ($intentshow->getEntitysDataTable());
-
         $data = \Kernel\Tools\Tools::entitys_TO_array($entity);
-
-
-
-
 
         $titles = [];
         $dataSets = [];
@@ -49,6 +62,8 @@ class AjaxController extends AbstractController {
 
         $json = \Kernel\Tools\Tools::json(["data" => $data, "titles" => $titles, "dataSet" => $dataSets]);
         $this->getResponse()->getBody()->write($json);
+
+
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
 

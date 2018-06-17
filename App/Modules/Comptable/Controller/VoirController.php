@@ -9,116 +9,69 @@ use Kernel\INTENT\Intent;
 class VoirController extends AbstractController {
 
     public function exec(): ResponseInterface {
-        $query = $this->getRequest()->getQueryParams();
+        $this->getModel()->setStatement($this->getPage());
+        if ($this->getModel()->is_null()) {
+            return $this->render("@show/show");
+        }
 
-        return $this->show($query);
+        $query = $this->getRequest()->getQueryParams();
+       
+        $data = $this->showDataTable($query);
+        return $this->render("@show/show", $data);
     }
 
-    private function show($query) {
-        $this->getModel()->setStatement($this->getPage());
-
-        if ($this->getModel()->is_null()) {
-            die("erre");
-        }
-        if (isset($query["imageview"])) {
-            $id_image = $query["imageview"];
-            return $this->getFile_Upload()->get($id_image);
-        }
+    private function showDataTable($query) {
 
 
-        $btndatatable = $this->btn_DataTable($query);
-        $js = $this->js_charge($query);
         $modeshow = $this->getModeShow($query);
         $modeintent = $modeshow["modeIntent"];
-        $modetype = $modeshow["type"];
         
-        $intentshow = $this->getModel()->show($modeintent, true);
         $data = [
-            "modetype" => $modetype,
-            "intent" => $intentshow,
-            "btndatatable" => $btndatatable,
-            "js" => $js
+            "Html_or_Json" => $modeshow["type"],
+            "btnDataTable" => $this->btn_DataTable($query)["btn"],
+            "jsCharges" => $this->btn_DataTable($query)["jsCharges"],
+            "modeintentpere"=>$modeintent[0],
+            "modeintentenfant"=>$modeintent[1]
         ];
-        return $this->render("@show/show", $data);
 
         
+        if ($modeshow["type"] === "HTML") {
+            $data["intent"] = $this->getModel()->show($modeintent, true);
+        } elseif ($modeshow["type"] === "json") {
+            $url= $this->getRouter()
+               ->generateUri("ajaxcomptable",
+                              ["controle" => $this->getPage()]);
+            
+            $get="?".$this->getRequest()->getUri()->getQuery();
+            $data["ajax"] =$url.$get;
+      }
+
+        return $data;
     }
 
-    private function getModeShow(array $modeHTTP): array {
-        $parent = "MASTER";
-        $child = "EMPTY";
-        $type = "json";
-        if (isset($modeHTTP["pere"])) {
-            $parent = $this->parseMode($modeHTTP["pere"], "MASTER");
-        }
-        if (isset($modeHTTP["fils"])) {
-            $child = $this->parseMode($modeHTTP["fils"], "EMPTY");
-            if ($child != "EMPTY") {
-                $type = "HTML";
-            }
-        }
+    private function btn_DataTable(array $modeHTTP): array {
 
-
-        return ["type" => $type, "modeIntent" => [$parent, $child]];
-    }
-
-    private function parseMode(string $modefr, $default): string {
-        switch ($modefr) {
-            case "rien":
-                $mode = "EMPTY";
-
-                break;
-            case "resume":
-                $mode = "MASTER";
-                break;
-            case "defaut":
-                $mode = "DEFAULT";
-                break;
-            case "tous":
-                $mode = "ALL";
-                break;
-
-            default:
-                $mode = $default;
-                break;
-        }
-        return $mode;
-    }
-
-    private function btn_DataTable(array $modeHTTP): string {
-        $option = ['pageLength', "colvis"];
+        $param = "pageLength colvis";
+        $jsCharge = [];
         if (isset($modeHTTP["copier"]) && $modeHTTP["copier"] == "on") {
-            $option[] = "copyHtml5";
+            $param .= " copyHtml5";
+            $jsCharge["copier"] = true;
         }
         if (isset($modeHTTP["pdf"]) && $modeHTTP["pdf"] == "on") {
-            $option[] = "pdfHtml5";
+            $param .= " pdfHtml5";
+            $jsCharge["pdf"] = true;
         }
         if (isset($modeHTTP["excel"]) && $modeHTTP["excel"] == "on") {
-            $option[] = "excelHtml5";
+            $param .= " excelHtml5";
+            $jsCharge["excel"] = true;
         }
         if (isset($modeHTTP["impression"]) && $modeHTTP["impression"] == "on") {
-            $option[] = "print";
+            $param .= " print";
+            $jsCharge["print"] = true;
         }
-        $option[] = "control";
-        return implode(" ", $option);
-    }
+        $param .= " control";
 
-    private function js_charge(array $modeHTTP) {
-        $option = [];
-        if (isset($modeHTTP["copier"]) && $modeHTTP["copier"] == "on") {
-            $option["copier"] = true;
-        }
-        if (isset($modeHTTP["pdf"]) && $modeHTTP["pdf"] == "on") {
-            $option["pdf"] = true;
-        }
-        if (isset($modeHTTP["excel"]) && $modeHTTP["excel"] == "on") {
-            $option["excel"] = true;
-        }
-        if (isset($modeHTTP["impression"]) && $modeHTTP["impression"] == "on") {
-            $option["print"] = true;
-        }
-
-        return $option;
+        return ["btn" => $param, "jsCharges" => $jsCharge];
     }
 
 }

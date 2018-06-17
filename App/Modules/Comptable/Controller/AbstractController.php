@@ -24,7 +24,49 @@ abstract class AbstractController extends Controller {
 
     function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
         parent::__construct($request, $response, $container, $page);
-         $this->setModel(new Model($container->get("pathModel")));
+        $this->setModel(new Model($container->get("pathModel")));
+    }
+
+    protected function getModeShow(array $modeHTTP): array {
+        $parent = "DEFAULT";
+        $child = "EMPTY";
+
+        $type = "json";
+        if (isset($modeHTTP["pere"])) {
+            $parent = $this->parseMode($modeHTTP["pere"], $parent);
+        }
+        if (isset($modeHTTP["fils"])) {
+            $child = $this->parseMode($modeHTTP["fils"], $child);
+            if ($child != "EMPTY") {
+                $type = "HTML";
+            }
+        }
+
+
+        return ["type" => $type, "modeIntent" => [$parent, $child]];
+    }
+
+    private function parseMode(string $modefr, $default): string {
+        switch ($modefr) {
+            case "rien":
+                $mode = "EMPTY";
+
+                break;
+            case "resume":
+                $mode = "MASTER";
+                break;
+            case "defaut":
+                $mode = "DEFAULT";
+                break;
+            case "tous":
+                $mode = "ALL";
+                break;
+
+            default:
+                $mode = $default;
+                break;
+        }
+        return $mode;
     }
 
 }

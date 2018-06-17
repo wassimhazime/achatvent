@@ -28,12 +28,12 @@ class Model {
         return $this->is_null;
     }
 
-    public function showAjax($condition) {
+    public function showAjax($mode,$condition) {
         if ($this->is_null()) {
             throw new TypeError(" is_null==> show ");
         }
 
-        $intent = $this->getData()->select(\Kernel\INTENT\Intent::MODE_SELECT_ALL_NULL, $condition);
+        $intent = $this->getData()->select($mode, $condition);
 
         return $intent;
     }

@@ -30,16 +30,15 @@
 
 
 
-    <div class ="cadre">
+    <div class ="">
 
         <div class="row" style="width:90% ; margin: auto ;    margin-top: 10px;">
             <table id="DataTableJs"  class="DataTableJs table table-striped table-bordered dt-responsive nowrap ">
 
-                {% if modetype=='json' %}
+                {% if Html_or_Json=='json' %}
 
-
-                {% elseif modetype=='HTML' %}
-                    {{ table_intent(intent,input_tableHtml('traitement'))}}
+                {% elseif Html_or_Json=='HTML' %}
+                    {{ table_intent(intent,input_tableHtml('traitementShow'))}}
                 {% endif %}   
 
 
@@ -52,20 +51,24 @@
 {% block footer %}
     <!-- Custom datatables -->
 
-    {% if js.excel == true %}
+
+    <script  src="/public/Framework/DataTables-1.10.16/js/jquery.dataTables.min.js"></script>
+    <script  src="/public/Framework/DataTables-1.10.16/js/dataTables.bootstrap.min.js"></script>
+
+
+
+    {% if jsCharges.excel == true %}
         <script  src="/public/Framework/JSZip-2.5.0/jszip.min.js"></script>
     {% endif %}
-    {% if js.pdf == true %}
+    {% if jsCharges.pdf == true %}
         <script  src="/public/Framework/pdfmake-0.1.32/pdfmake.min.js"></script>
         <script  src="/public/Framework/pdfmake-0.1.32/vfs_fonts.js"></script>
     {% endif %}
-    <script  src="/public/Framework/DataTables-1.10.16/js/jquery.dataTables.min.js"></script>
-    <script  src="/public/Framework/DataTables-1.10.16/js/dataTables.bootstrap.min.js"></script>
     <script  src="/public/Framework/Buttons-1.5.1/js/dataTables.buttons.min.js"></script>
     <script  src="/public/Framework/Buttons-1.5.1/js/buttons.bootstrap.min.js"></script>
     <script  src="/public/Framework/Buttons-1.5.1/js/buttons.colVis.min.js"></script>
     <script  src="/public/Framework/Buttons-1.5.1/js/buttons.html5.min.js"></script>
-    {% if js.print == true %}
+    {% if jsCharges.print == true %}
         <script  src="/public/Framework/Buttons-1.5.1/js/buttons.print.min.js"></script>
     {% endif %}
     <script  src="/public/Framework/Responsive-2.2.1/js/dataTables.responsive.min.js"></script>
@@ -75,14 +78,14 @@
 
     <script src="/public/AWA/DataTable.js" ></script>
 
-    {% if modetype=='json' %}
+    {% if Html_or_Json=='json' %}
         <script>DataTable_awa('#DataTableJs',
-                    "{{btndatatable}}",
+                    "{{btnDataTable}}",
                     '{{input_tableJson("traitementShow")}}',
-                    "{{Ajax("ajaxcomptable")}}");</script>
-        {% elseif modetype=='HTML' %}
+                    "{{ajax}}");</script>
+        {% elseif Html_or_Json=='HTML' %}
         <script>DataTable_awa('#DataTableJs',
-                    "{{btndatatable}}",
+                    "{{btnDataTable}}",
                     '{{input_tableJson("traitementShow")}}'
                     );</script>
         {% endif %} 

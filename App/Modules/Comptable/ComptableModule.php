@@ -32,6 +32,7 @@ class ComptableModule {
         $router->get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}", [$this, "traitementShow"], "traitementShow");
         $router->post("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitementSend"], "traitementSend");
         $router->get("/ajaxcomptable/{controle:[a-z\$]+}", [$this, "ajax"], "ajaxcomptable");
+        $router->get("/files/{controle:[a-z0-9\_\$\-]+}", [$this, "files"], "filescomptable");
     }
 
     // // controller
@@ -39,6 +40,11 @@ class ComptableModule {
 
     public function ajax(ServerRequestInterface $request, ResponseInterface $response) {
         $controller = new Controller\AjaxController($request, $response, $this->container, "controle");
+        return $controller->exec();
+    }
+
+    public function files(ServerRequestInterface $request, ResponseInterface $response) {
+        $controller = new Controller\FileController($request, $response, $this->container, "controle");
         return $controller->exec();
     }
 

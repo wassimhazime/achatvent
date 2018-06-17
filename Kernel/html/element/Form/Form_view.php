@@ -64,9 +64,11 @@ class Form_view extends FormAbstract {
                         $heads[] = $head;
                     }
 
-                    $att = 'id="example" style="width:95% ; margin: auto ;" class="table table-striped table-bordered dt-responsive nowrap "';
-                    return (new TableHTML())->builder($att, $heads, $input["Default"]);
-                }
+                    $att = ' style="width:95% ; margin: auto ;" class="table table-striped table-bordered dt-responsive nowrap "';
+                    $table= (new TableHTML())->builder( $heads, $input["Default"]);
+                
+                    return "<table $att >".$table."</table>";
+                    }
 
             default:
 

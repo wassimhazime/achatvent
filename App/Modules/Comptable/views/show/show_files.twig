@@ -1,0 +1,24 @@
+{% extends "themes.twig" %}
+
+
+
+{% block container %}
+    <div class ="cadre">
+        <div class="row">
+
+            {% for file in files %}
+                <center>
+
+                    <a href="/{{file}} ">
+                        <img src="/{{file}}" alt="/{{file}} " style="width:300px;" />
+                    </a>
+
+                </center>
+
+
+            {% endfor %} 
+
+
+        </div>
+    </div>   
+{% endblock %} 
