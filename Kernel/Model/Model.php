@@ -24,21 +24,22 @@ class Model {
         $this->ToolsDB = new ToolsDB($PathConfigJsone);
     }
 
-    function is_null(): bool {
+    public function is_null(): bool {
         return $this->is_null;
     }
 
-    public function showAjax($mode,$condition) {
+    public function showAjax($mode, $condition) {
         if ($this->is_null()) {
             throw new TypeError(" is_null==> show ");
         }
 
         $intent = $this->getData()->select($mode, $condition);
+        $entity = ($intent->getEntitysDataTable());
 
-        return $intent;
+        return \Kernel\Tools\Tools::entitys_TO_array($entity);
     }
 
-    function setStatement(string $table) {
+    public function setStatement(string $table) {
         if ($table == "statistique") {
             return new Statistique($this->PathJsonConfig);
         } else {
@@ -56,28 +57,79 @@ class Model {
         return $this->ToolsDB->getAllTables();
     }
 
-    function get_setData(): SetData {
+    public function get_setData(): SetData {
         return $this->setData;
     }
 
-    function getTable(): string {
+    public function getTable(): string {
         return $this->table;
     }
 
-    function getGui(): GUI {
+    public function getGui(): GUI {
         return $this->gui;
     }
 
-    function getData(): GetData {
+    public function getData(): GetData {
         return $this->getData;
     }
 
-    function getStatistique(): Statistique {
+    public function getStatistique(): Statistique {
         return $this->statistique;
     }
 
-    function getToolsDB(): ToolsDB {
+    public function getToolsDB(): ToolsDB {
         return $this->ToolsDB;
+    }
+
+    //////////////////////////////
+    public function delete($condition) {
+
+        return $this->get_setData()->delete($condition);
+    }
+
+    public function show_in(array $mode, $condition = true) {
+        if ($this->is_null()) {
+            throw new TypeError(" is_null==> show ");
+        }
+        if ($condition !== true) {
+            $condition = explode(",", $condition);
+        }
+        $intent = $this->getData()->select_in($mode, "{$this->getTable()}.id", $condition);
+        return $intent;
+    }
+
+    public function formSelect() {
+        if ($this->is_null()) {
+            throw new TypeError(" set table ==> call function setStatement() ");
+        }
+        $intent = $this->getGui()->formSelect();
+        return $intent;
+    }
+
+    public function formDefault($conditon) {
+        if ($this->is_null()) {
+            throw new TypeError(" set table ==> call function setStatement() ");
+        }
+
+        $intent = $this->getGui()->formDefault($conditon);
+
+
+        return $intent;
+    }
+
+    public function form($conditon = "") {
+        if ($this->is_null()) {
+            throw new TypeError(" set table ==> call function setStatement() ");
+        }
+
+        $intent = $this->getGui()->form($conditon);
+
+
+        return $intent;
+    }
+
+    public function show_id($id) {
+        return $this->getGui()->formDefault(["{$this->getTable()}.id" => $id]);
     }
 
 }

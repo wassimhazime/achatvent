@@ -48,6 +48,20 @@ abstract class Controller {
     }
 
     abstract function exec(): ResponseInterface;
+    
+    public function ajax_js() : ResponseInterface{
+             $this->getModel()->setStatement($this->getPage());
+        $query = $this->getRequest()->getQueryParams();
+
+        $modeshow = $this->getModeShow($query);
+        $modeintent = $modeshow["modeIntent"];
+
+        $data = $this->getModel()->showAjax($modeintent, true);
+        $json = \Kernel\Tools\Tools::json_js($data);
+        $this->getResponse()->getBody()->write($json);
+        return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+     
+    }
 
     public function render($view, array $data = []): ResponseInterface {
 

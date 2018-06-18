@@ -43,7 +43,7 @@ class TransactionsModule {
 
         $router->get("/admin/{action:[a-z]+}-{controle:[a-z\$]+}", [$this, "Voir"], "TransactionVoirGet");
 
-        $router->get("/admin/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitementShow"], "TransactionTraitementShow");
+        $router->get("/admin/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}", [$this, "traitementShow"], "TransactionTraitementShow");
 
         $router->post("/admin/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitementSend"], "TransactionTraitementSend");
 

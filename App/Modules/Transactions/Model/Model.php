@@ -51,58 +51,14 @@ class Model extends kernelModel {
         return $this->getData()->find_by_id($id);
     }
 
-    public function delete($condition) {
-
-       return  $this->get_setData()->delete($condition);
-    }
-
-    public function show(array $mode, $condition=true) {
+    public function show(array $mode, $condition = true) {
         if ($this->is_null()) {
             throw new TypeError(" is_null==> show ");
         }
-        if($condition!==true){
-        $condition=    ["{$this->getTable()}.id" => $condition];
+        if ($condition !== true) {
+            $condition = ["{$this->getTable()}.id" => $condition];
         }
         $intent = $this->getData()->select($mode, $condition);
-        return $intent;
-    }
-
-
-    public function show_id($id) {
-        return $this->getGui()->formDefault(["{$this->getTable()}.id" => $id]);
-    }
-    
-
-
-    public function form($conditon = "") {
-        if ($this->is_null()) {
-
-            throw new TypeError(" set table ==> call function setStatement() ");
-        }
-
-        $intent = $this->getGui()->form($conditon);
-
-
-        return $intent;
-    }
-
-    public function formDefault($conditon = "") {
-        if ($this->is_null()) {
-            throw new TypeError(" set table ==> call function setStatement() ");
-        }
-
-        $intent = $this->getGui()->formDefault($conditon);
-
-
-        return $intent;
-    }
-
-    public function formSelect() {
-        if ($this->is_null()) {
-            throw new TypeError(" set table ==> call function setStatement() ");
-        }
-
-        $intent = $this->getGui()->formSelect();
         return $intent;
     }
 
