@@ -15,7 +15,7 @@
 namespace App\Modules\Transactions;
 
 use App\Modules\Transactions\Controller\TraitementController;
-use App\Modules\Transactions\Controller\GetController;
+use App\Modules\Transactions\Controller\VoirController;
 use App\Modules\Transactions\Controller\PostController;
 use App\Modules\Transactions\Controller\Child_add;
 use Kernel\AWA_Interface\InterfaceRenderer;
@@ -41,7 +41,7 @@ class TransactionsModule {
 
     public function addRoute($router) {
 
-        $router->get("/admin/{action:[a-z]+}-{controle:[a-z\$]+}", [$this, "GET"], "T_actionGET");
+        $router->get("/admin/{action:[a-z]+}-{controle:[a-z\$]+}", [$this, "Voir"], "T_actionGET");
         
         $router->get("/admin/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitement"], "T_traitement");
 
@@ -53,9 +53,9 @@ class TransactionsModule {
     }
 
     //// controller
-    public function GET(ServerRequestInterface $request, ResponseInterface $response) {
+    public function Voir(ServerRequestInterface $request, ResponseInterface $response) {
 
-        $controller = new GetController($request, $response, $this->container, "controle");
+        $controller = new VoirController($request, $response, $this->container, "controle");
 
         return $controller->exec();
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Comptable\Controller;
+namespace App\Modules\Transactions\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,15 +10,14 @@ class VoirController extends AbstractController {
 
     public function exec(): ResponseInterface {
         $this->getModel()->setStatement($this->getPage());
-        
+
         if ($this->getModel()->is_null()) {
-            return $this->render("404",["_page"=>"404"]);
+            return $this->render("404", ["_page" => "404"]);
         }
 
         $query = $this->getRequest()->getQueryParams();
         $data = $this->showDataTable($query);
-         return $this->render("@ComptableShow/show", $data);
-        
+        return $this->render("@show/show", $data);
     }
 
     private function showDataTable($query) {
@@ -26,26 +25,25 @@ class VoirController extends AbstractController {
 
         $modeshow = $this->getModeShow($query);
         $modeintent = $modeshow["modeIntent"];
-        
+
         $data = [
             "Html_or_Json" => $modeshow["type"],
             "btnDataTable" => $this->btn_DataTable($query)["btn"],
             "jsCharges" => $this->btn_DataTable($query)["jsCharges"],
-            "modeintentpere"=>$modeintent[0],
-            "modeintentenfant"=>$modeintent[1]
+            "modeintentpere" => $modeintent[0],
+            "modeintentenfant" => $modeintent[1]
         ];
 
-        
+
         if ($modeshow["type"] === "HTML") {
             $data["intent"] = $this->getModel()->show($modeintent, true);
         } elseif ($modeshow["type"] === "json") {
-            $url= $this->getRouter()
-               ->generateUri("ajaxcomptable",
-                              ["controle" => $this->getPage()]);
-            
-            $get="?".$this->getRequest()->getUri()->getQuery();
-            $data["ajax"] =$url.$get;
-      }
+            $url = $this->getRouter()
+                    ->generateUri("ajaxcomptable", ["controle" => $this->getPage()]);
+
+            $get = "?" . $this->getRequest()->getUri()->getQuery();
+            $data["ajax"] = $url . $get;
+        }
 
         return $data;
     }

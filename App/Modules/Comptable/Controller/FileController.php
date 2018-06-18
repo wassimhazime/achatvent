@@ -20,7 +20,7 @@ class FileController extends AbstractController {
     //put your code here
     public function exec(): ResponseInterface {
         $files = $this->getFile_Upload()->get($this->getPage());
-        return $this->render("@show/show_files", ["files" => $files]);
+        return $this->render("@ComptableShow/show_files", ["files" => $files]);
     }
 
 }

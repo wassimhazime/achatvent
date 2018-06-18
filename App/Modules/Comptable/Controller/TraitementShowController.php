@@ -60,7 +60,7 @@ class TraitementShowController extends AbstractController {
         $page = $this->getPage();
         $conditon = ["$page.id" => $id];
         $intentform = $this->getModel()->formDefault($conditon);
-        return $this->render("@traitement/modifier_form", ["intent" => $intentform]);
+        return $this->render("@ComptableTraitement/modifier_form", ["intent" => $intentform]);
     }
 
     public function ajouter($id) {
@@ -69,18 +69,18 @@ class TraitementShowController extends AbstractController {
         if (!isset($getInfo["ajouter"])) {
             $intentformselect = $this->getModel()->formSelect();
             if (!empty($intentformselect->getMETA_data())) {
-                return $this->render("@traitement/ajouter_select", ["intent" => $intentformselect]);
+                return $this->render("@ComptableTraitement/ajouter_select", ["intent" => $intentformselect]);
             }
         }
 
         unset($getInfo["ajouter"]);
         $intentform = $this->getModel()->form($getInfo);
-        return $this->render("@traitement/ajouter_form", ["intent" => $intentform]);
+        return $this->render("@ComptableTraitement/ajouter_form", ["intent" => $intentform]);
     }
 
     public function show($id) {
         $intent = $this->getModel()->show_id($id);
-        return $this->render("@show/show_id", ["intent" => $intent]);
+        return $this->render("@ComptableShow/show_id", ["intent" => $intent]);
     }
 
     public function message($id) {
@@ -89,7 +89,7 @@ class TraitementShowController extends AbstractController {
         
         $intentshow = $this->getModel()->show_in($mode, $id);
         
-        return $this->render("@show/show_message_id", ["intent" => $intentshow]);
+        return $this->render("@ComptableShow/show_message_id", ["intent" => $intentshow]);
     }
 
 }

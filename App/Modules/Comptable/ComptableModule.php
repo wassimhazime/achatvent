@@ -22,9 +22,10 @@ class ComptableModule {
     }
 
     public function addPathRenderer(\Kernel\AWA_Interface\InterfaceRenderer $renderer, $pathModules) {
-        $renderer->addPath($pathModules . "Comptable" . D_S . "views" . D_S . "show", "show");
-        $renderer->addPath($pathModules . "Comptable" . D_S . "views" . D_S . "traitement", "traitement");
-    }
+        $renderer->addPath($pathModules . "Comptable" . D_S . "views" . D_S . "show", "ComptableShow");
+
+        $renderer->addPath($pathModules . "Comptable" . D_S . "views" . D_S . "traitement", "ComptableTraitement");
+        }
 
     public function addRoute($router) {
 

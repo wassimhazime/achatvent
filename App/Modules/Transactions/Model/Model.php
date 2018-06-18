@@ -67,15 +67,6 @@ class Model extends kernelModel {
         return $intent;
     }
 
-    public function showAjax($condition) {
-        if ($this->is_null()) {
-            throw new TypeError(" is_null==> show ");
-        }
-
-        $intent = $this->getData()->select(Intent::MODE_SELECT_ALL_NULL, $condition);
-
-        return $intent;
-    }
 
     public function show_id($id) {
         return $this->getGui()->formDefault(["{$this->getTable()}.id" => $id]);

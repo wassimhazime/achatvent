@@ -26,7 +26,7 @@ class TraitementSendController extends AbstractController {
 
         $this->getModel()->setStatement($this->getPage());
         $intent = $this->getModel()->setData($insert);
-        return $this->render("@show/show_item", ["intent" => $intent]);
+        return $this->render("@ComptableShow/show_item", ["intent" => $intent]);
     }
 
 }
