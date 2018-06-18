@@ -40,7 +40,7 @@ class VoirController extends AbstractController {
             $data["intent"] = $this->getModel()->show($modeintent, true);
         } elseif ($modeshow["type"] === "json") {
             $url= $this->getRouter()
-               ->generateUri("ajaxcomptable",
+               ->generateUri("ComptableAjax",
                               ["controle" => $this->getPage()]);
             
             $get="?".$this->getRequest()->getUri()->getQuery();

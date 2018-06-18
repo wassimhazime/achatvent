@@ -1,6 +1,6 @@
 {% extends "themes.twig" %}
 
-{% use "@ComptableShow/plugins/showmode.twig" %}
+{% use "@TransactionsShow/plugins/showmode.twig" %}
 
 {% block headcss %}
 
@@ -38,7 +38,7 @@
                 {% if Html_or_Json=='json' %}
 
                 {% elseif Html_or_Json=='HTML' %}
-                    {{ table_intent(intent,input_tableHtml('ComptableTraitementShow'))}}
+                    {{ table_intent(intent,input_tableHtml('TransactionTraitementShow'))}}
                 {% endif %}   
 
 
@@ -81,12 +81,12 @@
     {% if Html_or_Json=='json' %}
         <script>DataTable_awa('#DataTableJs',
                     "{{btnDataTable}}",
-                    '{{input_tableJson("ComptableTraitementShow")}}',
+                    '{{input_tableJson("TransactionTraitementShow")}}',
                     "{{ajax}}");</script>
         {% elseif Html_or_Json=='HTML' %}
         <script>DataTable_awa('#DataTableJs',
                     "{{btnDataTable}}",
-                    '{{input_tableJson("ComptableTraitementShow")}}'
+                    '{{input_tableJson("TransactionTraitementShow")}}'
                     );</script>
         {% endif %} 
     <!-- end dataTables -->  

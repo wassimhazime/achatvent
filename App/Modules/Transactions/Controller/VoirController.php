@@ -17,7 +17,7 @@ class VoirController extends AbstractController {
 
         $query = $this->getRequest()->getQueryParams();
         $data = $this->showDataTable($query);
-        return $this->render("@show/show", $data);
+        return $this->render("@TransactionsShow/show", $data);
     }
 
     private function showDataTable($query) {
@@ -39,7 +39,7 @@ class VoirController extends AbstractController {
             $data["intent"] = $this->getModel()->show($modeintent, true);
         } elseif ($modeshow["type"] === "json") {
             $url = $this->getRouter()
-                    ->generateUri("ajaxcomptable", ["controle" => $this->getPage()]);
+                    ->generateUri("TransactionAjax", ["controle" => $this->getPage()]);
 
             $get = "?" . $this->getRequest()->getUri()->getQuery();
             $data["ajax"] = $url . $get;

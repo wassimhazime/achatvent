@@ -15,7 +15,6 @@
 namespace App\Modules\Transactions\Controller;
 
 use App\Modules\Transactions\Model\Model;
-
 use Kernel\Controller\Controller;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -23,24 +22,51 @@ use Psr\Http\Message\ServerRequestInterface;
 
 abstract class AbstractController extends Controller {
 
-  function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
+    function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
         parent::__construct($request, $response, $container, $page);
-        $this->model = new Model($container->get( "pathModel"));
-
-
-        $this->renderer->addGlobal("_URLaction", $this->generateUriAction());
+        $this->setModel(new Model($container->get("pathModel")));
     }
 
-    public function generateUriAction() {
-        return ["_ajouter" => $this->generateUri("T_traitement", $this->page, "ajouter")];
+    protected function getModeShow(array $modeHTTP): array {
+        $parent = "DEFAULT";
+        $child = "EMPTY";
+
+        $type = "json";
+        if (isset($modeHTTP["pere"])) {
+            $parent = $this->parseMode($modeHTTP["pere"], $parent);
+        }
+        if (isset($modeHTTP["fils"])) {
+            $child = $this->parseMode($modeHTTP["fils"], $child);
+            if ($child != "EMPTY") {
+                $type = "HTML";
+            }
+        }
+
+
+        return ["type" => $type, "modeIntent" => [$parent, $child]];
     }
 
-    public function generateUri($nomroute, $controle, $action = "voir", $id = 0) {
-        return $this->router->generateUri($nomroute, ["controle" => $controle,
-                    "action" => $action,
-                    "id" => $id
-        ]);
-    }
+    private function parseMode(string $modefr, $default): string {
+        switch ($modefr) {
+            case "rien":
+                $mode = "EMPTY";
 
+                break;
+            case "resume":
+                $mode = "MASTER";
+                break;
+            case "defaut":
+                $mode = "DEFAULT";
+                break;
+            case "tous":
+                $mode = "ALL";
+                break;
+
+            default:
+                $mode = $default;
+                break;
+        }
+        return $mode;
+    }
 
 }

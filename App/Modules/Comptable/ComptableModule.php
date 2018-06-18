@@ -23,17 +23,16 @@ class ComptableModule {
 
     public function addPathRenderer(\Kernel\AWA_Interface\InterfaceRenderer $renderer, $pathModules) {
         $renderer->addPath($pathModules . "Comptable" . D_S . "views" . D_S . "show", "ComptableShow");
-
         $renderer->addPath($pathModules . "Comptable" . D_S . "views" . D_S . "traitement", "ComptableTraitement");
-        }
+    }
 
     public function addRoute($router) {
 
-        $router->get("/voir-{controle:[a-z\$]+}", [$this, "Voir"], "VoirGet");
-        $router->get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}", [$this, "traitementShow"], "traitementShow");
-        $router->post("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitementSend"], "traitementSend");
-        $router->get("/ajaxcomptable/{controle:[a-z\$]+}", [$this, "ajax"], "ajaxcomptable");
-        $router->get("/files/{controle:[a-z0-9\_\$\-]+}", [$this, "files"], "filescomptable");
+        $router->get("/voir-{controle:[a-z\$]+}", [$this, "Voir"], "ComptableVoirGet");
+        $router->get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}", [$this, "traitementShow"], "ComptableTraitementShow");
+        $router->post("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitementSend"], "ComptableTraitementSend");
+        $router->get("/ajaxcomptable/{controle:[a-z\$]+}", [$this, "ajax"], "ComptableAjax");
+        $router->get("/files/{controle:[a-z0-9\_\$\-]+}", [$this, "files"], "ComptableFiles");
     }
 
     // // controller
@@ -69,19 +68,19 @@ class ComptableModule {
 
     // //////////////////////
     public function dataMenu() {
-        $nav1 = $this->generateUriMenu("VoirGet", [
+        $nav1 = $this->generateUriMenu("ComptableVoirGet", [
             "clients",
             'raison$sociale',
             'contacts',
             'mode$paiement'
         ]);
-        $nav2 = $this->generateUriMenu("VoirGet", [
+        $nav2 = $this->generateUriMenu("ComptableVoirGet", [
             'commandes',
             'bons$achats',
             'factures$achats',
             'avoirs$achats'
         ]);
-        $nav3 = $this->generateUriMenu("VoirGet", [
+        $nav3 = $this->generateUriMenu("ComptableVoirGet", [
             'devis',
             'factures$ventes'
         ]);

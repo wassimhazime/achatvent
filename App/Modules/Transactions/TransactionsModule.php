@@ -14,9 +14,9 @@
 
 namespace App\Modules\Transactions;
 
-use App\Modules\Transactions\Controller\TraitementController;
+use App\Modules\Transactions\Controller\TraitementShowController;
 use App\Modules\Transactions\Controller\VoirController;
-use App\Modules\Transactions\Controller\PostController;
+use App\Modules\Transactions\Controller\TraitementSendController;
 use App\Modules\Transactions\Controller\Child_add;
 use Kernel\AWA_Interface\InterfaceRenderer;
 use Kernel\Router\Router;
@@ -35,24 +35,37 @@ class TransactionsModule {
     }
 
     public function addPathRenderer(InterfaceRenderer $renderer, $pathModules) {
-        $renderer->addPath($pathModules . "Transactions" . D_S . "views" . D_S . "show", "T_show");
-        $renderer->addPath($pathModules . "Transactions" . D_S . "views" . D_S . "traitement", "T_traitement");
+        $renderer->addPath($pathModules . "Transactions" . D_S . "views" . D_S . "show", "TransactionsShow");
+        $renderer->addPath($pathModules . "Transactions" . D_S . "views" . D_S . "traitement", "TransactionsTraitement");
     }
 
     public function addRoute($router) {
 
-        $router->get("/admin/{action:[a-z]+}-{controle:[a-z\$]+}", [$this, "Voir"], "T_actionGET");
-        
-        $router->get("/admin/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitement"], "T_traitement");
+        $router->get("/admin/{action:[a-z]+}-{controle:[a-z\$]+}", [$this, "Voir"], "TransactionVoirGet");
 
-        $router->post("/admin/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "POST"], "T_posttraitement");
+        $router->get("/admin/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitementShow"], "TransactionTraitementShow");
 
-        $router->post("/admin/{controle:[a-z]+}", [$this, "POST"], "T_post.post");
-        
+        $router->post("/admin/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", [$this, "traitementSend"], "TransactionTraitementSend");
+
+        $router->post("/admin/{controle:[a-z]+}", [$this, "traitementSend"], "T_post.post");
         $router->post("/admin/{controle:[a-z]+}_{action:[a-z]+}", [$this, "child_add"], "T_child_add.post");
+        $router->get("/admin/ajax_{controle:[a-z\$]+}", [$this, "ajax"], "TransactionAjax");
+        $router->get("/admin/files/{controle:[a-z0-9\_\$\-]+}", [$this, "files"], "TransactionFiles");
     }
 
     //// controller
+
+
+    public function ajax(ServerRequestInterface $request, ResponseInterface $response) {
+        $controller = new Controller\AjaxController($request, $response, $this->container, "controle");
+        return $controller->exec();
+    }
+
+    public function files(ServerRequestInterface $request, ResponseInterface $response) {
+        $controller = new Controller\FileController($request, $response, $this->container, "controle");
+        return $controller->exec();
+    }
+
     public function Voir(ServerRequestInterface $request, ResponseInterface $response) {
 
         $controller = new VoirController($request, $response, $this->container, "controle");
@@ -60,9 +73,9 @@ class TransactionsModule {
         return $controller->exec();
     }
 
-    public function traitement(ServerRequestInterface $request, ResponseInterface $response) {
+    public function traitementShow(ServerRequestInterface $request, ResponseInterface $response) {
 
-        $controller = new TraitementController($request, $response, $this->container, "controle");
+        $controller = new TraitementShowController($request, $response, $this->container, "controle");
 
         return $controller->exec();
     }
@@ -74,22 +87,16 @@ class TransactionsModule {
         return $controller->exec();
     }
 
-    public function POST(ServerRequestInterface $request, ResponseInterface $response) {
+    public function traitementSend(ServerRequestInterface $request, ResponseInterface $response) {
 
-        $controller = new PostController($request, $response, $this->container, "controle");
+        $controller = new TraitementSendController($request, $response, $this->container, "controle");
 
         return $controller->exec();
     }
 
-    
-    
-    
-    
-    
-    
     /// menu
     public function dataMenu() {
-        $nav1 = $this->generateUriMenu("T_actionGET", ["achats", 'recette']);
+        $nav1 = $this->generateUriMenu("TransactionVoirGet", ["achats", 'recette']);
 
 
         $menu = [

@@ -122,6 +122,7 @@ function DataTable_awa(id, btn_show_php, routes, urlAjax) {
                     text: '<spam class="glyphicon glyphicon-plus" style="color:#337ab7"></spam>',
                     titleAttr: 'ajouter',
                     action: function() {
+                        console.log(routes);
 
                         var url = generateUri("0", routes).urlajouter;
                         window.open(url, "_self")
