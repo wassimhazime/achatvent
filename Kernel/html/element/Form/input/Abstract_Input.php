@@ -62,14 +62,14 @@ abstract class Abstract_Input {
 
     protected function form_horizonta($input, $badge = "") {
         $labelHTML = HTML::TAG('label')
-                ->setClass("col-sm-2 control-label")
+                ->setClass("col-sm-3 control-label")
                 ->setAtt(' style="text-align: left;"')
                 ->setData($this->lable)
                 ->setFor($this->name)
                 ->builder();
 
         $inputHTML = HTML::TAG("div")
-                ->setClass("col-sm-8")
+                ->setClass("col-sm-9")
                 ->setData($input)
                 ->builder();
 

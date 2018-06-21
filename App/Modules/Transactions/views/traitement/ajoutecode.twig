@@ -1,0 +1,162 @@
+{% extends "themes.twig" %}
+{% use "@TransactionsTraitement/plugins/progress.twig" %}
+
+
+{% block headcss %}
+    <!-- Bootstrap-select Custom CSS -->
+    <link href="/public/Framework/BootstrapSelect/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+    <!-- multi-select Custom CSS -->
+    <link href="/public/Framework/BootstrapMultiSelect/css/multi-select.dev.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+
+{% block container %}
+    <div id="status" style="   
+         margin-left: 5px;
+         margin-right: 5px;">
+        <form  action="#"  method='POST'  enctype="multipart/form-data" class="form-horizontal">
+
+            <div class="row" >
+                <div class="col-lg-8" >
+
+                    <div id="formphp">
+                        <div class="panel panel-default box shadow-4dp" style="    padding: 0px ">
+                            <div class="panel-heading">
+                                <i class="fa fa-bar-chart-o fa-fw"></i> Notifications Panel
+
+                            </div>
+                            <!-- /.panel-heading -->
+                            {% block formMain %}
+
+                            {% endblock %}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-4" id="panelperentstatistiqe">
+                    <div class="panel panel-default box shadow-4dp" >
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Notifications Panel
+
+                        </div>
+
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            
+                            
+                            ok
+                            ok
+                            ok
+                            
+                            <canvas id="myChart" ></canvas>
+                        </div>
+                        <!-- /.list-group -->
+                        <button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal">
+                            View All Alerts
+                        </button>
+
+                    </div>
+                    <!-- /.panel-body -->
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <canvas id="myChart2"></canvas>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div> 
+            <div class="row">
+                <div class="bloch_child"> 
+                    <div class="col-lg-12"  >
+                        <div class="panel panel-default box shadow-4dp" style="    padding: 0px;">
+                            <div class="panel-heading">
+                                <i class=" glyphicon glyphicon-usd"></i>Les  Details - Les  Échéances 
+                                <div class="pull-right">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default  " id="btnpanelperentstatistiqe">
+                                            <span class="glyphicon glyphicon-floppy-saved" style="    color: #337ab7;"></span>
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="row clearfix" style="margin:5px">
+                                <div class="col-md-12 table-responsive"  style="font-size: 11px;     overflow-x: visible;">
+                                    {% block formMainRelation %}
+
+                                    {% endblock %}
+
+
+
+
+                                </div>
+                            </div>
+                            <a id="add_row" class="btn btn-default pull-right">Add Row</a>
+
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+
+                    </div>
+                    <!-- /.col-lg-8 -->
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-sm-12"> 
+                    <!-- par methode ajax 
+                    <label for="ajoutdata"> AJOUTER </label> 
+                    <input type="button" value="ajouter"  class="btn btn-primary btn-lg" id="setdataparAjax">
+                    -->
+                    <label for="reset"> VIDE </label>    
+                    <input type="reset" name="reset"  class="btn btn-success btn-lg">
+                    <!-- si methode simple form submit -->
+                    <input type="submit"  value="Majouter"  class="btn btn-success btn-lg"> 
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% block footer %}   
+    <script src="/public/Framework/BootstrapMultiSelect/js/jquery.quicksearch.js" type="text/javascript"></script>
+    <script src="/public/Framework/BootstrapMultiSelect/js/jquery.multi-select.js" type="text/javascript"></script>
+
+    <script src="/public/Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/public/Framework/BootstrapSelect/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
+    <script src="/public/Framework/JqueryConfirm/jquery-confirm.min.js"></script>
+    <!-- Custom multi select -->
+    <script src="/public/Framework/Moment/moment.js" type="text/javascript"></script>
+
+    <!--  <script src="/public/AWA/set_data_par_ajax.js" type="text/javascript"></script>-->
+    <script src="/public/AWA/app.multi-select.js" type="text/javascript"></script>
+
+
+
+    <script src="/public/Framework/ChartGraphique/Chart.min.js" type="text/javascript"></script>
+    <script src="/public/AWA/graphtranscation.js" type="text/javascript"></script>
+    <script src="/public/AWA/childe_add_row.js" type="text/javascript"></script>
+    <script src="/public/AWA/stylefile.js" type="text/javascript"></script>
+    <script src="/public/AWA/calculeReglementTTC.js" type="text/javascript"></script>
+    <script>
+
+        $("#id_html_date_negociation").val(moment().format('YYYY-MM-DD'));
+
+    </script>
+{% endblock %}

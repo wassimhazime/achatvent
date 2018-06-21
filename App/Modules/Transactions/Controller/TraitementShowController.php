@@ -76,10 +76,15 @@ class TraitementShowController extends AbstractController {
         }
 
         unset($getInfo["ajouter"]);
-
+        $this->getModel()->setStatement($this->getPage());
         $intentform = $this->getModel()->form($getInfo);
 
-        return $this->render("@TransactionsTraitement/ajouter_form", ["intent" => $intentform]);
+        $page = substr($this->getPage(), 0, -1); // childe achats => achat
+        
+        $this->getModel()->setStatement($page);
+         $intentformchile = $this->getModel()->form($getInfo);
+        
+        return $this->render("@TransactionsTraitement/ajouter_form", ["intent" => $intentform,"intentchild"=>$intentformchile]);
     }
 
     public function show($id) {
@@ -91,7 +96,7 @@ class TraitementShowController extends AbstractController {
         $mode = Intent::MODE_SELECT_DEFAULT_NULL;
 
         $intentshow = $this->getModel()->show_in($mode, $id);
-        
+
         return $this->render("@TransactionsShow/show_message_id", ["intent" => $intentshow]);
     }
 

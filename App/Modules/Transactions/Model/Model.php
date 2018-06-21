@@ -62,12 +62,12 @@ class Model extends kernelModel {
         return $intent;
     }
 
-    public function formChild(array $dataparent) {
-
-        $intent = $this->getGui()->formChild($dataparent);
-
-
-        return $intent;
-    }
+//    public function formChild(array $dataparent) {
+//
+//        $intent = $this->getGui()->formChild($dataparent);
+//
+//
+//        return $intent;
+//    }
 
 }

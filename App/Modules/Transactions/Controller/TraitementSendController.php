@@ -20,6 +20,11 @@ class TraitementSendController extends AbstractController {
 
     public function exec(): ResponseInterface {
 
+        var_dump($_POST);
+        
+        
+        
+        die();
         $this->getFile_Upload()->setPreffix($this->getPage());
         $insert = $this->getFile_Upload()->set($this->getRequest());
 

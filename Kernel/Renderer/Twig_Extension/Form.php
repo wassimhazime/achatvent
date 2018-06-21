@@ -40,7 +40,7 @@ class Form extends Twig_Extension {
             new Twig_SimpleFunction("form_child", [$this, "form_child"], ['is_safe' => ['html']]),
             new Twig_SimpleFunction("form_select", [$this, "form_select"], ['is_safe' => ['html']]),
             new Twig_SimpleFunction("Form_view", [$this, "Form_view"], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction("View_Data_Parent", [$this, "View_Data_Parent"], ['is_safe' => ['html']]),
+           // new Twig_SimpleFunction("View_Data_Parent", [$this, "View_Data_Parent"], ['is_safe' => ['html']]),
         ];
     }
 

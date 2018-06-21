@@ -98,19 +98,19 @@ class GUI extends AbstractOperatipn {
     }
 
     /////////////////////////////////////////////////:
-    public function formChild(array $datapernt = []): Intent_Form {
-        
-        $schema = $this->schema;
-        $Charge_data = [];
-        $Charge_data ["select"] = $this->datachargeselect($datapernt); // avec un sel raison sosial 
-        $Charge_data["multiselect"] = [];
-        $Charge_data["PARENT"] = $datapernt;
-
-        $Default_Data = [];
-
-
-        return new Intent_Form($schema->getCOLUMNS_META(), $Charge_data, $Default_Data);
-    }
+//    public function formChild(array $datapernt = []): Intent_Form {
+//        
+//        $schema = $this->schema;
+//        $Charge_data = [];
+//        $Charge_data ["select"] = $this->datachargeselect($datapernt); // avec un sel raison sosial 
+//        $Charge_data["multiselect"] = [];
+//       // $Charge_data["PARENT"] = $datapernt;
+//
+//        $Default_Data = [];
+//
+//
+//        return new Intent_Form($schema->getCOLUMNS_META(), $Charge_data, $Default_Data);
+//    }
 
     ///////////////////////////////////////////////////////////////////
 

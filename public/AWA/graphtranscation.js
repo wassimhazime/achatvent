@@ -1,64 +1,4 @@
-{% extends "themes.twig" %}
-{% use "@TransactionsTraitement/plugins/progress.twig" %}
 
-
-{% block headcss %}
-
-{% endblock %}
-
-
-{% block container %}
-
-    <style>
-        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
-            padding: 0px;
-        }
-        textArea{
-            resize:vertical;
-        }
-        @media (min-width: 1200px){
-            .row {
-                margin-right: -26px;
-                margin-left: -42px;
-            }
-            .col-lg-12  {     padding-right: 0px; }
-            .col-lg-4 {
-                width: 28%;
-            }
-            .col-lg-8 {
-                width: 72%;
-            }
-        }
-
-
-    </style>
-
-
-
-    <div class="row" style="margin: 0px">
-
-<form action="child_add"  method='POST'  enctype="multipart/form-data" >
-       
-
-      
-                    
-                    
-                    
-      <input type="submit" value="ok" name="ok" >
-    </form>
-
-    </div>
-
-
-
-{% endblock %}
-
-
-{% block footer %}
-
-  
-    <script src="/public/Framework/ChartGraphique/Chart.min.js" type="text/javascript"></script>
-    <script>
         var ctx = document.getElementById("myChart").getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'pie',
@@ -87,8 +27,7 @@
                     }]
             },
         });
-    </script>
-    <script>
+        
         var ctx = document.getElementById("myChart2").getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'pie',
@@ -117,8 +56,3 @@
                     }]
             },
         });
-    </script>
-    <script src="/public/AWA/childe_add_row.js" type="text/javascript"></script>
-    <script src="/public/AWA/stylefile.js" type="text/javascript"></script>
-
-{% endblock %}
