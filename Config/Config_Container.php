@@ -26,6 +26,6 @@ return [
         return new Router;
     },
     File_Upload::class => function (ContainerInterface $container): File_Upload {
-        return new File_Upload();
+        return new File_Upload("public/imageUpload/");
     },
 ];

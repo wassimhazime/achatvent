@@ -11,6 +11,7 @@
 		ajaxSendData(formdata);
 	});
 	function gestion_erreur(elment) {
+            
 		var not_hidden = elment.type != "hidden";
 		var not_null = $(elment).data("set_null") == "NO";
 		var is_null = $(elment).val() == "";

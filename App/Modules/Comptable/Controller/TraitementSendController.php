@@ -19,11 +19,11 @@ use Psr\Http\Message\ServerRequestInterface;
 class TraitementSendController extends AbstractController {
 
     public function exec(): ResponseInterface {
-
-        $this->getFile_Upload()->setPreffix($this->getPage());
-        $insert = $this->getFile_Upload()->set($this->getRequest());
-       
-
+        $request = $this->getRequest();
+        $request = $this->getFile_Upload()
+                ->save($request, $this->getPage());
+        $insert = $request->getParsedBody();
+        
         $this->getModel()->setStatement($this->getPage());
         $intent = $this->getModel()->setData($insert);
         return $this->render("@ComptableShow/show_item", ["intent" => $intent]);

@@ -23,20 +23,32 @@ abstract class Abstract_Input {
     protected $Default;
     protected $type;
     protected $null;
-    protected $lable="";
+    protected $lable = "";
     protected $styleGroup;
     protected $child;
 
     function __construct(array $input, string $styleGroup = "form-horizonta", string $child = "") {
 
         $this->child = $child;
+        $this->name = $input['Field'];
+        $this->id_html = $input['id_html'];
+
+        if ($this->child !== "") {
+            $this->name .= "_child";
+            $this->id_html .= "_child";
+        }
+
+
+
+
         $this->styleGroup = $styleGroup;
 
 
-        $this->name = $input['Field'];
+
+
         $this->input = $input;
 
-        $this->id_html = $input['id_html'];
+
         $this->Default = $input['Default'];
         $this->type = $input['Type'];
         $this->null = $input['Null'];
@@ -100,7 +112,7 @@ abstract class Abstract_Input {
     }
 
     protected function form_table($input, $badge = "") {
-        return ["label"=> $this->lable,"input"=>$input];
+        return ["label" => $this->lable, "input" => $input];
     }
 
 }

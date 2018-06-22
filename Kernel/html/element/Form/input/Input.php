@@ -25,17 +25,25 @@ class Input extends Abstract_Input {
         $Default = $this->Default;
         $type = $this->type;
         $tag = HTML::TAG('input')
-             ->setId($id_html)
+                ->setId($id_html)
                 ->setType($type)
                 ->setPlaceholder(str_replace("_", " ", str_replace("$", " ", $name)))
                 ->setClass("  form-control input-sm ")
-                ->setAtt('data-set_null="'.$this->null.'"  step="any" ')
+                ->setAtt('data-set_null="' . $this->null . '"  step="any" ')
                 ->setValue($Default);
+
+
         if ($this->input['Type'] == "file") {
-            $tag  ->setAtt('multiple accept=".pdf .jpeg, .png " ')
-                    ->setName($name.$this->child. "[]");
+          
+            if ($this->child != "[]") {
+                $tag->setAtt('multiple ');
+               $tag->setName($name . "[]");
+            } else {
+               $tag->setName($name."_")
+               ->setClass("  form-control input-sm  inputfile");
+            }
         } else {
-            $tag->setName($name.$this->child);
+            $tag->setName($name . $this->child);
         }
 
 

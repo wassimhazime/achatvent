@@ -45,13 +45,13 @@ class Select extends Abstract_Input {
 
             $rowTag = HTML::TAG('option')
                     ->setValue($key)
-                    ->setData($data[$name])
+                    ->setData($data[$this->input['Field']])
                     ->setAtt(' data-infocontent="' . $infocontent . ' "')
                     ->setAtt(' data-tokens="' . $tokens . '"')
 
             ;
 
-            if ($Default == $data[$name]) {
+            if ($Default == $data[$this->input['Field']]) {
                 $rowTag->setAtt("selected");
             }
             $optionTag [] = $rowTag->builder();
@@ -62,23 +62,23 @@ class Select extends Abstract_Input {
                     ->setClass(" form-control form-string input-sm")
                     ->setData($optionTag)
                     ->setId($id_html)
-                    ->setName($name.$this->child)
+                    ->setName($name . $this->child)
                     ->setAtt(" readonly  ");
-                  
-            if($this->child==="[]"){
-            $tag=    $tag->setClass(" hidden ");
-            $this->lable="";
-         }
-          $tag=    $tag->builder();
+
+            if ($this->child === "[]") {
+                $tag = $tag->setClass(" hidden ");
+                $this->lable = "";
+            }
+            $tag = $tag->builder();
             return $this->div($tag);
         } else {
             $tag = HTML::TAG("select")
                     ->setClass(" selectpicker form-control input-sm")
                     ->setId($id_html)
                     ->setAtt(' data-live-search="true"  data-size="5" data-container="body" ')
-                    ->setAtt('  data-set_null="'.$this->null.'" ')
+                    ->setAtt('  data-set_null="' . $this->null . '" ')
                     ->setData($optionTag)
-                    ->setName($name.$this->child)
+                    ->setName($name . $this->child)
                     ->builder();
             return $this->div($tag, "col-sm-6");
         }

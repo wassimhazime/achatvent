@@ -19,30 +19,61 @@ use Psr\Http\Message\ResponseInterface;
 class TraitementSendController extends AbstractController {
 
     public function exec(): ResponseInterface {
+        $insert = $this->getRequest()->getParsedBody();
 
-        var_dump($_POST);
-        
-        
-        
-        die();
-        $this->getFile_Upload()->setPreffix($this->getPage());
-        $insert = $this->getFile_Upload()->set($this->getRequest());
+        $data_parent = $this->parseDataPerant_child($insert)["data_parent"];
+        $data_child = $this->parseDataPerant_child($insert)["data_child"];
 
+
+        //  save data parent
         $this->getModel()->setStatement($this->getPage());
-        $id_parent = $this->getModel()->setData($insert); // formnext Raison sociale
-
-        $dataperant = $this->getModel()->find_by_id($id_parent); /// show data set
-
-
+        $id_parent = $this->getModel()->setData($data_parent); // formnext Raison sociale
+        //  save relation
         $page = substr($this->getPage(), 0, -1); // childe achats => achat
+        /// save image 
+        $data_child = $this->getFile_Upload()
+                ->save_child($this->getRequest(), $data_child, $page);
 
+        /// save data child
         $this->getModel()->setStatement($page);
+        $this->getModel()->setData($data_child, $id_parent);
 
 
+        /// show etem save
+        $this->getModel()->setStatement($this->getPage());
+        $intent = $this->getModel()->show_id($id_parent);
+        return $this->render("@TransactionsShow/show_item", ["intent" => $intent]);
+    }
 
-        $intent = $this->getModel()->formChild($dataperant);
+    private function parseDataPerant_child(array $data_set): array {
 
-        return $this->render("@TransactionsTraitement/ajouter_child", ["intent" => $intent]);
+        $data_parent = [];
+        $data_child = [];
+
+        // parse data => dataperant and datachild
+        foreach ($data_set as $key => $data) {
+
+            if (preg_match("/\_child\b/i", $key)) {
+                $data_child[str_replace("_child", "", $key)] = $data;
+            } else {
+                $data_parent[$key] = $data;
+            }
+        }
+
+
+        // sort array data child
+
+        $data_child_sort = [];
+        foreach ($data_child as $i => $element) {
+            foreach ($element as $j => $sub_element) {
+                $data_child_sort[$j][$i] = $sub_element;
+            }
+        }
+
+        return [
+            "data_parent" => $data_parent,
+            "data_child" => $data_child_sort
+        ];
     }
 
 }
