@@ -32,7 +32,7 @@ class TraitementSendController extends AbstractController {
         $page = substr($this->getPage(), 0, -1); // childe achats => achat
         /// save image 
         $data_child = $this->getFile_Upload()
-                ->save_child($this->getRequest(), $data_child, $page);
+                ->save_child("TransactionFiles",$this->getRequest(), $data_child, $page);
 
         /// save data child
         $this->getModel()->setStatement($page);

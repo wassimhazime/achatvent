@@ -57,10 +57,33 @@ class TraitementShowController extends AbstractController {
     }
 
     public function modifier($id) {
-        $page = $this->page;
+        $page = $this->getPage();
         $conditon = ["$page.id" => $id];
-        $intentform = $this->model->formDefault($conditon);
-        return $this->render("@T_traitement/modifier_form", ["intent" => $intentform]);
+        $intentform = $this->getModel()->formDefault($conditon);
+
+
+
+
+
+        $pagechild = substr($this->getPage(), 0, -1); // childe achats => achat
+        $this->getModel()->setStatement($pagechild);
+
+        
+        // name raisonsocialand id 
+        $dataselect = $this->getdataselect($intentform);
+        
+        $intentformchile = $this->getModel()->form($dataselect);
+        return $this->render("@TransactionsTraitement/modifier_form", ["intent" => $intentform, "intentchild" => $intentformchile]);
+    }
+
+    private function getdataselect($intentform) {
+        $dataSelectObject = $intentform->getCharge_data()["select"];
+        $dataselect = [];
+        foreach ($dataSelectObject as $key => $value) {
+
+            $dataselect[$key] = $value[0]->id;
+        }
+        return $dataselect;
     }
 
     public function ajouter($id) {
@@ -80,11 +103,11 @@ class TraitementShowController extends AbstractController {
         $intentform = $this->getModel()->form($getInfo);
 
         $page = substr($this->getPage(), 0, -1); // childe achats => achat
-        
+
         $this->getModel()->setStatement($page);
-         $intentformchile = $this->getModel()->form($getInfo);
-        
-        return $this->render("@TransactionsTraitement/ajouter_form", ["intent" => $intentform,"intentchild"=>$intentformchile]);
+        $intentformchile = $this->getModel()->form($getInfo);
+
+        return $this->render("@TransactionsTraitement/ajouter_form", ["intent" => $intentform, "intentchild" => $intentformchile]);
     }
 
     public function show($id) {

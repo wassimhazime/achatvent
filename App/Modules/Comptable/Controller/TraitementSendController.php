@@ -19,9 +19,12 @@ use Psr\Http\Message\ServerRequestInterface;
 class TraitementSendController extends AbstractController {
 
     public function exec(): ResponseInterface {
+        
+       
+        
         $request = $this->getRequest();
         $request = $this->getFile_Upload()
-                ->save($request, $this->getPage());
+                ->save("ComptableFiles",$request, $this->getPage());
         $insert = $request->getParsedBody();
         
         $this->getModel()->setStatement($this->getPage());
