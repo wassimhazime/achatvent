@@ -13,50 +13,69 @@ namespace App\Modules\Transactions\Controller;
  *
  * @author wassime
  */
-use Kernel\INTENT\Intent;
+use App\AbstractModules\Controller\AbstractTraitementShowController;
+use App\Modules\Transactions\Model\Model;
+use Kernel\INTENT\Intent_Form;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use function substr;
+use function var_dump;
 
-class TraitementShowController extends AbstractController {
+class TraitementShowController extends AbstractTraitementShowController {
+
+    function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
+        parent::__construct($request, $response, $container, $page);
+        $this->setModel(new Model($container->get("pathModel")));
+    }
 
     public function exec(): ResponseInterface {
         $this->getModel()->setStatement($this->getPage());
-
-
-        $route = $this->getRouter()->match($this->getRequest());
-        $params = $route->getParams();
+        $params = $this->getRouter()->match($this->getRequest())->getParams();
         $action = $params["action"];
         $id = $params["id"];
 
 
+        switch ($action) {
+            case "supprimer":
+                return $this->supprimer($id, "les données a supprimer de ID");
+                break;
 
+            case "modifier":
+                return $this->modifier($id, "@TransactionsTraitement/modifier_form");
+                break;
 
-        if ($action == "supprimer") {
-            return $this->supprimer($id);
-        } elseif ($action == "modifier") {
-            return $this->modifier($id);
-        } elseif ($action == "ajouter") {
-            return $this->ajouter($id);
-        } elseif ($action == "voir") {
-            return $this->show($id);
-        } elseif ($action == "message") {
-            return $this->message($id);
+            case "ajouter":
+                $getInfo = $this->getRequest()->getQueryParams();
+                if (!isset($getInfo["ajouter"])) {
+                    $response = $this->ajouter_select("@TransactionsTraitement/ajouter_select");
+                    if ($response !== null) {
+                        return $response;
+                    } else {
+                        // if table is mastre (table premier )
+                        return $this->ajouter($getInfo, "@TransactionsTraitement/ajouter_form");
+                    }
+                } else {
+                    return $this->ajouter($getInfo, "@TransactionsTraitement/ajouter_form");
+                }
+                break;
+
+            case "voir":
+                return $this->show($id, "@TransactionsShow/show_id");
+                break;
+
+            case "message":
+                return $this->message($id, "@TransactionsShow/show_message_id");
+                break;
+
+            default:
+                var_dump("errr");
+                die("errr");
+                break;
         }
     }
 
-    public function supprimer($id) {
-        $conditon = ['id' => $id];
-        $etat = $this->getModel()->delete($conditon);
-        if ($etat == -1) {
-            $r = new \GuzzleHttp\Psr7\Response(404);
-            $r->getBody()->write("accès refusé  de supprimer ID  $id");
-            return $r;
-        } else {
-            $this->getResponse()->getBody()->write("les données a supprimer de ID  $id");
-        }
-        return $this->getResponse();
-    }
-
-    public function modifier($id) {
+    public function modifier($id, string $view) {
         $page = $this->getPage();
         $conditon = ["$page.id" => $id];
         $intentform = $this->getModel()->formDefault($conditon);
@@ -68,35 +87,26 @@ class TraitementShowController extends AbstractController {
         $pagechild = substr($this->getPage(), 0, -1); // childe achats => achat
         $this->getModel()->setStatement($pagechild);
 
-        
+
         // name raisonsocialand id 
         $dataselect = $this->getdataselect($intentform);
-        
+
         $intentformchile = $this->getModel()->form($dataselect);
-        return $this->render("@TransactionsTraitement/modifier_form", ["intent" => $intentform, "intentchild" => $intentformchile]);
+        return $this->render($view, ["intent" => $intentform, "intentchild" => $intentformchile]);
     }
 
-    private function getdataselect($intentform) {
-        $dataSelectObject = $intentform->getCharge_data()["select"];
-        $dataselect = [];
-        foreach ($dataSelectObject as $key => $value) {
+    public function ajouter_select(string $view) {
+        $intentformselect = $this->getModel()->formSelect();
 
-            $dataselect[$key] = $value[0]->id;
+        if (!empty($intentformselect->getMETA_data())) {
+            return $this->render($view, ["intent" => $intentformselect]);
         }
-        return $dataselect;
     }
 
-    public function ajouter($id) {
-        $getInfo = $this->getRequest()->getQueryParams();
+    public function ajouter($getInfo, string $view) {
 
-        if (!isset($getInfo["ajouter"])) {
 
-            $intentformselect = $this->getModel()->formSelect();
 
-            if (!empty($intentformselect->getMETA_data())) {
-                return $this->render("@TransactionsTraitement/ajouter_select", ["intent" => $intentformselect]);
-            }
-        }
 
         unset($getInfo["ajouter"]);
         $this->getModel()->setStatement($this->getPage());
@@ -107,20 +117,17 @@ class TraitementShowController extends AbstractController {
         $this->getModel()->setStatement($page);
         $intentformchile = $this->getModel()->form($getInfo);
 
-        return $this->render("@TransactionsTraitement/ajouter_form", ["intent" => $intentform, "intentchild" => $intentformchile]);
+        return $this->render($view, ["intent" => $intentform, "intentchild" => $intentformchile]);
     }
 
-    public function show($id) {
-        $intent = $this->getModel()->show_id($id);
-        return $this->render("@TransactionsShow/show_id", ["intent" => $intent]);
-    }
+    private function getdataselect(Intent_Form $intentform) {
+        $dataSelectObject = $intentform->getCharge_data()["select"];
+        $dataselect = [];
+        foreach ($dataSelectObject as $key => $value) {
 
-    public function message($id) {
-        $mode = Intent::MODE_SELECT_DEFAULT_NULL;
-
-        $intentshow = $this->getModel()->show_in($mode, $id);
-
-        return $this->render("@TransactionsShow/show_message_id", ["intent" => $intentshow]);
+            $dataselect[$key] = $value[0]->id;
+        }
+        return $dataselect;
     }
 
 }

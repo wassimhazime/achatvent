@@ -12,9 +12,8 @@
  * @author wassime
  */
 
-namespace App\Modules\Transactions\Controller;
+namespace App\AbstractModules\Controller;
 
-use App\Modules\Transactions\Model\Model;
 use Kernel\Controller\Controller;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -24,10 +23,8 @@ abstract class AbstractController extends Controller {
 
     function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
         parent::__construct($request, $response, $container, $page);
-        $this->setModel(new Model($container->get("pathModel")));
     }
-
-    protected function getModeShow(array $modeHTTP): array {
+       protected function getModeShow(array $modeHTTP): array {
         $parent = "DEFAULT";
         $child = "EMPTY";
 
@@ -68,5 +65,6 @@ abstract class AbstractController extends Controller {
         }
         return $mode;
     }
+
 
 }

@@ -17,13 +17,25 @@ namespace Kernel\html;
 
 use Kernel\Router\Router;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UploadedFileInterface;
+use const D_S;
 use const ROOT;
+use function count;
 use function date;
+use function filesize;
+use function is_dir;
+use function is_file;
+use function mime_content_type;
+use function mkdir;
 use function preg_match;
 use function scandir;
 use function str_replace;
+use function strpos;
+use function unlink;
 
 class File_Upload {
+
+    const FIN_REGEX = "_";
 
     private $path;
     private $preffix;
@@ -42,29 +54,71 @@ class File_Upload {
         $this->router = $router;
     }
 
-    public function get($id_image) {
-        $images = [];
-        preg_match('/([a-zA-Z\$]+)_(.+)/i', $id_image, $matches);
+    public function get(string $id_file): array {
 
-        if (empty($matches)) {
-            return $images;
-        }
-       $preffix = $matches[1];
-       
-        $dir_imageupload = ROOT . $this->path . $preffix;
-        
-        if (is_dir($dir_imageupload)) {
+        $files = [];
+        $preffix = $this->get_preffix($id_file);
 
-            foreach (scandir($dir_imageupload) as $imagesave) { /// scan les image save
-                $subject = str_replace("$", "", $imagesave);
-                $id_image = str_replace("$", "", $id_image);
+        $dir_filesUpload = ROOT . $this->path . $preffix;
 
-                $pattern = '/^' . $id_image . '/';
-                if (preg_match($pattern, $subject)) {
-                    $images[] = $this->path . $preffix . D_S . $imagesave;
+
+        if (is_dir($dir_filesUpload)) {
+
+            foreach (scandir($dir_filesUpload) as $file_save) { /// scan les image save
+                $path = $this->path . $preffix . D_S . $file_save;
+                $file = [];
+
+                $is_match = $this->is_match($id_file, $file_save);
+                $is_file = is_file($path);
+
+                if ($is_match && $is_file) {
+                    $file["name"] = $file_save;
+                    $file["path"] = $path;
+                    $mime = mime_content_type($file["path"]);
+
+                    if (strpos($mime, "pdf") !== false) {
+                        $file["type"] = 'pdf';
+                    } elseif (strpos($mime, "image") !== false) {
+                        $file["type"] = 'image';
+                    } else {
+                        $file["type"] = "file";
+                    }
+
+
+                    $file["size"] = (filesize($file["path"]) * 0.000001) . ' MB';
+
+                    $files[] = $file;
                 }
             }
-            return $images;
+
+
+            return $files;
+        }
+    }
+
+    public function delete(string $id_file): array {
+
+        $files = [];
+        $preffix = $this->get_preffix($id_file);
+
+        $dir_filesUpload = ROOT . $this->path . $preffix;
+
+        if (is_dir($dir_filesUpload)) {
+
+            foreach (scandir($dir_filesUpload) as $file_save) { /// scan les image save
+                $path = $this->path . $preffix . D_S . $file_save;
+                $etat = [];
+
+                $is_match = $this->is_match($id_file, $file_save, self::FIN_REGEX);
+                $is_file = is_file($path);
+
+                if ($is_match && $is_file) {
+                    $etat[] = unlink($path);
+                }
+            }
+
+
+            return $etat;
         }
     }
 
@@ -73,16 +127,18 @@ class File_Upload {
         $insert = $request->getParsedBody();
         $uploadedFiles = $request->getUploadedFiles();
 
+
         $this->mkdir_is_not($preffix);
 
-        $id_image = $this->preffix . "_" . date("Y-m-d-H-i-s");
+        $id_file = $this->preffix . "_" . date("Y-m-d-H-i-s");
 
         foreach ($uploadedFiles as $key => $files) {
+            $file_upload = [];
             foreach ($files as $file) {
-                $this->insert_file_upload($preffix, $file, $id_image);
+                $file_upload[] = $this->insert_file_upload($preffix, $file, $id_file);
             }
 
-            $insert[$key] = $this->generateUrisave($nameRoute, $id_image);
+            $insert[$key] = $this->generateUrisave($nameRoute, $id_file, $file_upload);
         }
 
         return $request->withParsedBody($insert);
@@ -100,32 +156,68 @@ class File_Upload {
             $input = $matches[1];
             $index = $matches[3];
 
-            $id_image = $this->preffix . "_" . date("Y-m-d-H-i-s") . "_" . $index;
-            $this->insert_file_upload($preffix, $file, $id_image);
+            $id_file = $this->preffix . "_" . date("Y-m-d-H-i-s") . "_" . $index;
+            $file_upload = [];
+            $file_upload[] = $this->insert_file_upload($preffix, $file, $id_file);
 
-            $datachild[$index][$input] = $this->generateUrisave($nameRoute, $id_image);
+            $datachild[$index][$input] = $this->generateUrisave($nameRoute, $id_file, $file_upload);
         }
 
         return $datachild;
     }
 
-    private function generateUrisave(string $nameRoute, string $id_image): string {
-        $url = $this->getRouter()->generateUri($nameRoute, ["controle" => $id_image]);
-        return '<a class="btn "  role="button" href="' . $url . '" > <spam class="glyphicon glyphicon-download-alt"></spam></a>';
+    private function generateUrisave(string $nameRoute, string $id_file, array $file_uploads): string {
+
+
+        $con = count($file_uploads);
+
+        $url = $this->getRouter()->generateUri($nameRoute, ["controle" => $id_file]);
+
+        return '<a class="btn "  role="button"'
+                . ' href="' . $url . '" '
+                . ' data-regex="/' . $id_file . '/" > '
+                . '<spam class="glyphicon glyphicon-download-alt"></spam> '
+                . $con .
+                '</a>';
     }
 
-    private function insert_file_upload($preffix, $file, $id_image) {
-        if ($file->getClientFilename() != "") {
+    private function insert_file_upload(string $preffix, UploadedFileInterface $file, string $id_file): array {
+        $file_upload = [];
+        if ($file->getClientFilename() != "" && $file->getError() == 0) {
             /// insert file upload
-            $name = $id_image . "_" . $file->getClientFilename();
-            $file->moveTo($this->path . $preffix . D_S . $name);
+
+            $name = $id_file . self::FIN_REGEX . $file->getClientFilename();
+            $type = $file->getClientMediaType();
+            $path = $this->path . $preffix . D_S . $name;
+            $size = $file->getSize();
+
+            $file->moveTo($path);
+
+            $file_upload = ["name" => $name, "type" => $type, "path" => $path, "size" => $size];
         }
+        return $file_upload;
     }
 
-    private function mkdir_is_not($preffix) {
+    private function mkdir_is_not(string $preffix) {
         if (!is_dir($this->path . $preffix) && !mkdir($this->path . $preffix, 0777, true)) {
             die('Echec lors de la création des répertoires...');
         }
+    }
+
+    private function get_preffix(string $id_file): string {
+        preg_match('/([a-zA-Z\$]+)_(.+)/i', $id_file, $matches);
+        if (empty($matches)) {
+            return "";
+        }
+        $preffix = $matches[1];
+        return $preffix;
+    }
+
+    private function is_match(string $_id_file, string $file_save, string $finregex = ""): bool {
+        $subject = str_replace("$", "", $file_save);
+        $id_file = str_replace("$", "", $_id_file);
+        $pattern = '!^' . $id_file . $finregex . '!';
+        return preg_match($pattern, $subject);
     }
 
 }

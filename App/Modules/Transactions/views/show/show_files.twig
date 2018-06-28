@@ -8,13 +8,33 @@
         <div class="row">
 
             {% for file in files %}
-                <center>
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail" >
 
-                    <a href="/{{file}} ">
-                        <img src="/{{file}}" alt="/{{file}} " style="width:300px;" />
-                    </a>
+                        <a href="/{{file.path}} " >
 
-                </center>
+                            {% if file.type=="image" %}
+                                <img src="/{{file.path}}" alt="/{{file.name}} "                       data-toggle="tooltip" data-placement="bottom" title="{{file.name}}"  class="img-thumbnail" style="width:242px; height: 200px" />
+
+                            {% elseif file.type=="pdf"  %}
+                                <img src="/public/filesUpload/icon/pdf.png" alt="/{{file.name}}"       data-toggle="tooltip" data-placement="bottom" title="{{file.name}}" class="img-thumbnail" style="width:242px; height: 200px" />
+                            {% else %}
+
+                                <img src="/public/filesUpload/icon/file.jpeg" alt="/{{file.name}}"     data-toggle="tooltip" data-placement="bottom" title="{{file.name}}" class="img-thumbnail" style="width:242px; height: 200px" />
+
+                            {% endif %}
+
+
+
+                        </a>
+                        <div class="caption">
+                            <h3>la taille</h3>
+                            <p>{{file.size}}</p>
+                           
+                       </div>
+
+                    </div>
+                </div>
 
 
             {% endfor %} 

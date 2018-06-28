@@ -2,6 +2,7 @@
 namespace Kernel\Model\Operation;
 
 use Kernel\Model\Base_Donnee\MetaDatabase;
+use Kernel\Model\Entitys\EntitysSchema;
 
 /**
  * Description of abstractOperatipn
@@ -23,8 +24,16 @@ abstract class AbstractOperatipn extends MetaDatabase
             $this->schema = $this->getschema($table);
         }
     }
-    function getTable()
+    function getTable(): string
     {
         return $this->table;
     }
+    
+    function _getSchema(): EntitysSchema {
+        return $this->schema;
+    }
+
+
+    
+    
 }

@@ -131,5 +131,11 @@ class Model {
     public function show_id($id) {
         return $this->getGui()->formDefault(["{$this->getTable()}.id" => $id]);
     }
+    
+    
+    public function get_idfile($conditon) {
+        return $this->getData()->get_idfile($conditon);
+     
+    }
 
 }

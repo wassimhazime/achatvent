@@ -13,26 +13,49 @@ namespace App\Modules\Transactions\Controller;
  *
  * @author wassime
  */
-use Kernel\INTENT\Intent;
-use Psr\Http\Message\ResponseInterface;
+use App\AbstractModules\Controller\AbstractTraitementSendController;
 
-class TraitementSendController extends AbstractController {
+;
+
+use App\Modules\Transactions\Model\Model;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use function preg_match;
+use function str_replace;
+use function substr;
+
+class TraitementSendController extends AbstractTraitementSendController {
+
+    function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
+        parent::__construct($request, $response, $container, $page);
+        $this->setModel(new Model($container->get("pathModel")));
+    }
 
     public function exec(): ResponseInterface {
+        // get data insert merge par parent et child
         $insert = $this->getRequest()->getParsedBody();
-
-        $data_parent = $this->parseDataPerant_child($insert)["data_parent"];
-        $data_child = $this->parseDataPerant_child($insert)["data_child"];
+        
+        
+        // parse data 
+        $parseData=$this->parseDataPerant_child($insert);
+        $data_parent = $parseData["data_parent"];
+        $data_child =  $parseData["data_child"];
 
 
         //  save data parent
         $this->getModel()->setStatement($this->getPage());
-        $id_parent = $this->getModel()->setData($data_parent); // formnext Raison sociale
+        // insert data
+        // $id_parent pour gere relation et data lier(exemple raison social)
+        $id_parent = $this->getModel()->setData($data_parent); 
+        
+        /****************************/
         //  save relation
-        $page = substr($this->getPage(), 0, -1); // childe achats => achat
+        /// childe achats => achat
+        $page = substr($this->getPage(), 0, -1); 
         /// save image 
         $data_child = $this->getFile_Upload()
-                ->save_child("TransactionFiles",$this->getRequest(), $data_child, $page);
+                ->save_child("TransactionFiles", $this->getRequest(), $data_child, $page);
 
         /// save data child
         $this->getModel()->setStatement($page);

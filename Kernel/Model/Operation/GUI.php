@@ -68,6 +68,11 @@ class GUI extends AbstractOperatipn {
                         ->where($conditionDefault)
                         ->prepareQuery());
        
+      
+        if( !isset($Entitys[0])){
+            die("<h1>je ne peux pas insérer données  doublons ou vide </h1> ")  ;
+        }
+        
         $Entity = $Entitys[0];
         
         $conditionformSelect = $this->condition_formSelect_par_condition_Default($conditionDefault);

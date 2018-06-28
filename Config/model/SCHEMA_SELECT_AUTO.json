@@ -5,6 +5,7 @@
     "COLUMNS_all": " WHERE  `Key`!='MUL' ",
     "COLUMNS_META": " DESCRIBE ",
     "FOREIGN_KEY": " WHERE `Key`='MUL'",
+    "FILES": " WHERE `Type` ='varchar(250)'",
     "STATISTIQUE": " WHERE `Type` ='int(12)'",
     "CHILDREN": {
         "DEFAULT": " WHERE  `Key`!='MUL' and `Type` !='datetime' ",

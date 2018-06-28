@@ -13,83 +13,63 @@ namespace App\Modules\Comptable\Controller;
  *
  * @author wassime
  */
-use Kernel\INTENT\Intent;
+use App\AbstractModules\Controller\AbstractTraitementShowController;
+use App\Modules\Comptable\Model\Model;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
-class TraitementShowController extends AbstractController {
+class TraitementShowController extends AbstractTraitementShowController {
+
+    function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
+        parent::__construct($request, $response, $container, $page);
+        $this->setModel(new Model($container->get("pathModel")));
+    }
 
     public function exec(): ResponseInterface {
         $this->getModel()->setStatement($this->getPage());
-
-
-        $route = $this->getRouter()->match($this->getRequest());
-        $params = $route->getParams();
+        $params = $this->getRouter()->match($this->getRequest())->getParams();
         $action = $params["action"];
         $id = $params["id"];
 
 
+        switch ($action) {
+            case "supprimer":
+                return $this->supprimer($id, "les données a supprimer de ID");
+                break;
 
+            case "modifier":
+                return $this->modifier($id, "@ComptableTraitement/modifier_form");
+                break;
 
-        if ($action == "supprimer") {
-            return $this->supprimer($id);
-        } elseif ($action == "modifier") {
-            return $this->modifier($id);
-        } elseif ($action == "ajouter") {
-            return $this->ajouter($id);
-        } elseif ($action == "voir") {
-            return $this->show($id);
-        } elseif ($action == "message") {
-            return $this->message($id);
+            case "ajouter":
+                $getInfo = $this->getRequest()->getQueryParams();
+                if (!isset($getInfo["ajouter"])) {
+                    $response = $this->ajouter_select("@ComptableTraitement/ajouter_select");
+                    if ($response !== null) {
+                        return $response;
+                    } else {
+                        // if table is mastre (table premier )
+                        return $this->ajouter($getInfo, "@ComptableTraitement/ajouter_form");
+                    }
+                } else {
+                    return $this->ajouter($getInfo, "@ComptableTraitement/ajouter_form");
+                }
+                break;
+
+            case "voir":
+                return $this->show($id, "@ComptableShow/show_id");
+                break;
+
+            case "message":
+                return $this->message($id, "@ComptableShow/show_message_id");
+                break;
+
+            default:
+                var_dump("errr");
+                die("errr");
+                break;
         }
-    }
-
-    public function supprimer($id) {
-        $conditon = ['id' => $id];
-        $etat = $this->getModel()->delete($conditon);
-        if ($etat == -1) {
-            $r = new \GuzzleHttp\Psr7\Response(404);
-            $r->getBody()->write("accès refusé  de supprimer ID  $id");
-            return $r;
-        } else {
-            $this->getResponse()->getBody()->write("les données a supprimer de ID  $id");
-        }
-        return $this->getResponse();
-    }
-
-    public function modifier($id) {
-        $page = $this->getPage();
-        $conditon = ["$page.id" => $id];
-        $intentform = $this->getModel()->formDefault($conditon);
-        return $this->render("@ComptableTraitement/modifier_form", ["intent" => $intentform]);
-    }
-
-    public function ajouter($id) {
-        $getInfo = $this->getRequest()->getQueryParams();
-
-        if (!isset($getInfo["ajouter"])) {
-            $intentformselect = $this->getModel()->formSelect();
-            if (!empty($intentformselect->getMETA_data())) {
-                return $this->render("@ComptableTraitement/ajouter_select", ["intent" => $intentformselect]);
-            }
-        }
-
-        unset($getInfo["ajouter"]);
-        $intentform = $this->getModel()->form($getInfo);
-        return $this->render("@ComptableTraitement/ajouter_form", ["intent" => $intentform]);
-    }
-
-    public function show($id) {
-        $intent = $this->getModel()->show_id($id);
-        return $this->render("@ComptableShow/show_id", ["intent" => $intent]);
-    }
-
-    public function message($id) {
-        
-        $mode = Intent::MODE_SELECT_DEFAULT_NULL;
-        
-        $intentshow = $this->getModel()->show_in($mode, $id);
-        
-        return $this->render("@ComptableShow/show_message_id", ["intent" => $intentshow]);
     }
 
 }

@@ -69,6 +69,7 @@ class MetaDatabase extends ActionDataBase
                 $table->setCOLUMNS_META($this->columns_META($table, $config));
                 $table->setSTATISTIQUE($this->STATISTIQUE($table, $config));
                 $table->setFOREIGN_KEY($this->FOREIGN_KEY($table, $config));
+                $table->setFILES($this->FILES($table, $config));
                 $table->setCHILDREN($this->tables_CHILDREN($table, $config, $DB_name));
             }
             $this->allSchema = $allSchema;
@@ -181,6 +182,19 @@ class MetaDatabase extends ActionDataBase
         return $this->getField($describe);
     }
 
+    private function FILES($table, array $config)
+    {
+        if (isset($config['FILES']) and ! empty($config['FILES'])) {
+            $describe = $this->querySimple("SHOW COLUMNS FROM " .
+                    $table->getNameTable() .
+                    $config['FILES']);
+        }
+
+
+        return $this->getField($describe);
+    }
+    
+    
     private function STATISTIQUE($table, array $config)
     {
        

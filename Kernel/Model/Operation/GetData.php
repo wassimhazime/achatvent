@@ -15,12 +15,13 @@ namespace Kernel\Model\Operation;
  */
 use Kernel\INTENT\Intent;
 use Kernel\Model\Query\QuerySQL;
+use Kernel\Tools\Tools;
 
 class GetData extends AbstractOperatipn {
 
-    public function select_in(array $mode,$id, $condition): Intent {
-        
-        $schema = $this->schema;
+    public function select_in(array $mode, $id, $condition): Intent {
+
+        $schema = $this->_getSchema();
         if (Intent::is_show_MASTER($mode)) {
             $champs = $schema->select_master();
         } elseif (Intent::is_show_ALL($mode)) {
@@ -32,7 +33,7 @@ class GetData extends AbstractOperatipn {
                 ->select($champs)
                 ->from($schema->getNameTable())
                 ->join($schema->getFOREIGN_KEY())
-                ->whereIn($id,$condition)
+                ->whereIn($id, $condition)
                 ->prepareQuery();
 
         $Entitys = $this->prepareQuery($sql);
@@ -41,10 +42,10 @@ class GetData extends AbstractOperatipn {
 
         return new Intent($schema, $Entitys, $mode);
     }
-    
-      public function select(array $mode, $condition): Intent {
-        
-        $schema = $this->schema;
+
+    public function select(array $mode, $condition): Intent {
+
+        $schema = $this->_getSchema();
         if (Intent::is_show_MASTER($mode)) {
             $champs = $schema->select_master();
         } elseif (Intent::is_show_ALL($mode)) {
@@ -65,25 +66,23 @@ class GetData extends AbstractOperatipn {
 
         return new Intent($schema, $Entitys, $mode);
     }
-    
+
     public function is_id($id): bool {
-       $schema = $this->schema;
+        $schema = $this->_getSchema();
 
         $condition = ["{$schema->getNameTable()}.id" => $id];
 
         $Entitys = $this->prepareQuery((new QuerySQL())
                         ->select()
-                         ->from($schema->getNameTable())
-                         ->where($condition)
-                         ->prepareQuery());
-        
-         return (!empty($Entitys));
+                        ->from($schema->getNameTable())
+                        ->where($condition)
+                        ->prepareQuery());
 
-
+        return (!empty($Entitys));
     }
 
     public function find_by_id($id): array {
-        $schema = $this->schema;
+        $schema = $this->_getSchema();
 
         $condition = ["{$schema->getNameTable()}.id" => $id];
 
@@ -91,15 +90,14 @@ class GetData extends AbstractOperatipn {
                         ->select($schema->getCOLUMNS_master())
                         ->column($schema->getFOREIGN_KEY())
                         ->from($schema->getNameTable())
-                      
                         ->where($condition)->prepareQuery());
 
 
-        return \Kernel\Tools\Tools::entitys_TO_array($Entitys[0]);
+        return Tools::entitys_TO_array($Entitys[0]);
     }
 
     private function setDataJoins(array $Entitys, array $mode) {
-        $schema = $this->schema;
+        $schema = $this->_getSchema();
 
         foreach ($Entitys as $Entity) {
             if (!empty($schema->get_table_CHILDREN())and Intent::is_get_CHILDREN($mode)) {
@@ -117,6 +115,25 @@ class GetData extends AbstractOperatipn {
                 $Entity->setDataJOIN("empty", []);
             }
         }
+    }
+
+    public function get_idfile($condition): string {
+
+        $schema = $this->_getSchema();
+
+        if (empty($schema->getFILES())) {
+            return "";
+        }
+
+        $Entitys = $this->prepareQuery((new QuerySQL())
+                        ->select($schema->getFILES())
+                        ->from($schema->getNameTable())
+                        ->where($condition)->prepareQuery());
+        $datafile = Tools::entitys_TO_array($Entitys[0]);
+
+
+
+        return implode($datafile);
     }
 
 }
