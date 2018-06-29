@@ -28,7 +28,7 @@ class App extends Kernel {
 
 
         $this->router = $this->container->get(Router::class);
-        
+
         $renderer = $this->container->get(TwigRenderer::class);
         $pathModules = $this->container->get("pathModules");
         $datamenu = [];
@@ -41,11 +41,9 @@ class App extends Kernel {
                 $renderer->addGlobal("router", $this->router);
                 $m->addRoute($this->router);
                 $m->addPathRenderer($renderer, $pathModules);
-                if(is_array($m->dataMenu())){
-                 $datamenu = array_merge($datamenu, $m->dataMenu());   
+                if (is_array($m->dataMenu())) {
+                    $datamenu = array_merge($datamenu, $m->dataMenu());
                 }
-
-                
             }
             $renderer->addGlobal("_menu", $datamenu);
         }
@@ -53,15 +51,18 @@ class App extends Kernel {
         $route = $this->router->match($request);
         $call = $route->getCallable();
 
-        $res = call_user_func_array($call, [$request, $respons]);
+        $response = call_user_func_array($call, [$request, $respons]);
 
-        if (is_string($res)) {
-            $r = new Response(404);
-            $r->getBody()->write($res);
-            $res = $r;
+        if (is_string($response)) {
+
+            $response = new Response(404);
+            $render = $this->container->get(TwigRenderer::class)
+                    ->render("404", ["_page" => "404"]);
+
+            $response->getBody()->write($render);
         }
 
-        return $res;
+        return $response;
     }
 
 }

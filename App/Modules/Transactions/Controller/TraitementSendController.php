@@ -35,35 +35,47 @@ class TraitementSendController extends AbstractTraitementSendController {
     public function exec(): ResponseInterface {
         // get data insert merge par parent et child
         $insert = $this->getRequest()->getParsedBody();
-        
-        
+
+
         // parse data 
-        $parseData=$this->parseDataPerant_child($insert);
+        $parseData = $this->parseDataPerant_child($insert);
         $data_parent = $parseData["data_parent"];
-        $data_child =  $parseData["data_child"];
+        $data_child = $parseData["data_child"];
 
 
         //  save data parent
-        $this->getModel()->setStatement($this->getPage());
+        $flag = $this->chargeModel($this->getPage());
+        if (!$flag) {
+            /// 404 not found
+            return $this->render("404", ["_page" => "404"]);
+        };
         // insert data
         // $id_parent pour gere relation et data lier(exemple raison social)
-        $id_parent = $this->getModel()->setData($data_parent); 
-        
-        /****************************/
+        $id_parent = $this->getModel()->setData($data_parent);
+
+        /*         * ************************* */
         //  save relation
         /// childe achats => achat
-        $page = substr($this->getPage(), 0, -1); 
+        $page = substr($this->getPage(), 0, -1);
         /// save image 
         $data_child = $this->getFile_Upload()
                 ->save_child("TransactionFiles", $this->getRequest(), $data_child, $page);
 
         /// save data child
-        $this->getModel()->setStatement($page);
+        $flag = $this->chargeModel($page);
+        if (!$flag) {
+            /// 404 not found
+            return $this->render("404", ["_page" => "404"]);
+        }
         $this->getModel()->setData($data_child, $id_parent);
 
 
         /// show etem save
-        $this->getModel()->setStatement($this->getPage());
+        $flag = $this->chargeModel($this->getPage());
+        if (!$flag) {
+            /// 404 not found
+            return $this->render("404", ["_page" => "404"]);
+        };
         $intent = $this->getModel()->show_id($id_parent);
         return $this->render("@TransactionsShow/show_item", ["intent" => $intent]);
     }

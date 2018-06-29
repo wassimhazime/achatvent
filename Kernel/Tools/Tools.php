@@ -81,7 +81,8 @@ class Tools {
     }
 
     public static function json_js($data) {
-
+/// datatable js setdatapar (titles ... and dataset ....)
+// https://datatables.net/examples/data_sources/js_array.html
 
         $titles = [];
         $dataSets = [];
@@ -96,7 +97,8 @@ class Tools {
             $dataSets[] = $dataSet;
         }
 
-        return self::json(["data" => $data, "titles" => $titles, "dataSet" => $dataSets]);
+        /// datatable js setdatapar (titles ... and dataset ....)
+        return self::json(["titles" => $titles, "dataSet" => $dataSets]);
     }
 
     public static function parse_object_TO_array($object): array {

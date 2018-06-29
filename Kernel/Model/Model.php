@@ -30,6 +30,7 @@ class Model {
 
     public function showAjax($mode, $condition) {
         if ($this->is_null()) {
+            
             throw new TypeError(" is_null==> show ");
         }
 
@@ -39,17 +40,25 @@ class Model {
         return \Kernel\Tools\Tools::entitys_TO_array($entity);
     }
 
-    public function setStatement(string $table) {
-        if ($table == "statistique") {
+    public function action(string $action) {
+        if ($action == "statistique") {
             return new Statistique($this->PathJsonConfig);
         } else {
-            if ($this->ToolsDB->is_Table($table)) {
-                $this->is_null = false;
-                $this->table = $table;
-                $this->setData = new SetData($this->PathJsonConfig, $table);
-                $this->gui = new GUI($this->PathJsonConfig, $table);
-                $this->getData = new GetData($this->PathJsonConfig, $table);
-            }
+            throw new TypeError(" not acition in model ");
+        }
+    }
+
+    public function setStatement(string $table): bool {
+
+        if ($this->ToolsDB->is_Table($table)) {
+            $this->is_null = false;
+            $this->table = $table;
+            $this->setData = new SetData($this->PathJsonConfig, $table);
+            $this->gui = new GUI($this->PathJsonConfig, $table);
+            $this->getData = new GetData($this->PathJsonConfig, $table);
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -131,11 +140,9 @@ class Model {
     public function show_id($id) {
         return $this->getGui()->formDefault(["{$this->getTable()}.id" => $id]);
     }
-    
-    
+
     public function get_idfile($conditon) {
         return $this->getData()->get_idfile($conditon);
-     
     }
 
 }

@@ -16,7 +16,17 @@ return [
         return ROOT . "Config/model/" ;
     },
     TwigRenderer::class => function (ContainerInterface $container): TwigRenderer {
-        return new TwigRenderer(ROOT . "App/TEMPLETE", ROOT . "Config/html/");
+       //// configue Extension 
+        $configueExtension=ROOT . "Config/html/";
+        //// default Templte
+        $defaultTemplte=ROOT . "App/TEMPLETE";
+        $renderer= new TwigRenderer($defaultTemplte,$configueExtension );
+       
+        
+        // add templet abstract
+        $pathAbstractModules = ROOT . "App" . D_S . "AbstractModules" . D_S."views";
+        $renderer->addPath($pathAbstractModules, "AbstractModules");
+        return $renderer;
     },
     Model::class => function (ContainerInterface $container): Model {
 

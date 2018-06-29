@@ -63,6 +63,7 @@ abstract class Controller {
     }
 
     function getModel(): \Kernel\Model\Model {
+        
         return $this->model;
     }
 

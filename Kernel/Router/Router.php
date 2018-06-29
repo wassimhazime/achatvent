@@ -40,7 +40,7 @@ class Router implements \Kernel\AWA_Interface\RouterInterface
             $name=  $routeResulte->getMatchedRouteName();
         } else {
             $callable= function () {
-                return "notFound";
+                return "404 notFound";
             };
             $params=  [];
             $name=  "notFound";

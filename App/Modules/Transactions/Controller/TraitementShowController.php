@@ -30,7 +30,11 @@ class TraitementShowController extends AbstractTraitementShowController {
     }
 
     public function exec(): ResponseInterface {
-        $this->getModel()->setStatement($this->getPage());
+            $flag = $this->chargeModel($this->getPage());
+        if (!$flag) {
+            /// 404 not found
+            return $this->render("404", ["_page" => "404"]);
+        }
         $params = $this->getRouter()->match($this->getRequest())->getParams();
         $action = $params["action"];
         $id = $params["id"];

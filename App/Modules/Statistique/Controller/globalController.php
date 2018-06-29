@@ -25,7 +25,7 @@ class globalController extends AbstractController
     {
 
 
-            $st = $this->model->setStatement('statistique');
+            $st = $this->getModel()->action('statistique');
             $charge = $st->chargeDataSelect();
           
             var_dump($_GET);

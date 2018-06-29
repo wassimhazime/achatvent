@@ -16,9 +16,9 @@ class VoirController extends AbstractVoirController {
     }
 
     public function exec(): ResponseInterface {
-        $this->getModel()->setStatement($this->getPage());
-
-        if ($this->getModel()->is_null()) {
+        $flag = $this->chargeModel($this->getPage());
+        if (!$flag) {
+            /// 404 not found
             return $this->render("404", ["_page" => "404"]);
         }
 

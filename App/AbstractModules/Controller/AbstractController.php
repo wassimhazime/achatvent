@@ -24,7 +24,8 @@ abstract class AbstractController extends Controller {
     function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
         parent::__construct($request, $response, $container, $page);
     }
-       protected function getModeShow(array $modeHTTP): array {
+
+    protected function getModeShow(array $modeHTTP): array {
         $parent = "DEFAULT";
         $child = "EMPTY";
 
@@ -66,5 +67,9 @@ abstract class AbstractController extends Controller {
         return $mode;
     }
 
+    protected function chargeModel($table) {
+        $flag = $this->getModel()->setStatement($table);
+        return $flag;
+    }
 
 }

@@ -18,7 +18,9 @@ use Psr\Http\Message\ResponseInterface;
 abstract  class  AbstractAjaxController extends AbstractController {
 
       public function ajax_js() : ResponseInterface{
-             $this->getModel()->setStatement($this->getPage());
+          
+              $this->chargeModel($this->getPage());;
+             
         $query = $this->getRequest()->getQueryParams();
 
         $modeshow = $this->getModeShow($query);
