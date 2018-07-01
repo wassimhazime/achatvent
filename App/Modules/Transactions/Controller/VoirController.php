@@ -24,7 +24,7 @@ class VoirController extends AbstractVoirController {
         }
 
         $query = $this->getRequest()->getQueryParams();
-        $data = $this->showDataTable($query, "TransactionAjax");
+        $data = $this->showDataTable($query, "TransactionAjax","TransactionTraitementShow");
         return $this->render("@TransactionsShow/show", $data);
     }
 

@@ -8,13 +8,14 @@ use Kernel\INTENT\Intent;
 
 abstract class AbstractVoirController extends AbstractController {
 
-    protected function showDataTable($query,string $nameroute) {
+    protected function showDataTable($query,string $nameRouteGetDataAjax,string $nameRouteTraitementData) {
 
 
         $modeshow = $this->getModeShow($query);
         $modeintent = $modeshow["modeIntent"];
 
         $data = [
+            "nameRouteTraitementData"=>$nameRouteTraitementData,
             "Html_or_Json" => $modeshow["type"],
             "btnDataTable" => $this->btn_DataTable($query)["btn"],
             "jsCharges" => $this->btn_DataTable($query)["jsCharges"],
@@ -27,7 +28,7 @@ abstract class AbstractVoirController extends AbstractController {
             $data["intent"] = $this->getModel()->show($modeintent, true);
         } elseif ($modeshow["type"] === "json") {
             $url = $this->getRouter()
-                    ->generateUri($nameroute, ["controle" => $this->getPage()]);
+                    ->generateUri($nameRouteGetDataAjax, ["controle" => $this->getPage()]);
 
             $get = "?" . $this->getRequest()->getUri()->getQuery();
             $data["ajax"] = $url . $get;

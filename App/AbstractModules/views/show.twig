@@ -75,18 +75,19 @@
     <script  src="/public/Framework/Responsive-2.2.1/js/responsive.bootstrap.min.js"></script>
     <script  src="/public/Framework/Select-1.2.5/js/dataTables.select.min.js"></script>
 
-
+{{nameRoute}}
     <script src="/public/AWA/DataTable.js" ></script>
 
     {% if Html_or_Json=='json' %}
+        
         <script>DataTable_awa('#DataTableJs',
                     "{{btnDataTable}}",
-                    '{{input_tableJson("ComptableTraitementShow")}}',
+                    '{{input_tableJson(nameRouteTraitementData)}}',
                     "{{ajax}}");</script>
         {% elseif Html_or_Json=='HTML' %}
         <script>DataTable_awa('#DataTableJs',
                     "{{btnDataTable}}",
-                    '{{input_tableJson("ComptableTraitementShow")}}'
+                    '{{input_tableJson(nameRouteTraitementData)}}'
                     );</script>
         {% endif %} 
     <!-- end dataTables -->  

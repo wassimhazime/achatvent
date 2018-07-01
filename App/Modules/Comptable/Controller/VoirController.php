@@ -23,7 +23,7 @@ class VoirController extends AbstractVoirController {
         }
 
         $query = $this->getRequest()->getQueryParams();
-        $data = $this->showDataTable($query,"ComptableAjax");
+        $data = $this->showDataTable($query,"ComptableAjax","ComptableTraitementShow");
         return $this->render("@ComptableShow/show", $data);
     }
 
