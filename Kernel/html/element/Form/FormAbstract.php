@@ -26,12 +26,12 @@ abstract class FormAbstract {
     protected $input = [];
 
     function __construct(array $Conevert, Intent_Form $Intent_Form) {
-        
+
         $META_data = $Intent_Form->getMETA_data();
         $Charge_data = $Intent_Form->getCharge_data();
         $Default_Data = $Intent_Form->getDefault_Data();
-        
-       ///Conevert_TypeClomunSQL_to_TypeInputHTML 
+
+        ///Conevert_TypeClomunSQL_to_TypeInputHTML 
         $this->Conevert = $Conevert;
         //// change input
         $this->setInput($META_data, $Charge_data, $Default_Data);

@@ -34,13 +34,12 @@ class Input extends Abstract_Input {
 
 
         if ($this->input['Type'] == "file") {
-          
+
             if ($this->child != "[]") {
                 $tag->setAtt('multiple ');
-               $tag->setName($name . "[]");
+                $tag->setName($name . "[]");
             } else {
-               $tag->setName($name."_")
-               ->setClass("  form-control input-sm  inputfile");
+                $tag->setName($name . "_");
             }
         } else {
             $tag->setName($name . $this->child);

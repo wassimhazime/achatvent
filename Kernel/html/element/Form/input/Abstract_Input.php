@@ -37,18 +37,8 @@ abstract class Abstract_Input {
             $this->name .= "_child";
             $this->id_html .= "_child";
         }
-
-
-
-
         $this->styleGroup = $styleGroup;
-
-
-
-
         $this->input = $input;
-
-
         $this->Default = $input['Default'];
         $this->type = $input['Type'];
         $this->null = $input['Null'];
