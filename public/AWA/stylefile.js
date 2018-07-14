@@ -1,5 +1,5 @@
 "use strict";
-/// class .inputfile
+
 
 
 $("input[type='file']").each(function(index) {
