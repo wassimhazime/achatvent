@@ -36,11 +36,13 @@ $(document).ready(function() {
                         }
                     }
                 });
+        this.data_init(" Reste de Reglement TTC", 0)
 
-        this.Reste_Reglement_global = 0;
-        this.label_Reglement_global = " Reste de Reglement TTC";
     }
     AWA_Chart.prototype = {
+        init: {label: "", dataset: 0},
+        plugins: {},
+        row: [],
         chart_Color_theme: {
             chartBackgroundColor: [
                 'rgba(255, 255, 255, 1)',
@@ -98,44 +100,18 @@ $(document).ready(function() {
             ]
 
         },
-        Reste_Reglement: function(value) {
-            this.Reste_Reglement_global = value;
 
-            this.GRAPHIQUE.data.labels[0] = this.label_Reglement_global;
-            this.GRAPHIQUE.data.datasets.forEach((dataset) => {
-                dataset.data[0] = value;
-            });
-            this.GRAPHIQUE.update();
-        },
-        data_change_graph: function(content_child, select_raw) {
-            // remove
-            var self = this;
-            this.removeAllData();
-
-            var valueReste = this.Reste_Reglement_global;
-            this.Reste_Reglement(valueReste)
-            var $row = content_child.find(select_raw);
-            $row.each(function() {
-                var label = $(this).find("[type=date]").val();
-                var value = $(this).find("[type=number]").val();
-                // set dat graph
-                self.addData.call(self, label, value);
-
-            })
-            this.calcule_Reste_Reglement();
-
-            this.GRAPHIQUE.update();
-        },
         calcule_Reste_Reglement: function() {
-            var valueReste = this.Reste_Reglement_global;
-            var datagraphsave = this.GRAPHIQUE.data.datasets[0].data;
-            console.log(datagraphsave);
-            for (var i = 1; i < datagraphsave.length; i++) {
-                var d = datagraphsave[i] * 1;
-                valueReste = valueReste - d;
+
+            //comteur 1 pars==> 0 init
+            var values_set = this.GRAPHIQUE.data.datasets[0].data;
+            var somme = 0;
+            for (var i = 1; i < values_set.length; i++) {
+                somme = somme + Number(values_set[i]);
             }
-            console.log(valueReste);
-            this.GRAPHIQUE.data.datasets[0].data[0] = valueReste;
+
+            var value_init = Number(this.init.dataset);
+            this.GRAPHIQUE.data.datasets[0].data[0] = (value_init - somme);
         },
         addData: function(label, data) {
             this.GRAPHIQUE.data.labels.push(label);
@@ -145,20 +121,52 @@ $(document).ready(function() {
             });
             this.GRAPHIQUE.update();
         },
-        removeLastData: function() {
-            this.GRAPHIQUE.data.labels.pop();
-            //dataset pluseieur element avec un sel lable
-            this.GRAPHIQUE.data.datasets.forEach((dataset) => {
-                dataset.data.pop();
-            });
-            this.GRAPHIQUE.update();
-        },
         removeAllData: function() {
             this.GRAPHIQUE.data.labels = [];
             this.GRAPHIQUE.data.datasets.forEach((dataset) => {
                 dataset.data = [];
             });
+            this.row = [];
+            this.row[0] = this.init;
             this.GRAPHIQUE.update();
+        },
+        set_Data: function(plugin, data) {
+            this.plugins[plugin] = data;
+            this.update();
+        },
+        update: function() {
+            this.removeAllData();
+            /// merge les plugin ==>row
+            for (var plugin in this.plugins) {
+                this.row = this.row.concat(this.plugins[plugin]);
+            }
+
+            // set row
+            for (var i = 0; i < this.row.length; i++) {
+                var label = this.row[i].label;
+                var dataset = this.row[i].dataset;
+                // set dat graph
+                this.addData(label, dataset);
+
+            }
+
+
+
+            this.calcule_Reste_Reglement();
+
+            this.GRAPHIQUE.update();
+
+
+        },
+        data_init: function(dataset, label) {
+            this.removeAllData();
+            if (dataset && label) {
+                this.init.label = label;
+                this.init.dataset = dataset;
+            }
+            this.row[0] = this.init;
+            this.update();
+
         }
 
     }
@@ -207,15 +215,6 @@ $(document).ready(function() {
 
 
             this.ttc_avoirs = parseFloat(data[preffix + "montant_avoirs_ttc"]) * 1; /// payemment achat
-
-            this.montant_paye_ttc = parseFloat(data[preffix + "montant_paye_ttc"]) * 1;     /// payemment achat
-            this.date_paye = data[preffix + "date"];     /// date payemment achat
-            console.log(this.montant_paye_ttc, this.date_paye);
-
-
-
-
-
         },
         calcule: function(op, data) {
             this.data = data;
@@ -264,10 +263,23 @@ $(document).ready(function() {
     //*******************************************************//
 //plugins multiSelect =>> graph
     // class plugins Multiselect 
-    var pluginsMultiSelectGraph = function() {
-
+    var pluginsMultiSelectGraph = function(graph) {
+        this.graph = graph;
     }
     pluginsMultiSelectGraph.prototype = {
+        selected: function(element) {
+            //  console.log(element.find('option:selected'));
+            var data = element.find('option:selected');
+            var row = [];
+            for (var i = 0; i < data.length; i++) {
+                var ob = {};
+                ob.label = $(data[i]).data("content_date");
+                ob.dataset = $(data[i]).data("content_montant_paye_ttc");
+                row.push(ob);
+            }
+            this.graph.set_Data(element.attr('id'), row);
+
+        }
 
     }
 
@@ -293,20 +305,24 @@ $(document).ready(function() {
                 }
             });
             this.Calcule = plugins.Calcule;
+            this.Graph = plugins.Graph;
         };
         this.afterSelect = function(values, item) {
+
             this.qs1.cache();
             this.qs2.cache();
             this.Calcule.calcule(function(a, b) {
                 return ((a + b).toFixed(2));
             }, item.data());
+            this.Graph.selected(this.$element);
 
             console.log(item.data());
         };
         this.afterDeselect = function(values, item) {
+            ;
             this.qs1.cache();
             this.qs2.cache();
-
+            this.Graph.selected(this.$element);
             this.Calcule.calcule(function(a, b) {
                 return ((a - b).toFixed(2));
             }, item.data());
@@ -376,9 +392,7 @@ $(document).ready(function() {
         },
 
         change: function(input, value) {
-            this.graph.Reste_Reglement(value);
-            console.log(input + "=>" + value);
-
+            this.graph.data_init(value, " Reste de Reglement TTC");
         },
 
         calcule_paye_TTC: function(value_avoir_TTC, value_factures_TTC) {
@@ -474,13 +488,12 @@ $(document).ready(function() {
         this.content_child.on("click", ".delete", function(e) {
             e.preventDefault();
             $(this).parent('td').parent('tr').remove();
-            self.graph.data_change_graph(self.content_child, ".inputs-child");
-
+            self.updateGraph();
         });
         // set data graph
         this.content_child.on("change", "input", function(e) {
             e.preventDefault();
-            self.graph.data_change_graph(self.content_child, ".inputs-child");
+            self.updateGraph();
         });
         // add row inputs 
         this.add_button.click(function(e) {
@@ -525,6 +538,20 @@ $(document).ready(function() {
 
     }
     FormChild.prototype = {
+        updateGraph: function() {
+            // return json
+            var row = [];
+            this.content_child.find(".inputs-child").each(function(index) {
+                var ob = {};
+                ob.label = $(this).find("[type=date]").val();
+                ob.dataset = $(this).find("[type=number]").val();
+                row.push(ob)
+
+            })
+
+            this.graph.set_Data("row", row)
+
+        }
 
     }
 
@@ -551,7 +578,7 @@ $(document).ready(function() {
             preffixDOM: "id_html",
             preffixDATA: "content_",
         }),
-        graph: awa_Chart,
+        Graph: new pluginsMultiSelectGraph(awa_Chart),
     });
     /// set config multi select
     $.each($('select[multiple]'), function() {
