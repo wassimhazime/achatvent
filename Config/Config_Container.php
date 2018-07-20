@@ -5,6 +5,7 @@ use Kernel\AWA_Interface\InterfaceRenderer;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\AWA_Interface\InterfaceFile_Upload;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 return [
     "pathModules" => function (ContainerInterface $container): string {
@@ -14,6 +15,10 @@ return [
     "pathModel" => function (ContainerInterface $container): string {
 
         return ROOT . "Config/model/";
+    },
+    RequestHandlerInterface::class => function (ContainerInterface $container): RequestHandlerInterface {
+
+        return new \Kernel\Middleware\Despatcher();
     },
     InterfaceRenderer::class => function (ContainerInterface $container): InterfaceRenderer {
         //// configue Extension 

@@ -22,7 +22,7 @@ class Despatcher implements RequestHandlerInterface {
 
     private $middlwares = [];
     private $index = 0;
-    private static $self = null;
+   
 
     function getMiddlwares() {
         $midd = null;
@@ -33,12 +33,7 @@ class Despatcher implements RequestHandlerInterface {
         return $midd;
     }
 
-    public static function getDespatch(): self {
-        if (self::$self === null) {
-            self::$self = new self();
-        }
-        return self::$self;
-    }
+ 
 
     public function pipe(MiddlewareInterface $middleware) {
         $this->middlwares[] = $middleware;

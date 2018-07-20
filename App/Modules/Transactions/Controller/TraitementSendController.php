@@ -48,9 +48,8 @@ class TraitementSendController extends AbstractTraitementSendController {
         //  save data parent
         $flag = $this->chargeModel($this->getPage());
         if (!$flag) {
-            /// 404 not found
-            return $this->render("404", ["_page" => "404"]);
-        };
+            return $this->getResponse()->withStatus(404);
+        }
         // insert data
         // $id_parent pour gere relation et data lier(exemple raison social)
         $id_parent = $this->getModel()->setData($data_parent);
@@ -67,7 +66,7 @@ class TraitementSendController extends AbstractTraitementSendController {
         $flag = $this->chargeModel($page);
         if (!$flag) {
             /// 404 not found
-            return $this->render("404", ["_page" => "404"]);
+           return $this->getResponse()->withStatus(404);
         }
         $this->getModel()->setData($data_child, $id_parent);
 

@@ -40,8 +40,7 @@ class TraitementSendController extends AbstractTraitementSendController {
 
         $flag = $this->chargeModel($this->getPage());
         if (!$flag) {
-            /// 404 not found
-            return $this->render("404", ["_page" => "404"]);
+            return $this->getResponse()->withStatus(404);
         }
         $intent = $this->getModel()->setData($insert);
         return $this->render("@ComptableShow/show_item", ["intent" => $intent]);

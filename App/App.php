@@ -14,10 +14,10 @@
 
 namespace App;
 
+use App\Middleware\NotFound;
 use Kernel\AWA_Interface\InterfaceRenderer;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\Kernel;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use function array_merge;
 use function class_exists;
@@ -47,25 +47,10 @@ class App extends Kernel {
         }
 
         $route = $this->router->match($request);
-        $despatcher = \Kernel\Middleware\Despatcher::getDespatch();
+        $this->addMiddleware(new NotFound($this->container));
+        $this->addMiddleware($route->getMiddleware());
 
-        $middleware = $route->getMiddleware();
-        if ($middleware !== null) {
-            $despatcher->pipe($middleware);
-            $response = $despatcher->handle($request);
-        } else {
-            //man ba3D
-           // $despatcher->pipe($middleware);//not fond
-            $response = $despatcher->handle($request);
-            $render = $this->container->get(InterfaceRenderer::class)
-                    ->render("404", ["_page" => "404"]);
-
-            $response->getBody()->write($render);
-        }
-
-
-
-
+        $response = $this->despatcher->handle($request);
         return $response;
     }
 

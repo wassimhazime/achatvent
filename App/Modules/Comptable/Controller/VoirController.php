@@ -18,11 +18,10 @@ class VoirController extends AbstractVoirController {
     public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
 
         parent::process($request, $handler);
-        
-        $flag = $this->chargeModel($this->getPage());
 
+        $flag = $this->chargeModel($this->getPage());
         if (!$flag) {
-            return $this->render("404", ["_page" => "404"]);
+            return $this->getResponse()->withStatus(404);
         }
 
         $query = $this->getRequest()->getQueryParams();

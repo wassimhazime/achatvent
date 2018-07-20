@@ -31,7 +31,7 @@ abstract class AbstractTraitementShowController extends AbstractController {
 
         $etat = $this->getModel()->delete($conditon);
         if ($etat == -1) {
-            $r = new Response(404);
+            $r = $this->getResponse()->withStatus(406);
             $r->getBody()->write("accès refusé  de supprimer ID  $id");
             return $r;
         } else {

@@ -31,10 +31,9 @@ class TraitementShowController extends AbstractTraitementShowController {
 
     public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
-        $flag = $this->chargeModel($this->getPage());
+         $flag = $this->chargeModel($this->getPage());
         if (!$flag) {
-            /// 404 not found
-            return $this->render("404", ["_page" => "404"]);
+            return $this->getResponse()->withStatus(404);
         }
         $params = $this->getRouter()->match($this->getRequest())->getParams();
         $action = $params["action"];

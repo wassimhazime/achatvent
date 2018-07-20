@@ -15,16 +15,20 @@ namespace Kernel\Router;
  */
 class Route {
 
+    private $success;
     private $middleware;
     private $name;
     private $params;
 
-    function __construct($middleware, $name, $params) {
+    function __construct($middleware, $name, $params,$success=true) {
         $this->middleware = $middleware;
         $this->name = $name;
         $this->params = $params;
+        $this->success=$success;
     }
-
+    function isSuccess(): bool {
+        return $this->success; 
+    }
     function getMiddleware() {
         return $this->middleware;
     }

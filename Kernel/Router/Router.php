@@ -14,7 +14,7 @@ class Router implements \Kernel\AWA_Interface\RouterInterface {
         $this->router = new FastRouteRouter();
     }
 
-    public function get(string $url,MiddlewareInterface $middleware, string $name) {
+    public function get(string $url, MiddlewareInterface $middleware, string $name) {
         $route = new \Zend\Expressive\Router\Route($url, $middleware, ['GET'], $name);
         $this->router->addRoute($route);
     }
@@ -36,13 +36,13 @@ class Router implements \Kernel\AWA_Interface\RouterInterface {
             $middleware = $routeResulte;
             $params = $routeResulte->getMatchedParams();
             $name = $routeResulte->getMatchedRouteName();
+            return new Route($middleware, $name, $params, true);
         } else {
-            ////
-            $middleware = null;
+            $middleware = $routeResulte;
             $params = [];
             $name = "notFound";
+            return new Route($middleware, $name, $params, false);
         }
-        return new Route($middleware, $name, $params);
     }
 
 }
