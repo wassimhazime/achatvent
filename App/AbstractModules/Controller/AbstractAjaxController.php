@@ -19,7 +19,8 @@ abstract  class  AbstractAjaxController extends AbstractController {
 
       public function ajax_js() : ResponseInterface{
           
-              $this->chargeModel($this->getPage());;
+          
+        $this->chargeModel($this->getPage());;
              
         $query = $this->getRequest()->getQueryParams();
 

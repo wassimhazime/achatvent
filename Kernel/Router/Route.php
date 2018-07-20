@@ -13,55 +13,46 @@ namespace Kernel\Router;
  *
  * @author wassime
  */
-class Route
-{
-    
-    
-    private $callable;
+class Route {
+
+    private $middleware;
     private $name;
     private $params;
-   
-    function __construct($callable, $name, $params)
-    {
-        $this->callable = $callable;
+
+    function __construct($middleware, $name, $params) {
+        $this->middleware = $middleware;
         $this->name = $name;
         $this->params = $params;
     }
-    function getCallable()
-    {
-        return $this->callable;
+
+    function getMiddleware() {
+        return $this->middleware;
     }
 
-    function getName()
-    {
+    function getName() {
         return $this->name;
     }
 
-    function getParams()
-    {
+    function getParams() {
         return $this->params;
     }
 
-    
-    
-    function getParam(string $index)
-    {
+    function getParam(string $index) {
         if (isset($this->params[$index])) {
             return $this->params[$index];
         }
     }
-    function setCallable($callable)
-    {
-        $this->callable = $callable;
+
+    function setMiddleware($middleware) {
+        $this->middleware = $middleware;
     }
 
-    function setName($name)
-    {
+    function setName($name) {
         $this->name = $name;
     }
 
-    function setParams($params)
-    {
+    function setParams($params) {
         $this->params = $params;
     }
+
 }

@@ -20,13 +20,14 @@ use Psr\Http\Message\ServerRequestInterface;
  * @author wassime
  */
 class FileController extends AbstractFileController {
-      function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
-        parent::__construct($request, $response, $container, $page);
+
+    function __construct(ContainerInterface $container, string $page) {
+        parent::__construct($container, $page);
         $this->setModel(new Model($container->get("pathModel")));
     }
 
-    //show
-    public function exec(): ResponseInterface {
+    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
+        parent::process($request, $handler);
         $files = $this->getFile_Upload()->get($this->getPage());
         return $this->render("@ComptableShow/show_files", ["files" => $files]);
     }

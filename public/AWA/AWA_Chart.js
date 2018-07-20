@@ -7,6 +7,14 @@ var AWA_Chart = function(config) {
     }
     var type = config.type || 'pie';
     var title = config.title || ' ';
+    var options = config.options || {
+        responsive: true,
+        title: {
+            display: true,
+            text: title
+        }
+    };
+
     var self = this;
     this.GRAPHIQUE = new Chart(canva,
             {
@@ -24,14 +32,7 @@ var AWA_Chart = function(config) {
                         }]
                 },
                 // Configuration options go here
-                options: {
-                    responsive: true,
-
-                    title: {
-                        display: true,
-                        text: title
-                    }
-                }
+                options: options
             });
     this.data_init(" Reste de Reglement TTC", 0)
 
@@ -42,7 +43,7 @@ AWA_Chart.prototype = {
     row: [],
     chart_Color_theme: {
         chartBackgroundColor: [
-            'rgba(255, 255, 255, 1)',
+            
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
             'rgba(255, 206, 86, 0.2)',
@@ -69,7 +70,7 @@ AWA_Chart.prototype = {
             'rgba(255, 159, 64, 1)',
         ],
         chartBorderColor: [
-            'rgba(255,255,255,1)',
+            
             'rgba(255,99,132,1)',
             'rgba(54, 162, 235, 1)',
             'rgba(255, 206, 86, 1)',

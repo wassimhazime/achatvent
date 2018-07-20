@@ -1,7 +1,7 @@
 // tableform for chile  autoadd , style file icon  
 var AWA_FormChild = function(config) {
     var select_id = config.select_id || 'content-child';
-    this.graph = config.graph || '';
+    this.graph = config.graph || [];
     var self = this;
     // index row inputs
     this.id_index = 0;
@@ -83,7 +83,12 @@ AWA_FormChild.prototype = {
 
         })
 
-        this.graph.set_Data("row", row)
+        for (var i = 0; i < this.graph.length; i++) {
+            this.graph[i].set_Data("row", row);
+        }
+
+
+
 
     }
 

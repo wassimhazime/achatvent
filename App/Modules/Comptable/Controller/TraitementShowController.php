@@ -21,13 +21,14 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class TraitementShowController extends AbstractTraitementShowController {
 
-    function __construct(ServerRequestInterface $request, ResponseInterface $response, ContainerInterface $container, string $page) {
-        parent::__construct($request, $response, $container, $page);
+    function __construct(ContainerInterface $container, string $page) {
+        parent::__construct($container, $page);
         $this->setModel(new Model($container->get("pathModel")));
     }
 
-    public function exec(): ResponseInterface {
-           $flag = $this->chargeModel($this->getPage());
+    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
+        parent::process($request, $handler);
+        $flag = $this->chargeModel($this->getPage());
         if (!$flag) {
             /// 404 not found
             return $this->render("404", ["_page" => "404"]);

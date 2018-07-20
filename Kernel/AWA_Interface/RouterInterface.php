@@ -17,11 +17,11 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface RouterInterface {
 
-    public function get(string $url, callable $callable, string $name);
+  // public function get(string $url, callable $callable, string $name);
 
-    public function post(string $url, callable $callable, string $name);
+   // public function post(string $url, callable $callable, string $name);
 
-    public function generateUri($name, array $substitutions = [], array $options = []);
+   // public function generateUri($name, array $substitutions = [], array $options = []);
 
-    public function match(ServerRequestInterface $request);
+  //  public function match(ServerRequestInterface $request);
 }

@@ -15,7 +15,8 @@ namespace Kernel\html;
  */
 ;
 
-use Kernel\Router\Router;
+use Kernel\AWA_Interface\InterfaceFile_Upload;
+use Kernel\AWA_Interface\RouterInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use const D_S;
@@ -33,7 +34,7 @@ use function str_replace;
 use function strpos;
 use function unlink;
 
-class File_Upload {
+class File_Upload implements InterfaceFile_Upload{
 
     const FIN_REGEX = "_";
 
@@ -41,17 +42,17 @@ class File_Upload {
     private $preffix;
     private $router;
 
-    function setPreffix($preffix) {
+    public function __construct(RouterInterface $router, string $path) {
+        $this->path = $path;
+        $this->router = $router;
+    }
+
+    public function setPreffix($preffix) {
         $this->preffix = $preffix;
     }
 
-    function getRouter(): Router {
+    public function getRouter(): RouterInterface {
         return $this->router;
-    }
-
-    function __construct(Router $router, string $path) {
-        $this->path = $path;
-        $this->router = $router;
     }
 
     public function get(string $id_file): array {

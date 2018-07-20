@@ -17,11 +17,11 @@ namespace App\Modules\Statistique;
 use App\Modules\Statistique\Controller\globalController;
 use Kernel\AWA_Interface\InterfaceRenderer;
 use Kernel\AWA_Interface\RouterInterface;
-use Kernel\Router\Router;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use const D_S;
+use function str_replace;
 
 class StatistiqueModule {
 
@@ -30,7 +30,7 @@ class StatistiqueModule {
 
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
-        $this->router = $this->container->get(Router::class);
+        $this->router = $this->container->get(RouterInterface::class);
     }
 
     public function addPathRenderer(InterfaceRenderer $renderer, $pathModules) {
@@ -40,16 +40,9 @@ class StatistiqueModule {
 
     public function addRoute(RouterInterface $router) {
 
-        $router->get("/{controle:[a-z\$]*}", [$this, "Statistique"], "home.get");
+        $router->get("/{controle:[a-z\$]*}", new globalController($this->container, "controle"), "home.get");
 
-        $router->get("/st/{controle:[a-z\$]*}", [$this, "Statistique"], "st.get");
-    }
-
-    public function Statistique(ServerRequestInterface $request, ResponseInterface $response) {
-
-        $controller = new globalController($request, $response, $this->container, "controle");
-
-        return $controller->exec();
+        $router->get("/st/{controle:[a-z\$]*}", new Controller\AjaxController($this->container, "controle"), "st.get");
     }
 
     public function dataMenu() {

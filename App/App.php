@@ -14,23 +14,20 @@
 
 namespace App;
 
-use GuzzleHttp\Psr7\Response;
+use Kernel\AWA_Interface\InterfaceRenderer;
+use Kernel\AWA_Interface\RouterInterface;
 use Kernel\Kernel;
-use Kernel\Renderer\TwigRenderer;
-use Kernel\Router\Router;
-
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use function array_merge;
+use function class_exists;
+use function is_array;
 
 class App extends Kernel {
 
-    function run(ServerRequestInterface $request, ResponseInterface $respons) {
-
-
-
-        $this->router = $this->container->get(Router::class);
-
-        $renderer = $this->container->get(TwigRenderer::class);
+    function run(ServerRequestInterface $request) {
+        $this->router = $this->container->get(RouterInterface::class);
+        $renderer = $this->container->get(InterfaceRenderer::class);
         $pathModules = $this->container->get("pathModules");
         $datamenu = [];
 
@@ -50,18 +47,24 @@ class App extends Kernel {
         }
 
         $route = $this->router->match($request);
-        $call = $route->getCallable();
+        $despatcher = \Kernel\Middleware\Despatcher::getDespatch();
 
-        $response = call_user_func_array($call, [$request, $respons]);
-
-        if (is_string($response)) {
-
-            $response = new Response(404);
-            $render = $this->container->get(TwigRenderer::class)
+        $middleware = $route->getMiddleware();
+        if ($middleware !== null) {
+            $despatcher->pipe($middleware);
+            $response = $despatcher->handle($request);
+        } else {
+            //man ba3D
+           // $despatcher->pipe($middleware);//not fond
+            $response = $despatcher->handle($request);
+            $render = $this->container->get(InterfaceRenderer::class)
                     ->render("404", ["_page" => "404"]);
 
             $response->getBody()->write($render);
         }
+
+
+
 
         return $response;
     }

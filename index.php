@@ -1,26 +1,24 @@
 <?php
+
 date_default_timezone_set("Africa/Casablanca");
 define('D_S', DIRECTORY_SEPARATOR);
 //define('ROOT', dirname(__DIR__) . D_S);
 define('ROOT', __DIR__ . D_S);
 require ROOT . "vendor/autoload.php";
 
-
 use App\App;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use function Http\Response\send;
 
-$whoops = new \Whoops\Run;
-$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-$whoops->register();
+//$app->addModule("achat", ["Middlewareauto"], ["event"]);
+//$app->addModule("vente", ["Middlewareauto"]);
+//$app->addModule("charge", ["Middlewareauto"]);
+//$app->addModule("pub");
 
-
-// start application
-$start = microtime(true);
 
 
 $app = new App(ROOT . "Config" . D_S . "Config_Container.php");
+$app->addMiddleware(new \Middlewares\Whoops());
 
 $app->addModule(\App\Modules\Statistique\StatistiqueModule::class);
 $app->addModule(\App\Modules\Comptable\ComptableModule::class);
@@ -28,8 +26,11 @@ $app->addModule(\App\Modules\Transactions\TransactionsModule::class);
 
 
 
+$app->addEvent("exeption", "code");
+$app->addEvent("add", "code");
 
-$Response = $app->run(ServerRequest::fromGlobals(), new Response());
+
+$Response = $app->run(ServerRequest::fromGlobals());
 
 send($Response);
 
@@ -38,9 +39,6 @@ send($Response);
 
 
 
-$fin = round(microtime(true) - $start, 5);
-
-//echo"<h5>". $fin.' secondes </h5>';
 
 
 
@@ -57,14 +55,10 @@ $fin = round(microtime(true) - $start, 5);
 
 
 
-//$app->addModule("achat", ["Middlewareauto"], ["event"]);
-//$app->addModule("vente", ["Middlewareauto"]);
-//$app->addModule("charge", ["Middlewareauto"]);
-//$app->addModule("pub");
-//
-//$app->addEvent("exeption", "code");
-//$app->addEvent("add", "code");
-//
-//
-//$app->addMiddleware("csrf");
-//$app->addMiddleware("whoop");
+
+
+
+
+
+
+

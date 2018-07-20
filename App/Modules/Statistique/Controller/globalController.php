@@ -16,20 +16,15 @@ namespace App\Modules\Statistique\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class globalController extends AbstractController
-{
+class globalController extends AbstractController {
 
-    
-    
-    public function exec(): ResponseInterface
-    {
+    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
 
-
-            $st = $this->getModel()->action('statistique');
-            $charge = $st->chargeDataSelect();
-          
-            var_dump($_GET);
-
-            return $this->render("@statistique/global", ["charge" => $charge]);
+        parent::process($request, $handler);
+        
+        $st = $this->getModel()->action('statistique');
+        $charge = $st->chargeDataSelect();
+        return $this->render("@statistique/global", ["charge" => $charge]);
     }
+
 }
