@@ -12,6 +12,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use function array_merge;
 
 abstract class Controller implements MiddlewareInterface {
@@ -35,20 +36,15 @@ abstract class Controller implements MiddlewareInterface {
         $this->File_Upload = $container->get(InterfaceFile_Upload::class);
     }
 
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
         $this->setRequest($request);
         $this->setResponse($handler->handle($request));
-        
         $route = $this->getRouter()->match($this->getRequest());
         $this->setPage($route->getParam($this->getNameController()));
         return $this->getResponse();
-        }
+    }
 
-    
-    
-    
-    
     function getInfoTemplete() {
         return $this->InfoTemplete;
     }
@@ -60,9 +56,9 @@ abstract class Controller implements MiddlewareInterface {
     }
 
     public function render($view, array $data = []): ResponseInterface {
-        
-       
-        
+
+
+
         $this->renderer->addGlobal("_page", $this->getPage());
 
         $result = $this->setInfoTemplete($data);

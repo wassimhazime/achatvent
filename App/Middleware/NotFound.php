@@ -8,48 +8,40 @@
 
 namespace App\Middleware;
 
-use Kernel\AWA_Interface\InterfaceRenderer;
-use Kernel\AWA_Interface\RouterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use function call_user_func;
+use function strpos;
 
 /**
- * Description of Midd_pse15
+ * Description of Midd_psR15
  *
  * @author wassime
  */
 class NotFound implements MiddlewareInterface {
 
-    private $container;
-    private $router;
+    private $call;
 
-    function __construct($container) {
-        $this->container = $container;
-        $this->router = $this->container->get(RouterInterface::class);
+    function __construct(callable $call) {
+        $this->call = $call;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
         $Response = $handler->handle($request);
-        $route = $this->router->match($request);
         $code = $Response->getStatusCode();
 
-        if ($code === 404 || !$route->isSuccess()) {
-
+        if ($code === 404 || $Response->getBody()->getSize() === 0) {
             // is json page not found
-            $isjson = implode(" ", $Response->getHeader("Content-Type"));
-            preg_match('/(.+)\/json(.+)/i', $isjson, $matches);
-            if (!empty($matches)) {
+            $HeaderLine = $Response->getHeaderLine("Content-Type");
+            if (strpos($HeaderLine, "json") > 0) {
                 $Response->getBody()->write("{}");
-                return $Response;
+            } else {
+                $Response = call_user_func($this->call, $Response);
             }
-            // is html page not found
-            $render = $this->container->get(InterfaceRenderer::class)
-                    ->render("404", ["_page" => "404"]);
-
-            $Response->getBody()->write($render);
+            return $Response->withStatus(404);
         }
 
         return $Response;

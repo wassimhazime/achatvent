@@ -2,7 +2,7 @@
 
 namespace Kernel;
 
-use Kernel\Container\Factory_Container;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -13,9 +13,9 @@ abstract class Kernel {
     protected $modules;
     protected $despatcher;
 
-    function __construct($config) {
+    function __construct(ContainerInterface $container) {
 
-        $this->container = Factory_Container::getContainer($config);
+        $this->container = $container;
         $this->despatcher = $this->container->get(RequestHandlerInterface::class);
     }
 
@@ -23,7 +23,10 @@ abstract class Kernel {
         $this->modules[] = $module;
     }
 
-    abstract function run(ServerRequestInterface $request);
+    public function run(ServerRequestInterface $request) {
+        $response = $this->despatcher->handle($request);
+        return $response;
+    }
 
     function addMiddleware(MiddlewareInterface $Middleware) {
         $this->despatcher->pipe($Middleware);

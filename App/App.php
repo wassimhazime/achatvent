@@ -14,44 +14,29 @@
 
 namespace App;
 
-use App\Middleware\NotFound;
 use Kernel\AWA_Interface\InterfaceRenderer;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\Kernel;
-use Psr\Http\Message\ServerRequestInterface;
 use function array_merge;
 use function class_exists;
-use function is_array;
 
 class App extends Kernel {
 
-    function run(ServerRequestInterface $request) {
+    function save_modules() {
         $this->router = $this->container->get(RouterInterface::class);
         $renderer = $this->container->get(InterfaceRenderer::class);
         $pathModules = $this->container->get("pathModules");
-        $datamenu = [];
-
+        $menu = [];
         foreach ($this->modules as $module) {
-
             if (class_exists($module)) {
-
                 $m = new $module($this->container);
-                $renderer->addGlobal("router", $this->router);
                 $m->addRoute($this->router);
                 $m->addPathRenderer($renderer, $pathModules);
-                if (is_array($m->dataMenu())) {
-                    $datamenu = array_merge($datamenu, $m->dataMenu());
-                }
+                $menu = array_merge($menu, $m->dataMenu());
             }
-            $renderer->addGlobal("_menu", $datamenu);
         }
-
-        $route = $this->router->match($request);
-        $this->addMiddleware(new NotFound($this->container));
-        $this->addMiddleware($route->getMiddleware());
-
-        $response = $this->despatcher->handle($request);
-        return $response;
+        $renderer->addGlobal("router", $this->router);
+        $renderer->addGlobal("_menu", $menu);
     }
 
 }

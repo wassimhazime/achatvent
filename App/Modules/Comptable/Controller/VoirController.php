@@ -7,6 +7,7 @@ use App\Modules\Comptable\Model\Model;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class VoirController extends AbstractVoirController {
 
@@ -15,7 +16,7 @@ class VoirController extends AbstractVoirController {
         $this->setModel(new Model($container->get("pathModel")));
     }
 
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
         parent::process($request, $handler);
 

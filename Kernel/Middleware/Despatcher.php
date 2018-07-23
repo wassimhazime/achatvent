@@ -21,30 +21,33 @@ use Psr\Http\Server\RequestHandlerInterface;
 class Despatcher implements RequestHandlerInterface {
 
     private $middlwares = [];
-    private $index = 0;
-   
+    private $protoTypeRespons;
+
+    /*
+     * Return middlwares|| null
+     */
 
     function getMiddlwares() {
-        $midd = null;
-        if (isset($this->middlwares[$this->index])) {
-            $midd = $this->middlwares[$this->index];
-            $this->index++;
-        }
-        return $midd;
+        return array_shift($this->middlwares);
     }
 
- 
+    function __construct(ResponseInterface $prototypeRespons) {
+        $this->protoTypeRespons = $prototypeRespons;
+    }
 
     public function pipe(MiddlewareInterface $middleware) {
         $this->middlwares[] = $middleware;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface {
-        $m = $this->getMiddlwares();
-        if ($m) {
-            return $m->process($request, $this);
+         
+        
+        $middlware = $this->getMiddlwares();
+       
+        if ($middlware != null) {
+            return $middlware->process($request, $this);
         } else {
-            return new \GuzzleHttp\Psr7\Response();
+            return $this->protoTypeRespons;
         }
     }
 

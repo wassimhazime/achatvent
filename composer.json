@@ -27,7 +27,12 @@
         "psr/http-server-middleware": "^1.0",
         "psr/http-server-handler": "^1.0",
         "zendframework/zend-expressive-fastroute": "^3.0",
-        "middlewares/whoops": "^1.1"
+        "middlewares/whoops": "^1.1",
+        "zendframework/zend-diactoros": "^1.8",
+        "middlewares/response-time": "^1.0",
+        "middlewares/http-authentication": "^1.0",
+        "middlewares/minifier": "^1.0",
+        "middlewares/negotiation": "^1.0"
        
     },
     "require-dev": {

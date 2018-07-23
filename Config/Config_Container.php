@@ -6,29 +6,46 @@ use Kernel\AWA_Interface\RouterInterface;
 use Kernel\AWA_Interface\InterfaceFile_Upload;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 return [
-    "pathModules" => function (ContainerInterface $container): string {
-
-        return ROOT . "App" . D_S . "Modules" . D_S;
+    "Config" => function (): string {
+        return ROOT . "Config" . D_S;
+    }, "App" => function (): string {
+        return ROOT . "App" . D_S;
     },
     "pathModel" => function (ContainerInterface $container): string {
-
-        return ROOT . "Config/model/";
+        return $container->get("Config") . "model" . D_S;
+    },
+    "configue_Extension" => function (ContainerInterface $container): string {
+        return $container->get("Config") . "html" . D_S;
+    }, "pathModules" => function (ContainerInterface $container): string {
+        return $container->get("App") . "Modules" . D_S;
+    },
+    "default_Templte" => function (ContainerInterface $container): string {
+        return $container->get("App") . "TEMPLETE";
+    },
+    "AbstractTempletModules" => function (ContainerInterface $container): string {
+        return $container->get("App") . "AbstractModules" . D_S . "views";
+    }
+    ,
+    ResponseInterface::class => function (): ResponseInterface {
+        return new \GuzzleHttp\Psr7\Response();
+    },
+    ServerRequestInterface::class => function (): ServerRequestInterface {
+        return \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
     },
     RequestHandlerInterface::class => function (ContainerInterface $container): RequestHandlerInterface {
-
-        return new \Kernel\Middleware\Despatcher();
+        return new \Kernel\Middleware\Despatcher($container->get(ResponseInterface::class));
     },
     InterfaceRenderer::class => function (ContainerInterface $container): InterfaceRenderer {
-        //// configue Extension 
-        $configueExtension = ROOT . "Config/html/";
-        //// default Templte
-        $defaultTemplte = ROOT . "App/TEMPLETE";
-        $renderer = new \Kernel\Renderer\TwigRenderer($defaultTemplte, $configueExtension);
+
+        $renderer = new \Kernel\Renderer\TwigRenderer(
+                $container->get("default_Templte"), $container->get("configue_Extension")
+        );
         // add templet abstract
-        $pathAbstractModules = ROOT . "App" . D_S . "AbstractModules" . D_S . "views";
-        $renderer->addPath($pathAbstractModules, "AbstractModules");
+        $renderer->addPath($container->get("AbstractTempletModules"), "AbstractModules");
         return $renderer;
     },
     Model::class => function (ContainerInterface $container): Model {

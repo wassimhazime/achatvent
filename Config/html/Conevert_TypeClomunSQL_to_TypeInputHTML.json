@@ -2,7 +2,6 @@
     "text": "textarea",
     "date": "date",
     "tinyint(1)": "checkBox",
-
     "varchar(20)": "tel",
     "varchar(150)": "email",
     "varchar(200)": "text",
@@ -10,12 +9,7 @@
     "varchar(250)": "file",
     "int(10)": "hidden",
     "int(11)": "select",
- 
- 
- 
     "double": "number", 
- 
-
     "datetime": "hidden"
 }
 
