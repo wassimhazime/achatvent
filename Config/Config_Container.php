@@ -1,9 +1,9 @@
 <?php
 
 use App\Modules\Comptable\Model\Model;
-use Kernel\AWA_Interface\InterfaceRenderer;
+use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
-use Kernel\AWA_Interface\InterfaceFile_Upload;
+use Kernel\AWA_Interface\File_UploadInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -39,7 +39,7 @@ return [
     RequestHandlerInterface::class => function (ContainerInterface $container): RequestHandlerInterface {
         return new \Kernel\Middleware\Despatcher($container->get(ResponseInterface::class));
     },
-    InterfaceRenderer::class => function (ContainerInterface $container): InterfaceRenderer {
+    RendererInterface::class => function (ContainerInterface $container): RendererInterface {
 
         $renderer = new \Kernel\Renderer\TwigRenderer(
                 $container->get("default_Templte"), $container->get("configue_Extension")
@@ -54,7 +54,7 @@ return [
     RouterInterface::class => function (ContainerInterface $container): RouterInterface {
         return new \Kernel\Router\Router;
     },
-    InterfaceFile_Upload::class => function (ContainerInterface $container): InterfaceFile_Upload {
+    File_UploadInterface::class => function (ContainerInterface $container): File_UploadInterface {
         return new \Kernel\html\File_Upload($container->get(RouterInterface::class), "public/filesUpload/");
     },
 ];

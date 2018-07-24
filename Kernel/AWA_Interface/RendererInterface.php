@@ -14,7 +14,7 @@
 
 namespace Kernel\AWA_Interface;
 
-interface InterfaceRenderer
+interface RendererInterface
 {
 
   

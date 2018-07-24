@@ -13,15 +13,32 @@
 
 namespace Kernel\AWA_Interface;
 
+use Kernel\Router\Route;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
-interface RouterInterface {
+interface RouterInterface extends MiddlewareInterface{
 
-  // public function get(string $url, callable $callable, string $name);
+  
 
-   // public function post(string $url, callable $callable, string $name);
+    public function addRoute(string $url, MiddlewareInterface $middleware,  $methods, string $name);
 
-   // public function generateUri($name, array $substitutions = [], array $options = []);
+    public function addRoute_get(string $url, MiddlewareInterface $middleware, string $name) ;
 
-  //  public function match(ServerRequestInterface $request);
+    public function addRoute_post(string $url, MiddlewareInterface $middleware, string $name) ;
+
+    public function addRoute_put(string $url, MiddlewareInterface $middleware, string $name) ;
+
+    public function addRoute_patch(string $url, MiddlewareInterface $middleware, string $name);
+
+    public function addRoute_delete(string $url, MiddlewareInterface $middleware, string $name) ;
+
+    public function addRoute_any(string $url, MiddlewareInterface $middleware, string $name) ;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function generateUri($name, array $substitutions = [], array $options = []): string ;
+
+    public function match(ServerRequestInterface $request): RouteInterface;
+  
+
 }

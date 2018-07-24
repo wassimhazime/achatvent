@@ -14,7 +14,7 @@
 
 namespace Kernel\Renderer;
 
-class PHPRenderer implements InterfaceRenderer
+class PHPRenderer implements RendererInterface
 {
 
     private $paths = [];

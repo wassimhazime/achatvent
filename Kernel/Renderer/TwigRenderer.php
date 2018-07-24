@@ -8,7 +8,7 @@
 
 namespace Kernel\Renderer;
 
-use Kernel\AWA_Interface\InterfaceRenderer;
+use Kernel\AWA_Interface\RendererInterface;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 use Kernel\html\element\TableHTML;
@@ -20,7 +20,7 @@ use Kernel\Tools\Tools;
  *
  * @author wassime
  */
-class TwigRenderer implements InterfaceRenderer
+class TwigRenderer implements RendererInterface
 {
 
     private $twig;

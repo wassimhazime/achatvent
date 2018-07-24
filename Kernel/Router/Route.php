@@ -8,36 +8,41 @@
 
 namespace Kernel\Router;
 
+use Kernel\AWA_Interface\RouteInterface;
+use Psr\Http\Server\MiddlewareInterface;
+
 /**
  * Description of Route
  *
  * @author wassime
  */
-class Route {
+class Route implements RouteInterface {
 
     private $success;
     private $middleware;
     private $name;
     private $params;
 
-    function __construct($middleware, $name, $params,$success=true) {
+    function __construct(MiddlewareInterface $middleware, string $name, array $params, bool $success = true) {
         $this->middleware = $middleware;
         $this->name = $name;
         $this->params = $params;
-        $this->success=$success;
+        $this->success = $success;
     }
+
     function isSuccess(): bool {
-        return $this->success; 
+        return $this->success;
     }
-    function getMiddleware() {
+
+    function getMiddleware(): MiddlewareInterface {
         return $this->middleware;
     }
 
-    function getName() {
+    function getName(): string {
         return $this->name;
     }
 
-    function getParams() {
+    function getParams(): array {
         return $this->params;
     }
 
@@ -47,15 +52,15 @@ class Route {
         }
     }
 
-    function setMiddleware($middleware) {
+    function setMiddleware(MiddlewareInterface $middleware) {
         $this->middleware = $middleware;
     }
 
-    function setName($name) {
+    function setName(string $name) {
         $this->name = $name;
     }
 
-    function setParams($params) {
+    function setParams(array $params) {
         $this->params = $params;
     }
 

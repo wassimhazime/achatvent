@@ -8,7 +8,7 @@ require ROOT . "vendor/autoload.php";
 
 use App\App;
 use App\Middleware\NotFound;
-use Kernel\AWA_Interface\InterfaceRenderer;
+use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\Container\Factory_Container;
 use Middlewares\BasicAuthentication;
@@ -32,12 +32,12 @@ $container = Factory_Container::getContainer(ROOT . "Config" . D_S . "Config_Con
 
 $app = new App($container);
 $app->addMiddleware(new Whoops());
-$app->addMiddleware((new BasicAuthentication([
-    'username1' => 'password1',
-    'aa' => 'a'
-        ]
-        ))->attribute('username')
-);
+//$app->addMiddleware((new BasicAuthentication([
+//    'username1' => 'password1',
+//    'aa' => 'a'
+//        ]
+//        ))->attribute('username')
+//);
 
 
 $app->addModule(\App\Modules\Statistique\StatistiqueModule::class);
@@ -59,24 +59,23 @@ $app->addEvent("exeption", "code");
 $app->addEvent("add", "code");
 
 $app->addMiddleware(new ResponseTime());
-$Request = $container->get(ServerRequestInterface::class);
+
+
+
+
 
 $app->addMiddleware(new NotFound(function ($Response) use ($container) {
     // is html page not found
-    $render = $container->get(InterfaceRenderer::class)
+    $render = $container->get(RendererInterface::class)
             ->render("404", ["_page" => "404"]);
     $Response->getBody()->write($render);
     return $Response;
 })
 );
+
 //rest put delete post .....
-$app->addMiddleware(
-        $container->get(RouterInterface::class)
-                ->match($Request)
-                ->getMiddleware()
-);
-
-
+$app->addMiddleware($container->get(RouterInterface::class));
+$Request = $container->get(ServerRequestInterface::class);
 $Response = $app->run($Request);
 send($Response);
 

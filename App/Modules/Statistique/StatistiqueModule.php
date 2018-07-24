@@ -15,11 +15,9 @@
 namespace App\Modules\Statistique;
 
 use App\Modules\Statistique\Controller\globalController;
-use Kernel\AWA_Interface\InterfaceRenderer;
+use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use const D_S;
 use function str_replace;
 
@@ -33,16 +31,20 @@ class StatistiqueModule {
         $this->router = $this->container->get(RouterInterface::class);
     }
 
-    public function addPathRenderer(InterfaceRenderer $renderer, $pathModules) {
+    public function addPathRenderer(RendererInterface $renderer, $pathModules) {
 
         $renderer->addPath($pathModules . "Statistique" . D_S . "views" . D_S . "statistique", "statistique");
     }
 
     public function addRoute(RouterInterface $router) {
 
-        $router->get("/{controle:[a-z\$]*}", new globalController($this->container, "controle"), "home.get");
+        $router->addRoute_any("/{controle:[a-z\$]*}",
+                new globalController($this->container, "controle"),
+                "home.get");
 
-        $router->get("/st/{controle:[a-z\$]*}", new Controller\AjaxController($this->container, "controle"), "st.get");
+        $router->addRoute_any("/st/{controle:[a-z\$]*}",
+                new Controller\AjaxController($this->container, "controle"), 
+                "st.get");
     }
 
     public function dataMenu() {

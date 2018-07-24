@@ -5,11 +5,9 @@ namespace App\Modules\Comptable;
 use App\Modules\Comptable\Controller\TraitementSendController;
 use App\Modules\Comptable\Controller\TraitementShowController;
 use App\Modules\Comptable\Controller\VoirController;
-use Kernel\AWA_Interface\InterfaceRenderer;
+use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use const D_S;
 use function str_replace;
 
@@ -23,36 +21,26 @@ class ComptableModule {
         $this->router = $this->container->get(RouterInterface::class);
     }
 
-    public function addPathRenderer(InterfaceRenderer $renderer, $pathModules) {
+    public function addPathRenderer(RendererInterface $renderer, $pathModules) {
         $renderer->addPath($pathModules . "Comptable" . D_S . "views" . D_S . "show", "ComptableShow");
         $renderer->addPath($pathModules . "Comptable" . D_S . "views" . D_S . "traitement", "ComptableTraitement");
     }
 
-    public function addRoute($router) {
+    public function addRoute(RouterInterface $router) {
 
-        $router->get("/voir-{controle:[a-z\$]+}", 
-                new VoirController($this->container, "controle"), 
-                "ComptableVoirGet");
-        
-        
-        $router->get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}",
-                new TraitementShowController($this->container, "controle"),
-                "ComptableTraitementShow");
-        
-        
-        $router->post("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}",
-                new TraitementSendController($this->container, "controle"),
-                "ComptableTraitementSend");
-        
-        
-        $router->get("/ajaxcomptable/{controle:[a-z\$]+}", 
-                new Controller\AjaxController($this->container, "controle"),
-                "ComptableAjax");
-        
-        
-        $router->get("/files/{controle:[a-z0-9\_\$\-]+}",
-                new Controller\FileController($this->container, "controle"),
-                "ComptableFiles");
+        $router->addRoute_get("/voir-{controle:[a-z\$]+}", new VoirController($this->container, "controle"), "ComptableVoirGet");
+
+
+        $router->addRoute_get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}", new TraitementShowController($this->container, "controle"), "ComptableTraitementShow");
+
+
+        $router->addRoute_post("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", new TraitementSendController($this->container, "controle"), "ComptableTraitementSend");
+
+
+        $router->addRoute_get("/ajaxcomptable/{controle:[a-z\$]+}", new Controller\AjaxController($this->container, "controle"), "ComptableAjax");
+
+
+        $router->addRoute_get("/files/{controle:[a-z0-9\_\$\-]+}", new Controller\FileController($this->container, "controle"), "ComptableFiles");
     }
 
     // //////////////////////

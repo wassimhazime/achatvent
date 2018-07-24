@@ -14,7 +14,7 @@
 
 namespace App;
 
-use Kernel\AWA_Interface\InterfaceRenderer;
+use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\Kernel;
 use function array_merge;
@@ -24,7 +24,7 @@ class App extends Kernel {
 
     function save_modules() {
         $this->router = $this->container->get(RouterInterface::class);
-        $renderer = $this->container->get(InterfaceRenderer::class);
+        $renderer = $this->container->get(RendererInterface::class);
         $pathModules = $this->container->get("pathModules");
         $menu = [];
         foreach ($this->modules as $module) {

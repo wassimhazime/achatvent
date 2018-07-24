@@ -10,9 +10,28 @@
  *
  * @author wassime
  */
+
 namespace Kernel\AWA_Interface;
 
-interface RouteInterface
-{
-    //put your code here
+use Psr\Http\Server\MiddlewareInterface;
+
+interface RouteInterface {
+
+    function __construct(MiddlewareInterface $middleware, string $name, array $params, bool $success = true);
+
+    function isSuccess(): bool;
+
+    function getMiddleware(): MiddlewareInterface;
+
+    function getName(): string;
+
+    function getParams(): array;
+
+    function getParam(string $index);
+
+    function setMiddleware(MiddlewareInterface $middleware);
+
+    function setName(string $name);
+
+    function setParams(array $params);
 }

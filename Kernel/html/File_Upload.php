@@ -15,7 +15,7 @@ namespace Kernel\html;
  */
 ;
 
-use Kernel\AWA_Interface\InterfaceFile_Upload;
+use Kernel\AWA_Interface\File_UploadInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
@@ -34,7 +34,7 @@ use function str_replace;
 use function strpos;
 use function unlink;
 
-class File_Upload implements InterfaceFile_Upload{
+class File_Upload implements File_UploadInterface{
 
     const FIN_REGEX = "_";
 

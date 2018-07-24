@@ -2,8 +2,8 @@
 
 namespace Kernel\Controller;
 
-use Kernel\AWA_Interface\InterfaceFile_Upload;
-use Kernel\AWA_Interface\InterfaceRenderer;
+use Kernel\AWA_Interface\File_UploadInterface;
+use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\html\File_Upload;
 use Kernel\Model\Model;
@@ -32,8 +32,8 @@ abstract class Controller implements MiddlewareInterface {
         $this->nameController = $nameController;
 
         $this->router = $container->get(RouterInterface::class);
-        $this->renderer = $container->get(InterfaceRenderer::class);
-        $this->File_Upload = $container->get(InterfaceFile_Upload::class);
+        $this->renderer = $container->get(RendererInterface::class);
+        $this->File_Upload = $container->get(File_UploadInterface::class);
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {

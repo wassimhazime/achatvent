@@ -31,14 +31,14 @@ class NotFound implements MiddlewareInterface {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
         $Response = $handler->handle($request);
-        $code = $Response->getStatusCode();
-
-        if ($code === 404 || $Response->getBody()->getSize() === 0) {
+        
+        if ($Response->getStatusCode() === 404) {
             // is json page not found
             $HeaderLine = $Response->getHeaderLine("Content-Type");
             if (strpos($HeaderLine, "json") > 0) {
                 $Response->getBody()->write("{}");
             } else {
+                // is html page not found
                 $Response = call_user_func($this->call, $Response);
             }
             return $Response->withStatus(404);
