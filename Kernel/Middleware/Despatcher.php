@@ -40,7 +40,7 @@ class Despatcher implements RequestHandlerInterface {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface {
-         
+       // var_dump($this->middlwares);die();
         
         $middlware = $this->getMiddlwares();
        

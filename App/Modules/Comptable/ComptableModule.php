@@ -2,49 +2,42 @@
 
 namespace App\Modules\Comptable;
 
+use App\AbstractModules\AbstractModule;
 use App\Modules\Comptable\Controller\TraitementSendController;
 use App\Modules\Comptable\Controller\TraitementShowController;
 use App\Modules\Comptable\Controller\VoirController;
 use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
-use Psr\Container\ContainerInterface;
 use const D_S;
-use function str_replace;
 
-class ComptableModule {
+class ComptableModule extends AbstractModule {
 
-    private $container;
-    private $router;
+    public function addPathRenderer(RendererInterface $renderer, string $pathModules) {
+        $pathModule = $pathModules . "Comptable" . D_S . "views" . D_S;
 
-    public function __construct(ContainerInterface $container) {
-        $this->container = $container;
-        $this->router = $this->container->get(RouterInterface::class);
+        $renderer->addPath($pathModule . "show", "ComptableShow");
+        $renderer->addPath($pathModule . "traitement", "ComptableTraitement");
     }
 
-    public function addPathRenderer(RendererInterface $renderer, $pathModules) {
-        $renderer->addPath($pathModules . "Comptable" . D_S . "views" . D_S . "show", "ComptableShow");
-        $renderer->addPath($pathModules . "Comptable" . D_S . "views" . D_S . "traitement", "ComptableTraitement");
-    }
+    public function addRoute(RouterInterface $router,array $middlewares) {
 
-    public function addRoute(RouterInterface $router) {
-
-        $router->addRoute_get("/voir-{controle:[a-z\$]+}", new VoirController($this->container, "controle"), "ComptableVoirGet");
+        $router->addRoute_get("/{action:[a-z]+}-{controle:[a-z\$]+}", new VoirController($this->container), "ComptableVoirGet");
 
 
-        $router->addRoute_get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}", new TraitementShowController($this->container, "controle"), "ComptableTraitementShow");
+        $router->addRoute_get("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}", new TraitementShowController($this->container), "ComptableTraitementShow");
 
 
-        $router->addRoute_post("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", new TraitementSendController($this->container, "controle"), "ComptableTraitementSend");
+        $router->addRoute_post("/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", new TraitementSendController($this->container), "ComptableTraitementSend");
 
 
-        $router->addRoute_get("/ajaxcomptable/{controle:[a-z\$]+}", new Controller\AjaxController($this->container, "controle"), "ComptableAjax");
+        $router->addRoute_get("/ajaxcomptable/{controle:[a-z\$]+}", new Controller\AjaxController($this->container), "ComptableAjax");
 
 
-        $router->addRoute_get("/files/{controle:[a-z0-9\_\$\-]+}", new Controller\FileController($this->container, "controle"), "ComptableFiles");
+        $router->addRoute_get("/files/{controle:[a-z0-9\_\$\-]+}", new Controller\FileController($this->container), "ComptableFiles");
     }
 
     // //////////////////////
-    public function dataMenu() {
+    public function getMenu(): array {
         $nav1 = $this->generateUriMenu("ComptableVoirGet", [
             "clients",
             'raison$sociale',
@@ -82,21 +75,6 @@ class ComptableModule {
 
         return $menu;
         // // "group"=> [[lable,url],....]
-    }
-
-    private function generateUriMenu(string $route, array $info): array {
-        $infogenerate = [];
-        foreach ($info as $controle) {
-
-            $label = str_replace("$", "  ", $controle);
-            $url = $this->router->generateUri($route, [
-                "controle" => $controle
-            ]);
-
-            $infogenerate[$label] = $url;
-        }
-
-        return $infogenerate;
     }
 
 }

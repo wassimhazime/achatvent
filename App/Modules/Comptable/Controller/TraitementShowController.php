@@ -21,8 +21,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class TraitementShowController extends AbstractTraitementShowController {
 
-    function __construct(ContainerInterface $container, string $page) {
-        parent::__construct($container, $page);
+    function __construct(ContainerInterface $container) {
+        parent::__construct($container);
         $this->setModel(new Model($container->get("pathModel")));
     }
 

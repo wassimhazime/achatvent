@@ -21,8 +21,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 abstract class AbstractController extends Controller {
 
-    function __construct(ContainerInterface $container, string $page) {
-        parent::__construct($container, $page);
+    function __construct(ContainerInterface $container) {
+        parent::__construct($container);
     }
 
     protected function getModeShow(array $modeHTTP): array {
@@ -68,6 +68,7 @@ abstract class AbstractController extends Controller {
     }
 
     protected function chargeModel($table) {
+         
         $flag = $this->getModel()->setStatement($table);
         return $flag;
     }

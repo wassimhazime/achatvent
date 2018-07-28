@@ -16,27 +16,34 @@ namespace App;
 
 use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
+use Kernel\AWA_Interface\ModuleInterface;
 use Kernel\Kernel;
 use function array_merge;
-use function class_exists;
+use function is_a;
 
 class App extends Kernel {
 
-    function save_modules() {
-        $this->router = $this->container->get(RouterInterface::class);
+    function run_modules() {
+        $router = $this->container->get(RouterInterface::class);
         $renderer = $this->container->get(RendererInterface::class);
         $pathModules = $this->container->get("pathModules");
-        $menu = [];
-        foreach ($this->modules as $module) {
-            if (class_exists($module)) {
-                $m = new $module($this->container);
-                $m->addRoute($this->router);
-                $m->addPathRenderer($renderer, $pathModules);
-                $menu = array_merge($menu, $m->dataMenu());
+        $menus = [];
+        foreach ($this->modules as $_module) {
+            $class_module=$_module["module"];
+            $middlewares=$_module["middlewares"];
+            
+            $module = new $class_module($this->container);
+            if (is_a($module, ModuleInterface::class)) {
+                $module->addRoute($router,$middlewares);
+                $module->addPathRenderer($renderer, $pathModules);
+                $menu = $module->getMenu();
+                $menus = array_merge($menus, $menu);
             }
         }
-        $renderer->addGlobal("router", $this->router);
-        $renderer->addGlobal("_menu", $menu);
+
+
+        $renderer->addGlobal("router", $router);
+        $renderer->addGlobal("_menu", $menus);
     }
 
 }

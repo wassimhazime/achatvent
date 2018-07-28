@@ -27,8 +27,8 @@ use function substr;
 
 class TraitementSendController extends AbstractTraitementSendController {
 
-    function __construct(ContainerInterface $container, string $page) {
-        parent::__construct($container, $page);
+    function __construct(ContainerInterface $container) {
+        parent::__construct($container);
         $this->setModel(new Model($container->get("pathModel")));
     }
 

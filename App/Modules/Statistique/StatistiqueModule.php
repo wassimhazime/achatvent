@@ -14,40 +14,27 @@
 
 namespace App\Modules\Statistique;
 
+use App\AbstractModules\AbstractModule;
 use App\Modules\Statistique\Controller\globalController;
 use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
-use Psr\Container\ContainerInterface;
 use const D_S;
-use function str_replace;
 
-class StatistiqueModule {
+class StatistiqueModule extends AbstractModule {
 
-    private $container;
-    private $router;
-
-    public function __construct(ContainerInterface $container) {
-        $this->container = $container;
-        $this->router = $this->container->get(RouterInterface::class);
+    public function addPathRenderer(RendererInterface $renderer, string $pathModules) {
+        $pathModule = $pathModules . "Statistique" . D_S . "views" . D_S;
+        $renderer->addPath($pathModule . "statistique", "statistique");
     }
 
-    public function addPathRenderer(RendererInterface $renderer, $pathModules) {
+    public function addRoute(RouterInterface $router,array $middlewares) {
 
-        $renderer->addPath($pathModules . "Statistique" . D_S . "views" . D_S . "statistique", "statistique");
+        $router->addRoute_any("/{controle:[a-z\$]*}", new globalController($this->container), "home.get");
+
+        $router->addRoute_any("/st/{controle:[a-z\$]*}", new Controller\AjaxController($this->container), "st.get");
     }
 
-    public function addRoute(RouterInterface $router) {
-
-        $router->addRoute_any("/{controle:[a-z\$]*}",
-                new globalController($this->container, "controle"),
-                "home.get");
-
-        $router->addRoute_any("/st/{controle:[a-z\$]*}",
-                new Controller\AjaxController($this->container, "controle"), 
-                "st.get");
-    }
-
-    public function dataMenu() {
+    public function getMenu(): array {
         $nav1 = $this->generateUriMenu("home.get", ["clients", 'raison$sociale', 'contacts', 'mode$paiement']);
 
 
@@ -56,21 +43,6 @@ class StatistiqueModule {
         ];
 
         return $menu;
-    }
-
-    private function generateUriMenu(string $route, array $info): array {
-
-        $infogenerate = [];
-        foreach ($info as $controle) {
-
-
-            $label = str_replace("$", "  ", $controle);
-            $url = $this->router->generateUri($route, ["controle" => $controle]);
-
-            $infogenerate[$label] = $url;
-        }
-
-        return $infogenerate;
     }
 
 }

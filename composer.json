@@ -32,7 +32,8 @@
         "middlewares/response-time": "^1.0",
         "middlewares/http-authentication": "^1.0",
         "middlewares/minifier": "^1.0",
-        "middlewares/negotiation": "^1.0"
+        "middlewares/negotiation": "^1.0",
+        "middlewares/php-session": "^1.1"
        
     },
     "require-dev": {

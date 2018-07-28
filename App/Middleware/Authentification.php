@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Kernel\Middleware;
+namespace App\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,19 +14,22 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * Description of Midd_pse15
+ * Description of Authentification
  *
  * @author wassime
  */
-class Midd_pse15 implements MiddlewareInterface {
+class Authentification implements MiddlewareInterface {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-        
-        $res = $handler->handle($request);
         var_dump($_SESSION);
-        die("ok");
-        $res->getBody()->write("ok psr 15");
-        return $res;
+        if (isset($_SESSION["auth"]) ) {
+            $response = $handler->handle($request);
+            return $response;
+        }
+        $_SESSION["auth"]="hh";
+        die("auth");
+        
+        
     }
 
 }

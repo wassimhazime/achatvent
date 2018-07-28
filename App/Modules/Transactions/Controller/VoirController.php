@@ -10,9 +10,10 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class VoirController extends AbstractVoirController {
 
-    function __construct(ContainerInterface $container, string $page) {
-        parent::__construct($container, $page);
+    function __construct(ContainerInterface $container) {
+        parent::__construct($container);
         $this->setModel(new Model($container->get("pathModel")));
+        
     }
 
     public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {

@@ -21,44 +21,49 @@ use Middlewares\JsMinifier;
 use Middlewares\ResponseTime;
 use Middlewares\Whoops;
 use Psr\Http\Message\ServerRequestInterface;
+use App\Modules\Statistique\StatistiqueModule;
+use App\Modules\Comptable\ComptableModule;
+use App\Modules\Transactions\TransactionsModule;
 use function Http\Response\send;
 
-//$app->addModule("achat", ["Middlewareauto"], ["event"]);
-//$app->addModule("vente", ["Middlewareauto"]);
-//$app->addModule("charge", ["Middlewareauto"]);
-//$app->addModule("pub");
-
 $container = Factory_Container::getContainer(ROOT . "Config" . D_S . "Config_Container.php");
-
 $app = new App($container);
-$app->addMiddleware(new Whoops());
-//$app->addMiddleware((new BasicAuthentication([
-//    'username1' => 'password1',
-//    'aa' => 'a'
-//        ]
-//        ))->attribute('username')
-//);
-
-
-$app->addModule(\App\Modules\Statistique\StatistiqueModule::class);
-$app->addModule(\App\Modules\Comptable\ComptableModule::class);
-$app->addModule(\App\Modules\Transactions\TransactionsModule::class);
-$app->save_modules();
-
-
-
-$app->addMiddleware(new CssMinifier());
-$app->addMiddleware(new JsMinifier());
-$app->addMiddleware(new HtmlMinifier());
-$app->addMiddleware(new ContentType());
-$app->addMiddleware(new ContentLanguage(['fr', 'en', 'ar']));
-$app->addMiddleware(new ContentEncoding(['gzip', 'deflate']));
-
 
 $app->addEvent("exeption", "code");
 $app->addEvent("add", "code");
 
+$app->addMiddleware(new Whoops());
+
+$app->addMiddleware(new Middlewares\PhpSession());
+
+
+$app->addModule(StatistiqueModule::class);
+$app->addModule(ComptableModule::class);
+$app->addModule(TransactionsModule::class, [
+    new \App\Middleware\Authentification()
+        ]
+);
+
+
+
+
+$app->addMiddleware([
+    new CssMinifier(),
+    new JsMinifier(),
+    new HtmlMinifier()
+]);
+
+$app->addMiddleware([
+    new ContentType(),
+    new ContentLanguage(['fr', 'en', 'ar']),
+    new ContentEncoding(['gzip', 'deflate'])
+]);
 $app->addMiddleware(new ResponseTime());
+
+
+
+
+
 
 
 
@@ -73,10 +78,12 @@ $app->addMiddleware(new NotFound(function ($Response) use ($container) {
 })
 );
 
-//rest put delete post .....
+
 $app->addMiddleware($container->get(RouterInterface::class));
+
 $Request = $container->get(ServerRequestInterface::class);
 $Response = $app->run($Request);
+
 send($Response);
 
 

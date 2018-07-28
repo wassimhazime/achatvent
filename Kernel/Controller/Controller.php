@@ -16,7 +16,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use function array_merge;
 
 abstract class Controller implements MiddlewareInterface {
-
+    private $container;
     private $model;
     private $File_Upload;
     private $renderer;
@@ -27,22 +27,38 @@ abstract class Controller implements MiddlewareInterface {
     private $request;
     private $response;
     private $InfoTemplete = [];
+    private $middlewares=[];
+    
+    function setMiddlewares(array $middlewares) {
+        $this->middlewares = $middlewares;
+    }
+  
 
-    function __construct(ContainerInterface $container, string $nameController) {
-        $this->nameController = $nameController;
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+        
+        foreach ($this->middlewares as $middleware) {
+         $this->container->get(RequestHandlerInterface::class)
+                 ->pipe($middleware); 
+        }
+        
+        $this->setRequest($request);
+       
+        $this->setResponse($handler->handle($request));
+        
+        $route = $this->getRouter()->match($this->getRequest());
+        $this->setPage($route->getParam($this->getNameController()));
+        return $this->getResponse();
+    }
+
+    function __construct(ContainerInterface $container) {
+       
+        $this->container=$container;
+        
+        $this->nameController = "controle";
 
         $this->router = $container->get(RouterInterface::class);
         $this->renderer = $container->get(RendererInterface::class);
         $this->File_Upload = $container->get(File_UploadInterface::class);
-    }
-
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-
-        $this->setRequest($request);
-        $this->setResponse($handler->handle($request));
-        $route = $this->getRouter()->match($this->getRequest());
-        $this->setPage($route->getParam($this->getNameController()));
-        return $this->getResponse();
     }
 
     function getInfoTemplete() {
