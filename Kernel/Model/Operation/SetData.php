@@ -1,44 +1,32 @@
 <?php
-
 namespace Kernel\Model\Operation;
-
 use Kernel\INTENT\Intent;
 use Kernel\Model\Entitys\EntitysDataTable;
 use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Model\Query\QuerySQL;
 use Kernel\Tools\Tools;
 use TypeError;
-
 class SetData extends AbstractOperatipn
 {
-
     public function update(array $dataForm, $mode): int
     {
         if ($mode != Intent::MODE_UPDATE) {
             throw new TypeError(" ERROR mode Intent ==> mode!= MODE_UPDATE ");
         }
-
         $intent = $this->parse($dataForm, $this->schema, $mode);
-
         $dataCHILDRENs = $this->charge_data_childe($intent);
         $data_NameTable = $this->remove_childe_in_data($intent);
         $id_NameTable = $data_NameTable["id"];
-
         unset($data_NameTable["id"]);   // remove id
         // exec query sql insert to NameTable table
         $datenow = date("Y-m-d-H-i-s");
-
         $data_NameTable["date_modifier"] = $datenow;
-
-
         $querySQL = (new QuerySQL())->
                 update($this->getTable())
                 ->set($data_NameTable)
                 ->where(["id"=>$id_NameTable])
                 ->prepareQuery();
         $this->prepareQueryEXEC($querySQL);
-
-
         /**
          * code delete insert  data to relation table
          */
@@ -46,10 +34,8 @@ class SetData extends AbstractOperatipn
         $this->delete_data_childe($intent, $id_NameTable);
         //insert
         $this->insert_data_childe($intent, $id_NameTable, $dataCHILDRENs);
-
         return $id_NameTable;
     }
-
     public function delete(array $condition)
     { // one  item
        
@@ -59,14 +45,11 @@ class SetData extends AbstractOperatipn
                 ->prepareQuery();
         return     $this->prepareQueryEXEC($delete);
     }
-
     public function insert(array $dataForm, $mode): int
     {
-
         if ($mode != Intent::MODE_INSERT) {
             throw new TypeError(" ERROR mode Intent ==> mode!= MODE_INSERT ");
         }
-
         $intent = $this->parse($dataForm, $this->schema, $mode);
         $dataCHILDRENs = $this->charge_data_childe($intent);
          
@@ -77,8 +60,6 @@ class SetData extends AbstractOperatipn
         $data_NameTable["date_ajoute"] = $datenow;
         $data_NameTable["date_modifier"] = $datenow;
     
-
-
         $querySQL = (new QuerySQL())
                 ->insertInto($this->getTable())
                 ->value($data_NameTable)
@@ -86,7 +67,6 @@ class SetData extends AbstractOperatipn
         // return id rowe set data NameTable table
      
         $id_NameTable = $this->prepareQueryEXEC($querySQL);
-
         /**
          * code insert data to relation table
          */
@@ -94,11 +74,8 @@ class SetData extends AbstractOperatipn
        
         
         $this->insert_data_childe($intent, $id_NameTable, $dataCHILDRENs);
-
-
         return $id_NameTable;
     }
-
     
      public function insert_inverse(array $dataForms,$id_parent ,$mode): int
     {
@@ -117,7 +94,6 @@ class SetData extends AbstractOperatipn
         $datenow = date("Y-m-d-H-i-s");
         $data_NameTable["date_ajoute"] = $datenow;
         $data_NameTable["date_modifier"] = $datenow;
-
         $querySQL = (new QuerySQL())
                 ->insertInto($this->getTable())
                 ->value($data_NameTable)->query();
@@ -136,25 +112,20 @@ class SetData extends AbstractOperatipn
                     "id_achats"  => $id_parent,
                     "id_achat"  => $id_cheld
                         ])->query();
-
                 $this->exec($querySQL);
             
             
             
             
         }
-
         /**
          * code insert data to relation table
          */
       //  $this->insert_data_childe($intent, $id_NameTable, $dataCHILDRENs);
-
-
         return 0;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
-
     /**
      *
       charge data variables
@@ -172,12 +143,10 @@ class SetData extends AbstractOperatipn
       
         return $dataCHILDRENs;
     }
-
     private function remove_childe_in_data($intent)
     {
         $data = ($intent->getEntitysDataTable()[0]);
         $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array
-
         foreach ($name_CHILDRENs as $name_CHILDREN) {
             if (isset($data->$name_CHILDREN)) {
                 unset($data->$name_CHILDREN); // remove CHILDREN in $data
@@ -185,9 +154,7 @@ class SetData extends AbstractOperatipn
         }
         return Tools::entitys_TO_array($data);
     }
-
     ////////////////////////////////////////////////////////////////////////////
-
     /**
      *
       exec SQL des tables relations
@@ -202,15 +169,12 @@ class SetData extends AbstractOperatipn
                     "id_" . $intent->getEntitysSchema()->getNameTable() => $id_NameTable,
                     "id_" . $name_table_CHILDREN => $id_CHILD
                         ])->prepareQuery();
-
                 $this->prepareQueryEXEC($querySQL);
             }
         }
     }
-
     private function delete_data_childe($intent, $id_NameTable)
     {
-
         $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array
         foreach ($name_CHILDRENs as $name_table_CHILDREN) {
             $sqlquery = (new QuerySQL())
@@ -220,7 +184,6 @@ class SetData extends AbstractOperatipn
             $this->prepareQueryEXEC($sqlquery);
         }
     }
-
     /////////////////////////////
     /// insert update
     private function parse(array $data, EntitysSchema $schema, array $mode): Intent

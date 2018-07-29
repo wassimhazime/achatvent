@@ -1,13 +1,10 @@
 <?php
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 namespace Kernel\Model\Operation;
-
 /**
  * Description of ToolsDB
  *
@@ -15,7 +12,6 @@ namespace Kernel\Model\Operation;
  */
 class ToolsDB extends AbstractOperatipn
 {
-
     public function is_Table(string $nameTable): bool
     {
         
@@ -33,7 +29,6 @@ class ToolsDB extends AbstractOperatipn
         foreach ($Schemas as $schema) {
             $names_Tables[]=$schema->getNameTable();
         }
-
         return $names_Tables;
     }
 }

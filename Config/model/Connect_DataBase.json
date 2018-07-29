@@ -1,31 +1,32 @@
-{"BOOT":"TEST",
-    
-    "TEST":{
+{
+    "BOOT": "TEST",
+
+    "TEST": {
         "cache": false,
 
-    "DB": "mysql",
-    "dbhost": "localhost",
-    "dbuser": "root", 
-    "dbpass": "root", 
-    "dbname": "comptable"
-}
+        "DB": "mysql",
+        "dbhost": "localhost",
+        "dbuser": "root", 
+        "dbpass": "root", 
+        "dbname": "comptable"
+    }
     ,
-    "PROD":{
-     "cache": true,
-        
-    "DB": "mysql",
-    "dbhost": "localhost",
-    "dbuser": "comptable", 
-    "dbpass": "achrafwassim", 
-    "dbname": "comptable"
-},
-    "godaddy":{
-     "cache": true,
-        
-    "DB": "mysql",
-    "dbhost": "localhost",
-    "dbuser": "comptable", 
-    "dbpass": "achrafwassim", 
-    "dbname": "comptable"
-}
+    "PROD": {
+        "cache": true,
+
+        "DB": "mysql",
+        "dbhost": "localhost",
+        "dbuser": "comptable", 
+        "dbpass": "achrafwassim", 
+        "dbname": "comptable"
+    },
+    "godaddy": {
+        "cache": true,
+
+        "DB": "mysql",
+        "dbhost": "localhost",
+        "dbuser": "comptable", 
+        "dbpass": "achrafwassim", 
+        "dbname": "comptable"
+    }
 }

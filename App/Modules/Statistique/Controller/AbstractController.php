@@ -27,7 +27,7 @@ abstract class AbstractController extends Controller {
 
     function __construct(ContainerInterface $container) {
         parent::__construct($container);
-       $this->setModel( new Model($container->get( "pathModel")));
+       $this->setModel( new Model($container->get( "pathModel"),"client"));
 
      
        

@@ -1,9 +1,9 @@
 <?php
 
-use App\Modules\Comptable\Model\Model;
 use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\AWA_Interface\File_UploadInterface;
+use Kernel\AWA_Interface\ModelInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -17,6 +17,9 @@ return [
     },
     "pathModel" => function (ContainerInterface $container): string {
         return $container->get("Config") . "model" . D_S;
+    },
+    ModelInterface::class => function (ContainerInterface $container): ModelInterface {
+        return new \Kernel\Model\Model($container->get("pathModel"));
     },
     "configue_Extension" => function (ContainerInterface $container): string {
         return $container->get("Config") . "html" . D_S;
@@ -47,10 +50,8 @@ return [
         // add templet abstract
         $renderer->addPath($container->get("AbstractTempletModules"), "AbstractModules");
         return $renderer;
-    },
-    Model::class => function (ContainerInterface $container): Model {
-        return new Model($container->get("pathModel"));
-    },
+    }
+    ,
     RouterInterface::class => function (ContainerInterface $container): RouterInterface {
         return new \Kernel\Router\Router;
     },

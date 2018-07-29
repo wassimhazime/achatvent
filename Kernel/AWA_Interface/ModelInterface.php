@@ -12,7 +12,7 @@
  */
 namespace Kernel\AWA_Interface;
 
-interface Model
+interface ModelInterface
 {
-    //put your code here
+  
 }

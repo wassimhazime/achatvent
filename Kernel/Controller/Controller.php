@@ -59,7 +59,8 @@ abstract class Controller implements MiddlewareInterface {
         $this->router = $container->get(RouterInterface::class);
         $this->renderer = $container->get(RendererInterface::class);
         $this->File_Upload = $container->get(File_UploadInterface::class);
-    }
+   
+        }
 
     function getInfoTemplete() {
         return $this->InfoTemplete;
