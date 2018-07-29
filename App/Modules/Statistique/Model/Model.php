@@ -14,11 +14,9 @@
 
 namespace App\Modules\Statistique\Model;
 
-use Kernel\INTENT\Intent;
-use Kernel\Model\Model as kernelModel;
-use TypeError;
+use App\AbstractModules\Model\AbstractModel;
 
-class Model extends kernelModel
+class Model extends AbstractModel
 {
 
    

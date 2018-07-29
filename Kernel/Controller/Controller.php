@@ -16,6 +16,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use function array_merge;
 
 abstract class Controller implements MiddlewareInterface {
+
     private $container;
     private $model;
     private $File_Upload;
@@ -27,40 +28,38 @@ abstract class Controller implements MiddlewareInterface {
     private $request;
     private $response;
     private $InfoTemplete = [];
-    private $middlewares=[];
-    
+    private $middlewares = [];
+
     function setMiddlewares(array $middlewares) {
         $this->middlewares = $middlewares;
     }
-  
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-        
+
         foreach ($this->middlewares as $middleware) {
-         $this->container->get(RequestHandlerInterface::class)
-                 ->pipe($middleware); 
+            $this->container->get(RequestHandlerInterface::class)
+                    ->pipe($middleware);
         }
-        
+
         $this->setRequest($request);
-       
+
         $this->setResponse($handler->handle($request));
-        
+
         $route = $this->getRouter()->match($this->getRequest());
         $this->setPage($route->getParam($this->getNameController()));
         return $this->getResponse();
     }
 
     function __construct(ContainerInterface $container) {
-       
-        $this->container=$container;
-        
+
+        $this->container = $container;
+
         $this->nameController = "controle";
 
         $this->router = $container->get(RouterInterface::class);
         $this->renderer = $container->get(RendererInterface::class);
         $this->File_Upload = $container->get(File_UploadInterface::class);
-   
-        }
+    }
 
     function getInfoTemplete() {
         return $this->InfoTemplete;
@@ -94,9 +93,15 @@ abstract class Controller implements MiddlewareInterface {
         $this->nameController = $nameController;
     }
 
-    function getModel(): Model {
+    protected function getModel(): Model {
 
         return $this->model;
+    }
+
+    protected function chargeModel($table) : bool{
+
+        $flag = $this->getModel()->setTable($table);
+        return $flag;
     }
 
     function getFile_Upload(): File_Upload {

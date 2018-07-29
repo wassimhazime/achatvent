@@ -14,60 +14,11 @@
 
 namespace App\Modules\Transactions\Model;
 
+use App\AbstractModules\Model\AbstractModel;
 use Kernel\INTENT\Intent;
-use Kernel\Model\Model as kernelModel;
-use TypeError;
 
-class Model extends kernelModel {
+class Model extends AbstractModel {
 
-    public function setData($data, $id_perent = 0) {
-        if ($this->is_null()) {
-            throw new TypeError(" set table ==> call function setStatement() ");
-        }
-        if (isset($data) && !empty($data)) {
-
-
-            if ($id_perent === 0) {
-                if ($data['id'] == "") {
-
-                    $id_parent = $this->get_setData()->insert($data, Intent::MODE_INSERT);
-                    return ($id_parent);
-                } else {
-
-                    $id_parent = $this->get_setData()->update($data, Intent::MODE_UPDATE);
-
-                    return ($id_parent);
-                }
-            } else {
-                $id_parent = $this->get_setData()->insert_inverse($data, $id_perent, Intent::MODE_INSERT);
-                return ($id_parent);
-            }
-        } else {
-            die("rak 3aya9ti");
-        }
-    }
-
-    public function find_by_id($id): array {
-        return $this->getData()->find_by_id($id);
-    }
-
-    public function show(array $mode, $condition = true) {
-        if ($this->is_null()) {
-            throw new TypeError(" is_null==> show ");
-        }
-        if ($condition !== true) {
-            $condition = ["{$this->getTable()}.id" => $condition];
-        }
-        $intent = $this->getData()->select($mode, $condition);
-        return $intent;
-    }
-
-//    public function formChild(array $dataparent) {
-//
-//        $intent = $this->getGui()->formChild($dataparent);
-//
-//
-//        return $intent;
-//    }
+    
 
 }

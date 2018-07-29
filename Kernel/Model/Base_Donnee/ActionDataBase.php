@@ -47,7 +47,7 @@ class ActionDataBase extends Connection {
     }
 
     /// setdata
-    protected function prepareQueryEXEC(Prepare $query) {
+    protected function prepareQueryEXEC(Prepare $query): int {
 
         $sqlprepare = $query->getPrepare();
         $params_execute = $query->getExecute();

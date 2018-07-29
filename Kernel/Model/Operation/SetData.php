@@ -36,7 +36,7 @@ class SetData extends AbstractOperatipn
         $this->insert_data_childe($intent, $id_NameTable, $dataCHILDRENs);
         return $id_NameTable;
     }
-    public function delete(array $condition)
+    public function delete(array $condition): int
     { // one  item
        
         $delete = (new QuerySQL())

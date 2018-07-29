@@ -42,7 +42,9 @@ class TraitementSendController extends AbstractTraitementSendController {
         if (!$flag) {
             return $this->getResponse()->withStatus(404);
         }
-        $intent = $this->getModel()->setData($insert);
+        $id_parent = $this->getModel()->setData($insert);
+        $intent = $this->getModel()->show_id($id_parent);
+        
         return $this->render("@ComptableShow/show_item", ["intent" => $intent]);
     }
 

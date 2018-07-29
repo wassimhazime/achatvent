@@ -67,10 +67,6 @@ abstract class AbstractController extends Controller {
         return $mode;
     }
 
-    protected function chargeModel($table) {
-         
-        $flag = $this->getModel()->setStatement($table);
-        return $flag;
-    }
+   
 
 }
