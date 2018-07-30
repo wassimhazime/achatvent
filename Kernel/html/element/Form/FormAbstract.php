@@ -19,25 +19,28 @@ use Kernel\INTENT\Intent_Form;
  *
  * @author wassime
  */
-abstract class FormAbstract {
+abstract class FormAbstract
+{
 
     ///Conevert_TypeClomunSQL_to_TypeInputHTML
     protected $Conevert;
     protected $input = [];
 
-    function __construct(array $Conevert, Intent_Form $Intent_Form) {
+    function __construct(array $Conevert, Intent_Form $Intent_Form)
+    {
 
         $META_data = $Intent_Form->getMETA_data();
         $Charge_data = $Intent_Form->getCharge_data();
         $Default_Data = $Intent_Form->getDefault_Data();
 
-        ///Conevert_TypeClomunSQL_to_TypeInputHTML 
+        ///Conevert_TypeClomunSQL_to_TypeInputHTML
         $this->Conevert = $Conevert;
         //// change input
         $this->setInput($META_data, $Charge_data, $Default_Data);
     }
 
-    protected function conevert(array $COLUMN_META, $sefix = "id_html_"): array {
+    protected function conevert(array $COLUMN_META, $sefix = "id_html_"): array
+    {
         $type = $COLUMN_META['Type'];
         $id = $sefix . $COLUMN_META['Field'];
 
@@ -51,7 +54,8 @@ abstract class FormAbstract {
         return $COLUMN_META;
     }
 
-    protected function charge_input($META_data, $Charge_data, $Default_Data = []) {
+    protected function charge_input($META_data, $Charge_data, $Default_Data = [])
+    {
         foreach ($META_data as $COLUMN_META) {
             $name = $COLUMN_META["Field"];
 
@@ -71,7 +75,8 @@ abstract class FormAbstract {
         }
     }
 
-    protected function InputTage(array $input, string $styleGroup = "form-horizonta", string $child = "") {
+    protected function InputTage(array $input, string $styleGroup = "form-horizonta", string $child = "")
+    {
         switch ($input['Type']) {
             case "textarea":
                 $inputHTML = (new Textarea($input, $styleGroup, $child))->builder();

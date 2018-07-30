@@ -4,7 +4,7 @@
 
   Aujourd'hui nous allons parler d'un pattern assez particulier :
  *  Le conteneur d'injecteur de dépendance.
- *  Le but de ce pattern et d'être 
+ *  Le but de ce pattern et d'être
  * capable de résoudre les dépendances d'un objet simplement..
  */
 

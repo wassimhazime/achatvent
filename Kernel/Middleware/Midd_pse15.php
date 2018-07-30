@@ -18,9 +18,11 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-class Midd_pse15 implements MiddlewareInterface {
+class Midd_pse15 implements MiddlewareInterface
+{
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         
         $res = $handler->handle($request);
         var_dump($_SESSION);
@@ -28,5 +30,4 @@ class Midd_pse15 implements MiddlewareInterface {
         $res->getBody()->write("ok psr 15");
         return $res;
     }
-
 }

@@ -108,7 +108,7 @@ class HTML
         return $this;
     }
 
-     function setId(string $id): self
+    function setId(string $id): self
     {
         $this->html['id'] = trim($id);
         return $this;

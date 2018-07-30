@@ -15,20 +15,23 @@ use Kernel\html\HTML;
  *
  * @author wassime
  */
-class Box_shadow {
+class Box_shadow
+{
 
     private $title;
     private $body;
     private $px;
 
-    function __construct($title, $body, $px = 24) {
+    function __construct($title, $body, $px = 24)
+    {
 
         $this->title = $title;
         $this->body = $body;
         $this->px = $px;
     }
 
-    public function builder() {
+    public function builder()
+    {
         $heading = $this->heading();
         $body = $this->body();
         return HTML::TAG("div")
@@ -38,7 +41,8 @@ class Box_shadow {
                         ->builder();
     }
 
-    private function heading() {
+    private function heading()
+    {
 
 
 
@@ -53,10 +57,10 @@ class Box_shadow {
                         ->builder();
     }
 
-    private function body() {
+    private function body()
+    {
         return HTML::TAG("div")
                         ->setClass("box-body")
                         ->setData($this->body)->builder();
     }
-
 }

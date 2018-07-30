@@ -5,6 +5,7 @@
  * and open the template in the editor.
  */
 namespace Kernel\Model\Operation;
+
 /**
  * Description of Select
  *
@@ -13,8 +14,11 @@ namespace Kernel\Model\Operation;
 use Kernel\INTENT\Intent;
 use Kernel\Model\Query\QuerySQL;
 use Kernel\Tools\Tools;
-class GetData extends AbstractOperatipn {
-    public function select_in(array $mode, $id, $condition): Intent {
+
+class GetData extends AbstractOperatipn
+{
+    public function select_in(array $mode, $id, $condition): Intent
+    {
         $schema = $this->_getSchema();
         if (Intent::is_show_MASTER($mode)) {
             $champs = $schema->select_master();
@@ -33,7 +37,8 @@ class GetData extends AbstractOperatipn {
         $this->setDataJoins($Entitys, $mode);
         return new Intent($schema, $Entitys, $mode);
     }
-    public function select(array $mode, $condition): Intent {
+    public function select(array $mode, $condition): Intent
+    {
         $schema = $this->_getSchema();
         if (Intent::is_show_MASTER($mode)) {
             $champs = $schema->select_master();
@@ -52,7 +57,8 @@ class GetData extends AbstractOperatipn {
         $this->setDataJoins($Entitys, $mode);
         return new Intent($schema, $Entitys, $mode);
     }
-    public function is_id($id): bool {
+    public function is_id($id): bool
+    {
         $schema = $this->_getSchema();
         $condition = ["{$schema->getNameTable()}.id" => $id];
         $Entitys = $this->prepareQuery((new QuerySQL())
@@ -62,7 +68,8 @@ class GetData extends AbstractOperatipn {
                         ->prepareQuery());
         return (!empty($Entitys));
     }
-    public function find_by_id($id): array {
+    public function find_by_id($id): array
+    {
         $schema = $this->_getSchema();
         $condition = ["{$schema->getNameTable()}.id" => $id];
         $Entitys = $this->prepareQuery((new QuerySQL())
@@ -72,7 +79,8 @@ class GetData extends AbstractOperatipn {
                         ->where($condition)->prepareQuery());
         return Tools::entitys_TO_array($Entitys[0]);
     }
-    private function setDataJoins(array $Entitys, array $mode) {
+    private function setDataJoins(array $Entitys, array $mode)
+    {
         $schema = $this->_getSchema();
         foreach ($Entitys as $Entity) {
             if (!empty($schema->get_table_CHILDREN())and Intent::is_get_CHILDREN($mode)) {
@@ -90,7 +98,8 @@ class GetData extends AbstractOperatipn {
             }
         }
     }
-    public function get_idfile($condition): string {
+    public function get_idfile($condition): string
+    {
         $schema = $this->_getSchema();
         if (empty($schema->getFILES())) {
             return "";

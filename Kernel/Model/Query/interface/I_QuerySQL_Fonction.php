@@ -12,10 +12,10 @@ NOW() date et heure actuelle
 RAND() retourner un nombre aléatoire
 CONCAT() concaténer des chaînes de caractères
 CURRENT_DATE() date actuelle
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
 Fonctions d’agrégation
 SQL AVG()
 SQL COUNT()

@@ -5,18 +5,22 @@
  * and open the template in the editor.
  */
 namespace Kernel\Model\Operation;
+
 use Kernel\INTENT\Intent_Form;
 use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Model\Query\QuerySQL;
 use Kernel\Tools\Tools;
+
 /**
  * Description of FORM
  *
  * @author wassime
  */
-class GUI extends AbstractOperatipn {
+class GUI extends AbstractOperatipn
+{
     ////////////////////////////////////////////////////////////////////////////////
-    public function formSelect(): Intent_Form {
+    public function formSelect(): Intent_Form
+    {
         $schema = $this->schema;
         $schemaFOREIGN_KEY = new EntitysSchema();
         $schemaFOREIGN_KEY->setNameTable($schema->getNameTable());
@@ -30,7 +34,8 @@ class GUI extends AbstractOperatipn {
         $Default_Data = [];
         return new Intent_Form($META_data, $Charge_data, $Default_Data);
     }
-    public function form($condition): Intent_Form {
+    public function form($condition): Intent_Form
+    {
         
         $META_data = $this->schema->getCOLUMNS_META();
         
@@ -41,7 +46,8 @@ class GUI extends AbstractOperatipn {
         $Default_Data = [];
         return new Intent_Form($META_data, $Charge_data, $Default_Data);
     }
-    public function formDefault( array $conditionDefault): Intent_Form {
+    public function formDefault(array $conditionDefault): Intent_Form
+    {
         $schema = $this->schema;
         
         // data Default
@@ -53,7 +59,7 @@ class GUI extends AbstractOperatipn {
                         ->prepareQuery());
        
       
-        if( !isset($Entitys[0])){
+        if (!isset($Entitys[0])) {
             die("<h1>je ne peux pas insérer données  doublons ou vide </h1> ")  ;
         }
         
@@ -63,7 +69,7 @@ class GUI extends AbstractOperatipn {
            // data join (children enfant drari lbrahch ....)
           $nameTable_CHILDRENs = $schema->get_table_CHILDREN();
           $Entitys_CHILDRENs = [];
-         if (!empty($nameTable_CHILDRENs)) {
+        if (!empty($nameTable_CHILDRENs)) {
           /// charge enfant data no lier lien
             $Entitys_CHILDRENs = $this->dataChargeMultiSelectIndependent($conditionformSelect);
           /// charge enfant data lien
@@ -81,10 +87,10 @@ class GUI extends AbstractOperatipn {
     }
     /////////////////////////////////////////////////:
 //    public function formChild(array $datapernt = []): Intent_Form {
-//        
+//
 //        $schema = $this->schema;
 //        $Charge_data = [];
-//        $Charge_data ["select"] = $this->datachargeselect($datapernt); // avec un sel raison sosial 
+//        $Charge_data ["select"] = $this->datachargeselect($datapernt); // avec un sel raison sosial
 //        $Charge_data["multiselect"] = [];
 //       // $Charge_data["PARENT"] = $datapernt;
 //
@@ -94,7 +100,8 @@ class GUI extends AbstractOperatipn {
 //        return new Intent_Form($schema->getCOLUMNS_META(), $Charge_data, $Default_Data);
 //    }
     ///////////////////////////////////////////////////////////////////
-    private function datachargeselect(array $condition = []) {
+    private function datachargeselect(array $condition = [])
+    {
         $schema = $this->schema;
         $nameTable_FOREIGNs = $schema->getFOREIGN_KEY();
         /// charge select input
@@ -116,7 +123,8 @@ class GUI extends AbstractOperatipn {
         }
         return $Entitys_FOREIGNs;
     }
-    private function dataChargeMultiSelectIndependent(array $condition = []) {
+    private function dataChargeMultiSelectIndependent(array $condition = [])
+    {
         $schema = $this->schema;
         $nameTable_CHILDRENs = $schema->get_table_CHILDREN();
         $Entitys_CHILDRENs = [];
@@ -133,7 +141,8 @@ class GUI extends AbstractOperatipn {
         }
         return $Entitys_CHILDRENs;
     }
-    private function dataChargeMultiSelectDependent($tablechild, array $condition) {
+    private function dataChargeMultiSelectDependent($tablechild, array $condition)
+    {
         $schema = $this->schema;
         $schem_Table_CHILDREN = $this->getschema($tablechild);
         return $this->prepareQuery((
@@ -144,7 +153,8 @@ class GUI extends AbstractOperatipn {
                                 ->where($condition)
                                 ->prepareQuery());
     }
-    private function query_enfant_lier_formSelect( $query, array $condition, array $FOREIGN_KEY_CHILDRENs) {
+    private function query_enfant_lier_formSelect($query, array $condition, array $FOREIGN_KEY_CHILDRENs)
+    {
         if (!empty($condition) and ! empty($FOREIGN_KEY_CHILDRENs)) {
             foreach ($FOREIGN_KEY_CHILDRENs as $FOREIGN_KEY) {
                 if (isset($condition[$FOREIGN_KEY])) {
@@ -154,7 +164,8 @@ class GUI extends AbstractOperatipn {
         }
         return $query;
     }
-    private function condition_formSelect_par_condition_Default($condition): array {
+    private function condition_formSelect_par_condition_Default($condition): array
+    {
         $schema = $this->schema;
         $FOREIGN_KEYs = $schema->getFOREIGN_KEY();
         if (empty($FOREIGN_KEYs)) {

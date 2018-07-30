@@ -13,12 +13,14 @@ namespace Kernel\Model\Query;
  *
  * @author wassime
  */
-class Select extends Abstract_Query {
+class Select extends Abstract_Query
+{
 
     protected $column = ["*"];
     protected $join = [];
 
-    function __construct() {
+    function __construct()
+    {
         /// select query
         //(new QuerySQL())->
         // ->select("nom,age,adress as ADRESS ") or
@@ -36,7 +38,8 @@ class Select extends Abstract_Query {
         }
     }
 
-    protected function setColumn(array $columns) {
+    protected function setColumn(array $columns)
+    {
         if ($columns != null or ! empty($columns)) {
             if ($this->column[0] == "*") {
                 $this->column = [];
@@ -61,7 +64,8 @@ class Select extends Abstract_Query {
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function column() {
+    public function column()
+    {
 
         /// column query
         //(new QuerySQL())->select()->
@@ -79,7 +83,8 @@ class Select extends Abstract_Query {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public function from(string $table, string $alias = '') {
+    public function from(string $table, string $alias = '')
+    {
         /// form query
         //from("client_table")->from("adress_table")
         //**** alias
@@ -97,7 +102,8 @@ class Select extends Abstract_Query {
 
 
 
-    public function whereBETWEEN(string $column, $valeur1, $valeur2) {
+    public function whereBETWEEN(string $column, $valeur1, $valeur2)
+    {
         //query BETWEEN
         //L’intervalle peut être constitué de chaînes de caractères, de nombres ou de dates
         //new QuerySQL())->select()
@@ -110,7 +116,8 @@ class Select extends Abstract_Query {
         return $this;
     }
 
-    public function whereIn(string $column, array $range) {
+    public function whereIn(string $column, array $range)
+    {
         //query IN
         //
         //(new QuerySQL())->select()
@@ -123,7 +130,8 @@ class Select extends Abstract_Query {
         return $this;
     }
 
-    public function whereLike(string $column, $LIKE) {
+    public function whereLike(string $column, $LIKE)
+    {
         //query Like
         //Ce mot-clé permet d’effectuer une recherche sur un modèle
         //particulier. Il est par exemple possible de rechercher les
@@ -155,7 +163,8 @@ class Select extends Abstract_Query {
         return $this;
     }
 
-    public function whereNot(string $column, int $value) {
+    public function whereNot(string $column, int $value)
+    {
         // qury not
         //
         //new QuerySQL())->
@@ -167,7 +176,8 @@ class Select extends Abstract_Query {
         return $this;
     }
 
-    public function whereNotIn(string $column, array $range) {
+    public function whereNotIn(string $column, array $range)
+    {
         //query IN
         //
         //(new QuerySQL())->select()
@@ -180,14 +190,16 @@ class Select extends Abstract_Query {
         return $this;
     }
 
-    public function whereNotBETWEEN(string $column, $valeur1, $valeur2) {
+    public function whereNotBETWEEN(string $column, $valeur1, $valeur2)
+    {
         // query notbetwen inverst betwin
 
         $this->where("$column NOT BETWEEN '$valeur1' AND '$valeur2'");
         return $this;
     }
 
-    public function whereNotLike(string $column, $LIKE) {
+    public function whereNotLike(string $column, $LIKE)
+    {
         //query Like
         //Ce mot-clé permet d’effectuer une recherche sur un modèle
         //particulier. Il est par exemple possible de rechercher les
@@ -219,14 +231,16 @@ class Select extends Abstract_Query {
         return $this;
     }
 
-    public function whereNULL(string $column) {
+    public function whereNULL(string $column)
+    {
         // is null
         $this->where("$column IS NULL");
         return $this;
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected function joinstring($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '') {
+    protected function joinstring($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '')
+    {
 
 
 
@@ -239,15 +253,15 @@ class Select extends Abstract_Query {
 //select()
         // ->from('produit')
         // ->join("categorie","INNER",FALSE,"id_categorie=pro_categorie")
-//    SELECT *  FROM  produit INNER JOIN categorie ON  id_categorie=pro_categorie     
-//or 
+//    SELECT *  FROM  produit INNER JOIN categorie ON  id_categorie=pro_categorie
+//or
 //                      select() ->from('produit')
         //->join("categorie","INNER",true)
 //
-//SELECT *  FROM  produit 
-// INNER JOIN d_produit_categorie ON id_produit=id_produit_detail     
+//SELECT *  FROM  produit
+// INNER JOIN d_produit_categorie ON id_produit=id_produit_detail
 // INNER JOIN categorie           ON id_categorie=id_categorie_detail
-//        
+//
         $TABLEpere = $this->table[0];
 
 
@@ -272,7 +286,8 @@ class Select extends Abstract_Query {
         }
     }
 
-    public function join($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '') {
+    public function join($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '')
+    {
 
 
 
@@ -293,7 +308,8 @@ class Select extends Abstract_Query {
         return $this;
     }
 
-    public function joinAlias(string $tablejoin, string $alias, string $conditions, $type = "INNER") {
+    public function joinAlias(string $tablejoin, string $alias, string $conditions, $type = "INNER")
+    {
 
         //select()
         // ->from('produit')
@@ -309,7 +325,8 @@ class Select extends Abstract_Query {
         return $this;
     }
 
-    public function independent(string $master) {
+    public function independent(string $master)
+    {
         //
         //select()
         //        ->from('produit')
@@ -332,7 +349,8 @@ class Select extends Abstract_Query {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     //traitement
 
-    public function query(): string {
+    public function query(): string
+    {
         $table = implode(', ', $this->table);
         $join = implode('  ', $this->join);
         $where = ' WHERE ' . implode(' AND ', $this->conditionsSimple);
@@ -342,7 +360,8 @@ class Select extends Abstract_Query {
         return $action . $table . $join . $where;
     }
 
-    public function prepareQuery(): Prepare {
+    public function prepareQuery(): Prepare
+    {
         $table = implode(', ', $this->table);
         $join = implode('  ', $this->join);
         $condition = array_merge($this->conditionsPrepares, $this->conditionsPrepares_values);
@@ -352,5 +371,4 @@ class Select extends Abstract_Query {
         $execute = $this->conditionsValues;
         return new Prepare($prepare, $execute);
     }
-
 }

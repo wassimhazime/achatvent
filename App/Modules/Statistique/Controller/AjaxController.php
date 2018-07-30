@@ -15,9 +15,12 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @author wassime
  */
-class AjaxController extends AbstractController {
+class AjaxController extends AbstractController
+{
 
-    public function process(\Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
+    public function process(\Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
+    {
+        $this->setModel(new \App\Modules\Statistique\Model\Model($this->getContainer()->get("pathModel")));
 
         parent::process($request, $handler);
 
@@ -63,5 +66,4 @@ class AjaxController extends AbstractController {
 
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
-
 }

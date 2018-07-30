@@ -21,26 +21,30 @@ namespace Kernel\Model\Query;
  *
  * @author Wassim Hazime
  */
-class QuerySQL {
+class QuerySQL
+{
 
-    public function select(): Select {
+    public function select(): Select
+    {
         if (isset(func_get_args()[0])) {
             return new Select(func_get_args());
         }
         return new Select();
     }
 
-    public function insertInto(string $table): Insert {
+    public function insertInto(string $table): Insert
+    {
         return new Insert($table);
     }
 
-    public function update(string $table): Update {
+    public function update(string $table): Update
+    {
         return new Update($table);
     }
 
-    public function delete(string $table): Delete {
+    public function delete(string $table): Delete
+    {
 
         return new Delete($table);
     }
-
 }

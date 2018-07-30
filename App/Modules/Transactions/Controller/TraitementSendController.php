@@ -25,31 +25,32 @@ use function preg_match;
 use function str_replace;
 use function substr;
 
-class TraitementSendController extends AbstractTraitementSendController {
+class TraitementSendController extends AbstractTraitementSendController
+{
 
-    function __construct(ContainerInterface $container) {
-        parent::__construct($container);
-        $this->setModel(new Model($container->get("pathModel")));
-    }
+    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
+    {
+        $this->setModel(new Model($this->getContainer()->get("pathModel")));
 
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
-        parent::process($request, $handler);
+        $response = parent::process($request, $handler);
+
+        if ($response->getStatusCode() === 404) {
+            return $response;
+        }
 
         // get data insert merge par parent et child
         $insert = $this->getRequest()->getParsedBody();
 
 
-        // parse data 
+        // parse data
         $parseData = $this->parseDataPerant_child($insert);
         $data_parent = $parseData["data_parent"];
         $data_child = $parseData["data_child"];
 
 
         //  save data parent
-        $flag = $this->chargeModel($this->getPage());
-        if (!$flag) {
-            return $this->getResponse()->withStatus(404);
-        }
+        $this->chargeModel($this->getNameController());
+        
         // insert data
         // $id_parent pour gere relation et data lier(exemple raison social)
         $id_parent = $this->getModel()->setData($data_parent);
@@ -57,38 +58,38 @@ class TraitementSendController extends AbstractTraitementSendController {
         /*         * ************************* */
         //  save relation
         /// childe achats => achat
-        $page = substr($this->getPage(), 0, -1);
-        /// save image 
+        $Controller_child = substr($this->getNameController(), 0, -1);
+        /// save image
         $data_child = $this->getFile_Upload()
-                ->save_child("TransactionFiles", $this->getRequest(), $data_child, $page);
+                ->save_child(
+                    "TransactionFiles",
+                    $this->getRequest(),
+                    $data_child,
+                    $Controller_child
+                );
 
         /// save data child
-        $flag = $this->chargeModel($page);
-        if (!$flag) {
-            /// 404 not found
-           return $this->getResponse()->withStatus(404);
-        }
+        $this->chargeModel($Controller_child);
+        
         $this->getModel()->setData($data_child, $id_parent);
 
 
         /// show etem save
-        $flag = $this->chargeModel($this->getPage());
-        if (!$flag) {
-            /// 404 not found
-            return $this->render("404", ["_page" => "404"]);
-        };
+        $this->chargeModel($this->getNameController);
+       
         $intent = $this->getModel()->show_id($id_parent);
+        
         return $this->render("@TransactionsShow/show_item", ["intent" => $intent]);
     }
 
-    private function parseDataPerant_child(array $data_set): array {
+    private function parseDataPerant_child(array $data_set): array
+    {
 
         $data_parent = [];
         $data_child = [];
 
         // parse data => dataperant and datachild
         foreach ($data_set as $key => $data) {
-
             if (preg_match("/\_child\b/i", $key)) {
                 $data_child[str_replace("_child", "", $key)] = $data;
             } else {
@@ -111,5 +112,4 @@ class TraitementSendController extends AbstractTraitementSendController {
             "data_child" => $data_child_sort
         ];
     }
-
 }

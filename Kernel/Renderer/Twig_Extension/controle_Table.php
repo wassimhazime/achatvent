@@ -8,16 +8,19 @@
 
 namespace Kernel\Renderer\Twig_Extension;
 
-class controle_Table extends \Twig_Extension {
+class controle_Table extends \Twig_Extension
+{
 
-    public function getFunctions() {
+    public function getFunctions()
+    {
         return [
             new \Twig_SimpleFunction("input_tableHtml", [$this, "input_tableHtml"], ['is_safe' => ['html'], 'needs_context' => true]),
             new \Twig_SimpleFunction("input_tableJson", [$this, "input_tableJson"], ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
 
-    public function input_tableJson(array $context, string $nameroute): string {
+    public function input_tableJson(array $context, string $nameroute): string
+    {
         $url = $this->getUrl($context, $nameroute);
         $message = "urlmessage|" . $url["message"];
         $supprimer = "urlsupprimer|" . $url["supprimer"];
@@ -28,7 +31,8 @@ class controle_Table extends \Twig_Extension {
         return $message . "~" . $supprimer . "~" . $modifier . "~" . $ajouter . "~" . $voir;
     }
 
-    public function input_tableHtml(array $context, string $nameroute): array {
+    public function input_tableHtml(array $context, string $nameroute): array
+    {
 
         $url = $this->getUrl($context, $nameroute);
         $message = $url["message"];
@@ -47,7 +51,8 @@ class controle_Table extends \Twig_Extension {
         return $input;
     }
 
-    private function getUrl(array $context, string $nameroute) {
+    private function getUrl(array $context, string $nameroute)
+    {
 
         $page = $context["_page"]; // class controller main
         $router = $context["router"]; // class App
@@ -71,5 +76,4 @@ class controle_Table extends \Twig_Extension {
 
         return $url;
     }
-
 }

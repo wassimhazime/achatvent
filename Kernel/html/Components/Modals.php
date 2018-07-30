@@ -16,7 +16,8 @@ namespace Kernel\html\Components;
 
 use Kernel\html\HTML;
 
-class Modals {
+class Modals
+{
 
     private $name;
     private $title;
@@ -26,7 +27,8 @@ class Modals {
     private $id;
     private $id_label;
 
-    function __construct($title, $body, $footer = "", $badge = "") {
+    function __construct($title, $body, $footer = "", $badge = "")
+    {
         $name = str_replace(" ", "", $title);
         $this->name = $name;
         $this->title = $title;
@@ -40,7 +42,8 @@ class Modals {
         $this->id = 'id_Modal_' . $this->name;
     }
 
-    function builder() {
+    function builder()
+    {
         $content = $this->modal_header()
                 . $this->modal_body()
                 . $this->modal_footer();
@@ -66,7 +69,8 @@ class Modals {
         return $this->trigger() . $div_modal;
     }
 
-    public function modal_header() {
+    public function modal_header()
+    {
 
         $span = HTML::TAG("span")
                 ->setAtt('aria-hidden="true"')
@@ -89,14 +93,16 @@ class Modals {
                         ->builder();
     }
 
-    public function modal_body() {
+    public function modal_body()
+    {
         return HTML::TAG("div")
                         ->setClass("modal-body")
                         ->setData($this->body)
                         ->builder();
     }
 
-    public function modal_footer() {
+    public function modal_footer()
+    {
         $btn = HTML::TAG("button")
                 ->setType("button")
                 ->setClass("btn btn-default")
@@ -109,14 +115,15 @@ class Modals {
                         ->builder();
     }
 
-    private function trigger() {
+    private function trigger()
+    {
 
         if ($this->badge == "") {
             return HTML::TAG('button')
                             ->setType("button")
                             ->setClass("btn btn-default btn-sm")
                             ->setAtt('data-toggle="modal" data-target="#' . $this->id . '"')
-                            ->setData($this->title )
+                            ->setData($this->title)
                             ->builder();
         } else {
             return HTML::TAG('button')
@@ -127,5 +134,4 @@ class Modals {
                             ->builder();
         }
     }
-
 }

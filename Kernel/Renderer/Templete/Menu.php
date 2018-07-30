@@ -12,17 +12,17 @@
  * @author wassime
  */
 namespace Kernel\Renderer\Templete;
-class Menu {
+
+class Menu
+{
     private $nav_title="";
     private $nav_icon="";
     private $nav_array=[];
     
-    function __construct($nav_title, $nav_icon, $nav_array) {
+    function __construct($nav_title, $nav_icon, $nav_array)
+    {
         $this->nav_title = $nav_title;
         $this->nav_icon = $nav_icon;
         $this->nav_array = $nav_array;
     }
-    
-
-    
 }

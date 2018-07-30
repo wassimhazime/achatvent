@@ -7,12 +7,14 @@ namespace Kernel\html\element;
  *
  * @author Wassim Hazime
  */
-class TableHTML {
+class TableHTML
+{
     
     
     
 
-    public function builder( array $heade, array $table, array $CHILD = [], array $input = []): string {
+    public function builder(array $heade, array $table, array $CHILD = [], array $input = []): string
+    {
 
 
        
@@ -30,7 +32,8 @@ class TableHTML {
         return $thead . $tbody ;
     }
 
-    protected function thead(array $thead_columns, string $input = ""): string {
+    protected function thead(array $thead_columns, string $input = ""): string
+    {
         if ($input != "") {
             $thead_columns = array_merge($thead_columns, [$input]);
         }
@@ -45,7 +48,8 @@ class TableHTML {
         return "<thead >" . $this->tr(implode(" \n", $thead)) . " </thead > ";
     }
 
-    protected function tbody(array $table, array $CHILD, string $input = ""): string {
+    protected function tbody(array $table, array $CHILD, string $input = ""): string
+    {
 
         $bodys = [];
 
@@ -58,8 +62,7 @@ class TableHTML {
                 if (strtoupper($head) == "IMAGE") {
                     if ($body == "image.jpg") {
                         $body = " ";
-                        
-                    } 
+                    }
                 } elseif (strtoupper($head) == "ID") {
                     $ID = $body;
                 }
@@ -98,7 +101,8 @@ class TableHTML {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected function TableCHILD($table_CHILDREN, $CHILDREN, $datajoin): array {
+    protected function TableCHILD($table_CHILDREN, $CHILDREN, $datajoin): array
+    {
         $theadCHILD = $this->theadCHILD($table_CHILDREN, $CHILDREN);
         $tbodyCHILD = $this->tbodyCHILD($datajoin);
 
@@ -124,7 +128,8 @@ class TableHTML {
         return $tableCHILD;
     }
 
-    protected function theadCHILD($table_CHILDREN, $CHILDREN): array {
+    protected function theadCHILD($table_CHILDREN, $CHILDREN): array
+    {
 
         $theadChild = [];
         foreach ($table_CHILDREN as $table) {
@@ -140,7 +145,8 @@ class TableHTML {
         return $theadChild;
     }
 
-    protected function tbodyCHILD($datajoin): array {
+    protected function tbodyCHILD($datajoin): array
+    {
 
 
 
@@ -166,16 +172,18 @@ class TableHTML {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    protected function tr($content, $att = ""): string {
+    protected function tr($content, $att = ""): string
+    {
         return "\n<tr $att>\n{$content}\n</tr>\n";
     }
 
-    protected function th($content, $att = ""): string {
+    protected function th($content, $att = ""): string
+    {
         return "<th  $att>{$content}</th>";
     }
 
-    protected function td($content, $att = ""): string {
+    protected function td($content, $att = ""): string
+    {
         return "<td $att> {$content}</td>";
     }
-
 }

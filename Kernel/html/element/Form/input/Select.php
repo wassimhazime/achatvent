@@ -18,10 +18,12 @@ use Kernel\html\element\Form\input\Abstract_Input;
 use Kernel\html\HTML;
 use Kernel\Tools\Tools;
 
-class Select extends Abstract_Input {
+class Select extends Abstract_Input
+{
 
     //put your code here
-    public function builder() {
+    public function builder()
+    {
         $name = $this->name;
         $id_html = $this->id_html;
         $Default = $this->Default;
@@ -83,5 +85,4 @@ class Select extends Abstract_Input {
             return $this->div($tag, "col-sm-6");
         }
     }
-
 }

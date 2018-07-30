@@ -13,35 +13,38 @@ namespace Kernel\Model\Query;
  *
  * @author wassime
  */
-class Prepare {
+class Prepare
+{
 
     private $prepare="";
     private $execute=[];
     
     
     
-    function __construct(string $prepare, array $execute) {
+    function __construct(string $prepare, array $execute)
+    {
         $this->prepare = $prepare;
         $this->execute = $execute;
     }
 
     
-    function getPrepare(): string {
+    function getPrepare(): string
+    {
         return $this->prepare;
     }
 
-    function getExecute() : array{
+    function getExecute() : array
+    {
         return $this->execute;
     }
 
-    function setPrepare(string $prepare) {
+    function setPrepare(string $prepare)
+    {
         $this->prepare = $prepare;
     }
 
-    function setExecute(array $execute) {
+    function setExecute(array $execute)
+    {
         $this->execute = $execute;
     }
-
-
-
 }

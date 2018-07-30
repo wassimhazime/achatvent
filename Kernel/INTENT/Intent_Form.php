@@ -15,38 +15,41 @@ use Kernel\Tools\Tools;
  *
  * @author wassime
  */
-class Intent_Form {
+class Intent_Form
+{
 
     private $META_data = [];
     private $Charge_data = [];
     private $Default_Data = [];
 
-    function __construct($META_data, $Charge_data, $Default_Data) {
+    function __construct($META_data, $Charge_data, $Default_Data)
+    {
 
         $this->META_data = Tools::entitys_TO_array($META_data);
         
         $this->Charge_data = $Charge_data;
         
-         if ($Default_Data != []) {
+        if ($Default_Data != []) {
             $DefaultData = Tools::entitys_TO_array($Default_Data);
             $DefaultData["DataJOIN"] = $Default_Data->getDataJOIN();
         } else {
             $DefaultData = [];
         }
-       $this->Default_Data = $DefaultData;
-        
+        $this->Default_Data = $DefaultData;
     }
 
-    function getMETA_data() {
+    function getMETA_data()
+    {
         return $this->META_data;
     }
 
-    function getCharge_data() {
+    function getCharge_data()
+    {
         return $this->Charge_data;
     }
 
-    function getDefault_Data() {
+    function getDefault_Data()
+    {
         return $this->Default_Data;
     }
-
 }

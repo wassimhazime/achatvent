@@ -1,11 +1,13 @@
 <?php
 namespace Kernel\Model\Operation;
+
 use Kernel\INTENT\Intent;
 use Kernel\Model\Entitys\EntitysDataTable;
 use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Model\Query\QuerySQL;
 use Kernel\Tools\Tools;
 use TypeError;
+
 class SetData extends AbstractOperatipn
 {
     public function update(array $dataForm, $mode): int
@@ -37,7 +39,8 @@ class SetData extends AbstractOperatipn
         return $id_NameTable;
     }
     public function delete(array $condition): int
-    { // one  item
+    {
+ // one  item
        
         $delete = (new QuerySQL())
                 ->delete($this->getTable())
@@ -77,7 +80,7 @@ class SetData extends AbstractOperatipn
         return $id_NameTable;
     }
     
-     public function insert_inverse(array $dataForms,$id_parent ,$mode): int
+    public function insert_inverse(array $dataForms, $id_parent, $mode): int
     {
          
          
@@ -87,25 +90,22 @@ class SetData extends AbstractOperatipn
         $id_cheldrns=[];
         foreach ($dataForms as $dataForm) {
               $intent = $this->parse($dataForm, $this->schema, $mode);
-        $dataCHILDRENs = $this->charge_data_childe($intent);
-        $data_NameTable = $this->remove_childe_in_data($intent);
-        unset($data_NameTable["id"]);   // remove id
+            $dataCHILDRENs = $this->charge_data_childe($intent);
+            $data_NameTable = $this->remove_childe_in_data($intent);
+            unset($data_NameTable["id"]);   // remove id
         // exec query sql insert to NameTable table
-        $datenow = date("Y-m-d-H-i-s");
-        $data_NameTable["date_ajoute"] = $datenow;
-        $data_NameTable["date_modifier"] = $datenow;
-        $querySQL = (new QuerySQL())
+            $datenow = date("Y-m-d-H-i-s");
+            $data_NameTable["date_ajoute"] = $datenow;
+            $data_NameTable["date_modifier"] = $datenow;
+            $querySQL = (new QuerySQL())
                 ->insertInto($this->getTable())
                 ->value($data_NameTable)->query();
         // return id rowe set data NameTable table
-        $id_cheldrns[] = $this->exec($querySQL);
-            
+            $id_cheldrns[] = $this->exec($querySQL);
         }
-        var_dump($id_cheldrns,$id_parent);
+        var_dump($id_cheldrns, $id_parent);
         
         foreach ($id_cheldrns as $id_cheld) {
-            
-            
               $querySQL = (new QuerySQL())->
                         insertInto("r_achats_achat")
                         ->value([
@@ -113,10 +113,6 @@ class SetData extends AbstractOperatipn
                     "id_achat"  => $id_cheld
                         ])->query();
                 $this->exec($querySQL);
-            
-            
-            
-            
         }
         /**
          * code insert data to relation table

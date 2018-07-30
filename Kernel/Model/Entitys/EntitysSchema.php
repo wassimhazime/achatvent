@@ -4,7 +4,8 @@ namespace Kernel\Model\Entitys;
 
 use Kernel\Tools\Tools;
 
-class EntitysSchema {
+class EntitysSchema
+{
 
     private $modeCHILDREN = null;
     private $NameTable = null;
@@ -17,7 +18,8 @@ class EntitysSchema {
     private $STATISTIQUE = [];
     private $CHILDREN = [];
 
-    public function Instance(array $table): self {
+    public function Instance(array $table): self
+    {
         $this->NameTable = $table["NameTable"];
         $this->COLUMNS_default = $table["COLUMNS_default"];
         $this->COLUMNS_master = $table["COLUMNS_master"];
@@ -35,7 +37,8 @@ class EntitysSchema {
      * modeCHILDREN
      */
 
-    private function setModeCHILDREN($mode) {
+    private function setModeCHILDREN($mode)
+    {
         if ($mode == null and $this->modeCHILDREN == null) {
             $this->modeCHILDREN = "MASTER";
         } elseif ($mode != null) {
@@ -47,11 +50,13 @@ class EntitysSchema {
      * NameTable
      */
 
-    function getNameTable() {
+    function getNameTable()
+    {
         return $this->NameTable;
     }
 
-    function setNameTable($NameTable) {
+    function setNameTable($NameTable)
+    {
         $this->NameTable = $NameTable;
     }
 
@@ -60,7 +65,8 @@ class EntitysSchema {
      * COLUMNS
      */
     /// get columns meta total ou par type exemple  getCOLUMNS_META(["Key" =>"MUL"])
-    function getCOLUMNS_META(array $key = []) {
+    function getCOLUMNS_META(array $key = [])
+    {
         if (empty($key)) {
             return $this->COLUMNS_META;
         } else {
@@ -82,31 +88,38 @@ class EntitysSchema {
         }
     }
 
-    function setCOLUMNS_META($COLUMNS_META) {
+    function setCOLUMNS_META($COLUMNS_META)
+    {
         $this->COLUMNS_META = $COLUMNS_META;
     }
 
-    function getCOLUMNS_default() {
+    function getCOLUMNS_default()
+    {
         return $this->COLUMNS_default;
     }
 
-    function setCOLUMNS_default($COLUMNS_default) {
+    function setCOLUMNS_default($COLUMNS_default)
+    {
         $this->COLUMNS_default = $COLUMNS_default;
     }
 
-    function getCOLUMNS_all() {
+    function getCOLUMNS_all()
+    {
         return $this->COLUMNS_all;
     }
 
-    function setCOLUMNS_all($COLUMNS_all) {
+    function setCOLUMNS_all($COLUMNS_all)
+    {
         $this->COLUMNS_all = $COLUMNS_all;
     }
 
-    function getCOLUMNS_master() {
+    function getCOLUMNS_master()
+    {
         return $this->COLUMNS_master;
     }
 
-    function setCOLUMNS_master($COLUMNS) {
+    function setCOLUMNS_master($COLUMNS)
+    {
         $this->COLUMNS_master = $COLUMNS;
     }
 
@@ -114,27 +127,33 @@ class EntitysSchema {
      *
      * FOREIGN_KEY
      */
-    function getFOREIGN_KEY() {
+    function getFOREIGN_KEY()
+    {
         return $this->FOREIGN_KEY;
     }
 
-    function setFOREIGN_KEY($FOREIGN_KEY) {
+    function setFOREIGN_KEY($FOREIGN_KEY)
+    {
         $this->FOREIGN_KEY = $FOREIGN_KEY;
     }
 
-    function getFILES() {
+    function getFILES()
+    {
         return $this->FILES;
     }
 
-    function setFILES($FILES) {
+    function setFILES($FILES)
+    {
         $this->FILES = $FILES;
     }
 
-    function getSTATISTIQUE() {
+    function getSTATISTIQUE()
+    {
         return $this->STATISTIQUE;
     }
 
-    function setSTATISTIQUE($STATISTIQUE) {
+    function setSTATISTIQUE($STATISTIQUE)
+    {
         $this->STATISTIQUE = $STATISTIQUE;
     }
 
@@ -142,13 +161,15 @@ class EntitysSchema {
      * CHILDREN
      */
 
-    function getCHILDREN($mode = null) {
+    function getCHILDREN($mode = null)
+    {
         $this->setModeCHILDREN($mode);
 
         return $this->CHILDREN[$this->modeCHILDREN];
     }
 
-    function get_table_CHILDREN($mode = null) {
+    function get_table_CHILDREN($mode = null)
+    {
         $this->setModeCHILDREN($mode);
         $TABLE = [];
         foreach ($this->CHILDREN[$this->modeCHILDREN] as $table => $columns) {
@@ -158,7 +179,8 @@ class EntitysSchema {
         return $TABLE;
     }
 
-    function setCHILDREN($CHILDREN) {
+    function setCHILDREN($CHILDREN)
+    {
 
         $this->CHILDREN = $CHILDREN;
     }
@@ -167,7 +189,8 @@ class EntitysSchema {
     /*
      * SELECT SQL
      */
-    public function select_default() {
+    public function select_default()
+    {
 
         $select = [];
         foreach ($this->COLUMNS_default as $colom) {
@@ -179,7 +202,8 @@ class EntitysSchema {
         return $select;
     }
 
-    public function select_master() {
+    public function select_master()
+    {
 
         $select = [];
         foreach ($this->COLUMNS_master as $colom) {
@@ -191,7 +215,8 @@ class EntitysSchema {
         return $select;
     }
 
-    public function select_NameTable() {
+    public function select_NameTable()
+    {
 
         $select = [];
         foreach ($this->COLUMNS_master as $colom) {
@@ -201,7 +226,8 @@ class EntitysSchema {
         return $select;
     }
 
-    public function select_all() {
+    public function select_all()
+    {
 
         $select = [];
         foreach ($this->COLUMNS_all as $colom) {
@@ -213,7 +239,8 @@ class EntitysSchema {
         return $select;
     }
 
-    public function select_FOREIGN_KEY(array $FOREIGN_KEY = null) {
+    public function select_FOREIGN_KEY(array $FOREIGN_KEY = null)
+    {
         $select = [];
         if ($FOREIGN_KEY == null) {
             $FOREIGN_KEY = $this->FOREIGN_KEY;
@@ -225,7 +252,8 @@ class EntitysSchema {
         return $select;
     }
 
-    public function select_CHILDREN($TABLE = null, $mode = null) {
+    public function select_CHILDREN($TABLE = null, $mode = null)
+    {
         $this->setModeCHILDREN($mode);
         $select = [];
 
@@ -247,7 +275,7 @@ class EntitysSchema {
         return $select;
     }
 
-//    //// 
+//    ////
 //       public function select_statistique_SUM(): array {
 //
 //        $select = [];
@@ -267,7 +295,8 @@ class EntitysSchema {
 //            "FOREIGN_KEY" => $FOREIGN_KEY];
 //    }
 
-    public function select_statistique($fonction, $alias): array {
+    public function select_statistique($fonction, $alias): array
+    {
 
         $select = [];
         $FOREIGN_KEY = [];
@@ -284,5 +313,4 @@ class EntitysSchema {
             "select" => $select,
             "FOREIGN_KEY" => $FOREIGN_KEY];
     }
-
 }

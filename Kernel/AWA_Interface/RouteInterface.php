@@ -15,7 +15,8 @@ namespace Kernel\AWA_Interface;
 
 use Psr\Http\Server\MiddlewareInterface;
 
-interface RouteInterface {
+interface RouteInterface
+{
 
     function __construct(MiddlewareInterface $middleware, string $name, array $params, bool $success = true);
 

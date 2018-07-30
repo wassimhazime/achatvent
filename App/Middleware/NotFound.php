@@ -20,15 +20,18 @@ use function strpos;
  *
  * @author wassime
  */
-class NotFound implements MiddlewareInterface {
+class NotFound implements MiddlewareInterface
+{
 
     private $call;
 
-    function __construct(callable $call) {
+    function __construct(callable $call)
+    {
         $this->call = $call;
     }
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
 
         $Response = $handler->handle($request);
         
@@ -46,5 +49,4 @@ class NotFound implements MiddlewareInterface {
 
         return $Response;
     }
-
 }

@@ -17,11 +17,12 @@ use Kernel\Router\Route;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
-interface RouterInterface extends MiddlewareInterface{
+interface RouterInterface extends MiddlewareInterface
+{
 
   
 
-    public function addRoute(string $url, MiddlewareInterface $middleware,  $methods, string $name);
+    public function addRoute(string $url, MiddlewareInterface $middleware, $methods, string $name);
 
     public function addRoute_get(string $url, MiddlewareInterface $middleware, string $name) ;
 
@@ -39,6 +40,4 @@ interface RouterInterface extends MiddlewareInterface{
     public function generateUri($name, array $substitutions = [], array $options = []): string ;
 
     public function match(ServerRequestInterface $request): RouteInterface;
-  
-
 }

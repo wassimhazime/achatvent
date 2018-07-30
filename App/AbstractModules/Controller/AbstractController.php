@@ -15,17 +15,12 @@
 namespace App\AbstractModules\Controller;
 
 use Kernel\Controller\Controller;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
-abstract class AbstractController extends Controller {
+abstract class AbstractController extends Controller
+{
 
-    function __construct(ContainerInterface $container) {
-        parent::__construct($container);
-    }
-
-    protected function getModeShow(array $modeHTTP): array {
+    protected function getModeShow(array $modeHTTP): array
+    {
         $parent = "DEFAULT";
         $child = "EMPTY";
 
@@ -44,7 +39,8 @@ abstract class AbstractController extends Controller {
         return ["type" => $type, "modeIntent" => [$parent, $child]];
     }
 
-    private function parseMode(string $modefr, $default): string {
+    private function parseMode(string $modefr, $default): string
+    {
         switch ($modefr) {
             case "rien":
                 $mode = "EMPTY";
@@ -66,7 +62,4 @@ abstract class AbstractController extends Controller {
         }
         return $mode;
     }
-
-   
-
 }

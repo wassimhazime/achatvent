@@ -13,9 +13,11 @@ namespace Middleware;
  *
  * @author wassime
  */
-class midd_pse152 implements \Psr\Http\Server\MiddlewareInterface {
+class midd_pse152 implements \Psr\Http\Server\MiddlewareInterface
+{
 
-    public function process(\Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): \Psr\Http\Message\ResponseInterface {
+    public function process(\Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): \Psr\Http\Message\ResponseInterface
+    {
         $res = $handler->handle($request);
         $d = (string) $res->getBody();
         $string = "jjjjjj" . $d . "kkkkkkk";
@@ -25,5 +27,4 @@ class midd_pse152 implements \Psr\Http\Server\MiddlewareInterface {
 
         return $res->withBody($s);
     }
-
 }

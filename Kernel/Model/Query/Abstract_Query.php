@@ -15,7 +15,8 @@ use Kernel\Tools\Tools;
  *
  * @author wassime
  */
-abstract class Abstract_Query {
+abstract class Abstract_Query
+{
 
     
     protected $table = [];
@@ -30,7 +31,8 @@ abstract class Abstract_Query {
     protected $valuePrepare = ["sql" => "", "value" => ""];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function where() {
+    public function where()
+    {
         /// query where
 //
 //select()
@@ -40,18 +42,17 @@ abstract class Abstract_Query {
 //                        ->where("nom=achraf","age=26")
 //                        ->where(["ville=bm","d=12/6/9"],"jour=77")
 //                        ->where(["client"=>"c66"])
-//                        
-// SELECT *  FROM  test 
-// WHERE ( id_mode_paiement = 38 ) 
-// AND ( id=5 ) 
-// AND ( nom=achraf ) AND ( age=26 ) 
-// AND ( ville=bm ) AND ( d=12/6/9 ) AND ( jour=77 ) 
+//
+// SELECT *  FROM  test
+// WHERE ( id_mode_paiement = 38 )
+// AND ( id=5 )
+// AND ( nom=achraf ) AND ( age=26 )
+// AND ( ville=bm ) AND ( d=12/6/9 ) AND ( jour=77 )
 // AND ( client = c66 )
-//                        
+//
 //
 
         foreach (func_get_args() as $args) {
-
             /// vide condition instial
             if ($this->conditionsSimple == ["1"]) {
                 $this->conditionsSimple = [];
@@ -62,7 +63,8 @@ abstract class Abstract_Query {
         return $this;
     }
 
-    private function setConditionWhere($args) {
+    private function setConditionWhere($args)
+    {
 
         if (is_array($args) && $this->isAssoc($args)) {
             // ->where([id=>44])
@@ -95,8 +97,8 @@ abstract class Abstract_Query {
 //        return $this->query();
 //    }
     //// outils
-    protected function isAssoc(array $arr): bool {
+    protected function isAssoc(array $arr): bool
+    {
         return Tools::isAssoc($arr);
     }
-
 }

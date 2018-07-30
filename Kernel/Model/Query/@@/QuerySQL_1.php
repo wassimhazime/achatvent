@@ -21,7 +21,8 @@ namespace Kernel\Model\Query;
  *
  * @author Wassim Hazime
  */
-class QuerySQL_1  {
+class QuerySQL_1
+{
 
     protected $column = ["*"];
     protected $table = [];
@@ -33,14 +34,16 @@ class QuerySQL_1  {
     protected $valuePrepare = ["sql" => "", "value" => ""];
 
     // outils
-    protected function isAssoc(array $arr): bool {
+    protected function isAssoc(array $arr): bool
+    {
         if (array() === $arr) {
             return false;
         }
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
-    protected function setColumn(array $columns) {
+    protected function setColumn(array $columns)
+    {
         if ($columns != null or ! empty($columns)) {
             if ($this->column[0] == "*") {
                 $this->column = [];
@@ -65,7 +68,8 @@ class QuerySQL_1  {
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function column() {
+    public function column()
+    {
         /// column query
         //(new QuerySQL())->select()->
         // ->column("nom,age,adress") or
@@ -80,7 +84,8 @@ class QuerySQL_1  {
         return $this;
     }
 
-    public function select() {
+    public function select()
+    {
         /// select query
         //(new QuerySQL())->
         // ->select("nom,age,adress as ADRESS ") or
@@ -98,7 +103,8 @@ class QuerySQL_1  {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public function from(string $table, string $alias = '') {
+    public function from(string $table, string $alias = '')
+    {
         /// form query
         //from("client_table")->from("adress_table")
         //**** alias
@@ -113,7 +119,8 @@ class QuerySQL_1  {
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function where() {
+    public function where()
+    {
         /// query where
 //
 //select()
@@ -123,14 +130,14 @@ class QuerySQL_1  {
 //                        ->where("nom=achraf","age=26")
 //                        ->where(["ville=bm","d=12/6/9"],"jour=77")
 //                        ->where(["client"=>"c66"])
-//                        
-// SELECT *  FROM  test 
-// WHERE ( id_mode_paiement = 38 ) 
-// AND ( id=5 ) 
-// AND ( nom=achraf ) AND ( age=26 ) 
-// AND ( ville=bm ) AND ( d=12/6/9 ) AND ( jour=77 ) 
+//
+// SELECT *  FROM  test
+// WHERE ( id_mode_paiement = 38 )
+// AND ( id=5 )
+// AND ( nom=achraf ) AND ( age=26 )
+// AND ( ville=bm ) AND ( d=12/6/9 ) AND ( jour=77 )
 // AND ( client = c66 )
-//                        
+//
 //
 
         if (func_get_args() != null or ! empty(func_get_args())) {
@@ -147,7 +154,6 @@ class QuerySQL_1  {
                             $columns = [];
                             $conditions = [];
                             foreach ($args as $column => $condition) {
-
                                 $this->conditions[] = "( $column = $condition )";
 
                                 $columns[] = "( $column  = ? )";
@@ -160,7 +166,6 @@ class QuerySQL_1  {
                             }
                         }
                     } else {
-
                         $this->conditions[] = "( $args )";
                     }
                 }
@@ -170,7 +175,8 @@ class QuerySQL_1  {
         return $this;
     }
 
-    public function whereBETWEEN(string $column, $valeur1, $valeur2) {
+    public function whereBETWEEN(string $column, $valeur1, $valeur2)
+    {
         //query BETWEEN
         //L’intervalle peut être constitué de chaînes de caractères, de nombres ou de dates
         //new QuerySQL())->select()
@@ -183,7 +189,8 @@ class QuerySQL_1  {
         return $this;
     }
 
-    public function whereIn(string $column, array $range) {
+    public function whereIn(string $column, array $range)
+    {
         //query IN
         //
         //(new QuerySQL())->select()
@@ -196,7 +203,8 @@ class QuerySQL_1  {
         return $this;
     }
 
-    public function whereLike(string $column, $LIKE) {
+    public function whereLike(string $column, $LIKE)
+    {
         //query Like
         //Ce mot-clé permet d’effectuer une recherche sur un modèle
         //particulier. Il est par exemple possible de rechercher les
@@ -228,7 +236,8 @@ class QuerySQL_1  {
         return $this;
     }
 
-    public function whereNot(string $column, int $value) {
+    public function whereNot(string $column, int $value)
+    {
         // qury not
         //
         //new QuerySQL())->
@@ -240,7 +249,8 @@ class QuerySQL_1  {
         return $this;
     }
 
-    public function whereNotIn(string $column, array $range) {
+    public function whereNotIn(string $column, array $range)
+    {
         //query IN
         //
         //(new QuerySQL())->select()
@@ -253,14 +263,16 @@ class QuerySQL_1  {
         return $this;
     }
 
-    public function whereNotBETWEEN(string $column, $valeur1, $valeur2) {
+    public function whereNotBETWEEN(string $column, $valeur1, $valeur2)
+    {
         // query notbetwen inverst betwin
 
         $this->where("$column NOT BETWEEN '$valeur1' AND '$valeur2'");
         return $this;
     }
 
-    public function whereNotLike(string $column, $LIKE) {
+    public function whereNotLike(string $column, $LIKE)
+    {
         //query Like
         //Ce mot-clé permet d’effectuer une recherche sur un modèle
         //particulier. Il est par exemple possible de rechercher les
@@ -292,14 +304,16 @@ class QuerySQL_1  {
         return $this;
     }
 
-    public function whereNULL(string $column) {
+    public function whereNULL(string $column)
+    {
         // is null
         $this->where("$column IS NULL");
         return $this;
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected function joinstring($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '') {
+    protected function joinstring($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '')
+    {
 
 
 
@@ -312,15 +326,15 @@ class QuerySQL_1  {
 //select()
         // ->from('produit')
         // ->join("categorie","INNER",FALSE,"id_categorie=pro_categorie")
-//    SELECT *  FROM  produit INNER JOIN categorie ON  id_categorie=pro_categorie     
-//or 
+//    SELECT *  FROM  produit INNER JOIN categorie ON  id_categorie=pro_categorie
+//or
 //                      select() ->from('produit')
         //->join("categorie","INNER",true)
 //
-//SELECT *  FROM  produit 
-// INNER JOIN d_produit_categorie ON id_produit=id_produit_detail     
+//SELECT *  FROM  produit
+// INNER JOIN d_produit_categorie ON id_produit=id_produit_detail
 // INNER JOIN categorie           ON id_categorie=id_categorie_detail
-//        
+//
         $TABLEpere = $this->table[0];
 
 
@@ -345,7 +359,8 @@ class QuerySQL_1  {
         }
     }
 
-    public function join($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '') {
+    public function join($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '')
+    {
 
 
 
@@ -366,7 +381,8 @@ class QuerySQL_1  {
         return $this;
     }
 
-    public function joinAlias(string $tablejoin, string $alias, string $conditions, $type = "INNER") {
+    public function joinAlias(string $tablejoin, string $alias, string $conditions, $type = "INNER")
+    {
 
         //select()
         // ->from('produit')
@@ -382,7 +398,8 @@ class QuerySQL_1  {
         return $this;
     }
 
-    public function independent(string $master) {
+    public function independent(string $master)
+    {
         //
         //select()
         //        ->from('produit')
@@ -405,12 +422,13 @@ class QuerySQL_1  {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    public function group($column, $direction = null) {
-        
+    public function group($column, $direction = null)
+    {
     }
 
     ///delete
-    public function delete() {
+    public function delete()
+    {
         $condition = func_get_args();
         if (isset($condition[0])) {
             if (is_array($condition[0])) {
@@ -427,7 +445,8 @@ class QuerySQL_1  {
 
     //insert
 
-    public function insertInto(string $table) {
+    public function insertInto(string $table)
+    {
         $this->action = "insert";
         $this->table = [];
 
@@ -435,7 +454,8 @@ class QuerySQL_1  {
         return $this;
     }
 
-    public function value(array $data) {
+    public function value(array $data)
+    {
 
         if ($this->isAssoc($data)) {
             // sql simple
@@ -449,7 +469,6 @@ class QuerySQL_1  {
             $sqlp = [];
 
             foreach ($data as $key => $value) {
-
                 $sqlp[] = "?";
                 $valuep[] = $value;
             }
@@ -465,14 +484,16 @@ class QuerySQL_1  {
 
     //update
 
-    public function update(string $table) {
+    public function update(string $table)
+    {
         $this->action = "update";
         $this->table = [];
         $this->table[] = $table;
         return $this;
     }
 
-    public function set(array $data) {
+    public function set(array $data)
+    {
 
         $l = "";
         foreach ($data as $x => $x_value) {
@@ -510,7 +531,8 @@ class QuerySQL_1  {
 
     //traitement
 
-    public function query() {
+    public function query()
+    {
         $table = implode(', ', $this->table);
         $join = implode('  ', $this->join);
         $where = ' WHERE ' . implode(' AND ', $this->conditions);
@@ -553,7 +575,8 @@ class QuerySQL_1  {
         return "";
     }
 
-    public function prepareQuery(): array {
+    public function prepareQuery(): array
+    {
 
         $table = implode(', ', $this->table);
        
@@ -571,7 +594,6 @@ class QuerySQL_1  {
 
 
         switch ($this->action) {
-
             case "insert":
                 $action = ' INSERT INTO ';
                 return["prepare" => $action . $table . $this->valuePrepare["sql"],
@@ -609,8 +631,8 @@ class QuerySQL_1  {
         return "";
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->query();
     }
-
 }

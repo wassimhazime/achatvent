@@ -19,13 +19,15 @@ use PDO;
  *
  * @author wassime
  */
-class Connection {
+class Connection
+{
 
     protected $configExternal;
     private static $dbConnection = null;
     private $db;
 
-    private static function getDB(array $config) {
+    private static function getDB(array $config)
+    {
 
         if (self::$dbConnection === null) {
             $DB = $config['DB'];
@@ -45,15 +47,16 @@ class Connection {
     }
 
     // private $pathConfigJsone;
-    public function __construct(string $PathConfigJsone) {
+    public function __construct(string $PathConfigJsone)
+    {
         // $this->pathConfigJsone = $PathConfigJsone;
         $this->configExternal = new ConfigExternal($PathConfigJsone);
         $this->db = self::getDB($this->configExternal->getConnect());
     }
 
-    public function getDatabase(): PDO {
+    public function getDatabase(): PDO
+    {
 
         return $this->db;
     }
-
 }

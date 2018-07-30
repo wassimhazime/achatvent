@@ -9,7 +9,8 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @author wassime
  */
-interface File_UploadInterface {
+interface File_UploadInterface
+{
 
     public function __construct(RouterInterface $router, string $path);
 

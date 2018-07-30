@@ -13,7 +13,7 @@ namespace Kernel\html;
  *
  * @author wassime
  */
-;
+
 
 use Kernel\AWA_Interface\File_UploadInterface;
 use Kernel\AWA_Interface\RouterInterface;
@@ -34,7 +34,8 @@ use function str_replace;
 use function strpos;
 use function unlink;
 
-class File_Upload implements File_UploadInterface{
+class File_Upload implements File_UploadInterface
+{
 
     const FIN_REGEX = "_";
 
@@ -42,20 +43,24 @@ class File_Upload implements File_UploadInterface{
     private $preffix;
     private $router;
 
-    public function __construct(RouterInterface $router, string $path) {
+    public function __construct(RouterInterface $router, string $path)
+    {
         $this->path = $path;
         $this->router = $router;
     }
 
-    public function setPreffix($preffix) {
+    public function setPreffix($preffix)
+    {
         $this->preffix = $preffix;
     }
 
-    public function getRouter(): RouterInterface {
+    public function getRouter(): RouterInterface
+    {
         return $this->router;
     }
 
-    public function get(string $id_file): array {
+    public function get(string $id_file): array
+    {
 
         $files = [];
         $preffix = $this->get_preffix($id_file);
@@ -64,7 +69,6 @@ class File_Upload implements File_UploadInterface{
 
 
         if (is_dir($dir_filesUpload)) {
-
             foreach (scandir($dir_filesUpload) as $file_save) { /// scan les image save
                 $path = $this->path . $preffix . D_S . $file_save;
                 $file = [];
@@ -91,13 +95,12 @@ class File_Upload implements File_UploadInterface{
                     $files[] = $file;
                 }
             }
-
-
-            return $files;
         }
+        return $files;
     }
 
-    public function delete(string $id_file): array {
+    public function delete(string $id_file): array
+    {
 
         $files = [];
         $preffix = $this->get_preffix($id_file);
@@ -105,7 +108,6 @@ class File_Upload implements File_UploadInterface{
         $dir_filesUpload = ROOT . $this->path . $preffix;
 
         if (is_dir($dir_filesUpload)) {
-
             foreach (scandir($dir_filesUpload) as $file_save) { /// scan les image save
                 $path = $this->path . $preffix . D_S . $file_save;
                 $etat = [];
@@ -123,7 +125,8 @@ class File_Upload implements File_UploadInterface{
         }
     }
 
-    public function save(string $nameRoute, ServerRequestInterface $request, string $preffix = ""): ServerRequestInterface {
+    public function save(string $nameRoute, ServerRequestInterface $request, string $preffix = ""): ServerRequestInterface
+    {
         $this->setPreffix($preffix);
         $insert = $request->getParsedBody();
         $uploadedFiles = $request->getUploadedFiles();
@@ -145,7 +148,8 @@ class File_Upload implements File_UploadInterface{
         return $request->withParsedBody($insert);
     }
 
-    public function save_child(string $nameRoute, ServerRequestInterface $request, array $datachild, string $preffix = ""): array {
+    public function save_child(string $nameRoute, ServerRequestInterface $request, array $datachild, string $preffix = ""): array
+    {
         $this->setPreffix($preffix);
         $uploadedFiles = $request->getUploadedFiles();
 
@@ -167,7 +171,8 @@ class File_Upload implements File_UploadInterface{
         return $datachild;
     }
 
-    private function generateUrisave(string $nameRoute, string $id_file, array $file_uploads): string {
+    private function generateUrisave(string $nameRoute, string $id_file, array $file_uploads): string
+    {
 
 
         $con = count($file_uploads);
@@ -182,7 +187,8 @@ class File_Upload implements File_UploadInterface{
                 '</a>';
     }
 
-    private function insert_file_upload(string $preffix, UploadedFileInterface $file, string $id_file): array {
+    private function insert_file_upload(string $preffix, UploadedFileInterface $file, string $id_file): array
+    {
         $file_upload = [];
         if ($file->getClientFilename() != "" && $file->getError() == 0) {
             /// insert file upload
@@ -199,13 +205,15 @@ class File_Upload implements File_UploadInterface{
         return $file_upload;
     }
 
-    private function mkdir_is_not(string $preffix) {
+    private function mkdir_is_not(string $preffix)
+    {
         if (!is_dir($this->path . $preffix) && !mkdir($this->path . $preffix, 0777, true)) {
             die('Echec lors de la création des répertoires...');
         }
     }
 
-    private function get_preffix(string $id_file): string {
+    private function get_preffix(string $id_file): string
+    {
         preg_match('/([a-zA-Z\$]+)_(.+)/i', $id_file, $matches);
         if (empty($matches)) {
             return "";
@@ -214,11 +222,11 @@ class File_Upload implements File_UploadInterface{
         return $preffix;
     }
 
-    private function is_match(string $_id_file, string $file_save, string $finregex = ""): bool {
+    private function is_match(string $_id_file, string $file_save, string $finregex = ""): bool
+    {
         $subject = str_replace("$", "", $file_save);
         $id_file = str_replace("$", "", $_id_file);
         $pattern = '!^' . $id_file . $finregex . '!';
         return preg_match($pattern, $subject);
     }
-
 }

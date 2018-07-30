@@ -9,11 +9,13 @@ use Kernel\Model\Query\Prepare;
 use \PDO;
 use \PDOException;
 
-class ActionDataBase extends Connection {
+class ActionDataBase extends Connection
+{
 
     ///////////////////////////////////////////////////
     /// getData
-    protected function prepareQuery(Prepare $query) {
+    protected function prepareQuery(Prepare $query)
+    {
 
         $sqlprepare = $query->getPrepare();
         $params_execute = $query->getExecute();
@@ -32,7 +34,8 @@ class ActionDataBase extends Connection {
         }
     }
 
-    protected function query(string $sql): array {
+    protected function query(string $sql): array
+    {
 
         try {
             $Statement = $this->getDataBase()->query($sql);
@@ -47,7 +50,8 @@ class ActionDataBase extends Connection {
     }
 
     /// setdata
-    protected function prepareQueryEXEC(Prepare $query): int {
+    protected function prepareQueryEXEC(Prepare $query): int
+    {
 
         $sqlprepare = $query->getPrepare();
         $params_execute = $query->getExecute();
@@ -60,11 +64,11 @@ class ActionDataBase extends Connection {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
        //     echo $exc->getMessage();
             return -1;
-         
         }
     }
 
-    protected function exec($sql): string {
+    protected function exec($sql): string
+    {
         var_dump($sql);
     
 
@@ -85,7 +89,8 @@ class ActionDataBase extends Connection {
     }
 
     /// getShema
-    protected function querySchema($sql): array {
+    protected function querySchema($sql): array
+    {
 
         try {
             $Statement = $this->getDataBase()->query($sql);
@@ -101,7 +106,8 @@ class ActionDataBase extends Connection {
     }
 
     /// getShema
-    protected function querySimple($sql): array {
+    protected function querySimple($sql): array
+    {
 
         try {
             $Statement = $this->getDataBase()->query($sql);
@@ -115,5 +121,4 @@ class ActionDataBase extends Connection {
             die($sql);
         }
     }
-
 }

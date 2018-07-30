@@ -23,18 +23,21 @@ use \Twig_SimpleFunction;
  *
  * @author wassime
  */
-class Form extends Twig_Extension {
+class Form extends Twig_Extension
+{
 
     private $ConfigExternal;
     private $conevert;
 
-    public function __construct($PathConfigJsone) {
+    public function __construct($PathConfigJsone)
+    {
         $this->ConfigExternal = new ConfigExternal($PathConfigJsone);
         ///Conevert_TypeClomunSQL_to_TypeInputHTML
         $this->conevert = ($this->ConfigExternal->getConevert());
     }
 
-    public function getFunctions() {
+    public function getFunctions()
+    {
         return [
             new Twig_SimpleFunction("form", [$this, "form"], ['is_safe' => ['html']]),
             new Twig_SimpleFunction("form_child", [$this, "form_child"], ['is_safe' => ['html']]),
@@ -44,28 +47,32 @@ class Form extends Twig_Extension {
         ];
     }
 
-    public function form(Intent_Form $Intent_Form) {
+    public function form(Intent_Form $Intent_Form)
+    {
         $formhtml = new FormHTML($this->conevert, $Intent_Form);
         return $formhtml->builder();
     }
 
-    public function form_select(Intent_Form $Intent_Form) {
+    public function form_select(Intent_Form $Intent_Form)
+    {
         $formhtml = new Form_Select($this->conevert, $Intent_Form);
         return $formhtml->builder();
     }
-    public function View_Data_Parent(Intent_Form $Intent_Form) {
+    public function View_Data_Parent(Intent_Form $Intent_Form)
+    {
         $formhtml = new View_Data_Parent($this->conevert, $Intent_Form);
         return $formhtml->builder();
     }
 
-    public function form_child(Intent_Form $Intent_Form) {
+    public function form_child(Intent_Form $Intent_Form)
+    {
         $formhtml = new Form_child_HTML($this->conevert, $Intent_Form);
         return $formhtml->builder();
     }
 
-    public function Form_view(Intent_Form $Intent_Form) {
+    public function Form_view(Intent_Form $Intent_Form)
+    {
         $formhtml = new Form_view($this->conevert, $Intent_Form);
         return $formhtml->builder();
     }
-
 }

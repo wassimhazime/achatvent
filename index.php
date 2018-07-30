@@ -23,7 +23,9 @@ use Middlewares\ResponseTime;
 use Middlewares\Whoops;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Modules\Statistique\StatistiqueModule;
-use App\Modules\Comptable\ComptableModule;
+use App\Modules\CRM\CRMModule;
+use App\Modules\Achats\AchatsModule;
+use App\Modules\Ventes\VentesModule;
 use App\Modules\Transactions\TransactionsModule;
 use function Http\Response\send;
 
@@ -38,13 +40,15 @@ $app->addMiddleware(new Whoops());
 $app->addMiddleware(new Middlewares\PhpSession());
 
 
-$app->addModule(StatistiqueModule::class);
-$app->addModule(ComptableModule::class);
+
+$app->addModule(CRMModule::class);
+$app->addModule(AchatsModule::class);
+$app->addModule(VentesModule::class);
 $app->addModule(TransactionsModule::class, [
     new \App\Middleware\Authentification()
         ]
 );
-
+$app->addModule(StatistiqueModule::class);
 
 
 

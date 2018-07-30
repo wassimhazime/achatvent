@@ -15,7 +15,8 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @author wassime
  */
-abstract class AbstractFileController extends AbstractController {
+abstract class AbstractFileController extends AbstractController
+{
 
   
 

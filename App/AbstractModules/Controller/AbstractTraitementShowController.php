@@ -17,9 +17,11 @@ use GuzzleHttp\Psr7\Response;
 use Kernel\INTENT\Intent;
 use function preg_match;
 
-abstract class AbstractTraitementShowController extends AbstractController {
+abstract class AbstractTraitementShowController extends AbstractController
+{
 
-    public function supprimer($id,string $view) {
+    public function supprimer($id, string $view)
+    {
 
         $conditon = ['id' => $id];
 
@@ -38,42 +40,46 @@ abstract class AbstractTraitementShowController extends AbstractController {
             $this->getResponse()->getBody()->write("$view  $id");
 
             if (!empty($matches) && isset($matches[2])) {
-
                 $this->getFile_Upload()->delete($matches[2]);
             }
         }
+        sleep(1);
         return $this->getResponse();
     }
 
-    public function modifier($id,string $view) {
-        $page = $this->getPage();
-        $conditon = ["$page.id" => $id];
+    public function modifier($id, string $view)
+    {
+        $NameController = $this->getNameController();
+        $conditon = ["$NameController.id" => $id];
         $intentform = $this->getModel()->formDefault($conditon);
         return $this->render($view, ["intent" => $intentform]);
     }
 
-    public function ajouter_select(string $view) {
+    public function ajouter_select(string $view)
+    {
         $intentformselect = $this->getModel()->formSelect();
         if (!empty($intentformselect->getMETA_data())) {
             return $this->render($view, ["intent" => $intentformselect]);
         } else {
-           return null;  
+            return null;
         }
-        
     }
 
-    public function ajouter($getInfo,string $view) {
+    public function ajouter($getInfo, string $view)
+    {
         unset($getInfo["ajouter"]);
         $intentform = $this->getModel()->form($getInfo);
         return $this->render($view, ["intent" => $intentform]);
     }
 
-    public function show($id,string $view) {
+    public function show($id, string $view)
+    {
         $intent = $this->getModel()->show_id($id);
         return $this->render($view, ["intent" => $intent]);
     }
 
-    public function message($id,string $view) {
+    public function message($id, string $view)
+    {
 
         $mode = Intent::MODE_SELECT_DEFAULT_NULL;
 
@@ -81,5 +87,4 @@ abstract class AbstractTraitementShowController extends AbstractController {
 
         return $this->render($view, ["intent" => $intentshow]);
     }
-
 }

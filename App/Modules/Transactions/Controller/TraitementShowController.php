@@ -22,18 +22,17 @@ use Psr\Http\Message\ServerRequestInterface;
 use function substr;
 use function var_dump;
 
-class TraitementShowController extends AbstractTraitementShowController {
+class TraitementShowController extends AbstractTraitementShowController
+{
 
-    function __construct(ContainerInterface $container) {
-        parent::__construct($container);
-        $this->setModel(new Model($container->get("pathModel")));
-    }
+ 
 
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
-        parent::process($request, $handler);
-         $flag = $this->chargeModel($this->getPage());
-        if (!$flag) {
-            return $this->getResponse()->withStatus(404);
+    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
+    {
+         $this->setModel(new Model($this->getContainer()->get("pathModel")));
+        $response = parent::process($request, $handler);
+        if ($response->getStatusCode() === 404) {
+            return $response;
         }
         $params = $this->getRouter()->match($this->getRequest())->getParams();
         $action = $params["action"];
@@ -73,13 +72,13 @@ class TraitementShowController extends AbstractTraitementShowController {
                 break;
 
             default:
-                var_dump("errr");
-                die("errr");
+                return   $this->getResponse()->withStatus(404);
                 break;
         }
     }
 
-    public function modifier($id, string $view) {
+    public function modifier($id, string $view)
+    {
         $page = $this->getPage();
         $conditon = ["$page.id" => $id];
         $intentform = $this->getModel()->formDefault($conditon);
@@ -92,14 +91,15 @@ class TraitementShowController extends AbstractTraitementShowController {
         $this->getModel()->setStatement($pagechild);
 
 
-        // name raisonsocialand id 
+        // name raisonsocialand id
         $dataselect = $this->getdataselect($intentform);
 
         $intentformchile = $this->getModel()->form($dataselect);
         return $this->render($view, ["intent" => $intentform, "intentchild" => $intentformchile]);
     }
 
-    public function ajouter_select(string $view) {
+    public function ajouter_select(string $view)
+    {
         $intentformselect = $this->getModel()->formSelect();
 
         if (!empty($intentformselect->getMETA_data())) {
@@ -107,31 +107,31 @@ class TraitementShowController extends AbstractTraitementShowController {
         }
     }
 
-    public function ajouter($getInfo, string $view) {
+    public function ajouter($getInfo, string $view)
+    {
 
 
 
 
         unset($getInfo["ajouter"]);
-        $this->getModel()->setStatement($this->getPage());
+        $this->getModel()->setTable($this->getNameController());
         $intentform = $this->getModel()->form($getInfo);
 
-        $page = substr($this->getPage(), 0, -1); // childe achats => achat
+        $page = substr($this->getNameController(), 0, -1); // childe achats => achat
 
-        $this->getModel()->setStatement($page);
+        $this->getModel()->setTable($page);
         $intentformchile = $this->getModel()->form($getInfo);
 
         return $this->render($view, ["intent" => $intentform, "intentchild" => $intentformchile]);
     }
 
-    private function getdataselect(Intent_Form $intentform) {
+    private function getdataselect(Intent_Form $intentform)
+    {
         $dataSelectObject = $intentform->getCharge_data()["select"];
         $dataselect = [];
         foreach ($dataSelectObject as $key => $value) {
-
             $dataselect[$key] = $value[0]->id;
         }
         return $dataselect;
     }
-
 }

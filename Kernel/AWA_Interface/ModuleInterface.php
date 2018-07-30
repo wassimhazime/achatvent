@@ -17,13 +17,14 @@ use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Psr\Container\ContainerInterface;
 
-interface ModuleInterface {
+interface ModuleInterface
+{
 
     public function __construct(ContainerInterface $container);
 
-    public function addPathRenderer(RendererInterface $renderer, string $pathModules);
+    public function addPathRenderer(RendererInterface $renderer);
 
-    public function addRoute(RouterInterface $router,array $middlewares);
+    public function addRoute(RouterInterface $router, array $middlewares);
 
     public function getMenu(): array;
 }

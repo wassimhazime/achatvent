@@ -13,10 +13,9 @@ namespace App\AbstractModules\Controller;
  *
  * @author wassime
  */
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
-abstract  class AbstractTraitementSendController extends AbstractController {
+abstract class AbstractTraitementSendController extends AbstractController
+{
 
  
 

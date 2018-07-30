@@ -19,17 +19,21 @@ use Psr\Container\ContainerInterface;
  *
  * @author wassime
  */
-abstract class AbstractModule implements ModuleInterface {
+abstract class AbstractModule implements ModuleInterface
+{
 
     protected $container;
     protected $router;
+    const Controllers=null;
 
-    public function __construct(ContainerInterface $container) {
+    public function __construct(ContainerInterface $container)
+    {
         $this->container = $container;
         $this->router = $this->container->get(RouterInterface::class);
     }
 
-    protected function generateUriMenu(string $name_route, array $info): array {
+    protected function generateUriMenu(string $name_route, array $info): array
+    {
         $infogenerate = [];
         foreach ($info as $controle) {
             $url = $this->router->generateUri($name_route, ["controle" => $controle, "action" => "voir"]);
@@ -38,5 +42,4 @@ abstract class AbstractModule implements ModuleInterface {
         }
         return $infogenerate;
     }
-
 }

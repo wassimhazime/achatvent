@@ -21,12 +21,14 @@ use Kernel\Kernel;
 use function array_merge;
 use function is_a;
 
-class App extends Kernel {
+class App extends Kernel
+{
 
-    function run_modules() {
+    function run_modules()
+    {
         $router = $this->container->get(RouterInterface::class);
         $renderer = $this->container->get(RendererInterface::class);
-        $pathModules = $this->container->get("pathModules");
+        
         $menus = [];
         foreach ($this->modules as $_module) {
             $class_module=$_module["module"];
@@ -34,8 +36,8 @@ class App extends Kernel {
             
             $module = new $class_module($this->container);
             if (is_a($module, ModuleInterface::class)) {
-                $module->addRoute($router,$middlewares);
-                $module->addPathRenderer($renderer, $pathModules);
+                $module->addRoute($router, $middlewares);
+                $module->addPathRenderer($renderer);
                 $menu = $module->getMenu();
                 $menus = array_merge($menus, $menu);
             }
@@ -45,5 +47,4 @@ class App extends Kernel {
         $renderer->addGlobal("router", $router);
         $renderer->addGlobal("_menu", $menus);
     }
-
 }

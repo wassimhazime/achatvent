@@ -17,9 +17,11 @@ namespace Kernel\Tools;
 use Kernel\INTENT\Intent;
 use ReflectionClass;
 
-class Tools {
+class Tools
+{
 
-    public static function intent_to_metaTableHTML(Intent $intent) {
+    public static function intent_to_metaTableHTML(Intent $intent)
+    {
         $schema = $intent->getEntitysSchema();
         $COLUMNS_master = $schema->getCOLUMNS_master();
         $COLUMNS_all = $schema->getCOLUMNS_all();
@@ -51,36 +53,42 @@ class Tools {
         return ["columns" => $columns, "DataTable" => $DataTable, "CHILD" => $CHILD];
     }
 
-    public static function date_FR_to_EN($var) {
+    public static function date_FR_to_EN($var)
+    {
 
         $date = str_replace('/', '-', $var);
         return date('Y-m-d', strtotime($date));
     }
 
-    public static function date_EN_to_FR($var) {
+    public static function date_EN_to_FR($var)
+    {
 
         $date = str_replace('-', '/', $var);
         return date('d/m/Y', strtotime($date));
     }
 
-    public static function isAssoc(array $arr): bool {
+    public static function isAssoc(array $arr): bool
+    {
         if (array() === $arr) {
             return false;
         }
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
-    public static function entitys_TO_array($object): array {
+    public static function entitys_TO_array($object): array
+    {
 
         return json_decode(json_encode($object), true);
     }
 
-    public static function json($object) {
+    public static function json($object)
+    {
 
         return json_encode($object);
     }
 
-    public static function json_js($data) {
+    public static function json_js($data)
+    {
 /// datatable js setdatapar (titles ... and dataset ....)
 // https://datatables.net/examples/data_sources/js_array.html
 
@@ -101,7 +109,8 @@ class Tools {
         return self::json(["titles" => $titles, "dataSet" => $dataSets]);
     }
 
-    public static function parse_object_TO_array($object): array {
+    public static function parse_object_TO_array($object): array
+    {
 
         if (is_array($object)) {
             return $object;
@@ -116,5 +125,4 @@ class Tools {
 
         return $array;
     }
-
 }

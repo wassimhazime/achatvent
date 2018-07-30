@@ -5,8 +5,10 @@
  * and open the template in the editor.
  */
 namespace Kernel\Model\Operation;
+
 use Kernel\Model\Query\QuerySQL;
 use Kernel\Tools\Tools;
+
 /**
  * Description of FORM
  *

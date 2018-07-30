@@ -38,12 +38,12 @@ class Table extends Twig_Extension
         $DataTable = $metaTableHTML["DataTable"];
         $CHILD = $metaTableHTML["CHILD"];
 
-        return $this->tablehtml->builder( $columns, $DataTable, $CHILD, $input);
+        return $this->tablehtml->builder($columns, $DataTable, $CHILD, $input);
     }
 
     public function table_array(array $columns, array $DataTable, array $CHILD = [], array $input = [])
     {
-        return $this->tablehtml->builder( $columns, $DataTable, $CHILD, $input);
+        return $this->tablehtml->builder($columns, $DataTable, $CHILD, $input);
     }
 
     public function table_json_intent(Intent $intent)

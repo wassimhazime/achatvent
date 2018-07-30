@@ -13,9 +13,11 @@ namespace Kernel\html\element\Form;
  *
  * @author wassime
  */
-class Form_Select extends FormAbstract {
+class Form_Select extends FormAbstract
+{
 
-    public function builder() {
+    public function builder()
+    {
         $form_grop = [];
 
         foreach ($this->input as $input) {
@@ -24,8 +26,8 @@ class Form_Select extends FormAbstract {
         return implode(" ", $form_grop);
     }
 
-    protected function setInput($META_data, $Charge_data, $Default_Data = []) {
+    protected function setInput($META_data, $Charge_data, $Default_Data = [])
+    {
         $this->charge_input($META_data, $Charge_data, $Default_Data);
     }
-
 }

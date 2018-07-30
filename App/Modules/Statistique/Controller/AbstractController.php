@@ -23,15 +23,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-abstract class AbstractController extends Controller {
+abstract class AbstractController extends Controller
+{
 
-    function __construct(ContainerInterface $container) {
-        parent::__construct($container);
-       $this->setModel( new Model($container->get( "pathModel"),"client"));
-
-     
-       
-        
-    }
 
 }

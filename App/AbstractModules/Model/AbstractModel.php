@@ -20,19 +20,23 @@ use Kernel\Model\Model;
 use Kernel\Tools\Tools;
 use function explode;
 
-abstract class AbstractModel extends Model {
+abstract class AbstractModel extends Model
+{
 
     //get data
-    public function find_by_id($id): array {
+    public function find_by_id($id): array
+    {
         return $this->getData()->find_by_id($id);
     }
 
-    public function get_idfile($conditon): string {
+    public function get_idfile($conditon): string
+    {
         return $this->getData()->get_idfile($conditon);
     }
 
     // get ajax
-    public function showAjax($mode, $condition): array {
+    public function showAjax($mode, $condition): array
+    {
 
         $intent = $this->getData()->select($mode, $condition);
         $entity = ($intent->getEntitysDataTable());
@@ -40,7 +44,8 @@ abstract class AbstractModel extends Model {
     }
 
     // save data
-    public function setData($data, $id_perent = 0) {
+    public function setData($data, $id_perent = 0)
+    {
 
         if (isset($data) && !empty($data)) {
             if ($id_perent === 0) {
@@ -58,7 +63,8 @@ abstract class AbstractModel extends Model {
         }
     }
 
-    public function delete($condition): int {
+    public function delete($condition): int
+    {
         return $this->get_setData()->delete($condition);
     }
 
@@ -67,17 +73,18 @@ abstract class AbstractModel extends Model {
 
 
 
-    public function show(array $mode, $condition = true): Intent {
+    public function show(array $mode, $condition = true): Intent
+    {
 
         if ($condition !== true) {
-
             $condition = ["{$this->getTable()}.id" => $condition];
         }
         $intent = $this->getData()->select($mode, $condition);
         return $intent;
     }
 
-    public function show_in(array $mode, $condition = true): Intent {
+    public function show_in(array $mode, $condition = true): Intent
+    {
 
         if ($condition !== true) {
             $condition = explode(",", $condition);
@@ -86,27 +93,30 @@ abstract class AbstractModel extends Model {
         return $intent;
     }
 
-    public function show_id($id): Intent_Form {
+    public function show_id($id): Intent_Form
+    {
         return $this->getGui()->formDefault(["{$this->getTable()}.id" => $id]);
     }
 
     /// form
-    public function formSelect(): Intent_Form {
+    public function formSelect(): Intent_Form
+    {
 
         $intent = $this->getGui()->formSelect();
         return $intent;
     }
 
-    public function formDefault($conditon): Intent_Form {
+    public function formDefault($conditon): Intent_Form
+    {
 
         $intent = $this->getGui()->formDefault($conditon);
         return $intent;
     }
 
-    public function form($conditon = ""): Intent_Form {
+    public function form($conditon = ""): Intent_Form
+    {
 
         $intent = $this->getGui()->form($conditon);
         return $intent;
     }
-
 }

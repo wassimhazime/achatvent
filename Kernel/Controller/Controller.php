@@ -7,161 +7,208 @@ use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\html\File_Upload;
 use Kernel\Model\Model;
+
 use Psr\Container\ContainerInterface;
+use Psr\Http\Server\MiddlewareInterface;
+
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
 use function array_merge;
 
-abstract class Controller implements MiddlewareInterface {
+abstract class Controller implements MiddlewareInterface
+{
 
+    private $erreur = [];
     private $container;
     private $model;
     private $File_Upload;
     private $renderer;
-    private $controller;
     private $router;
-    private $page;
-    private $nameController;
     private $request;
     private $response;
     private $InfoTemplete = [];
     private $middlewares = [];
+    private $nameController = "";
+    private $namesControllers = [];
 
-    function setMiddlewares(array $middlewares) {
-        $this->middlewares = $middlewares;
-    }
-
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-
-        foreach ($this->middlewares as $middleware) {
-            $this->container->get(RequestHandlerInterface::class)
-                    ->pipe($middleware);
-        }
-
-        $this->setRequest($request);
-
-        $this->setResponse($handler->handle($request));
-
-        $route = $this->getRouter()->match($this->getRequest());
-        $this->setPage($route->getParam($this->getNameController()));
-        return $this->getResponse();
-    }
-
-    function __construct(ContainerInterface $container) {
+    function __construct(ContainerInterface $container, array $namesControllers)
+    {
 
         $this->container = $container;
-
-        $this->nameController = "controle";
+        $this->namesControllers = $namesControllers;
+        $this->erreur["Controller"] = false;
+        $this->erreur["Model"] = false;
 
         $this->router = $container->get(RouterInterface::class);
         $this->renderer = $container->get(RendererInterface::class);
         $this->File_Upload = $container->get(File_UploadInterface::class);
     }
 
-    function getInfoTemplete() {
-        return $this->InfoTemplete;
+    function setMiddlewares(array $middlewares)
+    {
+        $this->middlewares = $middlewares;
     }
 
-    function setInfoTemplete(array $InfoTemplete) {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
 
-        $this->InfoTemplete = array_merge($this->InfoTemplete, $InfoTemplete);
-        return $this->InfoTemplete;
+//        foreach ($this->middlewares as $middleware) {
+//            $this->container->get(RequestHandlerInterface::class)
+//                    ->pipe($middleware);
+//        }
+        
+
+        $this->setRequest($request);
+        $this->setResponse($handler->handle($request));
+
+        $route = $this->getRouter()->match($this->getRequest());
+        
+        $this->setNameController($route->getParam("controle"));
+        $this->chargeModel($this->getNameController());
+
+        return $this->getResponse();
     }
 
-    public function render($view, array $data = []): ResponseInterface {
+    public function render($view, array $data = []): ResponseInterface
+    {
 
 
 
-        $this->renderer->addGlobal("_page", $this->getPage());
+        $this->renderer->addGlobal("_page", $this->getNameController());
 
         $result = $this->setInfoTemplete($data);
 
         $render = $this->renderer->render($view, $result);
 
-        $this->response->getBody()->write($render);
-        return $this->response;
+        $response = $this->getResponse();
+        $response->getBody()->write($render);
+
+
+        return $response;
     }
 
-    function getNameController() {
+    function getInfoTemplete()
+    {
+        return $this->InfoTemplete;
+    }
+
+    function getContainer(): ContainerInterface
+    {
+        return $this->container;
+    }
+
+    function setInfoTemplete(array $InfoTemplete)
+    {
+
+        $this->InfoTemplete = array_merge($this->InfoTemplete, $InfoTemplete);
+        return $this->InfoTemplete;
+    }
+
+    function getNameController(): string
+    {
         return $this->nameController;
     }
 
-    function setNameController($nameController) {
-        $this->nameController = $nameController;
+    function setNameController(string $nameController): bool
+    {
+        $flag = in_array($nameController, $this->getNamesControllers());
+        if ($flag) {
+            $this->nameController = $nameController;
+        }
+        $this->erreur["Controller"] = $flag;
+        return $flag;
     }
 
-    protected function getModel(): Model {
+    protected function getModel(): Model
+    {
 
         return $this->model;
     }
 
-    protected function chargeModel($table) : bool{
-
+    protected function chargeModel($table): bool
+    {
         $flag = $this->getModel()->setTable($table);
+        $this->erreur["Model"] = $flag;
         return $flag;
     }
 
-    function getFile_Upload(): File_Upload {
+    function getFile_Upload(): File_Upload
+    {
         return $this->File_Upload;
     }
 
-    function getRenderer(): InterfaceRenderer {
+    function getRenderer(): InterfaceRenderer
+    {
         return $this->renderer;
     }
 
-    function getController() {
-        return $this->controller;
-    }
+//    function getController() {
+//        return $this->controller;
+//    }
 
-    function getRouter(): RouterInterface {
+    function getRouter(): RouterInterface
+    {
         return $this->router;
     }
 
-    function getPage(): string {
-        return $this->page;
-    }
-
-    function getRequest(): ServerRequestInterface {
+    function getRequest(): ServerRequestInterface
+    {
         return $this->request;
     }
 
-    function getResponse(): ResponseInterface {
+    function getResponse(): ResponseInterface
+    {
         return $this->response;
     }
 
-    function setModel($model) {
+    function is_Erreur(string $MC = ""): bool
+    {
+        if ($MC=="") {
+            return !$this->erreur["Controller"] || !$this->erreur["Model"];
+        } else {
+            return !$this->erreur[$MC];
+        }
+    }
+
+    function setModel($model)
+    {
         $this->model = $model;
     }
 
-    function setFile_Upload($File_Upload) {
+    function getNamesControllers(): array
+    {
+        return $this->namesControllers;
+    }
+
+    function setFile_Upload($File_Upload)
+    {
         $this->File_Upload = $File_Upload;
     }
 
-    function setRenderer($renderer) {
+    function setRenderer($renderer)
+    {
         $this->renderer = $renderer;
     }
 
-    function setController($controller) {
-        $this->controller = $controller;
-    }
+//    function setController($controller) {
+//        $this->controller = $controller;
+//    }
 
-    function setRouter(RouterInterface $router) {
+    function setRouter(RouterInterface $router)
+    {
         $this->router = $router;
     }
 
-    function setPage(string $page) {
-        $this->page = $page;
-    }
-
-    function setRequest(RequestInterface $request) {
+    function setRequest(ServerRequestInterface $request)
+    {
         $this->request = $request;
     }
 
-    function setResponse(ResponseInterface $response) {
+    function setResponse(ResponseInterface $response)
+    {
         $this->response = $response;
     }
-
 }

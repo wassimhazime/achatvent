@@ -7,6 +7,7 @@
  */
 
 namespace Kernel\html\Components;
+
 use Kernel\html\HTML;
 
 /**
@@ -14,17 +15,20 @@ use Kernel\html\HTML;
  *
  * @author wassime
  */
-class Panel {
+class Panel
+{
 
     private $title;
     private $body;
 
-    function __construct($title, $body) {
+    function __construct($title, $body)
+    {
         $this->title = $title;
         $this->body = $body;
     }
 
-    public function builder() {
+    public function builder()
+    {
         $heading= $this->heading();
         $body= $this->body();
         return   HTML::TAG("div")
@@ -32,10 +36,10 @@ class Panel {
                 ->setAtt('style="margin:10px"')
                 ->setData($heading.$body)
                 ->builder();
-        
     }
 
-    private function heading() {
+    private function heading()
+    {
         
         $h3=HTML::TAG("h3")
                 ->setClass("panel-title")
@@ -46,14 +50,12 @@ class Panel {
                  ->setClass("panel-heading")
                  ->setData($h3)
                  ->builder();
-        
     }
 
-    private function body() {
+    private function body()
+    {
          return   HTML::TAG("div")
                  ->setClass("panel-body ")
                  ->setData($this->body)->builder();
-        
     }
-
 }

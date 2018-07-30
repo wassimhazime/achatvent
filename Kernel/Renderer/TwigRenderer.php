@@ -49,9 +49,8 @@ class TwigRenderer implements RendererInterface
         $this->twig->addExtension(new \Twig_Extension_Debug);
         $this->twig->addExtension(new Twig_Extension\controle_Table);
         
-        //// configue Extension 
+        //// configue Extension
         $this->twig->addExtension(new Twig_Extension\Form($PathConfigJsone));
-       
     }
 
     public static function getRenderer(string $path = "")

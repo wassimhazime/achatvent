@@ -8,6 +8,7 @@
 
 namespace App\AbstractModules\Controller;
 
+use Kernel\Tools\Tools;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -15,28 +16,28 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @author wassime
  */
-abstract  class  AbstractAjaxController extends AbstractController {
+abstract class AbstractAjaxController extends AbstractController
+{
 
-      public function ajax_js() : ResponseInterface{
+    public function ajax_js() : ResponseInterface
+    {
           
           
-          $flag = $this->chargeModel($this->getPage());
-        if (!$flag) {
-            return $this->getResponse()
-                    ->withStatus(404)
-                    ->withHeader('Content-Type', 'application/json; charset=utf-8');
-        }
-             
+//          $flag = $this->chargeModel($this->getNameController());
+//        if (!$flag) {
+//            return $this->getResponse()
+//                    ->withStatus(404)
+//                    ->withHeader('Content-Type', 'application/json; charset=utf-8');
+//        }
+//
         $query = $this->getRequest()->getQueryParams();
 
         $modeshow = $this->getModeShow($query);
         $modeintent = $modeshow["modeIntent"];
 
         $data = $this->getModel()->showAjax($modeintent, true);
-        $json = \Kernel\Tools\Tools::json_js($data);
+        $json = Tools::json_js($data);
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
-     
     }
-
 }

@@ -13,16 +13,19 @@ namespace Kernel\Model\Query;
  *
  * @author wassime
  */
-class Update extends Abstract_Query {
+class Update extends Abstract_Query
+{
 
 //update
-    function __construct(string $table) {
+    function __construct(string $table)
+    {
 
 
         $this->table[] = $table;
     }
 
-    public function value(array $data) {
+    public function value(array $data)
+    {
 
         if ($this->isAssoc($data)) {
             // sql simple
@@ -36,7 +39,6 @@ class Update extends Abstract_Query {
             $sqlp = [];
 
             foreach ($data as $key => $value) {
-
                 $sqlp[] = "?";
                 $valuep[] = $value;
             }
@@ -50,7 +52,8 @@ class Update extends Abstract_Query {
         return "error value insert querysql";
     }
 
-    public function set(array $data) {
+    public function set(array $data)
+    {
 
         $l = "";
         foreach ($data as $x => $x_value) {
@@ -88,7 +91,8 @@ class Update extends Abstract_Query {
 
     //traitement
 
-    public function query(): string {
+    public function query(): string
+    {
         $table = implode(', ', $this->table);
 
         $where = ' WHERE ' . implode(' AND ', $this->conditionsSimple);
@@ -98,7 +102,8 @@ class Update extends Abstract_Query {
         return $action . $table . $set . $where;
     }
 
-    public function prepareQuery(): Prepare {
+    public function prepareQuery(): Prepare
+    {
 
         $table = implode(', ', $this->table);
         $condition = array_merge($this->conditionsPrepares, $this->conditionsPrepares_values);
@@ -110,5 +115,4 @@ class Update extends Abstract_Query {
 
         return new Prepare($prepare, $execute);
     }
-
 }

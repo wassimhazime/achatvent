@@ -13,21 +13,25 @@ namespace Kernel\Model\Query;
  *
  * @author wassime
  */
-class Delete extends Abstract_Query {
+class Delete extends Abstract_Query
+{
 
-    function __construct($table) {
+    function __construct($table)
+    {
         $this->table[] = $table;
     }
 
     //traitement
 
-    public function query(): string {
+    public function query(): string
+    {
         $table = implode(', ', $this->table);
         $where = ' WHERE ' . implode(' AND ', $this->conditionsSimple);
         return 'DELETE FROM ' . $table . $where;
     }
 
-    public function prepareQuery(): Prepare {
+    public function prepareQuery(): Prepare
+    {
         $table = implode(', ', $this->table);
         $execute = $this->conditionsValues;
         $condition = array_merge($this->conditionsPrepares, $this->conditionsPrepares_values);
@@ -35,5 +39,4 @@ class Delete extends Abstract_Query {
         $prepare = 'DELETE FROM ' . $table . $where;
         return new Prepare($prepare, $execute);
     }
-
 }

@@ -23,8 +23,6 @@ return [
     },
     "configue_Extension" => function (ContainerInterface $container): string {
         return $container->get("Config") . "html" . D_S;
-    }, "pathModules" => function (ContainerInterface $container): string {
-        return $container->get("App") . "Modules" . D_S;
     },
     "default_Templte" => function (ContainerInterface $container): string {
         return $container->get("App") . "TEMPLETE";

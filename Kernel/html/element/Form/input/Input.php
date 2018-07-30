@@ -16,10 +16,12 @@ use Kernel\html\HTML;
  *
  * @author wassime
  */
-class Input extends Abstract_Input {
+class Input extends Abstract_Input
+{
 
     //put your code here
-    public function builder() {
+    public function builder()
+    {
         $name = $this->name;
         $id_html = $this->id_html;
         $Default = $this->Default;
@@ -34,7 +36,6 @@ class Input extends Abstract_Input {
 
 
         if ($this->input['Type'] == "file") {
-
             if ($this->child != "[]") {
                 $tag->setAtt('multiple ');
                 $tag->setName($name . "[]");
@@ -48,5 +49,4 @@ class Input extends Abstract_Input {
 
         return $this->div($tag->builder());
     }
-
 }

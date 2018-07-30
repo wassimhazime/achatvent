@@ -2,9 +2,11 @@
 
 namespace Kernel\html\element\Form;
 
-class FormHTML extends FormAbstract {
+class FormHTML extends FormAbstract
+{
 
-    public function builder() {
+    public function builder()
+    {
         $form_grop = [];
 
         foreach ($this->input as $input) {
@@ -13,14 +15,16 @@ class FormHTML extends FormAbstract {
         return implode(" ", $form_grop);
     }
 
-    protected function setInput($META_data, $Charge_data, $Default_Data = []) {
+    protected function setInput($META_data, $Charge_data, $Default_Data = [])
+    {
 
         $this->charge_input_multiselect($Charge_data, $Default_Data);
 
         $this->charge_input($META_data, $Charge_data, $Default_Data);
     }
 
-    private function charge_input_multiselect($Charge_data, $Default_Data) {
+    private function charge_input_multiselect($Charge_data, $Default_Data)
+    {
 
         foreach ($Charge_data["multiselect"] as $name_CHILDREN => $data) {
             $default = [];
@@ -39,6 +43,4 @@ class FormHTML extends FormAbstract {
                 "Data_load" => $data];
         }
     }
-    
-
 }

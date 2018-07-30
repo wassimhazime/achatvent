@@ -18,7 +18,8 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-class Despatcher implements RequestHandlerInterface {
+class Despatcher implements RequestHandlerInterface
+{
 
     private $middlwares = [];
     private $protoTypeRespons;
@@ -27,19 +28,23 @@ class Despatcher implements RequestHandlerInterface {
      * Return middlwares|| null
      */
 
-    function getMiddlwares() {
+    function getMiddlwares()
+    {
         return array_shift($this->middlwares);
     }
 
-    function __construct(ResponseInterface $prototypeRespons) {
+    function __construct(ResponseInterface $prototypeRespons)
+    {
         $this->protoTypeRespons = $prototypeRespons;
     }
 
-    public function pipe(MiddlewareInterface $middleware) {
+    public function pipe(MiddlewareInterface $middleware)
+    {
         $this->middlwares[] = $middleware;
     }
 
-    public function handle(ServerRequestInterface $request): ResponseInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
        // var_dump($this->middlwares);die();
         
         $middlware = $this->getMiddlwares();
@@ -50,5 +55,4 @@ class Despatcher implements RequestHandlerInterface {
             return $this->protoTypeRespons;
         }
     }
-
 }

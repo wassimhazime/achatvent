@@ -16,9 +16,11 @@ use Kernel\html\HTML;
  *
  * @author wassime
  */
-class Textarea extends Abstract_Input {
+class Textarea extends Abstract_Input
+{
 
-    public function builder() {
+    public function builder()
+    {
 
         $name = $this->name;
         $id_html = $this->id_html;
@@ -37,5 +39,4 @@ class Textarea extends Abstract_Input {
         
         return $this->div($tag);
     }
-
 }

@@ -13,14 +13,17 @@ namespace Kernel\Model\Operation;
  *
  * @author wassime
  */
-class ToolsDB extends AbstractOperatipn {
+class ToolsDB extends AbstractOperatipn
+{
 
-    public function is_Table(string $nameTable): bool {
+    public function is_Table(string $nameTable): bool
+    {
         $entity = $this->getschema($nameTable);
         return $entity->getNameTable() != null;
     }
 
-    public function getAllTables(): array {
+    public function getAllTables(): array
+    {
         $names_Tables = [];
         $Schemas = $this->getALLschema();
         foreach ($Schemas as $schema) {
@@ -28,5 +31,4 @@ class ToolsDB extends AbstractOperatipn {
         }
         return $names_Tables;
     }
-
 }

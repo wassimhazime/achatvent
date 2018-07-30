@@ -17,11 +17,13 @@ use Kernel\html\HTML;
  *
  * @author wassime
  */
-class MultiSelect extends Abstract_Input {
+class MultiSelect extends Abstract_Input
+{
 
     //put your code here
 
-    private function value_att($data) {
+    private function value_att($data)
+    {
         $data_value_att = [];
         foreach ($data as $row) {
             $ligne = "";
@@ -35,7 +37,8 @@ class MultiSelect extends Abstract_Input {
         return $data_value_att;
     }
 
-    private function chargeOption($data_load, $Default) {
+    private function chargeOption($data_load, $Default)
+    {
         $optionTag = [];
         foreach ($data_load as $id => $data) {
             $optionTag [] = HTML::TAG('option')
@@ -53,7 +56,8 @@ class MultiSelect extends Abstract_Input {
         return $optionTag;
     }
 
-    public function builder() {
+    public function builder()
+    {
         $name = $this->name;
         $id_html = $this->id_html;
 
@@ -74,11 +78,11 @@ class MultiSelect extends Abstract_Input {
         return $this->div($Multiselecttag, count($optionTag));
     }
 
-    protected function div($Multiselecttag, $badge = "") {
+    protected function div($Multiselecttag, $badge = "")
+    {
 
         $modal = new Modals($this->lable, $Multiselecttag, "", $badge);
 
         return $modal->builder();
     }
-
 }

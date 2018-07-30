@@ -13,13 +13,16 @@ namespace Kernel\Model\Query;
  *
  * @author wassime
  */
-class Insert extends Abstract_Query {
+class Insert extends Abstract_Query
+{
 
-    function __construct(string $table) {
+    function __construct(string $table)
+    {
         $this->table[] = $table;
     }
 
-    public function value(array $data) {
+    public function value(array $data)
+    {
 
         if ($this->isAssoc($data)) {
             // sql simple
@@ -33,7 +36,6 @@ class Insert extends Abstract_Query {
             $sqlp = [];
 
             foreach ($data as $value) {
-
                 $sqlp[] = "?";
                 $valuep[] = $value;
             }
@@ -49,12 +51,14 @@ class Insert extends Abstract_Query {
 
     //traitement
 
-    public function query(): string {
+    public function query(): string
+    {
         $table = implode(', ', $this->table);
         return ' INSERT INTO ' . $table . $this->value;
     }
 
-    public function prepareQuery(): Prepare {
+    public function prepareQuery(): Prepare
+    {
 
         $table = implode(', ', $this->table);
         $prepare = ' INSERT INTO ' . $table . $this->valuePrepare["sql"];
@@ -62,5 +66,4 @@ class Insert extends Abstract_Query {
 
         return new Prepare($prepare, $execute);
     }
-
 }

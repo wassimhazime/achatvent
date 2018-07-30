@@ -18,18 +18,17 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-class Authentification implements MiddlewareInterface {
+class Authentification implements MiddlewareInterface
+{
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         var_dump($_SESSION);
-        if (isset($_SESSION["auth"]) ) {
+        if (isset($_SESSION["auth"])) {
             $response = $handler->handle($request);
             return $response;
         }
         $_SESSION["auth"]="hh";
         die("auth");
-        
-        
     }
-
 }

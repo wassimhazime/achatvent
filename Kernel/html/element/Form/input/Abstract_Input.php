@@ -15,7 +15,8 @@ use Kernel\html\HTML;
  *
  * @author wassime
  */
-abstract class Abstract_Input {
+abstract class Abstract_Input
+{
 
     protected $input = [];
     protected $name;
@@ -27,7 +28,8 @@ abstract class Abstract_Input {
     protected $styleGroup;
     protected $child;
 
-    function __construct(array $input, string $styleGroup = "form-horizonta", string $child = "") {
+    function __construct(array $input, string $styleGroup = "form-horizonta", string $child = "")
+    {
 
         $this->child = $child;
         $this->name = $input['Field'];
@@ -52,7 +54,8 @@ abstract class Abstract_Input {
 
     abstract function builder();
 
-    protected function div($input, $badge = "") {
+    protected function div($input, $badge = "")
+    {
         if ($this->styleGroup === "form-horizonta") {
             return $this->form_horizonta($input, $badge);
         } elseif ($this->styleGroup === "form-inline") {
@@ -62,7 +65,8 @@ abstract class Abstract_Input {
         }
     }
 
-    protected function form_horizonta($input, $badge = "") {
+    protected function form_horizonta($input, $badge = "")
+    {
         $labelHTML = HTML::TAG('label')
                 ->setClass("col-sm-3 control-label")
                 ->setAtt(' style="text-align: left;"')
@@ -82,7 +86,8 @@ abstract class Abstract_Input {
         return $div;
     }
 
-    protected function form_inline($input, $badge = "") {
+    protected function form_inline($input, $badge = "")
+    {
         $labelHTML = HTML::TAG('label')
                 ->setClass("control-label")
                 ->setAtt(' style="text-align: left;"')
@@ -101,8 +106,8 @@ abstract class Abstract_Input {
         return $div;
     }
 
-    protected function form_table($input, $badge = "") {
+    protected function form_table($input, $badge = "")
+    {
         return ["label" => $this->lable, "input" => $input];
     }
-
 }

@@ -16,9 +16,12 @@ namespace App\Modules\Statistique\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class globalController extends AbstractController {
+class globalController extends AbstractController
+{
 
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
+    {
+        $this->setModel(new \App\Modules\Statistique\Model\Model($this->getContainer()->get("pathModel")));
 
         parent::process($request, $handler);
         
@@ -26,5 +29,4 @@ class globalController extends AbstractController {
         $charge = $st->chargeDataSelect();
         return $this->render("@statistique/global", ["charge" => $charge]);
     }
-
 }
