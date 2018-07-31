@@ -13,103 +13,22 @@ namespace App\Modules\Transactions\Controller;
  *
  * @author wassime
  */
-use App\AbstractModules\Controller\AbstractTraitementSendController;
 
 ;
 
+use App\AbstractModules\Controller\AbstractTraitementSendController;
 use App\Modules\Transactions\Model\Model;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use function preg_match;
-use function str_replace;
-use function substr;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class TraitementSendController extends AbstractTraitementSendController
-{
+class TraitementSendController extends AbstractTraitementSendController {
 
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
-    {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
 
-        $response = parent::process($request, $handler);
-
-        if ($response->getStatusCode() === 404) {
-            return $response;
-        }
-
-        // get data insert merge par parent et child
-        $insert = $this->getRequest()->getParsedBody();
-
-
-        // parse data
-        $parseData = $this->parseDataPerant_child($insert);
-        $data_parent = $parseData["data_parent"];
-        $data_child = $parseData["data_child"];
-
-
-        //  save data parent
-        $this->chargeModel($this->getNameController());
-        
-        // insert data
-        // $id_parent pour gere relation et data lier(exemple raison social)
-        $id_parent = $this->getModel()->setData($data_parent);
-
-        /*         * ************************* */
-        //  save relation
-        /// childe achats => achat
-        $Controller_child = substr($this->getNameController(), 0, -1);
-        /// save image
-        $data_child = $this->getFile_Upload()
-                ->save_child(
-                    "TransactionFiles",
-                    $this->getRequest(),
-                    $data_child,
-                    $Controller_child
-                );
-
-        /// save data child
-        $this->chargeModel($Controller_child);
-        
-        $this->getModel()->setData($data_child, $id_parent);
-
-
-        /// show etem save
-        $this->chargeModel($this->getNameController);
-       
-        $intent = $this->getModel()->show_id($id_parent);
-        
-        return $this->render("@TransactionsShow/show_item", ["intent" => $intent]);
+        parent::process($request, $handler);
+        return $this->send_data_ParantChild("@TransactionsShow/show_item", "TransactionFiles");
     }
 
-    private function parseDataPerant_child(array $data_set): array
-    {
-
-        $data_parent = [];
-        $data_child = [];
-
-        // parse data => dataperant and datachild
-        foreach ($data_set as $key => $data) {
-            if (preg_match("/\_child\b/i", $key)) {
-                $data_child[str_replace("_child", "", $key)] = $data;
-            } else {
-                $data_parent[$key] = $data;
-            }
-        }
-
-
-        // sort array data child
-
-        $data_child_sort = [];
-        foreach ($data_child as $i => $element) {
-            foreach ($element as $j => $sub_element) {
-                $data_child_sort[$j][$i] = $sub_element;
-            }
-        }
-
-        return [
-            "data_parent" => $data_parent,
-            "data_child" => $data_child_sort
-        ];
-    }
 }

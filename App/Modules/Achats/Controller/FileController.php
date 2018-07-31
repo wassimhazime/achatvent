@@ -10,29 +10,21 @@ namespace App\Modules\Achats\Controller;
 
 use App\AbstractModules\Controller\AbstractFileController;
 use App\Modules\Achats\Model\Model;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Description of FileController
  *
  * @author wassime
  */
-class FileController extends AbstractFileController
-{
+class FileController extends AbstractFileController {
 
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
-    {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
-
-       
-         parent::process($request, $handler);
-              $route = $this->getRouter()->match($this->getRequest());
-           $files = $this->getFile_Upload()->get($route->getParam("controle"));
-        
-        
-        
-        return $this->render("@AchatsShow/show_files", ["files" => $files]);
+        parent::process($request, $handler);
+        return $this->get_views_files("@AchatsShow/show_files");
     }
+
 }

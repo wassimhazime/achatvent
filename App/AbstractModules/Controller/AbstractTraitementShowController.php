@@ -43,7 +43,7 @@ abstract class AbstractTraitementShowController extends AbstractController
                 $this->getFile_Upload()->delete($matches[2]);
             }
         }
-        sleep(1);
+        
         return $this->getResponse();
     }
 

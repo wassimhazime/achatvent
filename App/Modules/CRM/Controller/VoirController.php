@@ -8,22 +8,15 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class VoirController extends AbstractVoirController
-{
+class VoirController extends AbstractVoirController {
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
 
         parent::process($request, $handler);
-        
-        if ($this->is_Erreur()) {
-            return $this->getResponse()->withStatus(404);
-        }
-        
 
-        $query = $this->getRequest()->getQueryParams();
-        $data = $this->showDataTable($query, "CRMAjax", "CRMTraitementShow");
-        return $this->render("@CRMShow/show", $data);
+        return $this->showDataTable("@CRMShow/show","CRMAjax", "CRMTraitementShow");
+      
     }
+
 }

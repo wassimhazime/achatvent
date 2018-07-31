@@ -10,9 +10,9 @@ namespace App\Modules\Ventes\Controller;
 
 use App\AbstractModules\Controller\AbstractAjaxController;
 use App\Modules\Ventes\Model\Model;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Description of AjaxController
@@ -23,7 +23,7 @@ class AjaxController extends AbstractAjaxController
 {
 
  
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
 

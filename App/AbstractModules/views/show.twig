@@ -35,11 +35,17 @@
         <div class="row" style="width:90% ; margin: auto ;    margin-top: 10px;">
             <table id="DataTableJs"  class="DataTableJs table table-striped table-bordered dt-responsive nowrap ">
 
-                {% if Html_or_Json=='json' %}
 
-                {% elseif Html_or_Json=='HTML' %}
-                    {{ table_intent(intent,input_tableHtml('ComptableTraitementShow'))}}
-                {% endif %}   
+
+
+                {% block table %}
+                    {% if Html_or_Json=='json' %}
+
+                    {% elseif Html_or_Json=='HTML' %}
+                        {{ table_intent(intent,input_tableHtml('ComptableTraitementShow'))}}
+                    {% endif %}  
+                {% endblock %}
+
 
 
             </table>
@@ -75,11 +81,11 @@
     <script  src="/public/Framework/Responsive-2.2.1/js/responsive.bootstrap.min.js"></script>
     <script  src="/public/Framework/Select-1.2.5/js/dataTables.select.min.js"></script>
 
-{{nameRoute}}
+    {{nameRoute}}
     <script src="/public/AWA/DataTable.js" ></script>
 
     {% if Html_or_Json=='json' %}
-        
+
         <script>DataTable_awa('#DataTableJs',
                     "{{btnDataTable}}",
                     '{{input_tableJson(nameRouteTraitementData)}}',

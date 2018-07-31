@@ -10,25 +10,21 @@ namespace App\Modules\Achats\Controller;
 
 use App\AbstractModules\Controller\AbstractAjaxController;
 use App\Modules\Achats\Model\Model;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Description of AjaxController
  *
  * @author wassime
  */
-class AjaxController extends AbstractAjaxController
-{
+class AjaxController extends AbstractAjaxController {
 
-  
-
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
-    {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
-
         parent::process($request, $handler);
         return $this->ajax_js();
     }
+
 }

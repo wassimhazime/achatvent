@@ -21,15 +21,11 @@ abstract class AbstractAjaxController extends AbstractController
 
     public function ajax_js() : ResponseInterface
     {
-          
-          
-//          $flag = $this->chargeModel($this->getNameController());
-//        if (!$flag) {
-//            return $this->getResponse()
-//                    ->withStatus(404)
-//                    ->withHeader('Content-Type', 'application/json; charset=utf-8');
-//        }
-//
+      if ($this->is_Erreur()) {
+            return $this->getResponse()
+                            ->withStatus(404)
+                            ->withHeader('Content-Type', 'application/json; charset=utf-8');
+        }
         $query = $this->getRequest()->getQueryParams();
 
         $modeshow = $this->getModeShow($query);

@@ -2,13 +2,17 @@
 
 namespace App\AbstractModules\Controller;
 
-abstract class AbstractVoirController extends AbstractController
-{
+use Psr\Http\Message\ResponseInterface;
 
-    protected function showDataTable($query, string $nameRouteGetDataAjax, string $nameRouteTraitementData)
-    {
+abstract class AbstractVoirController extends AbstractController {
 
+    protected function showDataTable(string $name_views, string $nameRouteGetDataAjax, string $nameRouteTraitementData): ResponseInterface {
 
+        if ($this->is_Erreur()) {
+            return $this->getResponse()->withStatus(404);
+        }
+
+        $query = $this->getRequest()->getQueryParams();
         $modeshow = $this->getModeShow($query);
         $modeintent = $modeshow["modeIntent"];
 
@@ -31,12 +35,10 @@ abstract class AbstractVoirController extends AbstractController
             $get = "?" . $this->getRequest()->getUri()->getQuery();
             $data["ajax"] = $url . $get;
         }
-
-        return $data;
+        return $this->render($name_views, $data);
     }
 
-    private function btn_DataTable(array $modeHTTP): array
-    {
+    private function btn_DataTable(array $modeHTTP): array {
 
         $param = "pageLength colvis";
         $jsCharge = [];
@@ -60,4 +62,5 @@ abstract class AbstractVoirController extends AbstractController
 
         return ["btn" => $param, "jsCharges" => $jsCharge];
     }
+
 }

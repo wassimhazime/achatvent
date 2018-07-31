@@ -19,20 +19,13 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-class AjaxController extends AbstractAjaxController
-{
+class AjaxController extends AbstractAjaxController {
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
 
         parent::process($request, $handler);
-
-        if ($this->is_Erreur()) {
-            return $this->getResponse()->withStatus(404);
-        }
-
-
-        return $this->ajax_js();
+         return $this->ajax_js();
     }
+
 }

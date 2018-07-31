@@ -13,26 +13,24 @@ namespace App\Modules\CRM\Controller;
  *
  * @author wassime
  */
-
 use App\AbstractModules\Controller\AbstractTraitementShowController;
 use App\Modules\CRM\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class TraitementShowController extends AbstractTraitementShowController
-{
+class TraitementShowController extends AbstractTraitementShowController {
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
-        $response = parent::process($request, $handler);
+        parent::process($request, $handler);
+
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
-        $params = $this->getRouter()->match($this->getRequest())->getParams();
-        $action = $params["action"];
-        $id = $params["id"];
+
+        $action = $this->getRoute()->getParam("action");
+        $id = $this->getRoute()->getParam("id");
 
 
         switch ($action) {
@@ -72,4 +70,5 @@ class TraitementShowController extends AbstractTraitementShowController
                 break;
         }
     }
+
 }

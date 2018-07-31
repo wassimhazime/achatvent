@@ -19,16 +19,12 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @author wassime
  */
-class FileController extends AbstractFileController
-{
+class FileController extends AbstractFileController {
 
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
-    {
-        $this->setModel(new Model($this->getContainer()->get("pathModel")));
-
+    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
+$this->setModel(new Model($this->getContainer()->get("pathModel")));
         parent::process($request, $handler);
-        $route = $this->getRouter()->match($this->getRequest());
-        $files = $this->getFile_Upload()->get($route->getParam("controle"));
-        return $this->render("@VentesShow/show_files", ["files" => $files]);
+        return $this->get_views_files("@VentesShow/show_files");
     }
+
 }
