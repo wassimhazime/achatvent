@@ -22,19 +22,19 @@ interface RouterInterface extends MiddlewareInterface
 
   
 
-    public function addRoute(string $url, MiddlewareInterface $middleware, $methods, string $name);
+    public function addRoute(string $url, MiddlewareInterface $middleware, $methods=null, string $name , string $nameModule="");
 
-    public function addRoute_get(string $url, MiddlewareInterface $middleware, string $name) ;
+    public function addRoute_get(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="") ;
 
-    public function addRoute_post(string $url, MiddlewareInterface $middleware, string $name) ;
+    public function addRoute_post(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="") ;
 
-    public function addRoute_put(string $url, MiddlewareInterface $middleware, string $name) ;
+    public function addRoute_put(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="") ;
 
-    public function addRoute_patch(string $url, MiddlewareInterface $middleware, string $name);
+    public function addRoute_patch(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="");
 
-    public function addRoute_delete(string $url, MiddlewareInterface $middleware, string $name) ;
+    public function addRoute_delete(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="") ;
 
-    public function addRoute_any(string $url, MiddlewareInterface $middleware, string $name) ;
+    public function addRoute_any(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="") ;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function generateUri($name, array $substitutions = [], array $options = []): string ;

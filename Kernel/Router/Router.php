@@ -21,40 +21,40 @@ class Router implements RouterInterface
         $this->router = new FastRouteRouter();
     }
 
-    public function addRoute(string $url, MiddlewareInterface $middleware, $methods, string $name)
+    public function addRoute(string $url, MiddlewareInterface $middleware, $methods, string $name, string $nameModule="")
     {
-        $route = new FastRouteRoute($url, $middleware, $methods, $name);
+        $route = new FastRouteRoute("/".$nameModule.$url, $middleware, $methods, $name);
         $this->router->addRoute($route);
     }
 
-    public function addRoute_get(string $url, MiddlewareInterface $middleware, string $name)
+    public function addRoute_get(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="")
     {
-        $this->addRoute($url, $middleware, ['GET'], $name);
+        $this->addRoute($url, $middleware, ['GET'], $name,$nameModule);
     }
 
-    public function addRoute_post(string $url, MiddlewareInterface $middleware, string $name)
+    public function addRoute_post(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="")
     {
-        $this->addRoute($url, $middleware, ['POST'], $name);
+        $this->addRoute($url, $middleware, ['POST'], $name,$nameModule);
     }
 
-    public function addRoute_put(string $url, MiddlewareInterface $middleware, string $name)
+    public function addRoute_put(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="")
     {
-        $this->addRoute($url, $middleware, ['PUT'], $name);
+        $this->addRoute($url, $middleware, ['PUT'], $name,$nameModule);
     }
 
-    public function addRoute_patch(string $url, MiddlewareInterface $middleware, string $name)
+    public function addRoute_patch(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="")
     {
-        $this->addRoute($url, $middleware, ['PATCH'], $name);
+        $this->addRoute($url, $middleware, ['PATCH'], $name,$nameModule);
     }
 
-    public function addRoute_delete(string $url, MiddlewareInterface $middleware, string $name)
+    public function addRoute_delete(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="")
     {
-        $this->addRoute($url, $middleware, ['DELETE'], $name);
+        $this->addRoute($url, $middleware, ['DELETE'], $name,$nameModule);
     }
 
-    public function addRoute_any(string $url, MiddlewareInterface $middleware, string $name)
+    public function addRoute_any(string $url, MiddlewareInterface $middleware, string $name, string $nameModule="")
     {
-        $this->addRoute($url, $middleware, null, $name);
+        $this->addRoute($url, $middleware, null, $name,$nameModule);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -18,7 +18,7 @@ use function substr;
  *
  * @author wassime
  */
-abstract class AbstractTraitementSendController extends AbstractController {
+abstract class AbstractSendController extends AbstractController {
 
     public function send_data(string $view_show, string $routeFile = ""): ResponseInterface {
         if ($this->is_Erreur()) {

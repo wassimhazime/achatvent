@@ -13,21 +13,21 @@ namespace App\Modules\Transactions\Controller;
  *
  * @author wassime
  */
+
 use App\AbstractModules\Controller\AbstractTraitementShowController;
 use App\Modules\Transactions\Model\Model;
 use Kernel\INTENT\Intent_Form;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use function substr;
-use function var_dump;
 
 class TraitementShowController extends AbstractTraitementShowController
 {
 
  
 
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
          $this->setModel(new Model($this->getContainer()->get("pathModel")));
         $response = parent::process($request, $handler);
@@ -77,7 +77,7 @@ class TraitementShowController extends AbstractTraitementShowController
         }
     }
 
-    public function modifier($id, string $view)
+    public function modifier($id, string $view): ResponseInterface
     {
         $page = $this->getPage();
         $conditon = ["$page.id" => $id];
@@ -107,7 +107,7 @@ class TraitementShowController extends AbstractTraitementShowController
         }
     }
 
-    public function ajouter($getInfo, string $view)
+    public function ajouter($getInfo, string $view): ResponseInterface
     {
 
 

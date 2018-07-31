@@ -13,19 +13,27 @@ namespace App\Modules\Achats\Controller;
  *
  * @author wassime
  */
-
-use App\AbstractModules\Controller\AbstractTraitementSendController;
 use App\Modules\Achats\Model\Model;
+use App\AbstractModules\Controller\AbstractShowController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class TraitementSendController extends AbstractTraitementSendController {
+class ShowController extends AbstractShowController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
         parent::process($request, $handler);
-        return $this->send_data("@AchatsShow/show_item", "AchatsFiles");
+        
+
+        if ($this->is_Erreur()) {
+            return $this->getResponse()->withStatus(404);
+        }
+
+        $action = $this->getRoute()->getParam("action");
+        $id = $this->getRoute()->getParam("id");
+
+        return $this->run($action, $id);
     }
 
 }

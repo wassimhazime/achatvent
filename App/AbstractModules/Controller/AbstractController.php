@@ -19,8 +19,7 @@ use Kernel\Controller\Controller;
 abstract class AbstractController extends Controller
 {
 
-    protected function getModeShow(array $modeHTTP): array
-    {
+   protected function getModeShow(array $modeHTTP): array {
         $parent = "DEFAULT";
         $child = "EMPTY";
 
@@ -39,8 +38,7 @@ abstract class AbstractController extends Controller
         return ["type" => $type, "modeIntent" => [$parent, $child]];
     }
 
-    private function parseMode(string $modefr, $default): string
-    {
+    private function parseMode(string $modefr, $default): string {
         switch ($modefr) {
             case "rien":
                 $mode = "EMPTY";
@@ -62,4 +60,8 @@ abstract class AbstractController extends Controller
         }
         return $mode;
     }
+
+    
+    
+    
 }

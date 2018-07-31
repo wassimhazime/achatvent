@@ -4,6 +4,8 @@ use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\AWA_Interface\File_UploadInterface;
 use Kernel\AWA_Interface\ModelInterface;
+use Kernel\AWA_Interface\ActionInterface;
+use Kernel\AWA_Interface\NamesRouteInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -20,6 +22,10 @@ return [
     },
     ModelInterface::class => function (ContainerInterface $container): ModelInterface {
         return new \Kernel\Model\Model($container->get("pathModel"));
+    }, ActionInterface::class => function (ContainerInterface $container): ActionInterface {
+        return new Kernel\Controller\Action();
+    }, NamesRouteInterface::class => function (ContainerInterface $container): NamesRouteInterface {
+        return new Kernel\Controller\NamesRoute();
     },
     "configue_Extension" => function (ContainerInterface $container): string {
         return $container->get("Config") . "html" . D_S;

@@ -8,19 +8,25 @@
 
 namespace Kernel\Renderer\Twig_Extension;
 
-class controle_Table extends \Twig_Extension
-{
+use Kernel\AWA_Interface\ActionInterface;
+use Kernel\AWA_Interface\RouterInterface;
+use Twig_Extension;
+use Twig_SimpleFunction;
 
-    public function getFunctions()
-    {
+class controle_Table extends Twig_Extension {
+
+    private $router;
+    private $action;
+    private $nameController;
+
+    public function getFunctions() {
         return [
-            new \Twig_SimpleFunction("input_tableHtml", [$this, "input_tableHtml"], ['is_safe' => ['html'], 'needs_context' => true]),
-            new \Twig_SimpleFunction("input_tableJson", [$this, "input_tableJson"], ['is_safe' => ['html'], 'needs_context' => true]),
+            new Twig_SimpleFunction("input_tableHtml", [$this, "input_tableHtml"], ['is_safe' => ['html'], 'needs_context' => true]),
+            new Twig_SimpleFunction("input_tableJson", [$this, "input_tableJson"], ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
 
-    public function input_tableJson(array $context, string $nameroute): string
-    {
+    public function input_tableJson(array $context, string $nameroute): string {
         $url = $this->getUrl($context, $nameroute);
         $message = "urlmessage|" . $url["message"];
         $supprimer = "urlsupprimer|" . $url["supprimer"];
@@ -31,8 +37,7 @@ class controle_Table extends \Twig_Extension
         return $message . "~" . $supprimer . "~" . $modifier . "~" . $ajouter . "~" . $voir;
     }
 
-    public function input_tableHtml(array $context, string $nameroute): array
-    {
+    public function input_tableHtml(array $context, string $nameroute): array {
 
         $url = $this->getUrl($context, $nameroute);
         $message = $url["message"];
@@ -51,29 +56,46 @@ class controle_Table extends \Twig_Extension
         return $input;
     }
 
-    private function getUrl(array $context, string $nameroute)
-    {
+    private function getUrl(array $context, string $nameroute) {
 
-        $page = $context["_page"]; // class controller main
-        $router = $context["router"]; // class App
+        $this->set_context($context);
         $url = [];
 
-        $url["supprimer"] = $router->generateUri($nameroute, ["controle" => $page,
-            "action" => "supprimer",
+        $url["supprimer"] = $this->getRouter()->generateUri($nameroute, ["controle" => $this->getNameController(),
+            "action" => $this->getAction()->delete(),
             "id" => 0]);
-        $url["modifier"] = $router->generateUri($nameroute, ["controle" => $page,
-            "action" => "modifier",
+        $url["modifier"] = $this->getRouter()->generateUri($nameroute, ["controle" => $this->getNameController(),
+            "action" => $this->getAction()->update(),
             "id" => 0]);
-        $url["voir"] = $router->generateUri($nameroute, ["controle" => $page,
-            "action" => "voir",
+        $url["voir"] = $this->getRouter()->generateUri($nameroute, ["controle" => $this->getNameController(),
+            "action" => $this->getAction()->show(),
             "id" => 0]);
-        $url["message"] = $router->generateUri($nameroute, ["controle" => $page,
-            "action" => "message",
+        $url["message"] = $this->getRouter()->generateUri($nameroute, ["controle" => $this->getNameController(),
+            "action" => $this->getAction()->message(),
             "id" => 0]);
-        $url["ajouter"] = $router->generateUri($nameroute, ["controle" => $page,
-            "action" => "ajouter",
+        $url["ajouter"] = $this->getRouter()->generateUri($nameroute, ["controle" => $this->getNameController(),
+            "action" => $this->getAction()->add(),
             "id" => 0]);
 
         return $url;
     }
+
+    private function set_context(array $context) {
+        $this->nameController = $context["_Controller"]; // class controller main
+        $this->action = $context["_Action"]; // class controller main
+        $this->router = $context["router"]; // class App
+    }
+
+    private function getRouter(): RouterInterface {
+        return $this->router;
+    }
+
+    private function getAction(): ActionInterface {
+        return $this->action;
+    }
+
+    private function getNameController(): string {
+        return $this->nameController;
+    }
+
 }

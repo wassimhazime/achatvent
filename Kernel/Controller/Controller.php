@@ -2,7 +2,9 @@
 
 namespace Kernel\Controller;
 
+use Kernel\AWA_Interface\ActionInterface;
 use Kernel\AWA_Interface\File_UploadInterface;
+use Kernel\AWA_Interface\NamesRouteInterface;
 use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouteInterface;
 use Kernel\AWA_Interface\RouterInterface;
@@ -15,10 +17,12 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use function array_merge;
 use function in_array;
+use function preg_match;
 
 abstract class Controller implements MiddlewareInterface {
 
     private $erreur = [];
+    private $action = [];
     private $container;
     private $model;
     private $File_Upload;
@@ -31,17 +35,26 @@ abstract class Controller implements MiddlewareInterface {
     private $middlewares = [];
     private $nameController = "";
     private $namesControllers = [];
+    private $nameModule;
+    private $namesRoute;
 
-    function __construct(ContainerInterface $container, array $namesControllers) {
+    function __construct(array $Options) {
+        $this->container = $Options["container"];
+        $this->namesControllers = $Options["namesControllers"];
+        $this->nameModule = $Options["nameModule"];
+        $this->setMiddlewares($Options["middlewares"]);
+        $this->namesRoute = new NamesRoute();
 
-        $this->container = $container;
-        $this->namesControllers = $namesControllers;
+
+        $this->action = $this->getContainer()->get(ActionInterface::class);
+        
+        $this->namesRoute->set_NameModule($this->nameModule);
         $this->erreur["Controller"] = false;
         $this->erreur["Model"] = false;
 
-        $this->setRouter($container->get(RouterInterface::class));
-        $this->setRenderer($container->get(RendererInterface::class)) ;
-        $this->setFile_Upload($container->get(File_UploadInterface::class)) ;
+        $this->setRouter($this->getContainer()->get(RouterInterface::class));
+        $this->setRenderer($this->getContainer()->get(RendererInterface::class));
+        $this->setFile_Upload($this->getContainer()->get(File_UploadInterface::class));
     }
 
     function getContainer(): ContainerInterface {
@@ -116,6 +129,18 @@ abstract class Controller implements MiddlewareInterface {
         }
     }
 
+    function Actions(): ActionInterface {
+        return $this->action;
+    }
+
+    function getNameModule(): string {
+        return $this->nameModule;
+    }
+
+    function getNamesRoute(): NamesRouteInterface {
+        return $this->namesRoute;
+    }
+
     /// model
     function setModel($model) {
         $this->model = $model;
@@ -187,9 +212,10 @@ abstract class Controller implements MiddlewareInterface {
 
     public function render($name_view, array $data = []): ResponseInterface {
         $renderer = $this->getRenderer();
-        
+
         $renderer->addGlobal("_page", $this->getNameController());
-        
+        $renderer->addGlobal("_Controller", $this->getNameController());
+        $renderer->addGlobal("_Action", $this->Actions());
         $data_view = $this->add_data_views($data);
         $render = $renderer->render($name_view, $data_view);
 
