@@ -27,6 +27,6 @@ class globalController extends AbstractController
         
         $st = $this->getModel()->action('statistique');
         $charge = $st->chargeDataSelect();
-        return $this->render("@statistique/global", ["charge" => $charge]);
+        return $this->render("global", ["charge" => $charge]);
     }
 }

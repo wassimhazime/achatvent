@@ -15,13 +15,13 @@
 namespace App\Modules\Statistique;
 
 use App\AbstractModules\AbstractModule;
+use App\Modules\Statistique\Controller\AjaxController;
 use App\Modules\Statistique\Controller\globalController;
 use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use const D_S;
 
-class StatistiqueModule extends AbstractModule
-{
+class StatistiqueModule extends AbstractModule {
 
     const Controllers = [
         "clients",
@@ -29,33 +29,27 @@ class StatistiqueModule extends AbstractModule
         'contacts',
         'mode$paiement'
     ];
+    const NameModule = "Statistique";
+    const IconModule = " fa fa-fw fa-bar-chart-o ";
 
-    public function addPathRenderer(RendererInterface $renderer)
-    {
+    public function addPathRenderer(RendererInterface $renderer) {
         $pathModule = __DIR__ . D_S . "views" . D_S;
-        $renderer->addPath($pathModule . "statistique", "statistique");
+        $renderer->addPath($pathModule, self::NameModule);
     }
 
-    public function addRoute(RouterInterface $router, array $middlewares)
-    {
+    public function addRoute(RouterInterface $router, array $middlewares) {
+       
+        $nameRoute=$this->getNamesRoute();
+        $Options=["container"=>$this->getContainer(),
+            "namesControllers"=>self::Controllers,
+            "nameModule"=> self::NameModule,
+            "middlewares"=>$middlewares,
+            "nameRoute"=>$nameRoute
+            ];
 
-        $router->addRoute_any("/{controle:[a-z\$]*}", new globalController($this->container, self::Controllers), "home.get");
+        $router->addRoute_any("{controle:[a-z\$]*}", new globalController($Options), $nameRoute->show());
 
-        $router->addRoute_any("/st/{controle:[a-z\$]*}", new Controller\AjaxController($this->container, self::Controllers), "st.get");
+        $router->addRoute_any("st/{controle:[a-z\$]*}", new AjaxController($Options), "st.get");
     }
 
-    public function getMenu(): array
-    {
-
-
-        $menu = [
-            [
-                "nav_title" => "statistique",
-                "nav_icon" => ' fa fa-fw fa-bar-chart-o ',
-                "nav" => $this->generateUriMenu("home.get", self::Controllers)
-            ]
-        ];
-
-        return $menu;
-    }
 }

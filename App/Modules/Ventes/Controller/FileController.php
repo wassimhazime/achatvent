@@ -9,10 +9,9 @@
 namespace App\Modules\Ventes\Controller;
 
 use App\AbstractModules\Controller\AbstractFileController;
-use App\Modules\Ventes\Model\Model;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Description of FileController
@@ -21,10 +20,11 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class FileController extends AbstractFileController {
 
-    public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface {
-$this->setModel(new Model($this->getContainer()->get("pathModel")));
+     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+
         parent::process($request, $handler);
-        return $this->get_views_files("@VentesShow/show_files");
+
+        return $this->get_views_files("show_files");
     }
 
 }

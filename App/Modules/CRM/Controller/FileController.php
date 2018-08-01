@@ -9,7 +9,6 @@
 namespace App\Modules\CRM\Controller;
 
 use App\AbstractModules\Controller\AbstractFileController;
-use App\Modules\CRM\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -22,12 +21,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 class FileController extends AbstractFileController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-        $this->setModel(new Model($this->getContainer()->get("pathModel")));
 
         parent::process($request, $handler);
 
-        return $this->get_views_files("@CRMShow/show_files");
-       
+        return $this->get_views_files("show_files");
     }
 
 }

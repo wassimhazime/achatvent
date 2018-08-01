@@ -14,56 +14,62 @@
 
 namespace App\Modules\Transactions;
 
-use App\AbstractModules\AbstractModule;
-use App\Modules\Transactions\Controller\TraitementSendController;
-use App\Modules\Transactions\Controller\TraitementShowController;
-use App\Modules\Transactions\Controller\VoirController;
-use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
-use const D_S;
+use App\AbstractModules\AbstractModule;
+use Kernel\AWA_Interface\RendererInterface;
 
-class TransactionsModule extends AbstractModule
-{
+use App\Modules\Transactions\{
+    Controller\SendController,
+    Controller\ShowController,
+    Controller\AjaxController,
+    Controller\FileController
+};
+
+class TransactionsModule extends AbstractModule {
 
     const Controllers = [
         "achats",
         'ventes'
     ];
+    const NameModule = "Transactions";
+    const IconModule = "  fa fa-fw fa-briefcase ";
 
-    public function addPathRenderer(RendererInterface $renderer)
-    {
+  public function addPathRenderer(RendererInterface $renderer) {
         $pathModule = __DIR__ . D_S . "views" . D_S;
-        $renderer->addPath($pathModule . "show", "TransactionsShow");
-        $renderer->addPath($pathModule . "traitement", "TransactionsTraitement");
+        $renderer->addPath($pathModule, self::NameModule);
     }
 
-    public function addRoute(RouterInterface $router, array $middlewares)
-    {
-        $v = new VoirController($this->container, self::Controllers);
-        $v->setMiddlewares($middlewares);
-        $router->addRoute_get("/Transactions/{action:[a-z]+}-{controle:[a-z\$]+}", $v, "TransactionVoirGet");
+    public function addRoute(RouterInterface $router, array $middlewares) {
+         $nameRoute = $this->getNamesRoute();
 
-        $router->addRoute_get("/Transactions/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9\,]+}", new TraitementShowController($this->container, self::Controllers), "TransactionTraitementShow");
-
-        $router->addRoute_post("/Transactions/{action:[a-z]+}-{controle:[a-z\$]+}-{id:[0-9]+}", new TraitementSendController($this->container, self::Controllers), "TransactionTraitementSend");
-
-        $router->addRoute_get("/Transactions/ajax_{controle:[a-z\$]+}", new Controller\AjaxController($this->container, self::Controllers), "TransactionAjax");
-        $router->addRoute_get("/Transactions/files/{controle:[a-z0-9\_\$\-]+}", new Controller\FileController($this->container, self::Controllers), "TransactionFiles");
-    }
-
-    public function getMenu(): array
-    {
-
-
-
-        $menu = [
-            [
-                "nav_title" => "Transactions",
-                "nav_icon" => ' fa fa-fw fa-briefcase ',
-                "nav" => $this->generateUriMenu("TransactionVoirGet", self::Controllers)
-            ]
+        $Options = ["container" => $this->getContainer(),
+            "namesControllers" => self::Controllers,
+            "nameModule" => self::NameModule,
+            "middlewares" => $middlewares,
+            "nameRoute" => $nameRoute
         ];
 
-        return $menu;
-    }
+                                   //exemple Transactions/achats/update-721
+        $router->addRoute_get(
+                "/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]", new ShowController($Options), $nameRoute->show(), self::NameModule
+        );
+
+
+        $router->addRoute_post(
+                "/{controle:[a-z\$]+}/{action:[a-z]+}-{id:[0-9]+}", new SendController($Options), $nameRoute->send(), self::NameModule
+        );
+
+
+        $router->addRoute_get(
+                "/ajax/{controle:[a-z\$]+}", new AjaxController($Options), $nameRoute->ajax(), self::NameModule
+        );
+
+
+        $router->addRoute_get(
+                "/files/{controle:[a-z0-9\_\$\-]+}", new FileController($Options), $nameRoute->files(), self::NameModule
+        );
+
+   
+
+}
 }

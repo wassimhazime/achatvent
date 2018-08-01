@@ -2,10 +2,14 @@
 
 namespace App\AbstractModules;
 
-use Kernel\AWA_Interface\ModuleInterface;
-use Kernel\AWA_Interface\NamesRouteInterface;
-use Kernel\AWA_Interface\RouterInterface;
+use Kernel\AWA_Interface\{
+    ModuleInterface,
+    NamesRouteInterface,
+    RouterInterface,
+    RendererInterface
+};
 use Psr\Container\ContainerInterface;
+use const D_S;
 use function str_replace;
 use function ucfirst;
 
@@ -33,7 +37,7 @@ abstract class AbstractModule implements ModuleInterface {
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
         $this->router = $this->container->get(RouterInterface::class);
-        $this->namesRoute = $this->container->get(NamesRouteInterface::class);
+        $this->namesRoute = new \Kernel\Controller\NamesRoute();
         $this->namesRoute->set_NameModule($this::NameModule);
     }
 
@@ -58,14 +62,11 @@ abstract class AbstractModule implements ModuleInterface {
     function getNamesRoute(): NamesRouteInterface {
         return $this->namesRoute;
     }
-    
-    
-    
+
     ///////////////////////////////////////////////////////////
-    
-    
-       public function getMenu(): array
-    {
+
+
+    public function getMenu(): array {
         $menu = [
             [
                 "nav_title" => $this::NameModule,

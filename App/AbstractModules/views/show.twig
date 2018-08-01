@@ -42,7 +42,7 @@
                     {% if Html_or_Json=='json' %}
 
                     {% elseif Html_or_Json=='HTML' %}
-                        {{ table_intent(intent,input_tableHtml('ComptableTraitementShow'))}}
+                        {{ table_intent(intent,input_tableHtml())}}
                     {% endif %}  
                 {% endblock %}
 
@@ -81,19 +81,19 @@
     <script  src="/public/Framework/Responsive-2.2.1/js/responsive.bootstrap.min.js"></script>
     <script  src="/public/Framework/Select-1.2.5/js/dataTables.select.min.js"></script>
 
-    {{nameRoute}}
+    
     <script src="/public/AWA/DataTable.js" ></script>
 
     {% if Html_or_Json=='json' %}
 
         <script>DataTable_awa('#DataTableJs',
                     "{{btnDataTable}}",
-                    '{{input_tableJson(nameRouteTraitementData)}}',
+                    '{{input_tableJson()}}',
                     "{{ajax}}");</script>
         {% elseif Html_or_Json=='HTML' %}
         <script>DataTable_awa('#DataTableJs',
                     "{{btnDataTable}}",
-                    '{{input_tableJson(nameRouteTraitementData)}}'
+                    '{{input_tableJson()}}'
                     );</script>
         {% endif %} 
     <!-- end dataTables -->  

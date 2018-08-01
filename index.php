@@ -39,16 +39,16 @@ $app->addMiddleware(new Whoops());
 
 $app->addMiddleware(new Middlewares\PhpSession());
 
-
+$app->addModule(StatistiqueModule::class);
 
 $app->addModule(CRMModule::class);
 $app->addModule(AchatsModule::class);
-//$app->addModule(VentesModule::class);
-//$app->addModule(TransactionsModule::class, [
-//    new \App\Middleware\Authentification()
-//        ]
-//);
-//$app->addModule(StatistiqueModule::class);
+$app->addModule(VentesModule::class);
+$app->addModule(TransactionsModule::class, [
+    new \App\Middleware\Authentification()
+        ]
+);
+
 
 
 

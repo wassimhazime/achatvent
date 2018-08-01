@@ -19,37 +19,7 @@ use function preg_match;
 
 abstract class AbstractShowController extends AbstractController {
 
-     public function run($action, $id): ResponseInterface {
-
-        $this->Actions()->setAction($action);
-
-
-        if ($this->Actions()->is_index()) {
-
-            return $this->showDataTable("@" . $this->getNameModule() . "Show/show", $this->getNamesRoute()->ajax(), $this->getNamesRoute()->show());
-        } elseif ($this->Actions()->is_update()) {
-
-            return $this->modifier($id, "@" . $this->getNameModule() . "Traitement/modifier_form");
-        } elseif ($this->Actions()->is_delete()) {
-
-            return $this->supprimer($id, "les données a supprimer de ID");
-        } elseif ($this->Actions()->is_show()) {
-
-            return $this->show($id, "@" . $this->getNameModule() . "Show/show_id");
-        } elseif ($this->Actions()->is_message()) {
-
-            return $this->message($id, "@" . $this->getNameModule() . "Show/show_message_id");
-        } elseif ($this->Actions()->is_add()) {
-            return $this->ajouter("@" . $this->getNameModule() . "Traitement/ajouter_form", "@" . $this->getNameModule() . "Traitement/ajouter_select");
-        }
-
-        return $this->getResponse()->withStatus(404);
-    }
-
-    
-    
-    
-    protected function showDataTable(string $name_views, string $nameRouteGetDataAjax, string $nameRouteTraitementData): ResponseInterface {
+    protected function showDataTable(string $name_views, string $nameRouteGetDataAjax): ResponseInterface {
 
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
@@ -60,7 +30,6 @@ abstract class AbstractShowController extends AbstractController {
         $modeintent = $modeshow["modeIntent"];
 
         $data = [
-            "nameRouteTraitementData" => $nameRouteTraitementData,
             "Html_or_Json" => $modeshow["type"],
             "btnDataTable" => $this->btn_DataTable($query)["btn"],
             "jsCharges" => $this->btn_DataTable($query)["jsCharges"],
@@ -140,37 +109,20 @@ abstract class AbstractShowController extends AbstractController {
         return $this->render($view, ["intent" => $intentform]);
     }
 
-    public function ajouter_select(string $view) {
-        $intentformselect = $this->getModel()->formSelect();
-        if (!empty($intentformselect->getMETA_data())) {
-            return $this->render($view, ["intent" => $intentformselect]);
-        } else {
-            return null;
-        }
-    }
-
-    public function ajouterr($getInfo, string $view): ResponseInterface {
-        unset($getInfo["ajouter"]);
-        $intentform = $this->getModel()->form($getInfo);
-        return $this->render($view, ["intent" => $intentform]);
-    }
-
+  
+   
     public function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface {
-        $getInfo = $this->getRequest()->getQueryParams();
-
-        if (!isset($getInfo["ajouter"])) {
-            $response = $this->ajouter_select($viewSelect);
-            if ($response !== null) {
-                return $response;
-            } else {
-                // if table is mastre (table premier )
-                return $this->ajouterr($getInfo, $viewAjoutes);
-            }
+        $data_get = $this->getRequest()->getQueryParams();
+        $intent_formselect = $this->getModel()->formSelect();
+        if (empty($data_get) && !empty($intent_formselect->getMETA_data())) {
+            return $this->render($viewSelect, ["intent" => $intent_formselect]);
         } else {
-            return $this->ajouterr($getInfo, $viewAjoutes);
+            $intentform = $this->getModel()->form($data_get);
+            return $this->render($viewAjoutes, ["intent" => $intentform]);
         }
     }
 
+ 
     public function show($id, string $view): ResponseInterface {
         $intent = $this->getModel()->show_id($id);
         return $this->render($view, ["intent" => $intent]);

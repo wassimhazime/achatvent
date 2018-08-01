@@ -25,7 +25,6 @@ class AjaxController extends AbstractAjaxController {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
 
         parent::process($request, $handler);
-        return $this->ajax_js();
+         return $this->ajax_js();
     }
-
 }

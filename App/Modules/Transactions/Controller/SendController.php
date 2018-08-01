@@ -13,22 +13,20 @@ namespace App\Modules\Transactions\Controller;
  *
  * @author wassime
  */
-
 ;
 
-use App\AbstractModules\Controller\AbstractTraitementSendController;
+use App\AbstractModules\Controller\AbstractSendController;
 use App\Modules\Transactions\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class TraitementSendController extends AbstractTraitementSendController {
+class SendController extends AbstractSendController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
-
         parent::process($request, $handler);
-        return $this->send_data_ParantChild("@TransactionsShow/show_item", "TransactionFiles");
+        return $this->send_data_ParantChild("show_item", $this->getNamesRoute()->files());
     }
 
 }

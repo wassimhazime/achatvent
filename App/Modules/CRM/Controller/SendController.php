@@ -7,12 +7,12 @@
  */
 
 namespace App\Modules\CRM\Controller;
-
 /**
  * Description of PostController
  *
  * @author wassime
  */
+
 use App\AbstractModules\Controller\AbstractSendController;
 use App\Modules\CRM\Model\Model;
 use Psr\Http\Message\ResponseInterface;
@@ -24,7 +24,7 @@ class SendController extends AbstractSendController {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
         parent::process($request, $handler);
-        return $this->send_data("@CRMShow/show_item", "CRM_Files");
+        return $this->send_data("show_item", $this->getNamesRoute()->files());
     }
 
 }

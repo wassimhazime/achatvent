@@ -9,7 +9,6 @@
 namespace App\Modules\Transactions\Controller;
 
 use App\AbstractModules\Controller\AbstractFileController;
-use App\Modules\Transactions\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -23,11 +22,10 @@ class FileController extends AbstractFileController
 {
 
   
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
-      $this->setModel(new Model($this->getContainer()->get("pathModel")));
-         parent::process($request, $handler);
-         return $this->get_views_files("@TransactionsShow/show_files");
-         
-  }
+     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+
+        parent::process($request, $handler);
+
+        return $this->get_views_files("show_files");
+    }
 }

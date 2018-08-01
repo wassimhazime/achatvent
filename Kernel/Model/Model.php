@@ -2,13 +2,15 @@
 
 namespace Kernel\Model;
 
+use Kernel\AWA_Interface\ModelInterface;
 use Kernel\Model\Operation\GetData;
 use Kernel\Model\Operation\GUI;
 use Kernel\Model\Operation\SetData;
 use Kernel\Model\Operation\Statistique;
 use Kernel\Model\Operation\ToolsDB;
+use TypeError;
 
-class Model
+class Model implements ModelInterface
 {
 
     private $table = null;

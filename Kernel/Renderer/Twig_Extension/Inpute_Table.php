@@ -9,15 +9,17 @@
 namespace Kernel\Renderer\Twig_Extension;
 
 use Kernel\AWA_Interface\ActionInterface;
+use Kernel\AWA_Interface\NamesRouteInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
-class controle_Table extends Twig_Extension {
+class Inpute_Table extends Twig_Extension {
 
     private $router;
     private $action;
     private $nameController;
+    private $namesRoute;
 
     public function getFunctions() {
         return [
@@ -26,8 +28,8 @@ class controle_Table extends Twig_Extension {
         ];
     }
 
-    public function input_tableJson(array $context, string $nameroute): string {
-        $url = $this->getUrl($context, $nameroute);
+    public function input_tableJson(array $context): string {
+        $url = $this->getUrl($context);
         $message = "urlmessage|" . $url["message"];
         $supprimer = "urlsupprimer|" . $url["supprimer"];
         $modifier = "urlmodifier|" . $url["modifier"];
@@ -37,9 +39,9 @@ class controle_Table extends Twig_Extension {
         return $message . "~" . $supprimer . "~" . $modifier . "~" . $ajouter . "~" . $voir;
     }
 
-    public function input_tableHtml(array $context, string $nameroute): array {
+    public function input_tableHtml(array $context): array {
 
-        $url = $this->getUrl($context, $nameroute);
+        $url = $this->getUrl($context);
         $message = $url["message"];
         $supprimer = $url["supprimer"];
         $modifier = $url["modifier"];
@@ -56,11 +58,11 @@ class controle_Table extends Twig_Extension {
         return $input;
     }
 
-    private function getUrl(array $context, string $nameroute) {
+    private function getUrl(array $context) {
 
         $this->set_context($context);
         $url = [];
-
+        $nameroute = $this->getNamesRoute()->show();
         $url["supprimer"] = $this->getRouter()->generateUri($nameroute, ["controle" => $this->getNameController(),
             "action" => $this->getAction()->delete(),
             "id" => 0]);
@@ -81,9 +83,10 @@ class controle_Table extends Twig_Extension {
     }
 
     private function set_context(array $context) {
-        $this->nameController = $context["_Controller"]; // class controller main
-        $this->action = $context["_Action"]; // class controller main
-        $this->router = $context["router"]; // class App
+        $this->nameController = $context["_Controller"]; // class controller 
+        $this->action = $context["_Action"]; // name action add || ajouter ol jadid ....
+        $this->router = $context["_Router"]; // class routes
+        $this->namesRoute = $context["_NamesRoute"]; // class name route std
     }
 
     private function getRouter(): RouterInterface {
@@ -96,6 +99,10 @@ class controle_Table extends Twig_Extension {
 
     private function getNameController(): string {
         return $this->nameController;
+    }
+
+    function getNamesRoute(): NamesRouteInterface {
+        return $this->namesRoute;
     }
 
 }

@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\CRM\Controller;
+namespace App\Modules\Ventes\Controller;
 
 /**
  * Description of PostController
@@ -14,7 +14,7 @@ namespace App\Modules\CRM\Controller;
  * @author wassime
  */
 use App\AbstractModules\Controller\AbstractShowController;
-use App\Modules\CRM\Model\Model;
+use App\Modules\Ventes\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -22,7 +22,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 class ShowController extends AbstractShowController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-   $this->setModel(new Model($this->getContainer()->get("pathModel")));
+        $this->setModel(new Model($this->getContainer()->get("pathModel")));
         parent::process($request, $handler);
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
@@ -31,11 +31,12 @@ class ShowController extends AbstractShowController {
         $this->Actions()->setAction($action);
         $id = $this->getRoute()->getParam("id");
         return $this->run($id);
+        ;
     }
 
-  public function run($id): ResponseInterface {
-     
-        
+    public function run($id): ResponseInterface {
+
+
 
         switch (true) {
             case $this->Actions()->is_index():
@@ -66,4 +67,5 @@ class ShowController extends AbstractShowController {
                 return $this->getResponse()->withStatus(404);
         }
     }
+
 }

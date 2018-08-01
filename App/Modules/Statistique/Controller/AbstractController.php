@@ -14,14 +14,12 @@
 
 namespace App\Modules\Statistique\Controller;
 
-use App\Modules\Statistique\Model\Model;
+
 
 
 
 use Kernel\Controller\Controller;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+
 
 abstract class AbstractController extends Controller
 {

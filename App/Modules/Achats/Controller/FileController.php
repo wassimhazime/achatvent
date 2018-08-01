@@ -20,11 +20,11 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @author wassime
  */
 class FileController extends AbstractFileController {
+   public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-        $this->setModel(new Model($this->getContainer()->get("pathModel")));
         parent::process($request, $handler);
-        return $this->get_views_files("@AchatsShow/show_files");
+
+        return $this->get_views_files("show_files");
     }
 
 }
