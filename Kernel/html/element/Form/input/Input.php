@@ -16,12 +16,10 @@ use Kernel\html\HTML;
  *
  * @author wassime
  */
-class Input extends Abstract_Input
-{
+class Input extends Abstract_Input {
 
     //put your code here
-    public function builder()
-    {
+    public function builder() {
         $name = $this->name;
         $id_html = $this->id_html;
         $Default = $this->Default;
@@ -31,22 +29,32 @@ class Input extends Abstract_Input
                 ->setType($type)
                 ->setPlaceholder(str_replace("_", " ", str_replace("$", " ", $name)))
                 ->setClass("  form-control input-sm ")
-                ->setAtt('data-set_null="' . $this->null . '"  step="any" ')
-                ->setValue($Default);
+
+        ;
 
 
-        if ($this->input['Type'] == "file") {
+        if (strtolower($this->input['Type']) == "file") {
             if ($this->child != "[]") {
                 $tag->setAtt('multiple ');
                 $tag->setName($name . "[]");
             } else {
                 $tag->setName($name . "_");
             }
+        } elseif (strtolower($this->input['Type']) == "checkbox") {
+
+            $tag->setName($name . $this->child)
+                 ->setValue($name . $this->child);
+            if ($Default == "1" || $Default == 1) {
+                $tag->setAtt("checked");
+            }
         } else {
-            $tag->setName($name . $this->child);
+            $tag->setName($name . $this->child)
+                    ->setAtt('data-set_null="' . $this->null . '"  step="any" ')
+                    ->setValue($Default);
         }
 
 
         return $this->div($tag->builder());
     }
+
 }

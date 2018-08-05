@@ -25,7 +25,7 @@ class globalController extends AbstractController
 
         parent::process($request, $handler);
         
-        $st = $this->getModel()->action('statistique');
+        $st = $this->getModel();
         $charge = $st->chargeDataSelect();
         return $this->render("global", ["charge" => $charge]);
     }

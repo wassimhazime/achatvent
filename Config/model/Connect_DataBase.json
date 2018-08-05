@@ -2,7 +2,7 @@
     "BOOT": "TEST",
 
     "TEST": {
-        "cache": true,
+        "cache": false,
 
         "DB": "mysql",
         "dbhost": "localhost",

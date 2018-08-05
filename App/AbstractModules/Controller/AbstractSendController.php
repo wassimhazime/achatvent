@@ -37,6 +37,7 @@ abstract class AbstractSendController extends AbstractController {
 
 
         $insert = $request->getParsedBody();
+        
         $id_parent = $this->getModel()->setData($insert);
         $intent = $this->getModel()->show_id($id_parent);
 

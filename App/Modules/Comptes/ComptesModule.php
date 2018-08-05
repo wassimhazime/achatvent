@@ -1,61 +1,62 @@
 <?php
 
-namespace App\Modules\Achats;
+namespace App\Modules\Comptes;
 
 use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RendererInterface;
-use App\Modules\Achats\{
+use App\Modules\Comptes\{
     Controller\SendController,
     Controller\ShowController,
     Controller\AjaxController,
     Controller\FileController
 };
 
-class AchatsModule extends AbstractModule {
+class ComptesModule extends AbstractModule {
+
+    protected $Controllers = [
+        "comptes"];
+
+    const NameModule = "Comptes";
+    const IconModule = " fa fa-fw fa-stack-overflow ";
 
     public function addPathRenderer(RendererInterface $renderer) {
         $pathModule = __DIR__ . D_S . "views" . D_S;
         $renderer->addPath($pathModule, self::NameModule);
     }
 
-    protected $Controllers = [
-        'commandes',
-        'bons$achats',
-        'factures$achats',
-        'avoirs$achats'
-    ];
-    const NameModule = "Achats";
-    const IconModule = " fa fa-fw fa-shopping-cart ";
-
     public function addRoute(RouterInterface $router, array $middlewares) {
-
         $nameRoute = $this->getNamesRoute();
+        $this->Controllers = array_merge($this->Controllers, $this->autorisation_name);
+
+        
+        
         $Options = ["container" => $this->getContainer(),
             "namesControllers" => $this->Controllers,
             "nameModule" => self::NameModule,
             "middlewares" => $middlewares,
-            "nameRoute" => $nameRoute
+            "nameRoute" => $nameRoute,
+            "application"=> $this->application
         ];
 
 
         $router->addRoute_get(
-                "/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]", new ShowController($Options), $nameRoute->show(), self::NameModule
+                "/{controle:[a-zA-Z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]", new ShowController($Options), $nameRoute->show(), self::NameModule
         );
 
 
         $router->addRoute_post(
-                "/{controle:[a-z\$]+}/{action:[a-z]+}-{id:[0-9]+}", new SendController($Options), $nameRoute->send(), self::NameModule
+                "/{controle:[a-zA-Z\$]+}/{action:[a-z]+}-{id:[0-9]+}", new SendController($Options), $nameRoute->send(), self::NameModule
         );
 
 
         $router->addRoute_get(
-                "/ajax/{controle:[a-z\$]+}", new AjaxController($Options), $nameRoute->ajax(), self::NameModule
+                "/ajax/{controle:[a-zA-Z\$]+}", new AjaxController($Options), $nameRoute->ajax(), self::NameModule
         );
 
 
         $router->addRoute_get(
-                "/files/{controle:[a-z0-9\_\$\-]+}", new FileController($Options), $nameRoute->files(), self::NameModule
+                "/files/{controle:[a-zA-Z0-9\_\$\-]+}", new FileController($Options), $nameRoute->files(), self::NameModule
         );
     }
 

@@ -6,27 +6,25 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\Transactions\Controller;
+namespace App\Modules\Comptes\Controller;
 
-/**
- * Description of PostController
- *
- * @author wassime
- */
-
-
-use App\AbstractModules\Controller\AbstractSendController;
-use App\Modules\Transactions\Model\Model;
+use App\AbstractModules\Controller\AbstractFileController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class SendController extends AbstractSendController {
+/**
+ * Description of FileController
+ *
+ * @author wassime
+ */
+class FileController extends AbstractFileController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-        $this->setModel(new Model($this->getContainer()->get("pathModel")));
+
         parent::process($request, $handler);
-        return $this->send_data_ParantChild("show_item", $this->getNamesRoute()->files());
+
+        return $this->get_views_files("show_files");
     }
 
 }

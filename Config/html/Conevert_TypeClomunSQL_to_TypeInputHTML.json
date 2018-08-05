@@ -1,7 +1,7 @@
 {
     "text": "textarea",
     "date": "date",
-    "tinyint(1)": "checkBox",
+    "tinyint(4)": "checkBox",
     "varchar(20)": "tel",
     "varchar(150)": "email",
     "varchar(200)": "text",

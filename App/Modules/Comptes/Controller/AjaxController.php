@@ -6,27 +6,27 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\Transactions\Controller;
+namespace App\Modules\Comptes\Controller;
 
-/**
- * Description of PostController
- *
- * @author wassime
- */
-
-
-use App\AbstractModules\Controller\AbstractSendController;
-use App\Modules\Transactions\Model\Model;
+use App\AbstractModules\Controller\AbstractAjaxController;
+use App\Modules\Comptes\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class SendController extends AbstractSendController {
+
+/**
+ * Description of AjaxController
+ *
+ * @author wassime
+ */
+class AjaxController extends AbstractAjaxController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
+
         parent::process($request, $handler);
-        return $this->send_data_ParantChild("show_item", $this->getNamesRoute()->files());
+         return $this->ajax_js();
     }
 
 }

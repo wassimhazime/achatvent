@@ -34,7 +34,8 @@
         "middlewares/minifier": "^1.0",
         "middlewares/negotiation": "^1.0",
         "middlewares/php-session": "^1.1",
-        "robmorgan/phinx": "^0.10.5"
+        "robmorgan/phinx": "^0.10.5",
+        "grafikart/psr15-csrf-middleware": "^1.0"
        
     },
     "require-dev": {

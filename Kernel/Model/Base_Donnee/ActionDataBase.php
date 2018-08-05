@@ -67,9 +67,9 @@ class ActionDataBase extends Connection
         }
     }
 
-    protected function exec($sql): string
+    public function exec($sql): string
     {
-        var_dump($sql);
+       
     
 
         try {
@@ -106,7 +106,7 @@ class ActionDataBase extends Connection
     }
 
     /// getShema
-    protected function querySimple($sql): array
+    public function querySimple($sql): array
     {
 
         try {

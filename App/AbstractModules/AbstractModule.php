@@ -29,8 +29,10 @@ abstract class AbstractModule implements ModuleInterface {
     private $container;
     private $router;
     private $namesRoute;
+    protected $autorisation_name = [];
+    protected $application = [];
+    protected $Controllers;
 
-    const Controllers = null;
     const NameModule = "";
     const IconModule = "";
 
@@ -63,6 +65,10 @@ abstract class AbstractModule implements ModuleInterface {
         return $this->namesRoute;
     }
 
+    public function getControllers() {
+        return $this->Controllers;
+    }
+
     ///////////////////////////////////////////////////////////
 
 
@@ -71,12 +77,52 @@ abstract class AbstractModule implements ModuleInterface {
             [
                 "nav_title" => $this::NameModule,
                 "nav_icon" => $this::IconModule,
-                "nav" => $this->generateUriMenu($this->getNamesRoute()->show(), $this::Controllers)
+                "nav" => $this->generateUriMenu($this->getNamesRoute()->show(), $this->getControllers())
             ]
         ];
 
         return $menu;
         // // "group"=> [[lable,url],....]
+    }
+
+    public function CREATE_TABLE_autorisation_sql(): string {
+        $name = '$' . $this::NameModule;
+        $id = $this::NameModule;
+
+        return "
+           
+
+        CREATE TABLE IF NOT EXISTS `autorisation$name` (
+          `id` int(10) NOT NULL AUTO_INCREMENT,
+          `comptes` int(11) NOT NULL,
+          `controller` varchar(200) NOT NULL,
+          `voir` tinyint(4) DEFAULT 1,
+          `ajouter` tinyint(4) DEFAULT 0,
+          `modifier` tinyint(4) DEFAULT 0,
+          `effacer` tinyint(4) DEFAULT 0,
+          `active` tinyint(4) DEFAULT 1,
+          `date_ajoute` datetime NOT NULL,
+          `date_modifier` datetime NOT NULL,
+          
+          PRIMARY KEY (`id`),
+          KEY `autorisation_$id` (`comptes`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+        ALTER TABLE `autorisation$name`
+          ADD CONSTRAINT `autorisation_$id` FOREIGN KEY (`comptes`) REFERENCES `comptes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
+
+      ";
+    }
+
+    public function autorisation(array $application) {
+        $this->application=$application;
+        foreach ($application as $nameModule => $namecontroler) {
+            $this->autorisation_name[] = 'autorisation$' . $nameModule;
+        }
     }
 
 }

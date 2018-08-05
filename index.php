@@ -13,6 +13,7 @@ use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\Container\Factory_Container;
 use Middlewares\BasicAuthentication;
+use App\Modules\Comptes\ComptesModule;
 use Middlewares\ContentEncoding;
 use Middlewares\ContentLanguage;
 use Middlewares\ContentType;
@@ -42,13 +43,14 @@ $app->addMiddleware(new Middlewares\PhpSession());
 $app->addModule(StatistiqueModule::class);
 
 $app->addModule(CRMModule::class);
-$app->addModule(AchatsModule::class);
-$app->addModule(VentesModule::class);
-$app->addModule(TransactionsModule::class, [
-    new \App\Middleware\Authentification()
-        ]
-);
+//$app->addModule(AchatsModule::class);
+//$app->addModule(VentesModule::class);
+//$app->addModule(TransactionsModule::class, [
+//    new \App\Middleware\Authentification()
+//        ]
+//);
 
+$app->addModule(ComptesModule::class);
 
 
 

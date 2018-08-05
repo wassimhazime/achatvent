@@ -27,7 +27,7 @@ use App\Modules\Transactions\{
 
 class TransactionsModule extends AbstractModule {
 
-    const Controllers = [
+    protected $Controllers = [
         "achats",
         'ventes'
     ];
@@ -43,7 +43,7 @@ class TransactionsModule extends AbstractModule {
          $nameRoute = $this->getNamesRoute();
 
         $Options = ["container" => $this->getContainer(),
-            "namesControllers" => self::Controllers,
+            "namesControllers" => $this->Controllers,
             "nameModule" => self::NameModule,
             "middlewares" => $middlewares,
             "nameRoute" => $nameRoute

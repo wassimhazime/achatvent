@@ -67,9 +67,11 @@ class HTML
         return $this;
     }
 
-    function setAtt(string $att): self
+    function setAtt( $att): self
     {
+        if(is_string($att)){
         $this->att =$this->att. $att;
+        }
         return $this;
     }
 

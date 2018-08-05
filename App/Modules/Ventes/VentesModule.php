@@ -5,7 +5,6 @@ namespace App\Modules\Ventes;
 use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RendererInterface;
-
 use App\Modules\Ventes\{
     Controller\SendController,
     Controller\ShowController,
@@ -13,27 +12,26 @@ use App\Modules\Ventes\{
     Controller\FileController
 };
 
-class VentesModule extends AbstractModule
-{
+class VentesModule extends AbstractModule {
 
-    const Controllers = [
-                   'devis',
-            'factures$ventes'
+    protected $Controllers = [
+        'devis',
+        'factures$ventes'
     ];
+
     const NameModule = "Ventes";
     const IconModule = " fa fa-fw fa-usd   ";
 
- public function addPathRenderer(RendererInterface $renderer) {
+    public function addPathRenderer(RendererInterface $renderer) {
         $pathModule = __DIR__ . D_S . "views" . D_S;
         $renderer->addPath($pathModule, self::NameModule);
     }
 
- 
     public function addRoute(RouterInterface $router, array $middlewares) {
         $nameRoute = $this->getNamesRoute();
 
         $Options = ["container" => $this->getContainer(),
-            "namesControllers" => self::Controllers,
+            "namesControllers" => $this->Controllers,
             "nameModule" => self::NameModule,
             "middlewares" => $middlewares,
             "nameRoute" => $nameRoute

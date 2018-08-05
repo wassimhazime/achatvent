@@ -15,7 +15,7 @@ use App\Modules\CRM\{
 
 class CRMModule extends AbstractModule {
 
-    const Controllers = [
+    protected $Controllers = [
         "clients",
         'raison$sociale',
         'contacts',
@@ -31,7 +31,7 @@ class CRMModule extends AbstractModule {
         $nameRoute = $this->getNamesRoute();
 
         $Options = ["container" => $this->getContainer(),
-            "namesControllers" => self::Controllers,
+            "namesControllers" => $this->Controllers,
             "nameModule" => self::NameModule,
             "middlewares" => $middlewares,
             "nameRoute" => $nameRoute
@@ -58,5 +58,37 @@ class CRMModule extends AbstractModule {
         );
     }
 
-    // //////////////////////
+     public function CREATE_TABLE_autorisation_sql(): string {
+        $name = '$' . $this::NameModule;
+        $id = $this::NameModule;
+
+        return "
+           
+
+        CREATE TABLE IF NOT EXISTS `autorisation$name` (
+          `id` int(10) NOT NULL AUTO_INCREMENT,
+          `comptes` int(11) NOT NULL,
+          `controller` varchar(200) NOT NULL,
+          `voir` tinyint(4) DEFAULT 1,
+          `ajouter` tinyint(4) DEFAULT 1,
+          `modifier` tinyint(4) DEFAULT 1,
+          `effacer` tinyint(4) DEFAULT 1,
+          `active` tinyint(4) DEFAULT 1,
+          `date_ajoute` datetime NOT NULL,
+          `date_modifier` datetime NOT NULL,
+          
+          PRIMARY KEY (`id`),
+          KEY `autorisation_$id` (`comptes`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+        ALTER TABLE `autorisation$name`
+          ADD CONSTRAINT `autorisation_$id` FOREIGN KEY (`comptes`) REFERENCES `comptes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
+
+      ";
+    }
+
 }

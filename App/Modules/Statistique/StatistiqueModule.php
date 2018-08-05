@@ -23,7 +23,7 @@ use const D_S;
 
 class StatistiqueModule extends AbstractModule {
 
-    const Controllers = [
+    protected $Controllers = [
         "clients",
         'raison$sociale',
         'contacts',
@@ -41,7 +41,7 @@ class StatistiqueModule extends AbstractModule {
        
         $nameRoute=$this->getNamesRoute();
         $Options=["container"=>$this->getContainer(),
-            "namesControllers"=>self::Controllers,
+            "namesControllers"=>$this->Controllers,
             "nameModule"=> self::NameModule,
             "middlewares"=>$middlewares,
             "nameRoute"=>$nameRoute
