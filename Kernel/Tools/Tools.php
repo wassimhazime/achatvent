@@ -14,13 +14,25 @@
 
 namespace Kernel\Tools;
 
-use Kernel\INTENT\Intent;
+
+use Kernel\INTENT\Intent_Show;
 use ReflectionClass;
+use function array_keys;
+use function array_merge;
+use function count;
+use function date;
+use function get_class;
+use function is_array;
+use function json_decode;
+use function json_encode;
+use function range;
+use function str_replace;
+use function strtotime;
 
 class Tools
 {
 
-    public static function intent_to_metaTableHTML(Intent $intent)
+    public static function intent_to_metaTableHTML(Intent_Show $intent)
     {
         $schema = $intent->getEntitysSchema();
         $COLUMNS_master = $schema->getCOLUMNS_master();
@@ -29,15 +41,15 @@ class Tools
         $FOREIGN_KEY = $schema->getFOREIGN_KEY();
         $entitysDataTable = $intent->getEntitysDataTable();
 
-        if (Intent::is_show_MASTER($intent)) {
+        if (Intent_Show::is_show_MASTER($intent)) {
             $columns = array_merge($COLUMNS_master, $FOREIGN_KEY);
-        } elseif (Intent::is_show_ALL($intent)) {
+        } elseif (Intent_Show::is_show_ALL($intent)) {
             $columns = array_merge($COLUMNS_all, $FOREIGN_KEY);
-        } elseif (Intent::is_show_DEFAULT($intent)) {
+        } elseif (Intent_Show::is_show_DEFAULT($intent)) {
             $columns = array_merge($COLUMNS_default, $FOREIGN_KEY);
         }
         $CHILD = [];
-        $CHILD["flag_show_CHILDREN"] = Intent::is_get_CHILDREN($intent);
+        $CHILD["flag_show_CHILDREN"] = Intent_Show::is_get_CHILDREN($intent);
 
         if ($CHILD["flag_show_CHILDREN"]) {
             $CHILD["table_CHILDREN"] = $schema->get_table_CHILDREN(); // le nom de la table

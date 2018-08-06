@@ -8,7 +8,6 @@
 
 namespace Kernel\Model\Base_Donnee;
 
-use core\notify\Notify;
 use Exception;
 use Kernel\Model\Base_Donnee\ConfigExternal;
 use PDO;
@@ -19,44 +18,45 @@ use PDO;
  *
  * @author wassime
  */
-class Connection
-{
+class Connection {
 
-    protected $configExternal;
-    private static $dbConnection = null;
+    private $configExternal;
+    private static $init = [];
     private $db;
 
-    private static function getDB(array $config)
-    {
-
-        if (self::$dbConnection === null) {
-            $DB = $config['DB'];
-            $dbhost = $config['dbhost'];
-            $dbuser = $config['dbuser'];
-            $dbpass = $config['dbpass'];
-            $dbname = $config['dbname'];
+    private static function getInit(string $PathConfigJson) {
+        if (self::$init === []) {
+            $configExternal = new ConfigExternal($PathConfigJson);
+            $configPDO = $configExternal->getConnect();
+            $DB = $configPDO['DB'];
+            $dbhost = $configPDO['dbhost'];
+            $dbuser = $configPDO['dbuser'];
+            $dbpass = $configPDO['dbpass'];
+            $dbname = $configPDO['dbname'];
             try {
-                self::$dbConnection = new PDO("$DB:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+                self::$init["configExternal"] = $configExternal;
+                self::$init["PDO"] = new PDO("$DB:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             } catch (Exception $e) {
-                Notify::send_Notify($e->getMessage());
+                
                 die('Erreur data base: ' . $e->getMessage());
             }
         }
 
-        return self::$dbConnection;
+        return self::$init;
     }
 
-    // private $pathConfigJsone;
-    public function __construct(string $PathConfigJsone)
-    {
-        // $this->pathConfigJsone = $PathConfigJsone;
-        $this->configExternal = new ConfigExternal($PathConfigJsone);
-        $this->db = self::getDB($this->configExternal->getConnect());
+    public function __construct(string $PathConfigJson) {
+        $init = self::getInit($PathConfigJson);
+        $this->db = $init['PDO'];
+        $this->configExternal = $init['configExternal'];
     }
 
-    public function getDatabase(): PDO
-    {
-
+    public function getDatabase(): PDO {
         return $this->db;
     }
+
+    public function getConfigJson(): ConfigExternal {
+        return $this->configExternal;
+    }
+
 }

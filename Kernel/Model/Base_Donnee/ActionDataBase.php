@@ -9,13 +9,26 @@ use Kernel\Model\Query\Prepare;
 use \PDO;
 use \PDOException;
 
-class ActionDataBase extends Connection
-{
+class ActionDataBase extends Connection {
 
-    ///////////////////////////////////////////////////
+    /// getShema
+    public function querySchema($sql): array {
+
+        try {
+            $Statement = $this->getDataBase()->query($sql);
+
+            $Statement->setFetchMode(PDO::FETCH_CLASS, EntitysSchema::class);
+            return $Statement->fetchAll();
+        } catch (PDOException $exc) {
+            //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
+            echo $exc->getMessage();
+            echo '<br><hr>';
+            die($sql);
+        }
+    }
+
     /// getData
-    protected function prepareQuery(Prepare $query)
-    {
+    public function prepareQuery(Prepare $query) {
 
         $sqlprepare = $query->getPrepare();
         $params_execute = $query->getExecute();
@@ -34,8 +47,23 @@ class ActionDataBase extends Connection
         }
     }
 
-    protected function query(string $sql): array
-    {
+    /// getShema
+    public function querySimple($sql): array {
+
+        try {
+            $Statement = $this->getDataBase()->query($sql);
+
+            $Statement->setFetchMode(PDO::FETCH_ASSOC);
+            return $Statement->fetchAll();
+        } catch (\PDOException $exc) {
+            //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
+            echo $exc->getMessage();
+            echo '<br><hr>';
+            die($sql);
+        }
+    }
+
+    public function query(string $sql): array {
 
         try {
             $Statement = $this->getDataBase()->query($sql);
@@ -50,27 +78,9 @@ class ActionDataBase extends Connection
     }
 
     /// setdata
-    protected function prepareQueryEXEC(Prepare $query): int
-    {
+    public function exec($sql): string {
 
-        $sqlprepare = $query->getPrepare();
-        $params_execute = $query->getExecute();
 
-        try {
-            $Statement = $this->getDataBase()->prepare($sqlprepare);
-            $Statement->execute($params_execute);
-            return $this->getDataBase()->lastInsertId();
-        } catch (\PDOException $exc) {
-            //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-       //     echo $exc->getMessage();
-            return -1;
-        }
-    }
-
-    public function exec($sql): string
-    {
-       
-    
 
         try {
             //$getDataBase()->beginTransaction();
@@ -88,37 +98,20 @@ class ActionDataBase extends Connection
         }
     }
 
-    /// getShema
-    protected function querySchema($sql): array
-    {
+    public function prepareEXEC(Prepare $query): int {
+
+        $sqlprepare = $query->getPrepare();
+        $params_execute = $query->getExecute();
 
         try {
-            $Statement = $this->getDataBase()->query($sql);
-
-            $Statement->setFetchMode(PDO::FETCH_CLASS, EntitysSchema::class);
-            return $Statement->fetchAll();
-        } catch (PDOException $exc) {
-            //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-            echo $exc->getMessage();
-            echo '<br><hr>';
-            die($sql);
-        }
-    }
-
-    /// getShema
-    public function querySimple($sql): array
-    {
-
-        try {
-            $Statement = $this->getDataBase()->query($sql);
-
-            $Statement->setFetchMode(PDO::FETCH_ASSOC);
-            return $Statement->fetchAll();
+            $Statement = $this->getDataBase()->prepare($sqlprepare);
+            $Statement->execute($params_execute);
+            return $this->getDataBase()->lastInsertId();
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-            echo $exc->getMessage();
-            echo '<br><hr>';
-            die($sql);
+            //     echo $exc->getMessage();
+            return -1;
         }
     }
+
 }

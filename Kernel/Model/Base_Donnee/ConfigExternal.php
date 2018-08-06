@@ -9,10 +9,10 @@ class ConfigExternal
 
     private $file;
 
-    function __construct($PathConfigJsone)
+    function __construct(string $PathConfigJson)
     {
-
-        $this->file = new File($PathConfigJsone, File::JSON, []);
+        
+        $this->file = new File($PathConfigJson, File::JSON, []);
     }
 
     public function getConnect(string $name = "Connect_DataBase"): array

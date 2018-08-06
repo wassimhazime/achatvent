@@ -13,7 +13,8 @@ namespace App\AbstractModules\Controller;
  *
  * @author wassime
  */
-use Kernel\INTENT\Intent;
+
+use Kernel\INTENT\Intent_Show;
 use Psr\Http\Message\ResponseInterface;
 use function preg_match;
 
@@ -80,7 +81,7 @@ abstract class AbstractShowController extends AbstractController {
 
         $conditon = ['id' => $id];
 
-        $url_id_file = $this->getModel()->get_idfile($conditon);
+        $url_id_file = $this->getModel()->get_idfile($id);
 
         preg_match('!(.+)'
                 . 'data-regex="/(.+)/"'
@@ -130,7 +131,7 @@ abstract class AbstractShowController extends AbstractController {
 
     public function message($id, string $view): ResponseInterface {
 
-        $mode = Intent::MODE_SELECT_DEFAULT_NULL;
+        $mode = Intent_Show::MODE_SELECT_DEFAULT_NULL;
 
         $intentshow = $this->getModel()->show_in($mode, $id);
 

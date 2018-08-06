@@ -64,7 +64,8 @@ abstract class AbstractSendController extends AbstractController {
 
 
         //  save data parent
-        $this->chargeModel($this->getNameController());
+        $table_parent=$this->getNameController();
+        $this->chargeModel($table_parent);
 
         // insert data
         // $id_parent pour gere relation et data lier(exemple raison social)
@@ -84,7 +85,7 @@ abstract class AbstractSendController extends AbstractController {
         /// save data child
         $this->chargeModel($Controller_child);
 
-        $this->getModel()->setData($data_child, $id_parent);
+        $this->getModel()->setData($data_child, $table_parent,$id_parent);
 
 
         /// show etem save
