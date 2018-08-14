@@ -6,8 +6,8 @@ use Kernel\Tools\Tools;
 
 class EntitysDataTable
 {
-
-    private $DataJOIN = array();
+    private $null=false;
+    private $DataJOIN = [];
 
 //add item enfant
 
@@ -35,4 +35,14 @@ class EntitysDataTable
         }
         return [$this];
     }
+    
+    function is_Null(): bool {
+        return $this->null;
+    }
+
+    function setNull($null=true) {
+        $this->null = $null;
+    }
+
+
 }

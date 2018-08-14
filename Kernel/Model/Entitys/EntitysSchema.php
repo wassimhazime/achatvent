@@ -167,15 +167,16 @@ class EntitysSchema {
     /*
      * SELECT SQL
      */
+
     public function select_default() {
 
         $select = [];
         foreach ($this->COLUMNS_default as $colom) {
             $select[] = $this->NameTable . "." . $colom;
         }
-        foreach ($this->FOREIGN_KEY as $FOREIGN) {
-            $select[] = $FOREIGN . "." . $FOREIGN;
-        }
+//        foreach ($this->FOREIGN_KEY as $FOREIGN) {
+//            $select[] = $FOREIGN . "." . $FOREIGN;
+//        }
         return $select;
     }
 
@@ -185,9 +186,21 @@ class EntitysSchema {
         foreach ($this->COLUMNS_master as $colom) {
             $select[] = $this->NameTable . "." . $colom;
         }
-        foreach ($this->FOREIGN_KEY as $FOREIGN) {
-            $select[] = $FOREIGN . "." . $FOREIGN;
+//        foreach ($this->FOREIGN_KEY as $FOREIGN) {
+//            $select[] = $FOREIGN . "." . $FOREIGN;
+//        }
+        return $select;
+    }
+
+    public function select_all() {
+
+        $select = [];
+        foreach ($this->COLUMNS_all as $colom) {
+            $select[] = $this->NameTable . "." . $colom;
         }
+//        foreach ($this->FOREIGN_KEY as $FOREIGN) {
+//            $select[] = $FOREIGN . "." . $FOREIGN;
+//        }
         return $select;
     }
 
@@ -201,26 +214,16 @@ class EntitysSchema {
         return $select;
     }
 
-    public function select_all() {
-
+    public function select_FOREIGN_KEY(array $FOREIGN_KEY = []) {
         $select = [];
-        foreach ($this->COLUMNS_all as $colom) {
-            $select[] = $this->NameTable . "." . $colom;
-        }
-        foreach ($this->FOREIGN_KEY as $FOREIGN) {
-            $select[] = $FOREIGN . "." . $FOREIGN;
-        }
-        return $select;
-    }
-
-    public function select_FOREIGN_KEY(array $FOREIGN_KEY = null) {
-        $select = [];
-        if ($FOREIGN_KEY == null) {
+        if (empty($FOREIGN_KEY)) {
             $FOREIGN_KEY = $this->FOREIGN_KEY;
         }
         foreach ($FOREIGN_KEY as $FOREIGN) {
             $select[] = $FOREIGN . "." . $FOREIGN;
         }
+
+
 
         return $select;
     }

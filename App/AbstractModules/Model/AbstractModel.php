@@ -37,83 +37,58 @@ class AbstractModel extends Model {
      * 
      * @return Intent_Form
      */
-
-    public function formSelect(): Intent_Form {
-
-        //$schema = $this->getschema();
-        //$schemaFOREIGN_KEY = new EntitysSchema();
-        //$schemaFOREIGN_KEY->setNameTable($schema->getNameTable());
-        //$schemaFOREIGN_KEY->setCOLUMNS_META($schema->getCOLUMNS_META(["Key" => "MUL"]));
-        //$schemaFOREIGN_KEY->setFOREIGN_KEY($schema->getFOREIGN_KEY());
-        //$META_data = $schemaFOREIGN_KEY->getCOLUMNS_META();
-        $META_data = $this->get_Meta_FOREIGN_KEY();
-        $Charge_data = [];
-        $Charge_data ["select"] = $this->get_Data_FOREIGN_KEY();
-        $Charge_data["multiselect"] = [];
-        $Charge_data["PARENT"] = [];
-        $Default_Data = [];
-        return new Intent_Form($META_data, $Charge_data, $Default_Data);
-    }
+//    public function formSelect(): Intent_Form {
+//        $schema = $this->getschema();
+//        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"]);
+//        $Charge_data = $this->get_Data_FOREIGN_KEY();
+//
+//        $intent_form = new Intent_Form();
+//        $intent_form->setMETA_data($META_data);
+//        $intent_form->setCharge_data_select($Charge_data);
+//
+//
+//        return $intent_form;
+//    }
 
     /**
      * 
      * @param array $condition
      * @return Intent_Form
      */
-    public function form(array $condition): Intent_Form {
-
-        $META_data = $this->getschema()->getCOLUMNS_META();
-
-        $Charge_data = [];
-        $Charge_data ["select"] = $this->get_Data_FOREIGN_KEY($condition);
-        $Charge_data["multiselect"] = $this->dataChargeMultiSelectIndependent($condition);
-        $Charge_data["PARENT"] = [];
-        $Default_Data = [];
-        return new Intent_Form($META_data, $Charge_data, $Default_Data);
-    }
+//    public function form(array $condition): Intent_Form {
+//
+//        $META_data = $this->getschema()->getCOLUMNS_META();
+//        $select = $this->get_Data_FOREIGN_KEY($condition);
+//        $multiSelect = $this->dataChargeMultiSelectIndependent($condition);
+//
+//        $intent_form = new Intent_Form();
+//        $intent_form->setMETA_data($META_data);
+//        $intent_form->setCharge_data_select($select);
+//        $intent_form->setCharge_data_multiSelect($multiSelect);
+//
+//        return $intent_form;
+//    }
 
     /**
      * 
      * @param array $conditionDefault
      * @return Intent_Form
      */
-    public function formDefault(array $conditionDefault): Intent_Form {
-        $schema = $this->getschema();
-
-        // data Default
-        $Entitys = $this->prepareQuery((new QuerySQL())
-                        ->select($schema->select_all())
-                        ->from($schema->getNameTable())
-                        ->join($schema->getFOREIGN_KEY())
-                        ->where($conditionDefault)
-                        ->prepareQuery());
+    public function formDefault($id, $modeselect = Intent_Show::MODE_SELECT_ALL_MASTER): Intent_Form {
 
 
-        if (!isset($Entitys[0])) {
-            die("<h1>je ne peux pas insérer données  doublons ou vide </h1> ");
+        $Entitys = $this->find_by_id($id, $modeselect);
+        if ($Entitys->is_Null()) {
+            die("<h1>donnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
         }
 
-        $Entity = $Entitys[0];
+        $intent_Form = new Intent_Form();
+        $intent_Form->setDefault_Data($Entitys);
+        $intent_Form->setCharge_data_select($this->get_Data_FOREIGN_KEY__ID($id));
+        $intent_Form->setCharge_data_multiSelect($this->get_Charge_multiSelect($id, $modeselect));
+        $intent_Form->setCOLUMNS_META($this->getschema()->getCOLUMNS_META());
 
-        $conditionformSelect = $this->condition_formSelect_par_condition_Default($conditionDefault);
-        // data join (children enfant drari lbrahch ....)
-        $nameTable_CHILDRENs = $schema->get_table_CHILDREN();
-        $Entitys_CHILDRENs = [];
-        if (!empty($nameTable_CHILDRENs)) {
-            /// charge enfant data no lier lien
-            $Entitys_CHILDRENs = $this->dataChargeMultiSelectIndependent($conditionformSelect);
-            /// charge enfant data lien
-            foreach ($nameTable_CHILDRENs as $tablechild) {
-                $datacharg = $this->dataChargeMultiSelectDependent($tablechild, $conditionDefault);
-                $Entity->setDataJOIN($tablechild, $datacharg);
-            }
-        }
-        $Charge_data = [];
-        $Charge_data ["select"] = $this->get_Data_FOREIGN_KEY($conditionformSelect);
-        $Charge_data["multiselect"] = $Entitys_CHILDRENs;
-        $Charge_data["PARENT"] = [];
-        $Default_Data = $Entity;
-        return new Intent_Form($schema->getCOLUMNS_META(), $Charge_data, $Default_Data);
+        return $intent_Form;
     }
 
     /**
@@ -122,7 +97,7 @@ class AbstractModel extends Model {
      * @return Intent_Form
      */
     public function show_id($id): Intent_Form {
-        return $this->formDefault(["{$this->getTable()}.id" => $id]);
+        return $this->formDefault($id);
     }
 
     /*
@@ -189,21 +164,20 @@ class AbstractModel extends Model {
      *  |
 
      */ ///****************************************************************////
-
-   
     // save data
-    public function setData(array $data,$table_parent="", $id_perent = 0) {
+
+    public function setData(array $data, $table_parent = "", $id_perent = 0) {
 
 
         if (isset($data) && !empty($data)) {
             if ($id_perent === 0) {
                 if (!isset($data['id']) || $data['id'] == "") {
-                    $id_parent = $this->insert($data);
+                    $id_parent = $this->insert_table_Relation($data);
                 } else {
                     $id_parent = $this->update($data);
                 }
             } else {
-                $id_parent = $this->insert_inverse($data, $id_perent,$table_parent);
+                $id_parent = $this->insert_tableChilde_Relation($data, $id_perent, $table_parent);
             }
             return ($id_parent);
         } else {

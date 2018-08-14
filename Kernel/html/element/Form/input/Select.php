@@ -18,19 +18,17 @@ use Kernel\html\element\Form\input\Abstract_Input;
 use Kernel\html\HTML;
 use Kernel\Tools\Tools;
 
-class Select extends Abstract_Input
-{
+class Select extends Abstract_Input {
 
     //put your code here
-    public function builder()
-    {
+    public function builder() {
         $name = $this->name;
         $id_html = $this->id_html;
         $Default = $this->Default;
         $optionTag = [];
         $data_load = [];
         foreach ($this->input['Data_load'] as $row) {
-            $data_load[$row->id] = Tools::entitys_TO_array($row);
+            $data_load[$row["id"]] = Tools::entitys_TO_array($row);
         }
 
 ///////////////////////////////////////////////////////////////////
@@ -85,4 +83,5 @@ class Select extends Abstract_Input
             return $this->div($tag, "col-sm-6");
         }
     }
+
 }

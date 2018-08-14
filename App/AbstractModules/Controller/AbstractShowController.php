@@ -13,7 +13,7 @@ namespace App\AbstractModules\Controller;
  *
  * @author wassime
  */
-
+use Kernel\INTENT\Intent_Form;
 use Kernel\INTENT\Intent_Show;
 use Psr\Http\Message\ResponseInterface;
 use function preg_match;
@@ -104,26 +104,43 @@ abstract class AbstractShowController extends AbstractController {
     }
 
     public function modifier($id, string $view): ResponseInterface {
-        $NameController = $this->getNameController();
-        $conditon = ["$NameController.id" => $id];
-        $intentform = $this->getModel()->formDefault($conditon);
+        
+        
+        
+       
+        $intentform = $this->getModel()->show_id($id);
         return $this->render($view, ["intent" => $intentform]);
     }
 
-  
-   
     public function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface {
+        $model = $this->getModel();
+        $schema = $model->getschema();
+
         $data_get = $this->getRequest()->getQueryParams();
-        $intent_formselect = $this->getModel()->formSelect();
-        if (empty($data_get) && !empty($intent_formselect->getMETA_data())) {
+        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"]);
+
+        if (empty($data_get) && !empty($META_data)) {
+            $select = $model->get_Data_FOREIGN_KEY();
+            $intent_formselect = new Intent_Form();
+            $intent_formselect->setCOLUMNS_META($META_data);
+            $intent_formselect->setCharge_data_select($select);
             return $this->render($viewSelect, ["intent" => $intent_formselect]);
         } else {
-            $intentform = $this->getModel()->form($data_get);
-            return $this->render($viewAjoutes, ["intent" => $intentform]);
+
+            $META_data = $schema->getCOLUMNS_META();
+            $select = $model->get_Data_FOREIGN_KEY($data_get);
+            $multiSelect = $model->dataChargeMultiSelectIndependent($data_get);
+
+            $intent_form = new Intent_Form();
+            $intent_form->setCOLUMNS_META($META_data);
+            $intent_form->setCharge_data_select($select);
+            $intent_form->setCharge_data_multiSelect($multiSelect);
+
+
+            return $this->render($viewAjoutes, ["intent" => $intent_form]);
         }
     }
 
- 
     public function show($id, string $view): ResponseInterface {
         $intent = $this->getModel()->show_id($id);
         return $this->render($view, ["intent" => $intent]);

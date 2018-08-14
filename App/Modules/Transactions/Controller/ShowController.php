@@ -24,7 +24,7 @@ use function substr;
 class ShowController extends AbstractShowController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-     $this->setModel(new Model($this->getContainer()->get("pathModel")));
+        $this->setModel(new Model($this->getContainer()->get("pathModel")));
         parent::process($request, $handler);
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
@@ -36,8 +36,8 @@ class ShowController extends AbstractShowController {
     }
 
     public function run($id): ResponseInterface {
-     
-        
+
+
 
         switch (true) {
             case $this->Actions()->is_index():
@@ -70,21 +70,50 @@ class ShowController extends AbstractShowController {
     }
 
     public function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface {
+        $model = $this->getModel();
+        $schema = $model->getschema();
+
         $data_get = $this->getRequest()->getQueryParams();
-        $intent_formselect = $this->getModel()->formSelect();
-        if (empty($data_get) && !empty($intent_formselect->getMETA_data())) {
+        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"]);
+
+        if (empty($data_get) && !empty($META_data)) {
+            $select = $model->get_Data_FOREIGN_KEY();
+            $intent_formselect = new Intent_Form();
+            $intent_formselect->setCOLUMNS_META($META_data);
+            $intent_formselect->setCharge_data_select($select);
             return $this->render($viewSelect, ["intent" => $intent_formselect]);
         } else {
 
-            $this->getModel()->setTable($this->getNameController());
-            $intentform = $this->getModel()->form($data_get);
 
-            $page = substr($this->getNameController(), 0, -1); // childe achats => achat
+            $model = $this->getModel();
+            $schema = $model->getschema();
+            $META_data = $schema->getCOLUMNS_META();
+            $select = $model->get_Data_FOREIGN_KEY($data_get);
+            $multiSelect = $model->dataChargeMultiSelectIndependent($data_get);
 
-            $this->getModel()->setTable($page);
-            $intentformchile = $this->getModel()->form($data_get);
+            $intent_form = new Intent_Form();
+            $intent_form->setCOLUMNS_META($META_data);
+            $intent_form->setCharge_data_select($select);
+            $intent_form->setCharge_data_multiSelect($multiSelect);
 
-            return $this->render($viewAjoutes, ["intent" => $intentform, "intentchild" => $intentformchile]);
+
+
+
+            $NameControllerchild = substr($this->getNameController(), 0, -1); // childe achats => achat
+            $this->getModel()->setTable($NameControllerchild);
+
+            $model = $this->getModel();
+            $schema = $model->getschema();
+            $META_data = $schema->getCOLUMNS_META();
+            $select = $model->get_Data_FOREIGN_KEY($data_get);
+            $multiSelect = $model->dataChargeMultiSelectIndependent($data_get);
+
+            $intentformchile = new Intent_Form();
+            $intentformchile->setCOLUMNS_META($META_data);
+            $intentformchile->setCharge_data_select($select);
+            $intentformchile->setCharge_data_multiSelect($multiSelect);
+
+            return $this->render($viewAjoutes, ["intent" => $intent_form, "intentchild" => $intentformchile]);
         }
     }
 

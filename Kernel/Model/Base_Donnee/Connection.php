@@ -9,8 +9,10 @@
 namespace Kernel\Model\Base_Donnee;
 
 use Exception;
-use Kernel\Model\Base_Donnee\ConfigExternal;
+use Kernel\AWA_Interface\Base_Donnee\ConnectionInterface;
+use Kernel\File\File;
 use PDO;
+use TypeError;
 
 /**
  * Description of Connection
@@ -18,45 +20,109 @@ use PDO;
  *
  * @author wassime
  */
-class Connection {
+class Connection implements ConnectionInterface{
 
-    private $configExternal;
-    private static $init = [];
-    private $db;
+    const File_Connect_DataBase = "Connect_DataBase";
+    const BOOT = "BOOT";
+    const cache = "cache";
+    const dbname = "dbname";
 
-    private static function getInit(string $PathConfigJson) {
-        if (self::$init === []) {
-            $configExternal = new ConfigExternal($PathConfigJson);
-            $configPDO = $configExternal->getConnect();
-            $DB = $configPDO['DB'];
-            $dbhost = $configPDO['dbhost'];
-            $dbuser = $configPDO['dbuser'];
-            $dbpass = $configPDO['dbpass'];
-            $dbname = $configPDO['dbname'];
+    private static $fileConfigDB;
+    private static $ConfigDB;
+    private static $PDO = null;
+
+    /**
+     * singlton
+     * @param string $PathConfigJson
+     * @return PDO
+     */
+    public static function getPDO(string $PathConfigJson): PDO {
+        if (self::$PDO === null) {
+
+            $file = new File($PathConfigJson, File::JSON, []);
+            self::setFileConfigDB($file);
+
+            $config = self::getFileConfigDB(self::File_Connect_DataBase);
+            self::setConfigDB($config);
+
+            $DB = self::getConfigDB('DB');
+            $dbhost = self::getConfigDB('dbhost');
+            $dbuser = self::getConfigDB('dbuser');
+            $dbpass = self::getConfigDB('dbpass');
+            $dbname = self::getConfigDB('dbname');
             try {
-                self::$init["configExternal"] = $configExternal;
-                self::$init["PDO"] = new PDO("$DB:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+
+                self::$PDO = new PDO("$DB:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             } catch (Exception $e) {
-                
+
                 die('Erreur data base: ' . $e->getMessage());
             }
         }
 
-        return self::$init;
+        return self::$PDO;
     }
 
-    public function __construct(string $PathConfigJson) {
-        $init = self::getInit($PathConfigJson);
-        $this->db = $init['PDO'];
-        $this->configExternal = $init['configExternal'];
+    /**
+     * data config file
+     * @param string $key
+     * @return array|string
+     */
+    static function getConfigDB(string $key = "") {
+        if ($key == "") {
+            return self::$ConfigDB;
+        } else {
+            return self::$ConfigDB[$key];
+        }
     }
 
+    /**
+     *
+     * @param string $PathConfigJson
+     */
+    public function __construct($PathConfigJson, $table = null){
+        self::getPDO($PathConfigJson);
+    }
+  
+    /**
+     * singlton
+     * @return PDO
+     */
     public function getDatabase(): PDO {
-        return $this->db;
+     
+        return self::$PDO;
     }
 
-    public function getConfigJson(): ConfigExternal {
-        return $this->configExternal;
+    /**
+     * 
+     * @param string $key
+     * @return type File | array
+     */
+    static function getFileConfigDB(string$key = "") {
+        if ($key == "") {
+            return self::$fileConfigDB;
+        } else {
+            return self::$fileConfigDB->get($key);
+        }
+    }
+
+    /**
+     * 
+     * @param File $fileConfigDB
+     */
+    static function setFileConfigDB(File $fileConfigDB) {
+        self::$fileConfigDB = $fileConfigDB;
+    }
+
+    /**
+     * 
+     * @param array $config
+     * @throws TypeError
+     */
+    static function setConfigDB(array $config) {
+        if (empty($config)) {
+            throw new TypeError(" erreur file config dataBase json or path ");
+        }
+        self::$ConfigDB = $config[$config[self::BOOT]];
     }
 
 }

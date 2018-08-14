@@ -2,6 +2,7 @@
 
 namespace Kernel\Model\Base_Donnee;
 
+use Kernel\AWA_Interface\Base_Donnee\MetaDatabaseInterface;
 use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Tools\Tools;
 use TypeError;
@@ -12,13 +13,22 @@ use function str_replace;
  *
  * @author wassime
  */
-class MetaDatabase extends ActionDataBase {
+class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
 
+    const SCHEMA_SELECT_MANUAL = "SCHEMA_SELECT_MANUAL";
+    const SCHEMA_SELECT_AUTO = "SCHEMA_SELECT_AUTO";
+    const CACHE_SELECT = "SCHEMA_SELECT_CACHE";
+
+    private static $allSchema = [];
+    protected $schema;
     private $is_null = true;
     private $table;
-    private $allSchema = [];
-    private $schema;
 
+    /**
+     * 
+     * @param type $PathConfigJsone
+     * @param type $table
+     */
     public function __construct($PathConfigJsone, $table = null) {
         parent::__construct($PathConfigJsone);
         if ($table != null) {
@@ -26,28 +36,41 @@ class MetaDatabase extends ActionDataBase {
         }
     }
 
-    /*
-     * ***************************************************************
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-
-     */ ///****************************************************************////
-
+    /**
+     * is not table to data base
+     * @return bool
+     */
     public function is_null(): bool {
         return $this->is_null;
     }
 
+    /**
+     * has in table to data base
+     * @param string $nameTable
+     * @return bool
+     */
     public function is_Table(string $nameTable): bool {
+        if ($nameTable == "") {
+            return false;
+        }
         $entity = $this->getschema($nameTable);
         return $entity->getNameTable() != null;
     }
 
+    /**
+     * has in table to data base
+     * @param string $nameTable
+     * @return bool
+     */
+    public function has_Table(string $nameTable): bool {
+        return $this->is_Table($nameTable);
+    }
+
+    /**
+     * get name table set connect
+     * @return string
+     * @throws TypeError
+     */
     public function getTable(): string {
         if ($this->is_null()) {
             throw new TypeError(" set table ==> call function setTable()");
@@ -55,6 +78,11 @@ class MetaDatabase extends ActionDataBase {
         return $this->table;
     }
 
+    /**
+     * set name table connect
+     * @param string $table
+     * @return bool
+     */
     public function setTable(string $table): bool {
         if ($this->is_Table($table)) {
             $this->is_null = false;
@@ -66,6 +94,12 @@ class MetaDatabase extends ActionDataBase {
         return !$this->is_null;
     }
 
+    /**
+     * get EntitysSchema de  table par name table
+     * @param string|"" $NameTable
+     * @return EntitysSchema
+     * @throws TypeError
+     */
     public function getschema(string $NameTable = ""): EntitysSchema {
         if ($NameTable == "") {
             if ($this->is_null()) {
@@ -73,41 +107,21 @@ class MetaDatabase extends ActionDataBase {
             }
             return $this->schema;
         }
-        if ($this->getConfigJson()->is_set_cache()) {
-            //generateCache()is null|[] file $path/CACHE_SELECT.JSON
-            if ($this->getConfigJson()->getgenerateCACHE_SELECT() == [] || $this->getConfigJson()->getgenerateCACHE_SELECT() == null) {
-                $this->generateCache();
-            }
 
-            //find json config => model file CACHE_SELECT
-            foreach ($this->getConfigJson()->getgenerateCACHE_SELECT() as $table) {
-                $TABLE = (new EntitysSchema())->Instance($table);
-                if ($TABLE->getNameTable() == $NameTable) {
-                    return $TABLE;
-                }
+
+        foreach ($this->getALLschema() as $Schema) {
+            if ($Schema->getNameTable() == $NameTable) {
+                return $Schema;
             }
-            $this->generateCache(); /// is not table donc => modification en data base
-        } else {
-            $this->getConfigJson()->removeCACHE_SELECT();
         }
 
-        //find json config => model file 2SCHEMA_SELECT_MANUAL
-        foreach ($this->getConfigJson()->getSCHEMA_SELECT_MANUAL() as $table) {
-            $TABLE = (new EntitysSchema())->Instance($table);
-            if ($TABLE->getNameTable() == $NameTable) {
-                return $TABLE;
-            }
-        }
-        //find json config => model file 3SCHEMA_SELECT_AUTO
-
-        foreach ($this->getALLschema() as $TABLE) {
-            if ($TABLE->getNameTable() == $NameTable) {
-                return $TABLE;
-            }
-        }
         return (new EntitysSchema()); // == return EntitysSchema vide
     }
 
+    /**
+     * get tous les names tables  data base
+     * @return array string
+     */
     public function getAllTables(): array {
         $names_Tables = [];
         $Schemas = $this->getALLschema();
@@ -117,26 +131,43 @@ class MetaDatabase extends ActionDataBase {
         return $names_Tables;
     }
 
+    /**
+     * get tous les schemas tables  data base
+     * @return array
+     * @throws TypeError
+     */
     public function getALLschema(): array {
-        $config = $this->getConfigJson()->getSCHEMA_SELECT_AUTO();
-        $DB_name = $this->getConfigJson()->getNameDataBase();
-        if (empty($this->allSchema)) {
-            $allSchema = $this->querySchema(' SELECT table_name as NameTable FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" and  table_name not LIKE("r\_%") ');
-            foreach ($allSchema as $table) {
-                $table->setCOLUMNS_default($this->columns_default($table, $config));
-                $table->setCOLUMNS_master($this->columns_master($table, $config));
-                $table->setCOLUMNS_all($this->columns_all($table, $config));
-                $table->setCOLUMNS_META($this->columns_META($table, $config));
-                $table->setSTATISTIQUE($this->STATISTIQUE($table, $config));
-                $table->setFOREIGN_KEY($this->FOREIGN_KEY($table, $config));
-                $table->setFILES($this->FILES($table, $config));
-                $table->setCHILDREN($this->tables_CHILDREN($table, $config, $DB_name));
+        
+        if (empty(self::$allSchema)) {
+            $this->getALLschema_cache();
+            $this->getALLschema_manule();
+            $this->getALLschema_auto();
+            if (empty(self::$allSchema)) {
+                throw new TypeError(" "
+                . "erreur getALLschema =>> show json config | "
+                . "SCHEMA_SELECT_MANUAL"
+                . "SCHEMA_SELECT_AUTO"
+                . "SCHEMA_SELECT_CACHE");
             }
-            $this->allSchema = $allSchema;
+
+            if (self::is_set_cache()) {
+                if (empty(self::getgenerateCACHE_SELECT())) {
+                    $this->generateCache();
+                }
+            } else {
+                self::removeCACHE_SELECT();
+            }
         }
-        return $this->allSchema;
+        return self::$allSchema;
     }
 
+    /**
+     * getSchemaStatistique
+     * @param type $fonction
+     * @param type $alias
+     * @param type $table
+     * @return type
+     */
     public function getSchemaStatistique($fonction, $alias, $table = "") {
         if ($table == "") {
             $Schemas = $this->getALLschema();
@@ -156,8 +187,13 @@ class MetaDatabase extends ActionDataBase {
         return $schema_statistique;
     }
 
-    //private//////////////////////////////////////////////////////////////////////////
-
+//private//////////////////////////////////////////////////////////////////////////
+    /**
+     * get schema auto
+     * @param type $table
+     * @param array $config
+     * @return type
+     */
     private function columns_default($table, array $config) {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " .
@@ -167,6 +203,12 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
+    /**
+     * get schema auto
+     * @param type $table
+     * @param array $config
+     * @return type
+     */
     private function columns_master($table, array $config) {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " .
@@ -176,6 +218,12 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
+    /**
+     * get schema auto
+     * @param type $table
+     * @param array $config
+     * @return type
+     */
     private function columns_all($table, array $config) {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " .
@@ -185,6 +233,12 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
+    /**
+     * get schema auto
+     * @param type $table
+     * @param array $config
+     * @return type
+     */
     private function columns_META($table, array $config) {
 
 
@@ -195,6 +249,12 @@ class MetaDatabase extends ActionDataBase {
         return $describe;
     }
 
+    /**
+     * get schema auto
+     * @param type $table
+     * @param array $config
+     * @return type
+     */
     private function columns_master_CHILDREN($table, array $config) {
 
 
@@ -204,6 +264,12 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
+    /**
+     * get schema auto
+     * @param type $table
+     * @param array $config
+     * @return type
+     */
     private function columns_default_CHILDREN($table, array $config) {
 
 
@@ -213,6 +279,12 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
+    /**
+     * get schema auto
+     * @param type $table
+     * @param array $config
+     * @return type
+     */
     private function columns_all_CHILDREN($table, array $config) {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
@@ -223,6 +295,12 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
+    /**
+     * get schema auto
+     * @param type $table
+     * @param array $config
+     * @return type
+     */
     private function FOREIGN_KEY($table, array $config) {
         if (isset($config['FOREIGN_KEY']) and ! empty($config['FOREIGN_KEY'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
@@ -234,6 +312,12 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
+    /**
+     * get schema auto
+     * @param type $table
+     * @param array $config
+     * @return type
+     */
     private function FILES($table, array $config) {
         if (isset($config['FILES']) and ! empty($config['FILES'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
@@ -245,6 +329,12 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
+    /**
+     * get schema auto
+     * @param type $table
+     * @param array $config
+     * @return type
+     */
     private function STATISTIQUE($table, array $config) {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " .
@@ -256,6 +346,13 @@ class MetaDatabase extends ActionDataBase {
         return $this->getField($describe);
     }
 
+    /**
+     * get schema auto
+     * @param type $mainTable
+     * @param type $config
+     * @param type $DB_name
+     * @return array
+     */
     private function tables_CHILDREN($mainTable, $config, $DB_name) {
 
         $tables_relation = $this->querySchema('SELECT table_name as tables_relation FROM'
@@ -277,7 +374,11 @@ class MetaDatabase extends ActionDataBase {
         return $tables_CHILDREN;
     }
 
-    /////
+    /**
+     * get schema auto
+     * @param array $describe
+     * @return array
+     */
     private function getField(array $describe): array {
         $Field = [];
         foreach ($describe as $champ) {
@@ -287,34 +388,128 @@ class MetaDatabase extends ActionDataBase {
         return $Field;
     }
 
-    ////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * generateCache
      */
-    //////////////////////////////////////
+//////////////////////////////////////
     private function generateCache() {
-        $config = $this->getConfigJson();
-        $tempschmaTabls = [];
         $schmaTabls = [];
-        $DB_AUTO = $this->getALLschema($config->getSCHEMA_SELECT_AUTO());
-
-        foreach ($DB_AUTO as $TABLE) {
-            $tempschmaTabls[$TABLE->getNameTable()] = Tools::parse_object_TO_array($TABLE);
+        foreach (self::$allSchema as $Schema) {
+            $schmaTabls[] = Tools::parse_object_TO_array($Schema);
         }
+        self::setgenerateCACHE_SELECT($schmaTabls);
+    }
 
-        foreach ($config->getSCHEMA_SELECT_MANUAL() as $table) {
-            $TABLE = (new EntitysSchema())->Instance($table);
-            $tempschmaTabls[$TABLE->getNameTable()] = Tools::parse_object_TO_array($TABLE);
+    /**
+     * nam base donnee
+     * @return string
+     */
+    private static function getNameDataBase(): string {
+        return self::getConfigDB(self::dbname);
+    }
+
+    /**
+     * cache json databas schema database
+     * @return bool
+     */
+    private static function is_set_cache(): bool {
+        return self::getConfigDB(self::cache);
+    }
+
+    /**
+     * SCHEMA SELECT MANUAL mastre default All ...
+     * @param type $name
+     * @return array
+     */
+    private static function getSCHEMA_SELECT_MANUAL(): array {
+        return self::getFileConfigDB(self::SCHEMA_SELECT_MANUAL);
+    }
+
+    /**
+     * regle pour select schema auto
+     * @return array
+     */
+    private static function getSCHEMA_SELECT_AUTO(): array {
+        return self::getFileConfigDB(self::SCHEMA_SELECT_AUTO);
+    }
+
+    /**
+     * get cache shema
+     * @return array
+     */
+    private static function getgenerateCACHE_SELECT(): array {
+        return self::getFileConfigDB(self::CACHE_SELECT);
+    }
+
+    /**
+     * set cache schema par table
+     * @param type $schmaTabls
+     */
+    private static function setgenerateCACHE_SELECT($schmaTabls) {
+        self::getFileConfigDB()->set($schmaTabls, self::CACHE_SELECT);
+    }
+
+    /**
+     * remove cache shema
+     */
+    private static function removeCACHE_SELECT() {
+        self::getFileConfigDB()->remove(self::CACHE_SELECT);
+    }
+
+    /**
+     * set self::$allSchema 
+     */
+    private function getALLschema_cache() {
+        if (empty(self::$allSchema)) {
+
+            if (self::is_set_cache()) {
+                $allSchema = [];
+
+                foreach (self::getgenerateCACHE_SELECT() as $table) {
+                    $allSchema[] = (new EntitysSchema())->Instance($table);
+                }
+                self::$allSchema = $allSchema;
+            }
         }
+    }
 
-        foreach ($tempschmaTabls as $NameTable => $TABLE) {
-            $schmaTabls[] = Tools::parse_object_TO_array($TABLE);
+    /**
+     * set self::$allSchema 
+     */
+    private function getALLschema_manule() {
+        if (empty(self::$allSchema)) {
+            $allSchema = [];
+            foreach (self::getSCHEMA_SELECT_MANUAL() as $table) {
+                $allSchema[] = (new EntitysSchema())->Instance($table);
+            }
+            self::$allSchema = $allSchema;
         }
+    }
 
+    /**
+     * set self::$allSchema 
+     */
+    private function getALLschema_auto() {
+        if (empty(self::$allSchema)) {
 
-
-        $config->setgenerateCACHE_SELECT($schmaTabls);
+            $config = self::getSCHEMA_SELECT_AUTO();
+            $DB_name = self::getNameDataBase();
+            $sql = ' SELECT table_name as NameTable FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" and  table_name not LIKE("r\_%") ';
+            $allSchema = $this->querySchema($sql);
+            foreach ($allSchema as $table) {
+                $table->setCOLUMNS_default($this->columns_default($table, $config));
+                $table->setCOLUMNS_master($this->columns_master($table, $config));
+                $table->setCOLUMNS_all($this->columns_all($table, $config));
+                $table->setCOLUMNS_META($this->columns_META($table, $config));
+                $table->setSTATISTIQUE($this->STATISTIQUE($table, $config));
+                $table->setFOREIGN_KEY($this->FOREIGN_KEY($table, $config));
+                $table->setFILES($this->FILES($table, $config));
+                $table->setCHILDREN($this->tables_CHILDREN($table, $config, $DB_name));
+            }
+            self::$allSchema = $allSchema;
+        }
     }
 
 }
