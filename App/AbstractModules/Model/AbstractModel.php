@@ -75,9 +75,9 @@ class AbstractModel extends Model {
      * @return Intent_Form
      */
     public function formDefault($id, $modeselect = Intent_Show::MODE_SELECT_ALL_MASTER): Intent_Form {
+        $schema = $this->getschema();
 
-
-        $Entitys = $this->find_by_id($id, $modeselect);
+        $Entitys = $this->find_by_id($id, $schema, $modeselect);
         if ($Entitys->is_Null()) {
             die("<h1>donnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
         }
@@ -86,7 +86,7 @@ class AbstractModel extends Model {
         $intent_Form->setDefault_Data($Entitys);
         $intent_Form->setCharge_data_select($this->get_Data_FOREIGN_KEY__ID($id));
         $intent_Form->setCharge_data_multiSelect($this->get_Charge_multiSelect($id, $modeselect));
-        $intent_Form->setCOLUMNS_META($this->getschema()->getCOLUMNS_META());
+        $intent_Form->setCOLUMNS_META($schema->getCOLUMNS_META());
 
         return $intent_Form;
     }

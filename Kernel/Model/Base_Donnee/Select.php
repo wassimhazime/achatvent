@@ -7,8 +7,8 @@
  */
 
 namespace Kernel\Model\Base_Donnee;
-use Kernel\Model\Entitys\EntitysDataTable;
 
+use Kernel\Model\Entitys\EntitysDataTable;
 use Kernel\INTENT\Intent_Show;
 use Kernel\Model\Query\QuerySQL;
 use Kernel\Tools\Tools;
@@ -46,20 +46,18 @@ class Select extends MetaDatabase {
         return !$entitysDataTable->is_Null();
     }
 
-    
-    public function find_by_id($id, $mode = Intent_Show::MODE_SELECT_ALL_MASTER): EntitysDataTable{
+    public function find_by_id($id, $schema = null, $mode = Intent_Show::MODE_SELECT_ALL_ALL): EntitysDataTable {
 
-        $Entitys = $this->select($mode, $id);
-        
+        $Entitys = $this->select($mode, $id, $schema);
+
 
         if (isset($Entitys[0])) {
-             return ($Entitys[0]);
+            return ($Entitys[0]);
         } else {
-            $entitysDataTable=new EntitysDataTable();
+            $entitysDataTable = new EntitysDataTable();
             $entitysDataTable->setNull();
-            return $entitysDataTable ;  
+            return $entitysDataTable;
         }
-       
     }
 
     /**
@@ -138,16 +136,27 @@ class Select extends MetaDatabase {
      * pour select data to table
      * @param array $mode
      * @param type $id
-     * @return array EntitysDataTable
+     * @param type $schema
+     * @return array
      */
-    public function select(array $mode, $id = true): array {
-        if ($id !== true) {
-            $id = ["{$this->getTable()}.id" => $id];
+    public function select(array $mode, $id = true, $schema = null): array {
+        $fields = $this->get_fields($mode, $schema);
+
+        $Entitys = $this->select_simple($fields, $id, $schema);
+
+        return $this->get_Data_CHILDREN($Entitys, $mode[1]);
+    }
+
+    public function select_simple(array $fields, $id = true, $schema = null): array {
+        if ($schema === null) {
+            $schema = $this->getSchema();
         }
 
-        $schema = $this->getSchema();
-        $fields = $this->get_fields($mode);
-
+        if ($id !== true) {
+            if (is_string($id) || is_int($id)) {
+                $id = ["{$schema->getNameTable()}.id" => $id];
+            }
+        }
         $sql = (new QuerySQL())
                 ->select($fields)
                 ->column($schema->select_FOREIGN_KEY())
@@ -155,8 +164,7 @@ class Select extends MetaDatabase {
                 ->join($schema->getFOREIGN_KEY())
                 ->where($id)
                 ->prepareQuery();
-        $Entitys = $this->prepareQuery($sql);
-        return $this->get_Data_CHILDREN($Entitys, $mode[1]);
+        return $this->prepareQuery($sql);
     }
 
     /**

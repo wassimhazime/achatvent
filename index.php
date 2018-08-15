@@ -38,7 +38,7 @@ $app->addEvent("add", "code");
 
 $app->addMiddleware(new Whoops());
 
-//$app->addMiddleware(new Middlewares\PhpSession());
+$app->addMiddleware(new Middlewares\PhpSession());
 
 $app->addModule(StatistiqueModule::class);
 

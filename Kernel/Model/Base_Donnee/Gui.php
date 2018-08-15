@@ -20,26 +20,25 @@ class Gui extends Select_Fonctions {
     ////select input simple
 
     /**
-     * 
-     * @param type $id
+     * $id entity save => id_FOREIGN_KEY
+     * @param type $id_save
      * @return array
      */
-    public function get_id_FOREIGN_KEYs($id): array {
+    public function get_id_FOREIGN_KEYs($id_save): array {
         $FOREIGN_KEYs = $this->getschema()
                 ->getFOREIGN_KEY();
-
-
         if (empty($FOREIGN_KEYs)) {
             return [];
         }
 
-
+        $id = ["{$this->getTable()}.id" => $id_save];
 
         $Entitys = $this->prepareQueryAssoc((new QuerySQL())
                         ->select($FOREIGN_KEYs)
                         ->from($this->getTable())
-                        ->where(["{$this->getTable()}.id" => $id])
+                        ->where($id)
                         ->prepareQuery());
+
 
         // is vide
         if (isset($Entitys[0])) {
@@ -51,111 +50,104 @@ class Gui extends Select_Fonctions {
 
     /**
      * pour form select or select input
-     * @param array $id_FOREIGN_KEYs
+     * @param array $id_FOREIGN_KEYs exemple ['raison$sociale' =>  '24',...]
+     * @param array $mode
      * @return array
-     * 
      */
-    public function get_Data_FOREIGN_KEY(array $id_FOREIGN_KEYs = []): array {
-        $schema = $this->getschema();
-        $nameTable_FOREIGNs = $schema->getFOREIGN_KEY();
+    public function get_Data_FOREIGN_KEY(array $id_FOREIGN_KEYs = [], array $mode = Intent_Show::MODE_SELECT_MASTER_NULL): array {
         /// charge select input
         $Entitys_FOREIGNs = [];
 
-        foreach ($nameTable_FOREIGNs as $nameTable_FOREIGN) {
-            $schem_Table_FOREIGN = $this->getschema($nameTable_FOREIGN);
 
-            $querydataCharge = ( new QuerySQL())
-                    ->select($schem_Table_FOREIGN->select_master())
-                    ->column($schem_Table_FOREIGN->select_FOREIGN_KEY())
-                    ->from($schem_Table_FOREIGN->getNameTable())
-                    ->join($schem_Table_FOREIGN->getFOREIGN_KEY());
-            /// si is condition
-            if (!empty($id_FOREIGN_KEYs) && isset($id_FOREIGN_KEYs[$nameTable_FOREIGN])) {
-                $con = [$nameTable_FOREIGN . ".id" => $id_FOREIGN_KEYs[$nameTable_FOREIGN]];
-                $querydataCharge->where($con);
+        foreach ($this->getschema()->getFOREIGN_KEY() as $nameTable_FOREIGN) {
+            // get condition
+            //$id_FOREIGN_KEYs   exemple ['raison$sociale' =>  '24',....]
+            if (empty($id_FOREIGN_KEYs) || !isset($id_FOREIGN_KEYs[$nameTable_FOREIGN])) {
+                $conditions = true;
+            } else {
+                $conditions = [];
+                $id = $id_FOREIGN_KEYs[$nameTable_FOREIGN];
+                $conditions[$nameTable_FOREIGN . ".id"] = $id;
             }
 
-            $Entitys_FOREIGNs[$nameTable_FOREIGN] = $this->prepareQuery($querydataCharge->prepareQuery());
+
+
+            // get data
+            $shema_FOREIGN = $this->getschema($nameTable_FOREIGN);
+            $Entitys_FOREIGNs[$nameTable_FOREIGN] = $this->select(
+                    $mode, $conditions, $shema_FOREIGN
+            );
         }
+
         return $Entitys_FOREIGNs;
     }
 
-    public function get_Data_FOREIGN_KEY__ID($id): array {
+    public function get_Data_FOREIGN_KEY__ID($id_save): array {
         //select id de FOREIGN_KEY lier to table
-        $id_FOREIGN_KEYs = $this->get_id_FOREIGN_KEYs($id);
+        $id_FOREIGN_KEYs = $this->get_id_FOREIGN_KEYs($id_save);
         // select data de FOREIGN_KEY
         return $this->get_Data_FOREIGN_KEY($id_FOREIGN_KEYs);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////
-    //************************************************************************************
-    ////multiselect input 
+////multiselect input 
     /**
      * 
-     * @param array $condition
+     * @param array $id_FOREIGN_KEYs   exemple ['raison$sociale' =>  '24']
+     * @param array $mode
      * @return array
      */
-    public function dataChargeMultiSelectIndependent(array $condition = [], array $mode = Intent_Show::MODE_SELECT_ALL_MASTER): array {
-        $schema = $this->getschema();
+    public function dataChargeMultiSelectIndependent(array $id_FOREIGN_KEYs = [], array $mode = Intent_Show::MODE_SELECT_ALL_MASTER): array {
 
-        $nameTable_CHILDRENs = $schema->get_table_CHILDREN();
         $Entitys_CHILDRENs = [];
-        foreach ($nameTable_CHILDRENs as $table_CHILDREN) {
 
-            $FOREIGN_KEY_CHILDRENs = $this->getschema($table_CHILDREN)
-                    ->getFOREIGN_KEY();
-            $conditions = [];
+        foreach ($this->getschema()->get_table_CHILDREN() as $table_CHILDREN) {
 
-            foreach ($FOREIGN_KEY_CHILDRENs as $FOREIGN_KEY) {
-                if (isset($condition[$FOREIGN_KEY])) {
-                    $conditions[] = $FOREIGN_KEY . ".id=" . $condition[$FOREIGN_KEY];
+
+            if (empty($id_FOREIGN_KEYs)) {
+                $conditions = true;
+            } else {
+                $conditions = [];
+                // independent FOREIGN_KEY
+                //array (size=1) 0 => string 'raison$sociale'
+                foreach ($this->getschema($table_CHILDREN)->getFOREIGN_KEY() as $FOREIGN_KEY) {
+                    if (isset($id_FOREIGN_KEYs[$FOREIGN_KEY])) {
+                        $id = $id_FOREIGN_KEYs[$FOREIGN_KEY];
+                        $conditions[$FOREIGN_KEY . ".id"] = $id; // exemple ['raison$sociale.id' =>  '24',....] 
+                    }
+                }
+                if (empty($conditions)) {
+                    $conditions = true;
                 }
             }
 
 
 
 
-            $querydataCharge = (new QuerySQL())
-                    ->select($schema->select_CHILDREN($table_CHILDREN, $mode[1]))
-                    ->from($table_CHILDREN)
-                    ->join($FOREIGN_KEY_CHILDRENs)
-                    ->independent($schema->getNameTable())
-                    ->where($conditions);
-
-            $Entitys_CHILDRENs[$table_CHILDREN] = $this->prepareQuery($querydataCharge->prepareQuery());
+            $Entitys_CHILDRENs[$table_CHILDREN] = $this->prepareQuery(
+                    (new QuerySQL())
+                            ->select($this->getschema()->select_CHILDREN($table_CHILDREN, $mode[1]))
+                            ->from($table_CHILDREN)
+                            ->join($this->getschema($table_CHILDREN)->getFOREIGN_KEY()) //array [ 0 =>  'raison$sociale']
+                            ->independent($this->getTable()) // independent table not lier
+                            ->where($conditions) // lier FOREIGN_KEY
+                            ->prepareQuery());
         }
+
         return $Entitys_CHILDRENs;
     }
 
     /**
      * 
-     * @param type $id
+     * @param type $id_save
      * @param array $mode
      * @return type
      */
-    public function get_Charge_multiSelect($id, array $mode = Intent_Show::MODE_SELECT_ALL_MASTER) {
+    public function get_Charge_multiSelect($id_save, array $mode = Intent_Show::MODE_SELECT_ALL_MASTER) {
         //select id de FOREIGN_KEY lier to table
-        $id_FOREIGN_KEYs = $this->get_id_FOREIGN_KEYs($id);
+        $id_FOREIGN_KEYs = $this->get_id_FOREIGN_KEYs($id_save);
         // select data de MultiSelect || tablechilde
         return $this->dataChargeMultiSelectIndependent($id_FOREIGN_KEYs, $mode);
     }
 
-    /**
-     * 
-     * @param type $tablechild
-     * @param array $condition
-     * @return type
-     */
-//    
-//    protected function dataChargeMultiSelectDependent($tablechild, array $condition) {
-//        $schema = $this->getschema();
-//        $schem_Table_CHILDREN = $this->getschema($tablechild);
-//        return $this->prepareQuery((
-//                                new QuerySQL())
-//                                ->select($schem_Table_CHILDREN->select_NameTable())
-//                                ->from($schema->getNameTable())
-//                                ->join($tablechild, " INNER ", true)
-//                                ->where($condition)
-//                                ->prepareQuery());
-//    }
+    
 }
