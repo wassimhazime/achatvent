@@ -21,61 +21,144 @@ use Kernel\Model\Query\QuerySQL;
 use Kernel\Tools\Tools;
 
 class AbstractModel extends Model {
-    /*
-     * ***************************************************************
-     *  |form
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-
-     */ ///****************************************************************////
-    /**
-     * 
-     * @return Intent_Form
-     */
-//    public function formSelect(): Intent_Form {
-//        $schema = $this->getschema();
-//        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"]);
-//        $Charge_data = $this->get_Data_FOREIGN_KEY();
-//
-//        $intent_form = new Intent_Form();
-//        $intent_form->setMETA_data($META_data);
-//        $intent_form->setCharge_data_select($Charge_data);
-//
-//
-//        return $intent_form;
-//    }
+    ////select input simple
 
     /**
-     * 
-     * @param array $condition
-     * @return Intent_Form
+     * $id entity save => id_FOREIGN_KEY
+     * @param type $id_save
+     * @return array assoc  exemple ['raison$sociale' =>  '24',...]
      */
-//    public function form(array $condition): Intent_Form {
-//
-//        $META_data = $this->getschema()->getCOLUMNS_META();
-//        $select = $this->get_Data_FOREIGN_KEY($condition);
-//        $multiSelect = $this->dataChargeMultiSelectIndependent($condition);
-//
-//        $intent_form = new Intent_Form();
-//        $intent_form->setMETA_data($META_data);
-//        $intent_form->setCharge_data_select($select);
-//        $intent_form->setCharge_data_multiSelect($multiSelect);
-//
-//        return $intent_form;
-//    }
+    public function get_id_FOREIGN_KEYs($id_save): array {
+
+        $FOREIGN_KEYs = $this->getschema()
+                ->getFOREIGN_KEY();
+        if (empty($FOREIGN_KEYs)) {
+            return [];
+        }
+
+        $Entitys = $this->select_simple($FOREIGN_KEYs, $id_save);
+
+
+        // is vide
+        if (isset($Entitys[0])) {
+            return $Entitys[0];
+        }
+
+        return[];
+    }
+
+    /**
+     * pour form select or select input
+     * @param array $id_FOREIGN_KEYs exemple ['raison$sociale' =>  '24',...]
+     * @param array $mode
+     * @return array
+     */
+    public function get_Data_FOREIGN_KEY(array $id_FOREIGN_KEYs = [], array $mode = Intent_Show::MODE_SELECT_MASTER_NULL): array {
+        /// charge select input
+        $Entitys_FOREIGNs = [];
+
+
+        foreach ($this->getschema()->getFOREIGN_KEY() as $nameTable_FOREIGN) {
+            // get condition
+            //$id_FOREIGN_KEYs   exemple ['raison$sociale' =>  '24',....]
+            if (empty($id_FOREIGN_KEYs) || !isset($id_FOREIGN_KEYs[$nameTable_FOREIGN])) {
+                $conditions = true;
+            } else {
+                $conditions = [];
+                $id = $id_FOREIGN_KEYs[$nameTable_FOREIGN];
+                $conditions[$nameTable_FOREIGN . ".id"] = $id;
+            }
+
+
+
+            // get data
+            $shema_FOREIGN = $this->getschema($nameTable_FOREIGN);
+            $Entitys_FOREIGNs[$nameTable_FOREIGN] = $this->select(
+                    $mode, $conditions, $shema_FOREIGN
+            );
+        }
+
+        return $Entitys_FOREIGNs;
+    }
+
+    public function get_Data_FOREIGN_KEY__ID($id_save): array {
+        //select id de FOREIGN_KEY lier to table
+        $id_FOREIGN_KEYs = $this->get_id_FOREIGN_KEYs($id_save);
+        // select data de FOREIGN_KEY
+        return $this->get_Data_FOREIGN_KEY($id_FOREIGN_KEYs);
+    }
+
+////multiselect input 
+    /**
+     * 
+     * @param array $id_FOREIGN_KEYs   exemple ['raison$sociale' =>  '24']
+     * @param array $mode
+     * @return array
+     */
+    public function dataChargeMultiSelectIndependent(array $id_FOREIGN_KEYs = [], array $mode = Intent_Show::MODE_SELECT_ALL_MASTER): array {
+
+        $Entitys_CHILDRENs = [];
+
+        foreach ($this->getschema()->get_table_CHILDREN() as $table_CHILDREN) {
+
+
+            if (empty($id_FOREIGN_KEYs)) {
+                $conditions = true;
+            } else {
+                $conditions = [];
+                // independent FOREIGN_KEY
+                //array (size=1) 0 => string 'raison$sociale'
+                foreach ($this->getschema($table_CHILDREN)->getFOREIGN_KEY() as $FOREIGN_KEY) {
+                    if (isset($id_FOREIGN_KEYs[$FOREIGN_KEY])) {
+                        $id = $id_FOREIGN_KEYs[$FOREIGN_KEY];
+                        $conditions[$FOREIGN_KEY . ".id"] = $id; // exemple ['raison$sociale.id' =>  '24',....] 
+                    }
+                }
+                if (empty($conditions)) {
+                    $conditions = true;
+                }
+            }
+
+
+
+
+            $Entitys_CHILDRENs[$table_CHILDREN] = $this->prepareQuery(
+                    (new QuerySQL())
+                            ->select($this->getschema()->select_CHILDREN($table_CHILDREN, $mode[1]))
+                            ->from($table_CHILDREN)
+                            ->join($this->getschema($table_CHILDREN)->getFOREIGN_KEY()) //array [ 0 =>  'raison$sociale']
+                            ->independent($this->getTable()) // independent table not lier
+                            ->where($conditions) // lier FOREIGN_KEY
+                            ->prepareQuery());
+        }
+
+        return $Entitys_CHILDRENs;
+    }
 
     /**
      * 
-     * @param array $conditionDefault
+     * @param type $id_save
+     * @param array $mode
+     * @return type
+     */
+    public function get_Charge_multiSelect($id_save, array $mode = Intent_Show::MODE_SELECT_ALL_MASTER) {
+        //select id de FOREIGN_KEY lier to table
+        $id_FOREIGN_KEYs = $this->get_id_FOREIGN_KEYs($id_save);
+        // select data de MultiSelect || tablechilde
+        return $this->dataChargeMultiSelectIndependent($id_FOREIGN_KEYs, $mode);
+    }
+
+    /**
+     * 
+     * @param type $id
+     * @param type $modeselect
      * @return Intent_Form
      */
-    public function formDefault($id, $modeselect = Intent_Show::MODE_SELECT_ALL_MASTER): Intent_Form {
+    public function show_styleForm($id, $modeselect = Intent_Show::MODE_SELECT_ALL_MASTER): Intent_Form {
+
+
         $schema = $this->getschema();
+
 
         $Entitys = $this->find_by_id($id, $schema, $modeselect);
         if ($Entitys->is_Null()) {
@@ -92,33 +175,11 @@ class AbstractModel extends Model {
     }
 
     /**
-     * 
-     * @param type $id
-     * @return Intent_Form
-     */
-    public function show_id($id): Intent_Form {
-        return $this->formDefault($id);
-    }
-
-    /*
-     * ***************************************************************
-     *  |show
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-
-     */ ///****************************************************************////
-    /**
      * Intent_Show::mode 
      * @param array $mode
      * @param type $rangeID
      * @return Intent_Show
      */
-
     public function show_in(array $mode, $rangeID): Intent_Show {
         $schema = $this->getSchema();
         $Entitys = $this->select_in($mode, $rangeID);
@@ -152,24 +213,12 @@ class AbstractModel extends Model {
         return Tools::entitys_TO_array($entity);
     }
 
-    /*
-     * ***************************************************************
-     *  |set data
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-
-     */ ///****************************************************************////
-    // save data
+// save data
 
     public function setData(array $data, $table_parent = "", $id_perent = 0) {
 
 
-        if (isset($data) && !empty($data)) {
+        if (!empty($data)) {
             if ($id_perent === 0) {
                 if (!isset($data['id']) || $data['id'] == "") {
                     $id_parent = $this->insert_table_Relation($data);
@@ -181,7 +230,7 @@ class AbstractModel extends Model {
             }
             return ($id_parent);
         } else {
-            die("rak 3aya9ti");
+            die("erreur send data");
         }
     }
 

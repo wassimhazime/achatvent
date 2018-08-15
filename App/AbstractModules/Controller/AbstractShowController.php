@@ -103,13 +103,36 @@ abstract class AbstractShowController extends AbstractController {
         return $this->getResponse();
     }
 
-    public function modifier($id, string $view): ResponseInterface {
+    public function modifier($id_save, string $view): ResponseInterface {
         
+
+        $modeselect = Intent_Show::MODE_SELECT_ALL_MASTER;
+        $model = $this->getModel();
         
-        
-       
-        $intentform = $this->getModel()->show_id($id);
-        return $this->render($view, ["intent" => $intentform]);
+        $schema = $model->getschema();
+
+        $Entitys = $model->find_by_id($id_save, $schema, $modeselect);
+
+        if ($Entitys->is_Null()) {
+            die("<h1>donnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
+        }
+
+        $intent_Form = new Intent_Form();
+        $intent_Form->setDefault_Data($Entitys);
+        $id_FOREIGN_KEYs = $model->get_id_FOREIGN_KEYs($id_save);
+
+
+        $intent_Form->setCharge_data_select($model->get_Data_FOREIGN_KEY($id_FOREIGN_KEYs));
+        $intent_Form->setCharge_data_multiSelect($model->dataChargeMultiSelectIndependent($id_FOREIGN_KEYs, $modeselect));
+        $intent_Form->setCOLUMNS_META($schema->getCOLUMNS_META());
+
+
+
+
+
+
+
+        return $this->render($view, ["intent" => $intent_Form]);
     }
 
     public function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface {
@@ -142,7 +165,7 @@ abstract class AbstractShowController extends AbstractController {
     }
 
     public function show($id, string $view): ResponseInterface {
-        $intent = $this->getModel()->show_id($id);
+        $intent = $this->getModel()->show_styleForm($id);
         return $this->render($view, ["intent" => $intent]);
     }
 

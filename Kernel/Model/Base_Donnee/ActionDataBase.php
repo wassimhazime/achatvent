@@ -61,7 +61,7 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
 
         $sqlprepare = $query->getPrepare();
         $params_execute = $query->getExecute();
-        
+
         try {
             $Statement = $this->getDataBase()->prepare($sqlprepare);
             $Statement->execute($params_execute);
@@ -75,15 +75,16 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
             die($sqlprepare);
         }
     }
-     /**
+
+    /**
      * // get data form array assoc avec style prepare
      * @param Prepare $query
      * @return array Assoc
      */
     public function prepareQueryAssoc(Prepare $query): array {
-          $sqlprepare = $query->getPrepare();
+        $sqlprepare = $query->getPrepare();
         $params_execute = $query->getExecute();
-       
+
         try {
             $Statement = $this->getDataBase()->prepare($sqlprepare);
             $Statement->execute($params_execute);
@@ -144,7 +145,7 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
     }
 
     /**
-     * 
+     * sql prepare
      * @param Prepare $query
      * @return int
      */
@@ -163,7 +164,5 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
             return -1;
         }
     }
-
-
 
 }

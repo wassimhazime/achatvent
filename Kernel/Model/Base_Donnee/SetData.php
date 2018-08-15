@@ -21,8 +21,8 @@ use function date;
  *
  * @author wassime
  */
-class SetData extends Gui{
-       /*
+class SetData extends Select_Fonctions {
+    /*
      * ***************************************************************
      *  |set data
      *  |
@@ -201,4 +201,5 @@ class SetData extends Gui{
 
         return $id_table_parent;
     }
+
 }

@@ -12,7 +12,12 @@
  */
 namespace Kernel\AWA_Interface;
 
-interface ModelInterface
+use Kernel\AWA_Interface\Base_Donnee\ActionDataBaseInterface;
+use Kernel\AWA_Interface\Base_Donnee\ConnectionInterface;
+use Kernel\AWA_Interface\Base_Donnee\MetaDatabaseInterface;
+use Kernel\AWA_Interface\Base_Donnee\SelectInterface;
+
+interface ModelInterface extends SelectInterface, ActionDataBaseInterface, ConnectionInterface, MetaDatabaseInterface
 {
   
 }
