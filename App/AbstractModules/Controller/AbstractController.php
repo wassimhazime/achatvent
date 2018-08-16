@@ -14,14 +14,15 @@
 
 namespace App\AbstractModules\Controller;
 
+use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Controller\Controller;
 
-abstract class AbstractController extends Controller
-{
+abstract class AbstractController extends Controller {
 
-   protected function getModeShow(array $modeHTTP): array {
-        $parent = "DEFAULT";
-        $child = "EMPTY";
+    protected function getModeShow(array $modeHTTP): array {
+        ;
+        $parent = MODE_SELECT_Interface::_DEFAULT;
+        $child = MODE_SELECT_Interface::_NULL;
 
         $type = "json";
         if (isset($modeHTTP["pere"])) {
@@ -29,29 +30,29 @@ abstract class AbstractController extends Controller
         }
         if (isset($modeHTTP["fils"])) {
             $child = $this->parseMode($modeHTTP["fils"], $child);
-            if ($child != "EMPTY") {
+            if ($child != MODE_SELECT_Interface::_NULL) {
                 $type = "HTML";
             }
         }
 
 
-        return ["type" => $type, "modeIntent" => [$parent, $child]];
+        return ["type" => $type, "modeSelect" => [$parent, $child]];
     }
 
     private function parseMode(string $modefr, $default): string {
         switch ($modefr) {
             case "rien":
-                $mode = "EMPTY";
+                $mode = MODE_SELECT_Interface::_NULL;
 
                 break;
             case "resume":
-                $mode = "MASTER";
+                $mode = MODE_SELECT_Interface::_MASTER;
                 break;
             case "defaut":
-                $mode = "DEFAULT";
+                $mode = MODE_SELECT_Interface::_DEFAULT;
                 break;
             case "tous":
-                $mode = "ALL";
+                $mode = MODE_SELECT_Interface::_ALL;
                 break;
 
             default:
@@ -61,7 +62,4 @@ abstract class AbstractController extends Controller
         return $mode;
     }
 
-    
-    
-    
 }

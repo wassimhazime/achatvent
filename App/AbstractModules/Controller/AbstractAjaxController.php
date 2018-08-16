@@ -29,9 +29,9 @@ abstract class AbstractAjaxController extends AbstractController
         $query = $this->getRequest()->getQueryParams();
 
         $modeshow = $this->getModeShow($query);
-        $modeintent = $modeshow["modeIntent"];
+        $modeSelect = $modeshow["modeSelect"];
 
-        $data = $this->getModel()->showAjax($modeintent, true);
+        $data = $this->getModel()->showAjax($modeSelect, true);
         $json = Tools::json_js($data);
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');

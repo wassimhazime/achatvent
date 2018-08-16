@@ -43,17 +43,17 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <select class="selectpicker show-tick" data-style="btn-success"  data-width="90%" name="pere">
-                                    <option data-subtext="De père"  {% if modeintentpere == "MASTER" %} selected {% endif %}   value="resume">voir résumé des information</option>
-                                    <option data-subtext="De père" {% if modeintentpere == "DEFAULT" %} selected {% endif %}    value="defaut">voir defaut des information</option>
-                                    <option data-subtext="De père" {% if modeintentpere == "ALL" %} selected {% endif %}    value="tous">voir tous les information</option>
+                                    <option data-subtext="De père"  {% if modeSelectpere == "MASTER" %} selected {% endif %}   value="resume">voir résumé des information</option>
+                                    <option data-subtext="De père" {% if modeSelectpere == "DEFAULT" %} selected {% endif %}    value="defaut">voir defaut des information</option>
+                                    <option data-subtext="De père" {% if modeSelectpere == "ALL" %} selected {% endif %}    value="tous">voir tous les information</option>
                                 </select>
                             </div>
                             <div class="col-sm-6">
                                 <select class="selectpicker show-tick" data-style="btn-info"  data-width="90%" name="fils">
-                                    <option data-subtext="Des Fils" {% if modeintentenfant == "EMPTY" %} selected {% endif %} value="rien">voir rien</option>
-                                    <option data-subtext="Des Fils" {% if modeintentenfant == "MASTER" %} selected {% endif %} value="resume">voir résumé des information</option>
-                                    <option data-subtext="Des Fils" {% if modeintentenfant == "DEFAULT" %} selected {% endif %} value="defaut">voir defaut des information</option>
-                                    <option data-subtext="Des Fils" {% if modeintentenfant == "ALL" %} selected {% endif %} value="tous">voir tous les information</option>
+                                    <option data-subtext="Des Fils" {% if modeSelectenfant == "EMPTY" %} selected {% endif %} value="rien">voir rien</option>
+                                    <option data-subtext="Des Fils" {% if modeSelectenfant == "MASTER" %} selected {% endif %} value="resume">voir résumé des information</option>
+                                    <option data-subtext="Des Fils" {% if modeSelectenfant == "DEFAULT" %} selected {% endif %} value="defaut">voir defaut des information</option>
+                                    <option data-subtext="Des Fils" {% if modeSelectenfant == "ALL" %} selected {% endif %} value="tous">voir tous les information</option>
                                 </select>
                             </div>
                         </div> 

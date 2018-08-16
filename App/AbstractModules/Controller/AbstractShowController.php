@@ -13,8 +13,8 @@ namespace App\AbstractModules\Controller;
  *
  * @author wassime
  */
+
 use Kernel\INTENT\Intent_Form;
-use Kernel\INTENT\Intent_Show;
 use Psr\Http\Message\ResponseInterface;
 use function preg_match;
 
@@ -28,19 +28,19 @@ abstract class AbstractShowController extends AbstractController {
 
         $query = $this->getRequest()->getQueryParams();
         $modeshow = $this->getModeShow($query);
-        $modeintent = $modeshow["modeIntent"];
+        $modeSelect = $modeshow["modeSelect"];
 
         $data = [
             "Html_or_Json" => $modeshow["type"],
             "btnDataTable" => $this->btn_DataTable($query)["btn"],
             "jsCharges" => $this->btn_DataTable($query)["jsCharges"],
-            "modeintentpere" => $modeintent[0],
-            "modeintentenfant" => $modeintent[1]
+            "modeSelectpere" => $modeSelect[0],
+            "modeSelectenfant" => $modeSelect[1]
         ];
 
 
         if ($modeshow["type"] === "HTML") {
-            $data["intent"] = $this->getModel()->show($modeintent, true);
+            $data["intent"] = $this->getModel()->show($modeSelect, true);
         } elseif ($modeshow["type"] === "json") {
             $url = $this->getRouter()
                     ->generateUri($nameRouteGetDataAjax, ["controle" => $this->getNameController()]);
@@ -104,14 +104,14 @@ abstract class AbstractShowController extends AbstractController {
     }
 
     public function modifier($id_save, string $view): ResponseInterface {
-        
+
 
         $modeselect = $this->getModel()::MODE_SELECT_ALL_MASTER;
         $model = $this->getModel();
-        
+
         $schema = $model->getschema();
 
-        $Entitys = $model->find_by_id($id_save, $schema, $modeselect);
+        $Entitys = $model->find_by_id($id_save, $modeselect, $schema);
 
         if ($Entitys->is_Null()) {
             die("<h1>donnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
@@ -169,11 +169,11 @@ abstract class AbstractShowController extends AbstractController {
         return $this->render($view, ["intent" => $intent]);
     }
 
-    public function message($id, string $view): ResponseInterface {
+    public function message($rangeID, string $view): ResponseInterface {
 
         $mode = $this->getModel()::MODE_SELECT_DEFAULT_NULL;
 
-        $intentshow = $this->getModel()->show_in($mode, $id);
+        $intentshow = $this->getModel()->show_in( $mode,$rangeID);
 
         return $this->render($view, ["intent" => $intentshow]);
     }

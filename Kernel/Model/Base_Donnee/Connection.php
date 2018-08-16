@@ -20,7 +20,7 @@ use TypeError;
  *
  * @author wassime
  */
-class Connection implements ConnectionInterface{
+class Connection implements ConnectionInterface {
 
     const File_Connect_DataBase = "Connect_DataBase";
     const BOOT = "BOOT";
@@ -28,6 +28,7 @@ class Connection implements ConnectionInterface{
     const dbname = "dbname";
 
     private static $fileConfigDB;
+    
     private static $ConfigDB;
     private static $PDO = null;
 
@@ -39,7 +40,9 @@ class Connection implements ConnectionInterface{
     public static function getPDO(string $PathConfigJson): PDO {
         if (self::$PDO === null) {
 
+        
             $file = new File($PathConfigJson, File::JSON, []);
+
             self::setFileConfigDB($file);
 
             $config = self::getFileConfigDB(self::File_Connect_DataBase);
@@ -79,16 +82,16 @@ class Connection implements ConnectionInterface{
      *
      * @param string $PathConfigJson
      */
-    public function __construct($PathConfigJson, $table = null){
+    public function __construct($PathConfigJson, $table = null) {
         self::getPDO($PathConfigJson);
     }
-  
+
     /**
      * singlton
      * @return PDO
      */
     public function getDatabase(): PDO {
-     
+
         return self::$PDO;
     }
 
@@ -97,11 +100,12 @@ class Connection implements ConnectionInterface{
      * @param string $key
      * @return type File | array
      */
-    static function getFileConfigDB(string$key = "") {
+    static function getFileConfigDB(string $key = "", string $type = File::JSON) {
+
         if ($key == "") {
             return self::$fileConfigDB;
         } else {
-            return self::$fileConfigDB->get($key);
+            return self::$fileConfigDB->get($key, $type);
         }
     }
 

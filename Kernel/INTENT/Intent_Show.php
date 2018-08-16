@@ -2,12 +2,11 @@
 
 namespace Kernel\INTENT;
 
-use Kernel\Model\Entitys\EntitysSchema;
+use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Model\Entitys\EntitysDataTable;
+use TypeError;
 
-class Intent_Show extends Intent {
-
-   
+class Intent_Show extends Intent implements MODE_SELECT_Interface {
 
     function __construct($entitysSchema, $entitysDataTables, $mode) {
 
@@ -24,42 +23,39 @@ class Intent_Show extends Intent {
 
     //TOOLS
     // for show 
-    public static function is_show_DEFAULT($_intentORmode): bool {
-        if ($_intentORmode instanceof self) {
-            $mode = $_intentORmode->getMode();
-        } else {
-            $mode = $_intentORmode;
-        }
 
-        return $mode[0] == "DEFAULT";
+
+    public static function is_show_DEFAULT($_intentORmode): bool {
+        $mode = self::parseMode($_intentORmode);
+
+        return $mode[0] === self::_DEFAULT;
     }
 
     public static function is_show_MASTER($_intentORmode): bool {
-        if ($_intentORmode instanceof self) {
-            $mode = $_intentORmode->getMode();
-        } else {
-            $mode = $_intentORmode;
-        }
+        $mode = self::parseMode($_intentORmode);
 
-        return $mode[0] == "MASTER";
+        return $mode[0] === self::_MASTER;
     }
 
     public static function is_show_ALL($_intentORmode): bool {
-        if ($_intentORmode instanceof self) {
-            $mode = $_intentORmode->getMode();
-        } else {
-            $mode = $_intentORmode;
-        }
-        return $mode[0] == "ALL";
+        $mode = self::parseMode($_intentORmode);
+        return $mode[0] === self::_ALL;
     }
 
     public static function is_get_CHILDREN($_intentORmode): bool {
+        $mode = self::parseMode($_intentORmode);
+
+        return $mode[1] !== self::_NULL;
+    }
+
+    private static function parseMode($_intentORmode): array {
         if ($_intentORmode instanceof self) {
-            $mode = $_intentORmode->getMode();
+            return $_intentORmode->getMode();
+        } elseif (is_array($_intentORmode) && count($_intentORmode) == 2) {
+            return $_intentORmode;
         } else {
-            $mode = $_intentORmode;
+            throw new \TypeError(" Error mode ");
         }
-        return $mode[1] != "EMPTY";
     }
 
 }

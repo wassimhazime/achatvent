@@ -13,10 +13,10 @@ namespace App\Modules\Transactions\Controller;
  *
  * @author wassime
  */
+
 use App\AbstractModules\Controller\AbstractShowController;
 use App\Modules\Transactions\Model\Model;
 use Kernel\INTENT\Intent_Form;
-use Kernel\INTENT\Intent_Show;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -120,13 +120,13 @@ class ShowController extends AbstractShowController {
 
     public function modifier($id_save, string $view): ResponseInterface {
 
-        
-        
-        $modeselect = Intent_Show::MODE_SELECT_ALL_MASTER;
+
         $model = $this->getModel();
+        $modeselect = $model::MODE_SELECT_ALL_MASTER;
+
         $schema = $model->getschema();
 
-        $Entitys = $model->find_by_id($id_save, $schema, $modeselect);
+        $Entitys = $model->find_by_id($id_save, $modeselect, $schema);
 
         if ($Entitys->is_Null()) {
             die("<h1>donnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
@@ -134,17 +134,17 @@ class ShowController extends AbstractShowController {
 
         $intent_Form = new Intent_Form();
         $intent_Form->setDefault_Data($Entitys);
-        $id_FOREIGN_KEYs=$model->get_id_FOREIGN_KEYs($id_save);
-        
-        
+        $id_FOREIGN_KEYs = $model->get_id_FOREIGN_KEYs($id_save);
+
+
         $intent_Form->setCharge_data_select($model->get_Data_FOREIGN_KEY($id_FOREIGN_KEYs));
         $intent_Form->setCharge_data_multiSelect($model->dataChargeMultiSelectIndependent($id_FOREIGN_KEYs, $modeselect));
         $intent_Form->setCOLUMNS_META($schema->getCOLUMNS_META());
 
 
-        
+
         //****************************************//
-        
+
         $Controllerchild = substr($this->getNameController(), 0, -1); // childe achats => achat
         $this->chargeModel($Controllerchild);
         $model_Child = $this->getModel();
@@ -155,7 +155,7 @@ class ShowController extends AbstractShowController {
         $intent_formChile->setCharge_data_multiSelect($model_Child->dataChargeMultiSelectIndependent($id_FOREIGN_KEYs, $modeselect));
         $intent_formChile->setCOLUMNS_META($schema_Child->getCOLUMNS_META());
 
-        
+
         return $this->render($view, ["intent" => $intent_Form, "intentchild" => $intent_formChile]);
     }
 

@@ -44,7 +44,7 @@ public function __construct($PathConfigJson, $table = null);
      * @param string $key
      * @return type File | array
      */
-    static function getFileConfigDB(string$key = "");
+    static function getFileConfigDB(string $key = "", string $type = "json");
 
     /**
      * 

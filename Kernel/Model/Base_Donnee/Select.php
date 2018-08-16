@@ -26,38 +26,10 @@ use function is_string;
 class Select extends MetaDatabase implements SelectInterface {
 
     /**
-     * has id return true | false
-     * @param string $id
-     * @return bool
-     */
-    public function is_id(string $id, $schema = null): bool {
-        $entitysDataTable = $this->find_by_id($id, $schema);
-        return !$entitysDataTable->is_Null();
-    }
-
-    /**
-     * recherche par id
-     * @param type $id
-     * @param EntitysSchema $schema 
-     * @param array $mode 
-     * @return EntitysDataTable
-     */
-    public function find_by_id($id, $schema, array $mode = []): EntitysDataTable {
-        $Entitys = $this->select($mode, $id, $schema);
-        if (isset($Entitys[0])) {
-            return ($Entitys[0]);
-        } else {
-            $entitysDataTable = new EntitysDataTable();
-            $entitysDataTable->setNull();
-            return $entitysDataTable;
-        }
-    }
-
-    /**
      * get id (exmple:<a class="btn "  role="button" href="/CRM/files/clients_2018-08-01-16-32-12"  data-regex="/clients_2018-08-01-16-32-12/" > <spam class="glyphicon glyphicon-download-alt"></spam> 6</a>)
      * set to table de file upload
      * 
-     * @param string $id
+     * @param string $id_save
      * @return string
      */
     public function get_idfile(string $id_save): string {
@@ -80,13 +52,42 @@ class Select extends MetaDatabase implements SelectInterface {
     }
 
     /**
-     * pour select data to table
-     * @param array $mode
+     * has id return true | false
+     * @param string $id
+     * @return bool
+     */
+    public function is_id(string $id, $schema = null): bool {
+
+        $entitysDataTable = $this->find_by_id($id, self::MODE_SELECT_MASTER_NULL, $schema);
+        return !$entitysDataTable->is_Null();
+    }
+
+    /**
+     * recherche par id
      * @param type $id
+     * @param array $mode
+     * @param EntitysSchema $schema 
+     * @return EntitysDataTable
+     */
+    public function find_by_id($id, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): EntitysDataTable {
+        $Entitys = $this->select($id, $mode, $schema);
+        if (isset($Entitys[0])) {
+            return ($Entitys[0]);
+        } else {
+            $entitysDataTable = new EntitysDataTable();
+            $entitysDataTable->setNull();
+            return $entitysDataTable;
+        }
+    }
+
+    /**
+     * pour select data to table
+     * @param type $id
+     * @param array $mode
      * @param EntitysSchema $schema
      * @return array
      */
-    public function select(array $mode, $id = true, $schema = null): array {
+    public function select($id = true, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array {
         if ($schema === null) {
             $schema = $this->getSchema();
         }
@@ -141,12 +142,12 @@ class Select extends MetaDatabase implements SelectInterface {
 
     /**
      * pour sele data in range 
-     * @param array $mode
      * @param string|array $rangeID
+     * @param array $mode
      * @param EntitysSchema $schema
      * @return array EntitysDataTable
      */
-    public function select_in(array $mode, $rangeID, $schema = null): array {
+    public function select_in($rangeID, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array {
         if ($schema === null) {
             $schema = $this->getSchema();
         }
@@ -173,13 +174,14 @@ class Select extends MetaDatabase implements SelectInterface {
 
     /**
      * select data BETWEEN 2 value in id
-     * @param array $mode
+
      * @param int $valeur1
      * @param int $valeur2
+     * @param array $mode
      * @param EntitysSchema $schema
      * @return array EntitysDataTable
      */
-    public function select_BETWEEN(array $mode, int $valeur1, int $valeur2, $schema = null): array {
+    public function select_BETWEEN(int $valeur1, int $valeur2, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array {
         if ($schema === null) {
             $schema = $this->getSchema();
         }
@@ -204,20 +206,21 @@ class Select extends MetaDatabase implements SelectInterface {
      * @throws TypeError
      */
     private function get_fields(array $mode, $schema = null): array {
+
         // mode
         if ($schema == null) {
             $schema = $this->getSchema();
         }
-        if (empty($mode)) {
+
+        if (($mode[0] === self::_MASTER)) {
             $fields = $schema->select_master();
-        } elseif ($mode[0] == "ALL") {
+        } elseif ($mode[0] === self::_ALL) {
             $fields = $schema->select_all();
-        } elseif ($mode[0] == "DEFAULT") {
+        } elseif ($mode[0] === self::_DEFAULT) {
             $fields = $schema->select_default();
-        } elseif ($mode[0] == "MASTER") {
-            $fields = $schema->select_master();
         } else {
-            throw new \TypeError(" Error mode intent");
+
+            throw new \TypeError(" Error mode ");
         }
 
         return $fields;
@@ -230,11 +233,11 @@ class Select extends MetaDatabase implements SelectInterface {
      * @param type $schema
      * @return array
      */
-    private function get_Data_CHILDREN(array $Entitys, $mode = [], $schema = null): array {
+    private function get_Data_CHILDREN(array $Entitys, array $mode, $schema = null): array {
         if ($schema === null) {
             $schema = $this->getSchema();
         }
-        if (empty($schema->get_table_CHILDREN()) || empty($mode) || $mode[1] == "EMPTY") {
+        if (empty($schema->get_table_CHILDREN()) || empty($mode) || $mode[1] == self::_NULL) {
             return $Entitys;
         }
 

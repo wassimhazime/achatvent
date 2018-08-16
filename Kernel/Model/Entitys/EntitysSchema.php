@@ -2,9 +2,10 @@
 
 namespace Kernel\Model\Entitys;
 
+use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Tools\Tools;
 
-class EntitysSchema {
+class EntitysSchema implements MODE_SELECT_Interface{
 
     private $modeCHILDREN = null;
     private $NameTable = null;
@@ -37,7 +38,7 @@ class EntitysSchema {
 
     private function setModeCHILDREN($mode) {
         if ($mode == null and $this->modeCHILDREN == null) {
-            $this->modeCHILDREN = "MASTER";
+            $this->modeCHILDREN = self::_MASTER;
         } elseif ($mode != null) {
             $this->modeCHILDREN = $mode;
         }

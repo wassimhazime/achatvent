@@ -73,7 +73,7 @@ class AbstractModel extends Model {
             // get data
             $shema_FOREIGN = $this->getschema($nameTable_FOREIGN);
             $Entitys_FOREIGNs[$nameTable_FOREIGN] = $this->select(
-                    $mode, $conditions, $shema_FOREIGN
+                    $conditions, $mode, $shema_FOREIGN
             );
         }
 
@@ -159,7 +159,7 @@ class AbstractModel extends Model {
         $schema = $this->getschema();
 
 
-        $Entitys = $this->find_by_id($id, $schema, $modeselect);
+        $Entitys = $this->find_by_id($id, $modeselect, $schema);
         if ($Entitys->is_Null()) {
             die("<h1>donnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
         }
@@ -181,7 +181,7 @@ class AbstractModel extends Model {
      */
     public function show_in(array $mode, $rangeID): Intent_Show {
         $schema = $this->getSchema();
-        $Entitys = $this->select_in($mode, $rangeID);
+        $Entitys = $this->select_in($rangeID, $mode, $schema);
         return new Intent_Show($schema, $Entitys, $mode);
     }
 
@@ -194,7 +194,7 @@ class AbstractModel extends Model {
     public function show(array $mode, $id = true): Intent_Show {
 
         $schema = $this->getSchema();
-        $Entitys = $this->select($mode, $id);
+        $Entitys = $this->select($id, $mode);
 
         return new Intent_Show($schema, $Entitys, $mode);
     }
@@ -207,7 +207,7 @@ class AbstractModel extends Model {
      */
     public function showAjax($mode, $id = true): array {
 
-        $entity = $this->select($mode, $id);
+        $entity = $this->select( $id,$mode);
 
         return Tools::entitys_TO_array($entity);
     }

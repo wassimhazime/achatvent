@@ -3,6 +3,7 @@
 namespace Kernel\Model\Base_Donnee;
 
 use Kernel\AWA_Interface\Base_Donnee\MetaDatabaseInterface;
+use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Tools\Tools;
 use TypeError;
@@ -13,7 +14,7 @@ use function str_replace;
  *
  * @author wassime
  */
-class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
+class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface , MODE_SELECT_Interface {
 
     const SCHEMA_SELECT_MANUAL = "SCHEMA_SELECT_MANUAL";
     const SCHEMA_SELECT_AUTO = "SCHEMA_SELECT_AUTO";
@@ -144,7 +145,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
             $this->getALLschema_auto();
             if (empty(self::$allSchema)) {
                 throw new TypeError(" "
-                . "erreur getALLschema =>> show json config | "
+                . "erreur getALLschema =>> show json|php auto config | "
                 . "SCHEMA_SELECT_MANUAL"
                 . "SCHEMA_SELECT_AUTO"
                 . "SCHEMA_SELECT_CACHE");
@@ -198,7 +199,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " .
                 $table->getNameTable() .
-                $config['COLUMNS_default']);
+                $config[self::_DEFAULT]);
 
         return $this->getField($describe);
     }
@@ -213,7 +214,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " .
                 $table->getNameTable() .
-                $config['COLUMNS_master']);
+                $config[self::_MASTER]);
 
         return $this->getField($describe);
     }
@@ -228,7 +229,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " .
                 $table->getNameTable() .
-                $config['COLUMNS_all']);
+                $config[self::_ALL]);
 
         return $this->getField($describe);
     }
@@ -259,7 +260,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
 
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
-                $config['CHILDREN']['MASTER']);
+                $config['CHILDREN'][self::_MASTER]);
 
         return $this->getField($describe);
     }
@@ -274,7 +275,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
 
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
-                $config['CHILDREN']['DEFAULT']);
+                $config['CHILDREN'][self::_DEFAULT]);
 
         return $this->getField($describe);
     }
@@ -288,7 +289,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
     private function columns_all_CHILDREN($table, array $config) {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
-                $config['CHILDREN']['ALL']);
+                $config['CHILDREN'][self::_ALL]);
 
 
 
@@ -358,18 +359,18 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
         $tables_relation = $this->querySchema('SELECT table_name as tables_relation FROM'
                 . ' INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" '
                 . 'and  table_name  LIKE("r\_' . $mainTable->getNameTable() . '\_%")  ');
-        $tables_CHILDREN['MASTER'] = [];
-        $tables_CHILDREN['ALL'] = [];
-        $tables_CHILDREN['DEFAULT'] = [];
-        $tables_CHILDREN['EMPTY'] = [];
+        $tables_CHILDREN[self::_MASTER] = [];
+        $tables_CHILDREN[self::_ALL] = [];
+        $tables_CHILDREN[self::_DEFAULT] = [];
+        $tables_CHILDREN[self::_NULL] = [];
 
         foreach ($tables_relation as $champ) {
             $table = str_replace("r_{$mainTable->getNameTable()}_", "", $champ->tables_relation);
 
-            $tables_CHILDREN['MASTER'][$table] = $this->columns_master_CHILDREN($table, $config);
-            $tables_CHILDREN['DEFAULT'][$table] = $this->columns_default_CHILDREN($table, $config);
-            $tables_CHILDREN['ALL'][$table] = $this->columns_all_CHILDREN($table, $config);
-            $tables_CHILDREN['EMPTY'][$table] = [];
+            $tables_CHILDREN[self::_MASTER][$table] = $this->columns_master_CHILDREN($table, $config);
+            $tables_CHILDREN[self::_DEFAULT][$table] = $this->columns_default_CHILDREN($table, $config);
+            $tables_CHILDREN[self::_ALL][$table] = $this->columns_all_CHILDREN($table, $config);
+            $tables_CHILDREN[self::_NULL][$table] = [];
         }
         return $tables_CHILDREN;
     }
@@ -432,7 +433,10 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
      * @return array
      */
     private static function getSCHEMA_SELECT_AUTO(): array {
-        return self::getFileConfigDB(self::SCHEMA_SELECT_AUTO);
+        
+         $config=self::getFileConfigDB(self::SCHEMA_SELECT_AUTO,"php");
+       
+         return $config;
     }
 
     /**

@@ -14,10 +14,8 @@
 
 namespace Kernel\Tools;
 
-use Kernel\INTENT\Intent_Show;
 use ReflectionClass;
 use function array_keys;
-use function array_merge;
 use function count;
 use function date;
 use function get_class;
@@ -29,38 +27,6 @@ use function str_replace;
 use function strtotime;
 
 class Tools {
-
-    public static function intent_to_metaTableHTML(Intent_Show $intent) {
-        $schema = $intent->getEntitysSchema();
-        $COLUMNS_master = $schema->getCOLUMNS_master();
-        $COLUMNS_all = $schema->getCOLUMNS_all();
-        $COLUMNS_default = $schema->getCOLUMNS_default();
-        $FOREIGN_KEY = $schema->getFOREIGN_KEY();
-        $entitysDataTable = $intent->getEntitysDataTable();
-
-        if (Intent_Show::is_show_MASTER($intent)) {
-            $columns = array_merge($COLUMNS_master, $FOREIGN_KEY);
-        } elseif (Intent_Show::is_show_ALL($intent)) {
-            $columns = array_merge($COLUMNS_all, $FOREIGN_KEY);
-        } elseif (Intent_Show::is_show_DEFAULT($intent)) {
-            $columns = array_merge($COLUMNS_default, $FOREIGN_KEY);
-        }
-        $CHILD = [];
-        $CHILD["flag_show_CHILDREN"] = Intent_Show::is_get_CHILDREN($intent);
-
-        if ($CHILD["flag_show_CHILDREN"]) {
-            $CHILD["table_CHILDREN"] = $schema->get_table_CHILDREN(); // le nom de la table
-            $CHILD["CHILDREN"] = $schema->getCHILDREN(); // les noms des champ
-            $CHILD["datajoins"] = [];  //// body
-            foreach ($entitysDataTable as $entity) {
-                $CHILD["datajoins"][] = $entity->getDataJOIN();
-            }
-
-            $columns = array_merge($columns, $CHILD["table_CHILDREN"]);  ///head
-        }
-        $DataTable = Tools::entitys_TO_array($entitysDataTable);
-        return ["columns" => $columns, "DataTable" => $DataTable, "CHILD" => $CHILD];
-    }
 
     public static function date_FR_to_EN($var) {
 
