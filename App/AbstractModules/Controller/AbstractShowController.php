@@ -106,7 +106,7 @@ abstract class AbstractShowController extends AbstractController {
     public function modifier($id_save, string $view): ResponseInterface {
         
 
-        $modeselect = Intent_Show::MODE_SELECT_ALL_MASTER;
+        $modeselect = $this->getModel()::MODE_SELECT_ALL_MASTER;
         $model = $this->getModel();
         
         $schema = $model->getschema();
@@ -171,7 +171,7 @@ abstract class AbstractShowController extends AbstractController {
 
     public function message($id, string $view): ResponseInterface {
 
-        $mode = Intent_Show::MODE_SELECT_DEFAULT_NULL;
+        $mode = $this->getModel()::MODE_SELECT_DEFAULT_NULL;
 
         $intentshow = $this->getModel()->show_in($mode, $id);
 

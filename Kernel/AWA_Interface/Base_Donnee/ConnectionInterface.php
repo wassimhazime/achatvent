@@ -17,6 +17,7 @@ use TypeError;
  * @author wassime
  */
 interface ConnectionInterface {
+    
 public function __construct($PathConfigJson, $table = null);
     /**
      * singlton

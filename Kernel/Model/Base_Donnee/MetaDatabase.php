@@ -137,7 +137,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
      * @throws TypeError
      */
     public function getALLschema(): array {
-        
+
         if (empty(self::$allSchema)) {
             $this->getALLschema_cache();
             $this->getALLschema_manule();
@@ -242,7 +242,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface {
     private function columns_META($table, array $config) {
 
 
-        $describe = $this->querySchema("  DESCRIBE   " .
+        $describe = $this->querySchema($config['COLUMNS_META'] .
                 $table->getNameTable());
 
 

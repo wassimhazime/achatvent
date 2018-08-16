@@ -7,10 +7,19 @@ use Kernel\Model\Base_Donnee\Connection;
 use Kernel\Model\Entitys\EntitysDataTable;
 use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Model\Query\Prepare;
+use Kernel\Model\Query\QuerySQL;
 use PDO;
 use PDOException;
 
 class ActionDataBase extends Connection implements ActionDataBaseInterface {
+
+    /**
+     *  Créons un Query Builder
+     * @return QuerySQL
+     */
+    public static function Get_QuerySQL(): QuerySQL {
+        return new QuerySQL();
+    }
 
     /**
      * get Shema form EntitysSchema

@@ -17,7 +17,6 @@ namespace App\AbstractModules\Model;
 use Kernel\INTENT\Intent_Form;
 use Kernel\INTENT\Intent_Show;
 use Kernel\Model\Model;
-use Kernel\Model\Query\QuerySQL;
 use Kernel\Tools\Tools;
 
 class AbstractModel extends Model {
@@ -53,7 +52,7 @@ class AbstractModel extends Model {
      * @param array $mode
      * @return array
      */
-    public function get_Data_FOREIGN_KEY(array $id_FOREIGN_KEYs = [], array $mode = Intent_Show::MODE_SELECT_MASTER_NULL): array {
+    public function get_Data_FOREIGN_KEY(array $id_FOREIGN_KEYs = [], array $mode = self::MODE_SELECT_MASTER_NULL): array {
         /// charge select input
         $Entitys_FOREIGNs = [];
 
@@ -95,7 +94,7 @@ class AbstractModel extends Model {
      * @param array $mode
      * @return array
      */
-    public function dataChargeMultiSelectIndependent(array $id_FOREIGN_KEYs = [], array $mode = Intent_Show::MODE_SELECT_ALL_MASTER): array {
+    public function dataChargeMultiSelectIndependent(array $id_FOREIGN_KEYs = [], array $mode = self::MODE_SELECT_ALL_MASTER): array {
 
         $Entitys_CHILDRENs = [];
 
@@ -123,7 +122,7 @@ class AbstractModel extends Model {
 
 
             $Entitys_CHILDRENs[$table_CHILDREN] = $this->prepareQuery(
-                    (new QuerySQL())
+                    self::Get_QuerySQL()
                             ->select($this->getschema()->select_CHILDREN($table_CHILDREN, $mode[1]))
                             ->from($table_CHILDREN)
                             ->join($this->getschema($table_CHILDREN)->getFOREIGN_KEY()) //array [ 0 =>  'raison$sociale']
@@ -141,7 +140,7 @@ class AbstractModel extends Model {
      * @param array $mode
      * @return type
      */
-    public function get_Charge_multiSelect($id_save, array $mode = Intent_Show::MODE_SELECT_ALL_MASTER) {
+    public function get_Charge_multiSelect($id_save, array $mode = self::MODE_SELECT_ALL_MASTER) {
         //select id de FOREIGN_KEY lier to table
         $id_FOREIGN_KEYs = $this->get_id_FOREIGN_KEYs($id_save);
         // select data de MultiSelect || tablechilde
@@ -154,7 +153,7 @@ class AbstractModel extends Model {
      * @param type $modeselect
      * @return Intent_Form
      */
-    public function show_styleForm($id, $modeselect = Intent_Show::MODE_SELECT_ALL_MASTER): Intent_Form {
+    public function show_styleForm($id, $modeselect = self::MODE_SELECT_ALL_MASTER): Intent_Form {
 
 
         $schema = $this->getschema();
@@ -175,7 +174,7 @@ class AbstractModel extends Model {
     }
 
     /**
-     * Intent_Show::mode 
+     * self::mode 
      * @param array $mode
      * @param type $rangeID
      * @return Intent_Show
@@ -187,7 +186,7 @@ class AbstractModel extends Model {
     }
 
     /**
-     * Intent_Show::mode
+     * self::mode
      * @param array $mode
      * @param type $id
      * @return Intent_Show
@@ -201,7 +200,7 @@ class AbstractModel extends Model {
     }
 
     /**
-     * Intent_Show::mode
+     * self::mode
      * @param type $mode
      * @param type $id
      * @return array

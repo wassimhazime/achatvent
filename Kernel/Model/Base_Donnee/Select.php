@@ -11,7 +11,6 @@ namespace Kernel\Model\Base_Donnee;
 use Kernel\AWA_Interface\Base_Donnee\SelectInterface;
 use Kernel\Model\Entitys\EntitysDataTable;
 use Kernel\Model\Entitys\EntitysSchema;
-use Kernel\Model\Query\QuerySQL;
 use Kernel\Tools\Tools;
 use TypeError;
 use function explode;
@@ -68,7 +67,7 @@ class Select extends MetaDatabase implements SelectInterface {
         }
         $id = ["{$this->getTable()}.id" => $id_save];
 
-        $Entitys = $this->prepareQuery((new QuerySQL())
+        $Entitys = $this->prepareQuery(self::Get_QuerySQL()
                         ->select($schema->getFILES())
                         ->from($schema->getNameTable())
                         ->where($id)
@@ -100,7 +99,7 @@ class Select extends MetaDatabase implements SelectInterface {
 
         $fields = $this->get_fields($mode, $schema);
 
-        $sql = (new QuerySQL())
+        $sql = self::Get_QuerySQL()
                 ->select($fields)
                 ->column($schema->select_FOREIGN_KEY())
                 ->from($schema->getNameTable())
@@ -133,7 +132,7 @@ class Select extends MetaDatabase implements SelectInterface {
             }
         }
         return $this->prepareQueryAssoc(
-                        (new QuerySQL())
+                        self::Get_QuerySQL()
                                 ->select($fields)
                                 ->from($schema->getNameTable())
                                 ->where($id)
@@ -160,7 +159,7 @@ class Select extends MetaDatabase implements SelectInterface {
         }
 
 
-        $sql = (new QuerySQL())
+        $sql = self::Get_QuerySQL()
                 ->select($fields)
                 ->column($schema->select_FOREIGN_KEY())
                 ->from($schema->getNameTable())
@@ -186,7 +185,7 @@ class Select extends MetaDatabase implements SelectInterface {
         }
         $fields = $this->get_fields($mode);
 
-        $sql = (new QuerySQL())
+        $sql = self::Get_QuerySQL()
                 ->select($fields)
                 ->column($schema->select_FOREIGN_KEY())
                 ->from($schema->getNameTable())
@@ -244,7 +243,7 @@ class Select extends MetaDatabase implements SelectInterface {
                 $fields = $schema->select_CHILDREN($tablechild, $mode[1]);
 
                 $Entity->setDataJOIN($tablechild, $this->prepareQuery(
-                                (new QuerySQL())
+                                self::Get_QuerySQL()
                                         ->select($fields)
                                         ->from($schema->getNameTable())
                                         ->join($tablechild, " INNER ", true)

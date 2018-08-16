@@ -7,18 +7,7 @@ use Kernel\Model\Entitys\EntitysDataTable;
 
 class Intent_Show extends Intent {
 
-    const MODE_SELECT_DEFAULT_DEFAULT = ["DEFAULT", "DEFAULT"];
-    const MODE_SELECT_DEFAULT_MASTER = ["DEFAULT", "MASTER"];
-    const MODE_SELECT_DEFAULT_ALL = ["DEFAULT", "ALL"];
-    const MODE_SELECT_MASTER_DEFAULT = ["MASTER", "DEFAULT"];
-    const MODE_SELECT_MASTER_MASTER = ["MASTER", "MASTER"];
-    const MODE_SELECT_MASTER_ALL = ["MASTER", "ALL"];
-    const MODE_SELECT_ALL_DEFAULT = ["ALL", "DEFAULT"];
-    const MODE_SELECT_ALL_MASTER = ["ALL", "MASTER"];
-    const MODE_SELECT_ALL_ALL = ["ALL", "ALL"];
-    const MODE_SELECT_DEFAULT_NULL = ["DEFAULT", "EMPTY"];
-    const MODE_SELECT_MASTER_NULL = ["MASTER", "EMPTY"];
-    const MODE_SELECT_ALL_NULL = ["ALL", "EMPTY"];
+   
 
     function __construct($entitysSchema, $entitysDataTables, $mode) {
 
@@ -34,9 +23,9 @@ class Intent_Show extends Intent {
     }
 
     //TOOLS
-    //// for show 
+    // for show 
     public static function is_show_DEFAULT($_intentORmode): bool {
-        if ($_intentORmode instanceof Intent) {
+        if ($_intentORmode instanceof self) {
             $mode = $_intentORmode->getMode();
         } else {
             $mode = $_intentORmode;
@@ -46,7 +35,7 @@ class Intent_Show extends Intent {
     }
 
     public static function is_show_MASTER($_intentORmode): bool {
-        if ($_intentORmode instanceof Intent) {
+        if ($_intentORmode instanceof self) {
             $mode = $_intentORmode->getMode();
         } else {
             $mode = $_intentORmode;
@@ -56,7 +45,7 @@ class Intent_Show extends Intent {
     }
 
     public static function is_show_ALL($_intentORmode): bool {
-        if ($_intentORmode instanceof Intent) {
+        if ($_intentORmode instanceof self) {
             $mode = $_intentORmode->getMode();
         } else {
             $mode = $_intentORmode;
@@ -65,7 +54,7 @@ class Intent_Show extends Intent {
     }
 
     public static function is_get_CHILDREN($_intentORmode): bool {
-        if ($_intentORmode instanceof Intent) {
+        if ($_intentORmode instanceof self) {
             $mode = $_intentORmode->getMode();
         } else {
             $mode = $_intentORmode;

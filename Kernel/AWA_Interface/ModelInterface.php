@@ -16,8 +16,9 @@ use Kernel\AWA_Interface\Base_Donnee\ActionDataBaseInterface;
 use Kernel\AWA_Interface\Base_Donnee\ConnectionInterface;
 use Kernel\AWA_Interface\Base_Donnee\MetaDatabaseInterface;
 use Kernel\AWA_Interface\Base_Donnee\SelectInterface;
+use Kernel\AWA_Interface\Base_Donnee\SetDataInterface;
 
-interface ModelInterface extends SelectInterface, ActionDataBaseInterface, ConnectionInterface, MetaDatabaseInterface
+interface ModelInterface extends SelectInterface, ActionDataBaseInterface, ConnectionInterface, MetaDatabaseInterface, SetDataInterface
 {
   
 }

@@ -9,12 +9,19 @@
 namespace Kernel\AWA_Interface\Base_Donnee;
 
 use Kernel\Model\Query\Prepare;
+use Kernel\Model\Query\QuerySQL;
 
 /**
  *
  * @author wassime
  */
-interface ActionDataBaseInterface extends ConnectionInterface {
+interface ActionDataBaseInterface  {
+     /**
+     *  Créons un Query Builder
+     * @return QuerySQL
+     */
+    public static function Get_QuerySQL(): QuerySQL ;
+ 
 
     /**
      * get Shema form EntitysSchema

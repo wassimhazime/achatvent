@@ -8,10 +8,11 @@ use function array_keys;
 use function in_array;
 
 class Intent_Set extends Intent {
-
+   //to model
     const MODE_INSERT = ["INSERT"];
     const MODE_UPDATE = ["UPDATE"];
     const MODE_FORM = ["FORM"];
+    
     function __construct($entitysSchema, $entitysDataTables, $mode=self::MODE_FORM) {
           if ( !in_array($mode,[self::MODE_FORM, self::MODE_UPDATE, self::MODE_INSERT])) {
             if (!empty($entitysDataTables) and ! Tools::isAssoc($entitysDataTables)) {

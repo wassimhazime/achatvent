@@ -17,6 +17,19 @@ use Kernel\Model\Entitys\EntitysSchema;
  */
 interface SelectInterface {
 
+    const MODE_SELECT_DEFAULT_DEFAULT = ["DEFAULT", "DEFAULT"];
+    const MODE_SELECT_DEFAULT_MASTER = ["DEFAULT", "MASTER"];
+    const MODE_SELECT_DEFAULT_ALL = ["DEFAULT", "ALL"];
+    const MODE_SELECT_MASTER_DEFAULT = ["MASTER", "DEFAULT"];
+    const MODE_SELECT_MASTER_MASTER = ["MASTER", "MASTER"];
+    const MODE_SELECT_MASTER_ALL = ["MASTER", "ALL"];
+    const MODE_SELECT_ALL_DEFAULT = ["ALL", "DEFAULT"];
+    const MODE_SELECT_ALL_MASTER = ["ALL", "MASTER"];
+    const MODE_SELECT_ALL_ALL = ["ALL", "ALL"];
+    const MODE_SELECT_DEFAULT_NULL = ["DEFAULT", "EMPTY"];
+    const MODE_SELECT_MASTER_NULL = ["MASTER", "EMPTY"];
+    const MODE_SELECT_ALL_NULL = ["ALL", "EMPTY"];
+
     /**
      * has id return true | false
      * @param string $id

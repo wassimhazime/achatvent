@@ -8,9 +8,9 @@
 
 namespace Kernel\Model\Base_Donnee;
 
+use Kernel\AWA_Interface\Base_Donnee\SetDataInterface;
 use Kernel\INTENT\Intent_Set;
 use Kernel\Model\Entitys\EntitysDataTable;
-use Kernel\Model\Query\QuerySQL;
 use Kernel\Tools\Tools;
 use TypeError;
 use function array_keys;
@@ -21,20 +21,8 @@ use function date;
  *
  * @author wassime
  */
-class SetData extends Select_Fonctions {
-    /*
-     * ***************************************************************
-     *  |set data
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-     *  |
-
-     */ ///****************************************************************////
-    ///////////////////////////////////////////////////////////
+class SetData extends Select_Fonctions implements SetDataInterface{
+ ///////////////////////////////////////////////////////////
     /**
      * delete one item get id delete
      * @param array $condition
@@ -43,8 +31,8 @@ class SetData extends Select_Fonctions {
 
     public function delete(array $condition): int {
         // one  item
-
-        $delete = (new QuerySQL())
+        
+        $delete = self::Get_QuerySQL()
                 ->delete($this->getTable())
                 ->where($condition)
                 ->prepareQuery();
@@ -57,7 +45,7 @@ class SetData extends Select_Fonctions {
      * @param string $id_Table
      * @param array $Data_CHILDREN_id
      */
-    protected function insert_Relation_childe(string $id_Table, array $Data_CHILDREN_id, string $table = "") {
+    public function insert_Relation_childe(string $id_Table, array $Data_CHILDREN_id, string $table = "") {
         if ($table == "") {
             $table = $this->getTable();
         }
@@ -65,7 +53,7 @@ class SetData extends Select_Fonctions {
 
         foreach ($Data_CHILDREN_id as $name_table_CHILDREN => $id_CHILDRENs) {
             foreach ($id_CHILDRENs as $id_CHILD) {
-                $querySQL = (new QuerySQL())->
+                $querySQL = self::Get_QuerySQL()->
                                 insertInto("r_" . $table . "_" . $name_table_CHILDREN)
                                 ->value([
                                     "id_" . $table => $id_Table,
@@ -81,11 +69,11 @@ class SetData extends Select_Fonctions {
      *  exec SQL des tables relations
      * @param string $id_Table
      */
-    protected function delete_Relation_childe(string $id_Table) {
+    public function delete_Relation_childe(string $id_Table) {
         $name_CHILDRENs = (array_keys($this->getschema()->getCHILDREN())); // name childern array
 
         foreach ($name_CHILDRENs as $name_table_CHILDREN) {
-            $sqlquery = (new QuerySQL())
+            $sqlquery = self::Get_QuerySQL()
                     ->delete("r_" . $this->getTable() . "_" . $name_table_CHILDREN)
                     ->where(["id_" . $this->getTable() => $id_Table])
                     ->prepareQuery();
@@ -101,7 +89,7 @@ class SetData extends Select_Fonctions {
      * @return Intent_Set
      * @throws TypeError
      */
-    protected function parse(array $data): Intent_Set {
+    public function parse(array $data): Intent_Set {
         $schema = $this->getschema();
         if (Tools::isAssoc($data) and isset($data)) {
             return (new Intent_Set($schema, ((new EntitysDataTable())->set($data))));
@@ -125,7 +113,7 @@ class SetData extends Select_Fonctions {
         // exec query sql insert to NameTable table
         $datenow = date("Y-m-d-H-i-s");
         $data_table["date_modifier"] = $datenow;
-        $querySQL = (new QuerySQL())->
+        $querySQL = self::Get_QuerySQL()->
                 update($this->getTable())
                 ->set($data_table)
                 ->where(["id" => $id_Table])
@@ -160,7 +148,7 @@ class SetData extends Select_Fonctions {
         $data_table["date_ajoute"] = $datenow;
         $data_table["date_modifier"] = $datenow;
 
-        $querySQL = (new QuerySQL())
+        $querySQL = self::Get_QuerySQL()
                 ->insertInto($this->getTable())
                 ->value($data_table)
                 ->prepareQuery();

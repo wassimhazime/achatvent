@@ -60,7 +60,7 @@ class Select_Fonctions extends Select{
         foreach ($this->schema_statistique as $table => $st) {
             $champ = $st["champ"];
             echo "<h1> $table </h1>";
-            $sql = ((new QuerySQL())
+            $sql = (self::Get_QuerySQL()
                             ->select($champ)
                             ->from($table)
                             ->where("YEAR(`date`)=2018")
@@ -88,7 +88,7 @@ class Select_Fonctions extends Select{
             $par = $st["GroupBy"];
             $st = [];
             foreach ($par as $by) {
-                $sql = ((new QuerySQL())
+                $sql = (self::Get_QuerySQL()
                                 ->select($champ)
                                 //  ->column("$by.$by")
                                 ->from($table)

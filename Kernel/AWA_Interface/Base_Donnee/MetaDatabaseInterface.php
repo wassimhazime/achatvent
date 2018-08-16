@@ -15,7 +15,7 @@ use TypeError;
  *
  * @author wassime
  */
-interface MetaDatabaseInterface extends ActionDataBaseInterface{
+interface MetaDatabaseInterface {
 
     /**
      * is not table to data base
