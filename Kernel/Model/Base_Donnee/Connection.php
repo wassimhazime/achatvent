@@ -45,7 +45,7 @@ class Connection implements ConnectionInterface {
 
             self::setFileConfigDB($file);
 
-            $config = self::getFileConfigDB(self::File_Connect_DataBase);
+            $config = self::getFileConfigDB(self::File_Connect_DataBase,File::PHP);
             self::setConfigDB($config);
 
             $DB = self::getConfigDB('DB');
@@ -56,6 +56,8 @@ class Connection implements ConnectionInterface {
             try {
 
                 self::$PDO = new PDO("$DB:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            
+                 
             } catch (Exception $e) {
 
                 die('Erreur data base: ' . $e->getMessage());
@@ -98,7 +100,8 @@ class Connection implements ConnectionInterface {
     /**
      * 
      * @param string $key
-     * @return type File | array
+     * @param string $type
+     * @return type
      */
     static function getFileConfigDB(string $key = "", string $type = File::JSON) {
 

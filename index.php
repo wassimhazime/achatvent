@@ -5,7 +5,7 @@ date_default_timezone_set("Africa/Casablanca");
 define('D_S', DIRECTORY_SEPARATOR);
 //define('ROOT', dirname(__DIR__) . D_S);
 define('ROOT', __DIR__ . D_S);
-require ROOT . "vendor/autoload.php";
+require ROOT . "vendor" . D_S . "autoload.php";
 
 use App\App;
 use App\Middleware\NotFound;
@@ -30,14 +30,18 @@ use App\Modules\Ventes\VentesModule;
 use App\Modules\Transactions\TransactionsModule;
 use function Http\Response\send;
 
-$container = Factory_Container::getContainer(ROOT . "Config" . D_S . "Config_Container.php");
+$pathconfig = ROOT . "Config" . D_S . "Config_Container.php";
+$container = Factory_Container::getContainer($pathconfig);
 $app = new App($container);
+
+
+
+
 
 $app->addEvent("exeption", "code");
 $app->addEvent("add", "code");
 
 $app->addMiddleware(new Whoops());
-
 $app->addMiddleware(new Middlewares\PhpSession());
 
 $app->addModule(StatistiqueModule::class);
@@ -66,16 +70,6 @@ $app->addMiddleware([
     new ContentEncoding(['gzip', 'deflate'])
 ]);
 $app->addMiddleware(new ResponseTime());
-
-
-
-
-
-
-
-
-
-
 $app->addMiddleware(new NotFound(function ($Response) use ($container) {
     // is html page not found
     $render = $container->get(RendererInterface::class)
@@ -88,11 +82,13 @@ $app->addMiddleware(new NotFound(function ($Response) use ($container) {
 
 $app->addMiddleware($container->get(RouterInterface::class));
 
-$Request = $container->get(ServerRequestInterface::class);
-$Response = $app->run($Request);
 
-send($Response);
 
+if (php_sapi_name() != "cli") {
+    $Request = $container->get(ServerRequestInterface::class);
+    $Response = $app->run($Request);
+    send($Response);
+}
 
 
 

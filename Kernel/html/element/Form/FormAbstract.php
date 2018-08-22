@@ -8,6 +8,7 @@
 
 namespace Kernel\html\element\Form;
 
+use Kernel\Conevert\SQL_HTML;
 use Kernel\html\element\Form\input\Input;
 use Kernel\html\element\Form\input\MultiSelect;
 use Kernel\html\element\Form\input\Select;
@@ -26,15 +27,14 @@ abstract class FormAbstract
     protected $Conevert;
     protected $input = [];
 
-    function __construct(array $Conevert, Intent_Form $Intent_Form)
+    function __construct( Intent_Form $Intent_Form)
     {
 
         $META_data = $Intent_Form->getCOLUMNS_META();
         $Charge_data = $Intent_Form->getCharge_data();
         $Default_Data = $Intent_Form->getDefault_Data();
 
-        ///Conevert_TypeClomunSQL_to_TypeInputHTML
-        $this->Conevert = $Conevert;
+      
         //// change input
         $this->setInput($META_data, $Charge_data, $Default_Data);
     }
@@ -43,14 +43,17 @@ abstract class FormAbstract
     {
         $type = $COLUMN_META['Type'];
         $id = $sefix . $COLUMN_META['Field'];
-
-        if (isset($this->Conevert[$type])) {
-            $COLUMN_META['Type'] = $this->Conevert[$type];
-            $COLUMN_META['id_html'] = $id;
-        } else {
-            $COLUMN_META['Type'] = "text";
-            $COLUMN_META['id_html'] = " ";
-        }
+        $COLUMN_META['Type'] = SQL_HTML::getTypeHTML($type);
+          $COLUMN_META['id_html'] = $id;
+//        if (isset($this->Conevert[$type])) {
+//           
+//          // $COLUMN_META['Type'] = $this->Conevert[$type];
+//          $COLUMN_META['id_html'] = $id;
+//            
+//        } else {
+//            $COLUMN_META['Type'] = "text";
+//            $COLUMN_META['id_html'] = " ";
+//        }
         return $COLUMN_META;
     }
 

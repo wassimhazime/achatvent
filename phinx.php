@@ -1,30 +1,31 @@
 <?php
-define('D_S', DIRECTORY_SEPARATOR);
-//define('ROOT', dirname(__DIR__) . D_S);
-define('ROOT', __DIR__ . D_S);
-require ROOT . "vendor/autoload.php";
+
 use Kernel\AWA_Interface\ModelInterface;
-use Kernel\Container\Factory_Container;
-$container = Factory_Container::getContainer(ROOT . "Config" . D_S . "Config_Container.php");
 
+require "index.php";
+$PDO = $container->get(ModelInterface::class)->getDatabase();
 
+$pathModules = $app->getPathModules();
 
+$migrations = array_map(function(string $pathModule): string {
+    return $pathModule . "/phinix_db/migrations";
+}, $pathModules);
 
+$seeds = array_map(function(string $pathModule): string {
+    return $pathModule . "/phinix_db/seeds";
+}, $pathModules);
 
 return [
     "paths" => [
-        "migrations" => [
-            __DIR__ . '/db/migrations',
-            __DIR__ . '/db/m2'
-        ],
-        "seeds" => __DIR__ . '/db/seeds'
+        "migrations" => $migrations,
+        "seeds" => $seeds
     ]
     , 'environments' =>
     [
         'default_database' => 'development',
         'development' => [
-            "name" => "comptable",
-            'connection' => $container->get(ModelInterface::class)->get_PDO()
+            "name" => "app",
+            'connection' => $PDO
         ]
     ]
 ];

@@ -14,14 +14,14 @@ use function str_replace;
  *
  * @author wassime
  */
-class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface , MODE_SELECT_Interface {
+class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE_SELECT_Interface {
 
     const SCHEMA_SELECT_MANUAL = "SCHEMA_SELECT_MANUAL";
     const SCHEMA_SELECT_AUTO = "SCHEMA_SELECT_AUTO";
     const CACHE_SELECT = "SCHEMA_SELECT_CACHE";
 
     private static $allSchema = [];
-    protected $schema;
+    protected $schema = null;
     private $is_null = true;
     private $table;
 
@@ -102,10 +102,11 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface , MOD
      * @throws TypeError
      */
     public function getschema(string $NameTable = ""): EntitysSchema {
-        if ($NameTable == "") {
+        if ($NameTable == "" && $this->schema != null) {
             if ($this->is_null()) {
                 throw new TypeError(" set table ==> call function setTable()");
             }
+
             return $this->schema;
         }
 
@@ -115,8 +116,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface , MOD
                 return $Schema;
             }
         }
-
-        return (new EntitysSchema()); // == return EntitysSchema vide
+        throw new TypeError(" not is schema de table  " . $NameTable);
     }
 
     /**
@@ -433,10 +433,10 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface , MOD
      * @return array
      */
     private static function getSCHEMA_SELECT_AUTO(): array {
-        
-         $config=self::getFileConfigDB(self::SCHEMA_SELECT_AUTO,"php");
-       
-         return $config;
+
+        $config = self::getFileConfigDB(self::SCHEMA_SELECT_AUTO, "php");
+
+        return $config;
     }
 
     /**

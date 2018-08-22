@@ -6,8 +6,11 @@ use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
  * select table auto avec trois mode
  */
 $select_native_table = [
+    //COLUMNS_default
     MODE_SELECT_Interface::_DEFAULT => " WHERE  `Key`!='MUL' and `Type` !='datetime' ",
+    //COLUMNS_master
     MODE_SELECT_Interface::_MASTER => " WHERE (`null`='no' and `Type` !='datetime' and `Type` !='varchar(201)' and  `Type` !='varchar(20)' and `Key`!='MUL')",
+    //COLUMNS_all
     MODE_SELECT_Interface::_ALL => " WHERE  `Key`!='MUL' "
 ];
 /**

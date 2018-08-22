@@ -17,9 +17,9 @@ use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Psr\Container\ContainerInterface;
 
-interface ModuleInterface
-{
-      public function getControllers() ;
+interface ModuleInterface {
+
+    public function getControllers();
 
     public function __construct(ContainerInterface $container);
 
@@ -28,11 +28,8 @@ interface ModuleInterface
     public function addRoute(RouterInterface $router, array $middlewares);
 
     public function getMenu(): array;
-    
-    public function CREATE_TABLE_autorisation_sql():string;
+
+    public function CREATE_TABLE_autorisation_sql(): string;
+
     public function autorisation(array $nameModules);
-    
-    
-    
-    
 }

@@ -17,6 +17,7 @@ namespace Kernel\File;
 class File {
 
     const JSON = "json";
+    const PHP = "php";
 
     private $path;
     private $type;
@@ -46,7 +47,7 @@ class File {
                 $file_contents = file_get_contents($path_file);
                 return $this->decode($file_contents);
             }
-        } elseif ($type == "php") {
+        } elseif ($type == self::PHP) {
             if (is_file($path_file)) {
 
                 return require $path_file;

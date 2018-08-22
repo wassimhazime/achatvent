@@ -31,13 +31,12 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
 
         try {
             $Statement = $this->getDataBase()->query($sql);
-
             $Statement->setFetchMode(PDO::FETCH_CLASS, EntitysSchema::class);
             return $Statement->fetchAll();
         } catch (PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-            echo $exc->getMessage();
-            echo '<br><hr>';
+            var_dump($exc->getMessage());
+
             die($sql);
         }
     }
@@ -55,7 +54,7 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
             return $Statement->fetchAll();
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-            echo $exc->getMessage();
+            var_dump($exc->getMessage());
             echo '<br><hr>';
             die($sql);
         }
@@ -80,7 +79,7 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
             return $results;
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-            echo $exc->getMessage();
+            var_dump($exc->getMessage());
             die($sqlprepare);
         }
     }
@@ -103,7 +102,7 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
             return $results;
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-            echo $exc->getMessage();
+            var_dump($exc->getMessage());
             die($sqlprepare);
         }
     }
@@ -122,7 +121,7 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
             return $Statement->fetchAll();
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-            echo $exc->getMessage();
+            var_dump($exc->getMessage());
             echo '<br><hr>';
             die($sql);
         }
@@ -147,7 +146,7 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
         } catch (PDOException $exc) {
             // $getDataBase()->rollBack();
             //  Notify::send_Notify($exc->getMessage() . "exec SQL ERROR ==> </br> $sql");
-            echo $exc->getMessage();
+            var_dump($exc->getMessage());
             echo 'errrrr <br><hr>';
             die($sql);
         }
@@ -169,7 +168,7 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
             return $this->getDataBase()->lastInsertId();
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-            //     echo $exc->getMessage();
+            //     var_dump($exc->getMessage());
             return -1;
         }
     }
