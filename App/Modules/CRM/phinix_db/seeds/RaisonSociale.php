@@ -2,7 +2,7 @@
 
 use Phinx\Seed\AbstractSeed;
 
-class Client extends AbstractSeed {
+class RaisonSociale extends AbstractSeed {
 
     /**
      * Run Method.
@@ -18,16 +18,24 @@ class Client extends AbstractSeed {
         for ($index = 0; $index < 30; $index++) {
             $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
             $data[] = [
-                "clients" => $faker->name(),
-                'cin' => $faker->uuid,
+                'raison$sociale' => $faker->name(),
+                'ICE' => $faker->uuid,
+                'I_F' => $faker->uuid,
+                'T_P' => $faker->uuid,
+                'R_C' => $faker->uuid,
+                'CNSS' => $faker->uuid,
                 "TEL" => $faker->phoneNumber,
+                "GSM" => $faker->phoneNumber,
+                "FAX" => $faker->phoneNumber,
+                'site_web' =>"www". $faker->name().".com",
+                "email" => $faker->email,
                 "adresse" => $faker->address,
-                "commentaires_remarque" => $faker->text(3000),
+               
                 "date_ajoute" => $date,
                 "date_modifier" => $date
             ];
         }
-        $this->table("clients")->insert($data)->save();
+        $this->table('raison$sociale')->insert($data)->save();
     }
 
 }

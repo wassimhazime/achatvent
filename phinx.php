@@ -2,7 +2,8 @@
 
 use Kernel\AWA_Interface\ModelInterface;
 
-require "index.php";
+require __DIR__ . "/bootstrap.php";
+
 $PDO = $container->get(ModelInterface::class)->getDatabase();
 
 $pathModules = $app->getPathModules();

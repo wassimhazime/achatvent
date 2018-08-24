@@ -3,7 +3,7 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class Commandes extends AbstractMigration {
+class FacturesVentes extends AbstractMigration {
 
     /**
      * Change Method.
@@ -31,34 +31,54 @@ class Commandes extends AbstractMigration {
      * with the Table class.
      */
     public function change() {
+
         /*
-          CREATE TABLE `commandes` (
+
+          CREATE TABLE `factures$ventes` (
           `id` int(10) NOT NULL,
-          `raison$sociale` int(11) NOT NULL,
-          `titre` varchar(200) NOT NULL,
+          `clients` int(11) NOT NULL,
+          `N` varchar(200) NOT NULL,
           `date` date NOT NULL,
-          `montant_estime_HT` double NOT NULL,
-          `adresse` text DEFAULT NULL,
-          `remarque` text DEFAULT NULL,
+          `titre` varchar(200) NOT NULL,
+          `montant_HT` double NOT NULL,
+          `montant_TVA` double NOT NULL,
+          `montant_TTC` double NOT NULL,
           `fichiers` varchar(250) DEFAULT NULL,
           `date_ajoute` datetime NOT NULL,
-          `date_modifier` datetime NOT NULL
+          `date_modifier` datetime NOT NULL,
+          `remarque` text DEFAULT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
          */
 
-        $this->table("commandes", HTML_Phinx::id_default())
+        $this->table('factures$ventes', HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
-                ->addColumn(HTML_Phinx::select('raison$sociale'))
+                ->addColumn(HTML_Phinx::select('clients'))
+                ->addColumn(HTML_Phinx::text_master('N'))
+                ->addColumn(HTML_Phinx::date())
                 ->addColumn(HTML_Phinx::text_master('titre'))
-                ->addColumn(HTML_Phinx::number('montant_estime_HT'))
-                ->addColumn(HTML_Phinx::textarea('adresse'))
+                ->addColumn(HTML_Phinx::number('montant_HT'))
+                ->addColumn(HTML_Phinx::number('montant_TVA'))
+                ->addColumn(HTML_Phinx::number('montant_TTC'))
                 ->addColumn(HTML_Phinx::textarea('remarque'))
                 ->addColumn(HTML_Phinx::file('fichiers'))
                 ->addColumn(HTML_Phinx::datetime('date_ajoute'))
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
-                ->addForeignKey('raison$sociale', 'raison$sociale', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
+                ->addForeignKey('clients', 'clients', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
+
+
+        /*
+          --
+          -- Structure de la table `r_factures$ventes_devis`
+          --
+
+          CREATE TABLE `r_factures$ventes_devis` (
+          `id_factures$ventes` int(11) NOT NULL,
+          `id_devis` int(11) NOT NULL,
+          `remarque` text DEFAULT NULL
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+         */
+        HTML_Phinx::relation('factures$ventes', 'devis', $this->getAdapter());
     }
 
 }

@@ -3,7 +3,7 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class FacturesAchats extends AbstractMigration {
+class Achats extends AbstractMigration {
 
     /**
      * Change Method.
@@ -31,49 +31,81 @@ class FacturesAchats extends AbstractMigration {
      * with the Table class.
      */
     public function change() {
-        /**
-          CREATE TABLE `factures$achats` (
+
+        /*
+          --
+          -- Structure de la table `achats`
+          --
+
+          CREATE TABLE `achats` (
           `id` int(10) NOT NULL,
           `raison$sociale` int(11) NOT NULL,
-          `N` varchar(200) NOT NULL,
-          `date` date NOT NULL,
-          `montant_HT` double NOT NULL,
-          `montant_TVA` double NOT NULL,
-          `montant_TTC` double NOT NULL,
+          `date_negociation` date NOT NULL,
+          `montant_factures_TTC` double NOT NULL,
+          `montant_avoirs_TTC` double NOT NULL DEFAULT 0,
+          `Reglement_TTC` double NOT NULL DEFAULT 0,
           `remarque` text DEFAULT NULL,
-          `fichiers` varchar(250) DEFAULT NULL,
           `date_ajoute` datetime NOT NULL,
           `date_modifier` datetime NOT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
          */
-        $this->table('factures$achats', HTML_Phinx::id_default())
+        $this->table('achats', HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::select('raison$sociale'))
-                ->addColumn(HTML_Phinx::text_master('N'))
-                ->addColumn(HTML_Phinx::date('date'))
-                ->addColumn(HTML_Phinx::number('montant_HT'))
-                ->addColumn(HTML_Phinx::number('montant_TVA'))
-                ->addColumn(HTML_Phinx::number('montant_TTC'))
+                ->addColumn(HTML_Phinx::date('date_negociation'))
+                
+                ->addColumn(HTML_Phinx::number('montant_factures_TTC'))
+                ->addColumn(HTML_Phinx::number('montant_avoirs_TTC'))
+                ->addColumn(HTML_Phinx::number('Reglement_TTC'))
                 ->addColumn(HTML_Phinx::textarea('remarque'))
-                ->addColumn(HTML_Phinx::textarea('adresse'))
-                ->addColumn(HTML_Phinx::file('fichiers'))
                 ->addColumn(HTML_Phinx::datetime('date_ajoute'))
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
                 ->addForeignKey('raison$sociale', 'raison$sociale', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
 
-        /**
+        /*
           --
-          -- Structure de la table `r_factures$achats_bons$achats`
+          -- Structure de la table `r_achats_achat`
           --
 
-          CREATE TABLE `r_factures$achats_bons$achats` (
-          `id_factures$achats` int(11) NOT NULL,
-          `id_bons$achats` int(11) NOT NULL,
+          CREATE TABLE `r_achats_achat` (
+          `id_achats` int(11) NOT NULL,
+          `id_achat` int(11) NOT NULL,
+          `remarque` text DEFAULT NULL
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+         */
+
+        HTML_Phinx::relation('achats', 'achat', $this->getAdapter());
+
+
+        /*
+          --
+          -- Structure de la table `r_achats_avoirs$achats`
+          --
+
+          CREATE TABLE `r_achats_avoirs$achats` (
+          `id_achats` int(11) NOT NULL,
+          `id_avoirs$achats` int(11) NOT NULL,
           `remarque` text DEFAULT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
          */
-        HTML_Phinx::relation('factures$achats', 'bons$achats', $this->getAdapter());
+        HTML_Phinx::relation('achats', 'avoirs$achats', $this->getAdapter());
+
+
+
+        /*
+          --
+          -- Structure de la table `r_achats_factures$achats`
+          --
+
+          CREATE TABLE `r_achats_factures$achats` (
+          `id_achats` int(11) NOT NULL,
+          `id_factures$achats` int(11) NOT NULL,
+          `remarque` text DEFAULT NULL
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+         */
+        HTML_Phinx::relation('achats', 'factures$achats', $this->getAdapter());
     }
 
 }
