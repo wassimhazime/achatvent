@@ -4,16 +4,14 @@ namespace Kernel\html\element\Form;
 
 use function implode;
 
-class Form_child_HTML extends FormAbstract
-{
+class Form_child_HTML extends FormAbstract {
 
-    protected $input = [];
+  
 
-    public function builder()
-    {
+    public function builder() {
         $label = [];
         $input = [];
-        foreach ($this->input as $inputGenerete) {
+        foreach ($this->inputs as $inputGenerete) {
             $row = $this->InputTage($inputGenerete, "form-table", "[]");
             $input[] = $row["input"];
             $label[] = $row["label"];
@@ -22,8 +20,7 @@ class Form_child_HTML extends FormAbstract
         return $this->form_table($label, $input);
     }
 
-    protected function form_table($label, $input)
-    {
+    private function form_table($label, $input) {
         $Thead = [];
         $Tbody = [];
 
@@ -42,9 +39,4 @@ class Form_child_HTML extends FormAbstract
         return implode(" ", $Thead) . implode(" ", $Tbody);
     }
 
-    protected function setInput($META_data, $Charge_data, $Default_Data = [])
-    {
-        /// charge input child
-        $this->charge_input($META_data, $Charge_data);
-    }
 }

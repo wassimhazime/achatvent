@@ -39,6 +39,7 @@ class Modals
         }
 
         $this->id_label = '"myModalLabel' . $this->name . '"';
+        
         $this->id = 'id_Modal_' . $this->name;
     }
 
@@ -126,6 +127,7 @@ class Modals
                             ->setData($this->title)
                             ->builder();
         } else {
+           
             return HTML::TAG('button')
                             ->setType("button")
                             ->setClass("btn btn-primary btn-lg")

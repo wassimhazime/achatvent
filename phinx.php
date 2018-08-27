@@ -3,10 +3,12 @@
 use Kernel\AWA_Interface\ModelInterface;
 
 require __DIR__ . "/bootstrap.php";
-
-$PDO = $container->get(ModelInterface::class)->getDatabase();
-
+$container = $app->getContainer();
 $pathModules = $app->getPathModules();
+
+
+
+
 
 $migrations = array_map(function(string $pathModule): string {
     return $pathModule . "/phinix_db/migrations";
@@ -16,6 +18,7 @@ $seeds = array_map(function(string $pathModule): string {
     return $pathModule . "/phinix_db/seeds";
 }, $pathModules);
 
+$PDO = $container->get(ModelInterface::class)->getDatabase();
 return [
     "paths" => [
         "migrations" => $migrations,

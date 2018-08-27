@@ -1,5 +1,13 @@
 <?php
 
+use App\App;
+use App\Modules\Achats\AchatsModule;
+use App\Modules\Comptes\ComptesModule;
+use App\Modules\CRM\CRMModule;
+use App\Modules\Statistique\StatistiqueModule;
+use App\Modules\Transactions\TransactionsModule;
+use App\Modules\Ventes\VentesModule;
+
 //phpinfo();die();
 date_default_timezone_set("Africa/Casablanca");
 define('D_S', DIRECTORY_SEPARATOR);
@@ -7,19 +15,9 @@ define('D_S', DIRECTORY_SEPARATOR);
 define('ROOT', __DIR__ . D_S);
 require ROOT . "vendor" . D_S . "autoload.php";
 
-use App\Modules\Comptes\ComptesModule;
-use App\Modules\Statistique\StatistiqueModule;
-use App\Modules\CRM\CRMModule;
-use App\Modules\Achats\AchatsModule;
-use App\Modules\Ventes\VentesModule;
-use App\Modules\Transactions\TransactionsModule;
-use Kernel\Container\Factory_Container;
-use Middlewares\BasicAuthentication;
-use App\App;
 
 $pathconfig = ROOT . "Config" . D_S . "Config_Container.php";
-$container = Factory_Container::getContainer($pathconfig);
-$app = new App($container);
+$app = new App($pathconfig);
 
 $app->addModule(StatistiqueModule::class);
 $app->addModule(CRMModule::class);

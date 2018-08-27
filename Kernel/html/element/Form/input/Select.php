@@ -27,7 +27,7 @@ class Select extends Abstract_Input {
         $Default = $this->Default;
         $optionTag = [];
         $data_load = [];
-        foreach ($this->input['Data_load'] as $row) {
+        foreach ($this->input->getData_load() as $row) {
             $data_load[$row["id"]] = Tools::entitys_TO_array($row);
         }
 
@@ -45,13 +45,13 @@ class Select extends Abstract_Input {
 
             $rowTag = HTML::TAG('option')
                     ->setValue($key)
-                    ->setData($data[$this->input['Field']])
+                    ->setData($data[$this->input->getName()])
                     ->setAtt(' data-infocontent="' . $infocontent . ' "')
                     ->setAtt(' data-tokens="' . $tokens . '"')
 
             ;
 
-            if ($Default == $data[$this->input['Field']]) {
+            if ($Default == $data[$this->input->getName()]) {
                 $rowTag->setAtt("selected");
             }
             $optionTag [] = $rowTag->builder();

@@ -1,7 +1,7 @@
 <?php
 
-require __DIR__ .'/vendor/robmorgan/phinx/app/web.php';
-die();
+//require __DIR__ .'/vendor/robmorgan/phinx/app/web.php';
+//die();
 
 
 
@@ -16,11 +16,14 @@ use Middlewares\HtmlMinifier;
 use Middlewares\JsMinifier;
 use Middlewares\ResponseTime;
 use Middlewares\Whoops;
+use Middlewares\BasicAuthentication;
 use Psr\Http\Message\ServerRequestInterface;
 use function Http\Response\send;
 
 if (php_sapi_name() != "cli") {
     require __DIR__ . "/bootstrap.php";
+    $container = $app->getContainer();
+    
     $app->addEvent("exeption", "code");
     $app->addEvent("add", "code");
 
@@ -48,7 +51,9 @@ if (php_sapi_name() != "cli") {
     $app->addMiddleware($container->get(RouterInterface::class));
 
 
-
+    /**
+     * run app
+     */
     $Request = $container->get(ServerRequestInterface::class);
     $Response = $app->run($Request);
     send($Response);

@@ -22,7 +22,7 @@ class Client extends AbstractSeed {
                 'cin' => $faker->uuid,
                 "TEL" => $faker->phoneNumber,
                 "adresse" => $faker->address,
-                "commentaires_remarque" => $faker->text(3000),
+                "commentaires_remarque" => $faker->text(30),
                 "date_ajoute" => $date,
                 "date_modifier" => $date
             ];

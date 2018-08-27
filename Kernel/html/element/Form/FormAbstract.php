@@ -8,86 +8,46 @@
 
 namespace Kernel\html\element\Form;
 
-use Kernel\Conevert\SQL_HTML;
 use Kernel\html\element\Form\input\Input;
 use Kernel\html\element\Form\input\MultiSelect;
+use Kernel\html\element\Form\input\Schema_Input_HTML;
 use Kernel\html\element\Form\input\Select;
 use Kernel\html\element\Form\input\Textarea;
-use Kernel\INTENT\Intent_Form;
+use TypeError;
+use function is_a;
 
 /**
  * Description of FormAbstract
  *
  * @author wassime
  */
-abstract class FormAbstract
-{
+abstract class FormAbstract {
 
-    ///Conevert_TypeClomunSQL_to_TypeInputHTML
-    protected $Conevert;
-    protected $input = [];
+    protected $inputs = [];
 
-    function __construct( Intent_Form $Intent_Form)
-    {
+    /**
+     * 
+     * @param array Schema_Input_HTML $inputs
+     */
+    function __construct(array $inputs) {
 
-        $META_data = $Intent_Form->getCOLUMNS_META();
-        $Charge_data = $Intent_Form->getCharge_data();
-        $Default_Data = $Intent_Form->getDefault_Data();
-
-      
-        //// change input
-        $this->setInput($META_data, $Charge_data, $Default_Data);
-    }
-
-    protected function conevert(array $COLUMN_META, $sefix = "id_html_"): array
-    {
-        $type = $COLUMN_META['Type'];
-        $id = $sefix . $COLUMN_META['Field'];
-        $COLUMN_META['Type'] = SQL_HTML::getTypeHTML($type);
-          $COLUMN_META['id_html'] = $id;
-//        if (isset($this->Conevert[$type])) {
-//           
-//          // $COLUMN_META['Type'] = $this->Conevert[$type];
-//          $COLUMN_META['id_html'] = $id;
-//            
-//        } else {
-//            $COLUMN_META['Type'] = "text";
-//            $COLUMN_META['id_html'] = " ";
-//        }
-        return $COLUMN_META;
-    }
-
-    protected function charge_input($META_data, $Charge_data, $Default_Data = [])
-    {
-        foreach ($META_data as $COLUMN_META) {
-            $name = $COLUMN_META["Field"];
-
-            // conevetr metadata sql to html (<input type="text" .....)
-            $this->input[$name] = ($this->conevert($COLUMN_META));
-
-
-            // set data on select input <option> ......
-            if ($COLUMN_META["Key"] == "MUL") {
-                $this->input[$name]["Data_load"] = $Charge_data["select"][$name];
-            }
-
-            /// set data si is on default
-            if (isset($Default_Data[$name])) {
-                $this->input[$name] ['Default'] = $Default_Data[$name];
-            }
+        $flag = $this->is_Array_Schema_Input($inputs);
+        if (!$flag) {
+            throw new TypeError("Schema_Input_HTML error => is not inputs type Schema_Input_HTML ");
         }
+        $this->inputs = $inputs;
     }
 
-    protected function InputTage(array $input, string $styleGroup = "form-horizonta", string $child = "")
-    {
-        switch ($input['Type']) {
+    protected function InputTage(Schema_Input_HTML $input, string $styleGroup = "form-horizonta", string $child = "") {
+       
+        switch ($input->getType()) {
             case "textarea":
                 $inputHTML = (new Textarea($input, $styleGroup, $child))->builder();
                 break;
             case "select":
                 $inputHTML = (new Select($input, $styleGroup, $child))->builder();
                 break;
-            case "multiSelect":
+            case "mult_select":
                 $inputHTML = (new MultiSelect($input, $styleGroup, $child))->builder();
                 break;
 
@@ -100,5 +60,18 @@ abstract class FormAbstract
 
     abstract function builder();
 
-    abstract protected function setInput($META_data, $Charge_data, $Default_Data = []);
+    /**
+     * cheket type input 
+     * @param array $inputs
+     * @return boolean
+     */
+    private function is_Array_Schema_Input(array $inputs) {
+        foreach ($inputs as $input) {
+            if (!is_a($input, Schema_Input_HTML::class)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

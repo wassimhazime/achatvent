@@ -33,14 +33,14 @@ class Input extends Abstract_Input {
         ;
 
 
-        if (strtolower($this->input['Type']) == "file") {
+        if (strtolower($this->input->getType()) == "file") {
             if ($this->child != "[]") {
                 $tag->setAtt('multiple ');
                 $tag->setName($name . "[]");
             } else {
                 $tag->setName($name . "_");
             }
-        } elseif (strtolower($this->input['Type']) == "checkbox") {
+        } elseif (strtolower($this->input->getType()) == "checkbox") {
 
             $tag->setName($name . $this->child)
                  ->setValue($name . $this->child);

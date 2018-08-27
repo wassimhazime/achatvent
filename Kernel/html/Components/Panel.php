@@ -21,7 +21,7 @@ class Panel
     private $title;
     private $body;
 
-    function __construct($title, $body)
+    function __construct($title,  $body)
     {
         $this->title = $title;
         $this->body = $body;

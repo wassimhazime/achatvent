@@ -21,7 +21,8 @@ class MultiSelect extends Abstract_Input {
 
     //put your code here
 
-    private function value_att($data) {
+    private function value_att(array $data) {
+        
         $data_value_att = [];
         foreach ($data as $row) {
             $ligne = "";
@@ -63,12 +64,13 @@ class MultiSelect extends Abstract_Input {
         $id_html = $this->id_html;
 
         $Default = $this->value_att($this->Default);
-        $data_load = $this->value_att($this->input['Data_load']);
+        $data_load = $this->value_att($this->input->getData_load());
 
 //////////////////////////////////////////////////////
         $optionTag = $this->chargeOption($data_load, $Default);
         $Multiselecttag = HTML::TAG("select")
                 ->setAtt(' multiple ')
+                
                 ->setAtt('  data-set_null="' . $this->null . '" ')
                 ->setClass("  form-control ")
                 ->setId($id_html)

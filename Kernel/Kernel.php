@@ -2,14 +2,20 @@
 
 namespace Kernel;
 
-use Kernel\AWA_Interface\ModuleInterface;
+use Kernel\Container\Factory_Container;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use TypeError;
+use const DS;
+use const ROOT;
 use function class_exists;
+use function dirname;
 use function is_a;
 use function is_array;
+use function is_file;
+use function str_replace;
 
 abstract class Kernel {
 
@@ -18,13 +24,20 @@ abstract class Kernel {
     protected $modules = [];
     protected $pathModules = [];
 
-    function __construct(ContainerInterface $container) {
-
+    function __construct(string $pathconfig) {
+        if(!is_file($pathconfig)){
+            throw new TypeError(" erreur path file config ==> $pathconfig  ");
+   
+        }
+        $container = Factory_Container::getContainer($pathconfig);
         $this->container = $container;
         $this->despatcher = $this->container->get(RequestHandlerInterface::class);
     }
+    function getContainer(): ContainerInterface {
+        return $this->container;
+    }
 
-    abstract function run_modules();
+        abstract function run_modules();
 
     public function addModule(string $module, array $middlewares = []) {
         if (class_exists($module)) {
