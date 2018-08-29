@@ -34,19 +34,19 @@ class Form extends Twig_Extension {
 
         $inputs = $Intent_Form->getInputsSchema();
         $formhtml = new FormHTML($inputs);
-        return $formhtml->builder();
+        return $formhtml->builder_form();
     }
 
     public function form_child(Intent_Form $Intent_Form) {
         $inputs = $Intent_Form->getInputsSchema();
         $formhtml = new Form_child_HTML($inputs);
-        return $formhtml->builder();
+        return $formhtml->builder_form();
     }
 
     public function Form_view(Intent_Form $Intent_Form) {
         $inputs = $Intent_Form->getInputsSchema();
         $formhtml = new Form_view($inputs);
-        return $formhtml->builder();
+        return $formhtml->builder_form();
     }
 
 }

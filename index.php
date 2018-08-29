@@ -1,4 +1,5 @@
 <?php
+     
 
 //require __DIR__ .'/vendor/robmorgan/phinx/app/web.php';
 //die();
@@ -28,7 +29,10 @@ if (php_sapi_name() != "cli") {
     $app->addEvent("add", "code");
 
     $app->addMiddleware(new Whoops());
-    $app->addMiddleware(new Middlewares\PhpSession());
+    $session=new Middlewares\PhpSession();
+   // $session->id("wassimawja");
+    // session start() hhhhhh
+    $app->addMiddleware($session);
     $app->addMiddleware([
         new CssMinifier(),
         new JsMinifier(),
@@ -56,7 +60,9 @@ if (php_sapi_name() != "cli") {
      */
     $Request = $container->get(ServerRequestInterface::class);
     $Response = $app->run($Request);
+    
     send($Response);
+   
 }
 
 

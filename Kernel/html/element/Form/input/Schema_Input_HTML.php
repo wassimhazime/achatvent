@@ -65,7 +65,9 @@ class Schema_Input_HTML {
      * @return string
      */
     function getId_html(): string {
-        return $this->sefix . $this->getName();
+        // java scripe ==> not $ in id html
+        $name = (str_replace(["$"], "_", $this->getName()));
+        return $this->sefix . $name;
     }
 
     /**
@@ -82,7 +84,7 @@ class Schema_Input_HTML {
      */
     function getType(): string {
         // html Renvoie une chaîne en minuscules
-        return strtolower ($this->type);
+        return strtolower($this->type);
     }
 
     /**

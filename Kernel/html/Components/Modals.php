@@ -29,9 +29,10 @@ class Modals
 
     function __construct($title, $body, $footer = "", $badge = "")
     {
+        
         $name = str_replace(" ", "", $title);
         $this->name = $name;
-        $this->title = $title;
+        $this->title = str_replace(["_", "$"," "], " ", $title);
         $this->body = $body;
         $this->footer = $footer;
         if ($badge != "") {

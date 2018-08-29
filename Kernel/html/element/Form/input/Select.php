@@ -20,68 +20,120 @@ use Kernel\Tools\Tools;
 
 class Select extends Abstract_Input {
 
-    //put your code here
-    public function builder() {
+    /**
+     * 
+     * @return string
+     */
+    public function builder_Tag(): string {
         $name = $this->name;
         $id_html = $this->id_html;
-        $Default = $this->Default;
-        $optionTag = [];
         $data_load = [];
-        foreach ($this->input->getData_load() as $row) {
+        foreach ($this->Data_load as $row) {
             $data_load[$row["id"]] = Tools::entitys_TO_array($row);
         }
 
+
+
 ///////////////////////////////////////////////////////////////////
 
-        foreach ($data_load as $key => $data) {
-            $infocontent = "";
-            $tokens = "";
-            foreach ($data as $column => $value) {
-                $infocontent .= $column . '$$$' . $value . ' £££ ';
-                $tokens .= $value . ' ';
-            }
+        $optionTag = $this->charge_options($data_load);
 
+        $tag = HTML::TAG("select")
+                ->setData($optionTag)
+                ->setId($id_html)
+                ->setName($name . $this->child);
+
+        if (count($optionTag) === 1) {
+            $tag = $this->select_one($tag);
+        } else {
+            $tag = $this->select_all($tag);
+        }
+        return $tag->builder();
+    }
+
+    /**
+     * charg option select
+     * @param array $data_load
+     * @return array
+     */
+    private function charge_options(array $data_load): array {
+        /// name base input (remove _child if is) 
+        $name = $this->input->getName();
+
+
+
+        $optionTag = [];
+        foreach ($data_load as $key => $data) {
 
 
             $rowTag = HTML::TAG('option')
                     ->setValue($key)
-                    ->setData($data[$this->input->getName()])
-                    ->setAtt(' data-infocontent="' . $infocontent . ' "')
-                    ->setAtt(' data-tokens="' . $tokens . '"')
+                    ->setData($data[$name]);
 
-            ;
-
-            if ($Default == $data[$this->input->getName()]) {
+            // default value input
+            $Default = $this->Default;
+            if ($Default == $data[$name]) {
                 $rowTag->setAtt("selected");
             }
+
+            $rowTag = $this->att_javaScript($rowTag, $data);
+
+
+
             $optionTag [] = $rowTag->builder();
         }
+        return $optionTag;
+    }
 
-        if (count($data_load) === 1) {
-            $tag = HTML::TAG("select")
-                    ->setClass(" form-control form-string input-sm")
-                    ->setData($optionTag)
-                    ->setId($id_html)
-                    ->setName($name . $this->child)
-                    ->setAtt(" readonly  ");
+    /**
+     * pour form select show info
+     * @param HTML $rowTag
+     * @param array $data
+     * @return HTML
+     */
+    private function att_javaScript(HTML $rowTag, array $data): HTML {
 
-            if ($this->child === "[]") {
-                $tag = $tag->setClass(" hidden ");
-                $this->lable = "";
-            }
-            $tag = $tag->builder();
-            return $this->div($tag);
-        } else {
-            $tag = HTML::TAG("select")
-                    ->setClass(" selectpicker form-control input-sm")
-                    ->setId($id_html)
-                    ->setAtt(' data-live-search="true"  data-size="5" data-container="body" ')
-                    ->setAtt('  data-set_null="' . $this->null . '" ')
-                    ->setData($optionTag)
-                    ->setName($name . $this->child)
-                    ->builder();
-            return $this->div($tag, "col-sm-6");
+        $infocontent = "";
+        $tokens = "";
+
+        foreach ($data as $column => $value) {
+            $infocontent .= $column . '$$$' . $value . ' £££ ';
+            $tokens .= $value . ' ';
         }
+
+        $rowTag->setAtt(' data-infocontent="' . $infocontent . ' "')
+                ->setAtt(' data-tokens="' . $tokens . '"');
+
+        return $rowTag;
+    }
+
+    /**
+     * si input on update or show
+     * @param HTML $tag
+     * @return HTML
+     */
+    private function select_one(HTML $tag): HTML {
+        $tag->setClass(" form-control form-string input-sm")
+                ->setAtt(" readonly  ");
+
+        if ($this->child === "[]") {
+            $tag = $tag->setClass(" hidden ");
+            $this->is_hidden = true;
+        }
+        return $tag;
+    }
+
+    /**
+     * charge data loade input
+     * @param HTML $tag
+     * @return HTML
+     */
+    private function select_all(HTML $tag): HTML {
+        $tag->setClass(" selectpicker form-control input-sm")
+                ->setAtt(' data-live-search="true"  data-size="5" data-container="body" ')
+                ->setAtt('  data-set_null="' . $this->null . '" ');
+
+        return $tag;
     }
 
 }

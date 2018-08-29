@@ -18,43 +18,80 @@ use Kernel\html\HTML;
  */
 class Input extends Abstract_Input {
 
-    //put your code here
-    public function builder() {
+    /**
+     * 
+     * @return string
+     */
+    public function builder_Tag(): string {
         $name = $this->name;
+        $placeholder = str_replace(["_", "$"], " ", $name);
         $id_html = $this->id_html;
-        $Default = $this->Default;
         $type = $this->type;
+
+
         $tag = HTML::TAG('input')
                 ->setId($id_html)
                 ->setType($type)
-                ->setPlaceholder(str_replace("_", " ", str_replace("$", " ", $name)))
-                ->setClass("  form-control input-sm ")
-
-        ;
+                ->setPlaceholder($placeholder)
+                ->setClass("  form-control input-sm ");
 
 
-        if (strtolower($this->input->getType()) == "file") {
-            if ($this->child != "[]") {
-                $tag->setAtt('multiple ');
-                $tag->setName($name . "[]");
-            } else {
-                $tag->setName($name . "_");
-            }
-        } elseif (strtolower($this->input->getType()) == "checkbox") {
-
-            $tag->setName($name . $this->child)
-                 ->setValue($name . $this->child);
-            if ($Default == "1" || $Default == 1) {
-                $tag->setAtt("checked");
-            }
+        if ($type == "file") {
+            $tag = $this->input_file($tag);
+        } elseif ($type == "checkbox") {
+            $tag = $this->input_checkbox($tag);
         } else {
-            $tag->setName($name . $this->child)
-                    ->setAtt('data-set_null="' . $this->null . '"  step="any" ')
-                    ->setValue($Default);
+            $tag = $this->input_normal($tag);
         }
 
+        return $tag->builder();
+    }
 
-        return $this->div($tag->builder());
+    /**
+     * is type file
+     * @param HTML $tag
+     * @return HTML
+     */
+    private function input_file(HTML $tag): HTML {
+        $name = $this->name;
+        if ($this->child != "[]") {
+            $tag->setAtt('multiple ');
+            $tag->setName($name . "[]");
+        } else {
+            $tag->setName($name . "_");
+        }
+
+        return $tag;
+    }
+
+    /**
+     * is type checkbox
+     * @param HTML $tag
+     * @return HTML
+     */
+    private function input_checkbox(HTML $tag): HTML {
+        $name = $this->name;
+        $Default = $this->Default;
+        $tag->setName($name . $this->child)
+                ->setValue($name . $this->child);
+        if ($Default == "1" || $Default == 1) {
+            $tag->setAtt("checked");
+        }
+        return $tag;
+    }
+
+    /**
+     * default input
+     * @param HTML $tag
+     * @return HTML
+     */
+    private function input_normal(HTML $tag): HTML {
+        $name = $this->name;
+        $Default = $this->Default;
+        $tag->setName($name . $this->child)
+                ->setAtt('data-set_null="' . $this->null . '"  step="any" ')
+                ->setValue($Default);
+        return $tag;
     }
 
 }

@@ -1,5 +1,6 @@
 <?php
 
+
 use App\App;
 use App\Modules\Achats\AchatsModule;
 use App\Modules\Comptes\ComptesModule;
@@ -14,7 +15,7 @@ define('D_S', DIRECTORY_SEPARATOR);
 //define('ROOT', dirname(__DIR__) . D_S);
 define('ROOT', __DIR__ . D_S);
 require ROOT . "vendor" . D_S . "autoload.php";
-
+//setcookie("jjj", "bb");
 
 $pathconfig = ROOT . "Config" . D_S . "Config_Container.php";
 $app = new App($pathconfig);

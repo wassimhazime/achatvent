@@ -16,27 +16,29 @@ use Kernel\html\HTML;
  *
  * @author wassime
  */
-class Textarea extends Abstract_Input
-{
-
-    public function builder()
-    {
+class Textarea extends Abstract_Input {
+/**
+ * 
+ * @return string
+ */
+    public function builder_Tag(): string {
 
         $name = $this->name;
         $id_html = $this->id_html;
         $Default = $this->Default;
-        
+
         $tag = $inputHTML = HTML::TAG("textarea")
                 ->setClass(" form-control input-sm")
-                ->setAtt('  data-set_null="'.$this->null.'"  autocomplete="text"')
+                ->setAtt('  data-set_null="' . $this->null . '"  autocomplete="text"')
                 ->setId($id_html)
-                ->setName($name.$this->child)
-                ->setPlaceholder(str_replace("_", " ", $name))
-               ->setValue($Default)
+                ->setName($name . $this->child)
+                ->setPlaceholder(str_replace(["_","$"], " ", $name))
+                ->setValue($Default)
                 ->setData($Default)
                 ->setTag("textarea")
                 ->builder();
+        return $tag;
         
-        return $this->div($tag);
     }
+
 }
