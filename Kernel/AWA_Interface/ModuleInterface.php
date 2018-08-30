@@ -23,13 +23,28 @@ interface ModuleInterface {
 
     public function __construct(ContainerInterface $container);
 
+    /**
+     * add path view
+     * @param RendererInterface $renderer
+     */
     public function addPathRenderer(RendererInterface $renderer);
 
+    /**
+     * add path url
+     * set controller
+     * set middlewares to controller
+     * @param RouterInterface $router
+     * @param array $middlewares
+     */
     public function addRoute(RouterInterface $router, array $middlewares);
 
+    /**
+     * add item to menu
+     */
     public function getMenu(): array;
 
-    public function CREATE_TABLE_autorisation_sql(): string;
+    
+   // public function CREATE_TABLE_autorisation_sql(): string;
 
     public function autorisation(array $nameModules);
 }

@@ -28,9 +28,9 @@ class Connection implements ConnectionInterface {
     const dbname = "dbname";
 
     private static $fileConfigDB;
-    
     private static $ConfigDB;
     private static $PDO = null;
+    private static $DBname = "";
 
     /**
      * singlton
@@ -40,12 +40,12 @@ class Connection implements ConnectionInterface {
     public static function getPDO(string $PathConfigJson): PDO {
         if (self::$PDO === null) {
 
-        
+
             $file = new File($PathConfigJson, File::JSON, []);
 
             self::setFileConfigDB($file);
 
-            $config = self::getFileConfigDB(self::File_Connect_DataBase,File::PHP);
+            $config = self::getFileConfigDB(self::File_Connect_DataBase, File::PHP);
             self::setConfigDB($config);
 
             $DB = self::getConfigDB('DB');
@@ -53,11 +53,10 @@ class Connection implements ConnectionInterface {
             $dbuser = self::getConfigDB('dbuser');
             $dbpass = self::getConfigDB('dbpass');
             $dbname = self::getConfigDB('dbname');
+            self::$DBname = $dbname;
             try {
 
                 self::$PDO = new PDO("$DB:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-            
-                 
             } catch (Exception $e) {
 
                 die('Erreur data base: ' . $e->getMessage());
@@ -96,8 +95,11 @@ class Connection implements ConnectionInterface {
 
         return self::$PDO;
     }
+    public function getDBnames(): string {
+     return self::$DBname;   
+    }
 
-    /**
+        /**
      * 
      * @param string $key
      * @param string $type

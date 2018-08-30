@@ -38,7 +38,7 @@ interface SQL_HTMLInterface {
                 "file" =>        ["typeHtml"=>"file",       "typePhinix" => "string",     "options" => ['limit' => 250, 'null' => true,'default' => '']],
                 "textarea" =>    ["typeHtml"=>"textarea",   "typePhinix" => "text",       "options" => ['null' => true]],
                 "date" =>        ["typeHtml"=>"date",       "typePhinix" => "date",       "options" => []],
-                "checkBox" =>    ["typeHtml"=>"checkBox",   "typePhinix" => "integer",    "options" => ['limit' => 4]],
+                "checkBox" =>    ["typeHtml"=>"checkBox",   "typePhinix" => "integer",    "options" => ['limit' => 4, 'null' => true,'default' => 0]],
                 "number" =>      ["typeHtml"=>"number",     "typePhinix" => "integer",    "options" => ['limit' => 12]],
                 "double" =>      ["typeHtml"=>"number",     "typePhinix" => "double",     "options" => []], /// alias integer
                 "select" =>      ["typeHtml"=>"select",     "typePhinix" => "integer",    "options" => ['limit' => 11]],

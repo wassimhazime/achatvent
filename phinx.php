@@ -19,6 +19,7 @@ $seeds = array_map(function(string $pathModule): string {
 }, $pathModules);
 
 $PDO = $container->get(ModelInterface::class)->getDatabase();
+$DBname = $container->get(ModelInterface::class)->getDBnames();
 return [
     "paths" => [
         "migrations" => $migrations,
@@ -28,7 +29,7 @@ return [
     [
         'default_database' => 'development',
         'development' => [
-            "name" => "app",
+            "name" => $DBname,
             'connection' => $PDO
         ]
     ]

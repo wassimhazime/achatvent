@@ -10,7 +10,7 @@ $TEST = ["TEST" => [
         "dbhost" => "localhost",
         "dbuser" => "root",
         "dbpass" => "root",
-        "dbname" => "app"
+        "dbname" => "vtest"
         ]];
 $PROD = ["PROD" => [
         "cache" => true,

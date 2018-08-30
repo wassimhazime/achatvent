@@ -220,6 +220,7 @@ class AbstractModel extends Model {
         if (!empty($data)) {
             if ($id_perent === 0) {
                 if (!isset($data['id']) || $data['id'] == "") {
+                    
                     $id_parent = $this->insert_table_Relation($data);
                 } else {
                     $id_parent = $this->update($data);

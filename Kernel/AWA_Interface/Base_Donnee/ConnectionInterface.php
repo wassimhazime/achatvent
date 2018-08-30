@@ -38,6 +38,11 @@ public function __construct($PathConfigJson, $table = null);
      * @return PDO
      */
     public function getDatabase(): PDO;
+      /**
+     * singlton
+     * @return string
+     */
+    public function getDBnames(): string;
 
     /**
      * 
