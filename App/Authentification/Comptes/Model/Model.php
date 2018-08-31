@@ -12,7 +12,7 @@
  * @author wassime
  */
 
-namespace App\Modules\Comptes\Model;
+namespace App\Authentification\Comptes\Model;
 
 use App\AbstractModules\Model\AbstractModel;
 

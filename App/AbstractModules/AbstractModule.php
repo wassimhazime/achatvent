@@ -30,6 +30,7 @@ abstract class AbstractModule implements ModuleInterface {
     private $router;
     private $namesRoute;
     protected $Controllers;
+    protected $middlewares=[];
 
     const NameModule = "";
     const IconModule = "";
@@ -81,5 +82,11 @@ abstract class AbstractModule implements ModuleInterface {
         return $menu;
         // // "group"=> [[lable,url],....]
     }
+    
+    public function addMiddlewares($middlewares) {
+        $this->middlewares=$middlewares; 
+    }
+
+
 
 }

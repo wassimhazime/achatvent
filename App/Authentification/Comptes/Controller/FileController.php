@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\Comptes\Controller;
+namespace App\Authentification\Comptes\Controller;
 
 use App\AbstractModules\Controller\AbstractFileController;
 use Psr\Http\Message\ResponseInterface;

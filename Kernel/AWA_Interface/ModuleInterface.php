@@ -34,15 +34,20 @@ interface ModuleInterface {
      * set controller
      * set middlewares to controller
      * @param RouterInterface $router
-     * @param array $middlewares
      */
-    public function addRoute(RouterInterface $router, array $middlewares);
+    public function addRoute(RouterInterface $router);
 
     /**
      * add item to menu
      */
     public function getMenu(): array;
 
+    /**
+     * 
+     * @param array $middlewares
+     */
+    public function addMiddlewares( $middlewares);
     
-   
+    
+    
 }

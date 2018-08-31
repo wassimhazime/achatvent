@@ -27,13 +27,13 @@ class CRMModule extends AbstractModule {
         $pathModule = __DIR__ . D_S . "views" . D_S;
         $renderer->addPath($pathModule, self::NameModule);
     }
-    public function addRoute(RouterInterface $router, array $middlewares) {
+    public function addRoute(RouterInterface $router) {
         $nameRoute = $this->getNamesRoute();
 
         $Options = ["container" => $this->getContainer(),
             "namesControllers" => $this->Controllers,
             "nameModule" => self::NameModule,
-            "middlewares" => $middlewares,
+            "middlewares" => $this->middlewares,
             "nameRoute" => $nameRoute
         ];
 

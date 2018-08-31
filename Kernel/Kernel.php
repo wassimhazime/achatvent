@@ -2,19 +2,18 @@
 
 namespace Kernel;
 
+use Kernel\AWA_Interface\ModuleInterface;
 use Kernel\Container\Factory_Container;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use TypeError;
 use const DS;
 use const ROOT;
 use function class_exists;
 use function dirname;
 use function is_a;
 use function is_array;
-use function is_file;
 use function str_replace;
 
 abstract class Kernel {
@@ -25,42 +24,28 @@ abstract class Kernel {
     protected $pathModules = [];
 
     function __construct(string $pathconfig) {
-        if(!is_file($pathconfig)){
-            throw new TypeError(" erreur path file config ==> $pathconfig  ");
-   
-        }
+
         $container = Factory_Container::getContainer($pathconfig);
         $this->container = $container;
-        $this->despatcher = $this->container->get(RequestHandlerInterface::class);
+        $this->despatcher = $container->get(RequestHandlerInterface::class);
     }
+
     function getContainer(): ContainerInterface {
         return $this->container;
     }
 
-        abstract function run_modules();
+    public function addModule(string $name_module, array $middlewares = []) {
+        if (class_exists($name_module)) {
+            $object_module = new $name_module($this->container);
 
-    public function addModule(string $module, array $middlewares = []) {
-        if (class_exists($module)) {
+            if (is_a($object_module, ModuleInterface::class)) {
 
-            $this->pathModules[] = dirname(ROOT . str_replace("\\", DS, $module));
-            $this->modules[] = ["module" => $module,
-                "middlewares" => $middlewares];
+                $object_module->addMiddlewares($middlewares);
+                $this->modules[] = $object_module;
+                // phinix config
+                $this->pathModules[] = dirname(ROOT . str_replace("\\", DS, $name_module));
+            }
         }
-    }
-
-    /**
-     * path model save
-     * @return array string 
-     */
-    function getPathModules(): array {
-
-        return $this->pathModules;
-    }
-
-    public function run(ServerRequestInterface $request) {
-        $this->run_modules();
-        $response = $this->despatcher->handle($request);
-        return $response;
     }
 
     function addMiddleware($Middlewares) {
@@ -77,4 +62,12 @@ abstract class Kernel {
         
     }
 
+    public function run(ServerRequestInterface $request) {
+
+        $this->run_modules();
+        $response = $this->despatcher->handle($request);
+        return $response;
+    }
+
+    abstract function run_modules();
 }

@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\Comptes\Controller;
+namespace App\Authentification\Comptes\Controller;
 
 /**
  * Description of PostController
@@ -14,7 +14,7 @@ namespace App\Modules\Comptes\Controller;
  * @author wassime
  */
 use App\AbstractModules\Controller\AbstractSendController;
-use App\Modules\Comptes\Model\Model;
+use App\Authentification\Comptes\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;

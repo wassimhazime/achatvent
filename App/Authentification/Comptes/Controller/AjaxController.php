@@ -6,10 +6,10 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\Comptes\Controller;
+namespace App\Authentification\Comptes\Controller;
 
 use App\AbstractModules\Controller\AbstractAjaxController;
-use App\Modules\Comptes\Model\Model;
+use App\Authentification\Comptes\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;

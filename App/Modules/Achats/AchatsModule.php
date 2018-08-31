@@ -28,13 +28,13 @@ class AchatsModule extends AbstractModule {
     const NameModule = "Achats";
     const IconModule = " fa fa-fw fa-shopping-cart ";
 
-    public function addRoute(RouterInterface $router, array $middlewares) {
+    public function addRoute(RouterInterface $router) {
 
         $nameRoute = $this->getNamesRoute();
         $Options = ["container" => $this->getContainer(),
             "namesControllers" => $this->Controllers,
             "nameModule" => self::NameModule,
-            "middlewares" => $middlewares,
+            "middlewares" => $this->middlewares,
             "nameRoute" => $nameRoute
         ];
 

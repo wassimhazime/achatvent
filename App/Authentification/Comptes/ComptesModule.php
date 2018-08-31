@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\Comptes;
+namespace App\Authentification\Comptes;
 
 use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RendererInterface;
-use App\Modules\Comptes\{
+use App\Authentification\Comptes\{
     Controller\SendController,
     Controller\ShowController,
     Controller\AjaxController,
@@ -14,27 +14,64 @@ use App\Modules\Comptes\{
 
 class ComptesModule extends AbstractModule {
 
+    private $modules = [];
     protected $Controllers = [
         "comptes"];
 
     const NameModule = "Comptes";
     const IconModule = " fa fa-fw fa-stack-overflow ";
 
+    function setController($Controller) {
+        $this->Controllers[] = $Controller;
+    }
+
+    function setModules(array $modules) {
+        $this->modules = $modules;
+        foreach ($modules as $module) {
+            $this->setController('autorisation$' . $module::NameModule);
+        }
+        $this->set_event_autorisation();
+    }
+
+    public function set_event_autorisation() {
+        $modules = $this->modules;
+        $container = $this->getContainer();
+        $eventManager = $container->get(\Kernel\AWA_Interface\EventManagerInterface::class);
+        $autorisation = $container->get(\App\Authentification\Autorisation::class);
+
+
+        $eventManager->attach("autorisation_init", function ($event) use ($modules, $autorisation) {
+
+
+            foreach ($modules as $module) {
+                $controllers = [];
+                foreach ($module->getControllers() as $controller) {
+                    $controllers[] = $controller;
+                }
+                $autorisation->Autorisation_init($module::NameModule, $controllers);
+            }
+        });
+    }
+
+    /////////////////////////////////////////////////////////////////////
+
     public function addPathRenderer(RendererInterface $renderer) {
         $pathModule = __DIR__ . D_S . "views" . D_S;
         $renderer->addPath($pathModule, self::NameModule);
     }
 
-    public function addRoute(RouterInterface $router, array $middlewares) {
+    public function addRoute(RouterInterface $router) {
         $nameRoute = $this->getNamesRoute();
-        $this->Controllers = array_merge($this->Controllers);
+
+
+        $this->Controllers = $this->Controllers;
 
 
 
         $Options = ["container" => $this->getContainer(),
             "namesControllers" => $this->Controllers,
             "nameModule" => self::NameModule,
-            "middlewares" => $middlewares,
+            "middlewares" => $this->middlewares,
             "nameRoute" => $nameRoute,
         ];
 

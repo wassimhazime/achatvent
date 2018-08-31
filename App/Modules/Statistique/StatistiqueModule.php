@@ -37,13 +37,13 @@ class StatistiqueModule extends AbstractModule {
         $renderer->addPath($pathModule, self::NameModule);
     }
 
-    public function addRoute(RouterInterface $router, array $middlewares) {
+    public function addRoute(RouterInterface $router) {
        
         $nameRoute=$this->getNamesRoute();
         $Options=["container"=>$this->getContainer(),
             "namesControllers"=>$this->Controllers,
             "nameModule"=> self::NameModule,
-            "middlewares"=>$middlewares,
+            "middlewares" => $this->middlewares,
             "nameRoute"=>$nameRoute
             ];
 

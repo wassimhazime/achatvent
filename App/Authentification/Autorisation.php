@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App;
+namespace App\Authentification;
 
 use Kernel\AWA_Interface\ModelInterface;
 use function array_merge;
@@ -30,7 +30,7 @@ class Autorisation {
      * save id table to 'autorisation$' . $nameModul
      * avec data default si not set
      */
-    public function Autorisation_init(string $nameModul, array $namecontrollers) {
+    public function Autorisation_init(string $nameModul,array  $namecontrollers) {
         //  var_dump($nameModul,$namecontrollers);die();
         /**
          * get id comptees save 
@@ -62,7 +62,7 @@ class Autorisation {
 
                 // set data to table 'autorisation$' . $nameModul
                 foreach ($namecontrollers as $namecontroller) {
-                    $data = array_merge($namecontroller, ["comptes" => $id]);
+                    $data = array_merge(["controller" =>$namecontroller], ["comptes" => $id]);
                     $this->model->insert_table_Relation($data);
                 }
             }

@@ -3,7 +3,6 @@
 
 use App\App;
 use App\Modules\Achats\AchatsModule;
-use App\Modules\Comptes\ComptesModule;
 use App\Modules\CRM\CRMModule;
 use App\Modules\Statistique\StatistiqueModule;
 use App\Modules\Transactions\TransactionsModule;
@@ -19,7 +18,7 @@ require ROOT . "vendor" . D_S . "autoload.php";
 
 $pathconfig = ROOT . "Config" . D_S . "Config_Container.php";
 $app = new App($pathconfig);
-$app->addModule(ComptesModule::class);
+
 $app->addModule(StatistiqueModule::class);
 $app->addModule(CRMModule::class);
 $app->addModule(AchatsModule::class);
