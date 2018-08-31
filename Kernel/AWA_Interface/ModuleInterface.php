@@ -44,7 +44,5 @@ interface ModuleInterface {
     public function getMenu(): array;
 
     
-   // public function CREATE_TABLE_autorisation_sql(): string;
-
-    public function autorisation(array $nameModules);
+   
 }

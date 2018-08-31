@@ -39,16 +39,14 @@ abstract class Controller implements MiddlewareInterface {
     private $namesControllers = [];
     private $nameModule;
     private $namesRoute;
-    protected $application ;
+   
                 function __construct(array $Options) {
         $this->container = $Options["container"];
         $this->namesControllers = $Options["namesControllers"];
         $this->nameModule = $Options["nameModule"];
         $this->setMiddlewares($Options["middlewares"]);
         $this->namesRoute = $Options["nameRoute"];
-        if(isset($Options["application"])){
-        $this->application = $Options["application"];
-        }
+      
 
         $this->action = $this->getContainer()->get(ActionInterface::class);
 

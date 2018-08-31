@@ -19,7 +19,7 @@ require ROOT . "vendor" . D_S . "autoload.php";
 
 $pathconfig = ROOT . "Config" . D_S . "Config_Container.php";
 $app = new App($pathconfig);
-
+$app->addModule(ComptesModule::class);
 $app->addModule(StatistiqueModule::class);
 $app->addModule(CRMModule::class);
 $app->addModule(AchatsModule::class);
@@ -28,6 +28,6 @@ $app->addModule(TransactionsModule::class, [
     new \App\Middleware\Authentification()
         ]
 );
-$app->addModule(ComptesModule::class);
+
 
 

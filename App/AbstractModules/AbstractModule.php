@@ -29,8 +29,6 @@ abstract class AbstractModule implements ModuleInterface {
     private $container;
     private $router;
     private $namesRoute;
-    protected $autorisation_name = [];
-    protected $application = [];
     protected $Controllers;
 
     const NameModule = "";
@@ -73,25 +71,15 @@ abstract class AbstractModule implements ModuleInterface {
 
 
     public function getMenu(): array {
-        $menu = 
-            [
-                "nav_title" => $this::NameModule,
-                "nav_icon" => $this::IconModule,
-                "nav" => $this->generateUriMenu($this->getNamesRoute()->show(), $this->getControllers())
-            ]
+        $menu = [
+                    "nav_title" => $this::NameModule,
+                    "nav_icon" => $this::IconModule,
+                    "nav" => $this->generateUriMenu($this->getNamesRoute()->show(), $this->getControllers())
+                ]
         ;
 
         return $menu;
         // // "group"=> [[lable,url],....]
-    }
-
-    
-    
-    public function autorisation(array $application) {
-        $this->application = $application;
-        foreach ($application as $nameModule => $namecontroler) {
-            $this->autorisation_name[] = 'autorisation$' . $nameModule;
-        }
     }
 
 }

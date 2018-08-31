@@ -17,7 +17,9 @@
 
 namespace Kernel\Event;
 
-use Kernel\Event\InterfacePSR14\EventInterface;
+use Kernel\AWA_Interface\EventInterface;
+
+
 
 class Event implements EventInterface
 {

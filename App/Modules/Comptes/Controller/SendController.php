@@ -50,17 +50,24 @@ class SendController extends AbstractSendController {
 
 
         /// is new compte danc set data default autorisation$modul
-        if (!isset($insert['id']) || $insert['id'] == "") {
-            foreach ($this->application as $nameModul => $namecontrollers) {
-                $table = 'autorisation$' . $nameModul;
-                $this->chargeModel($table);
-                $compte = ["comptes" => $id_parent];
-                foreach ($namecontrollers as $namecontroller) {
-                    $d = array_merge($namecontroller, $compte);
-                    $this->getModel()->insert_table_Relation($d);
-                }
-            }
-        }
+
+        $event = new \Kernel\Event\Event();
+        $event->setName("autorisation_init");
+        $event->setParams([]);
+        $eventManager = $this->getContainer()->get(\Kernel\AWA_Interface\EventManagerInterface::class);
+        $eventManager->trigger($event);
+
+//        if (!isset($insert['id']) || $insert['id'] == "") {
+//            foreach ($this->application as $nameModul => $namecontrollers) {
+//                $table = 'autorisation$' . $nameModul;
+//                $this->chargeModel($table);
+//                $compte = ["comptes" => $id_parent];
+//                foreach ($namecontrollers as $namecontroller) {
+//                    $d = array_merge($namecontroller, $compte);
+//                    $this->getModel()->insert_table_Relation($d);
+//                }
+//            }
+//        }
 
 
         $this->chargeModel("comptes");

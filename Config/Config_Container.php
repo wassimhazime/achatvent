@@ -6,10 +6,13 @@ use Kernel\AWA_Interface\File_UploadInterface;
 use Kernel\AWA_Interface\ModelInterface;
 use Kernel\AWA_Interface\ActionInterface;
 use Kernel\AWA_Interface\NamesRouteInterface;
+use Kernel\AWA_Interface\EventManagerInterface;
+
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+
 
 return [
     "Config" => function (): string {
@@ -61,5 +64,8 @@ return [
     },
     File_UploadInterface::class => function (ContainerInterface $container): File_UploadInterface {
         return new \Kernel\html\File_Upload($container->get(RouterInterface::class), "public/filesUpload/");
+    },
+  EventManagerInterface::class => function (ContainerInterface $container): EventManagerInterface {
+        return new Kernel\Event\EventManager() ;
     },
 ];

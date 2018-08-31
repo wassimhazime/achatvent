@@ -14,8 +14,15 @@
 
 namespace Kernel\Event;
 
-use Kernel\Event\InterfacePSR14\EventManagerInterface;
-use Kernel\Event\InterfacePSR14\InterfacePSR14\EventInterface;
+use Kernel\AWA_Interface\EventInterface;
+use Kernel\AWA_Interface\EventManagerInterface;
+use function array_filter;
+use function call_user_func;
+use function count;
+use function is_string;
+use function uasort;
+
+
 
 class EventManager implements EventManagerInterface
 {

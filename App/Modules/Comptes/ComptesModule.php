@@ -27,16 +27,15 @@ class ComptesModule extends AbstractModule {
 
     public function addRoute(RouterInterface $router, array $middlewares) {
         $nameRoute = $this->getNamesRoute();
-        $this->Controllers = array_merge($this->Controllers, $this->autorisation_name);
+        $this->Controllers = array_merge($this->Controllers);
 
-        
-        
+
+
         $Options = ["container" => $this->getContainer(),
             "namesControllers" => $this->Controllers,
             "nameModule" => self::NameModule,
             "middlewares" => $middlewares,
             "nameRoute" => $nameRoute,
-            "application"=> $this->application
         ];
 
 

@@ -24,7 +24,7 @@ use function is_a;
 
 class App extends Kernel {
 
-    private $appliction = [];
+   
     private $model;
 
     function run_modules() {
@@ -32,7 +32,7 @@ class App extends Kernel {
         $renderer = $this->container->get(RendererInterface::class);
         $this->model = $this->container->get(ModelInterface::class);
         $menus = [];
-
+        $this->set_event_autorisation();
         foreach ($this->modules as $_module) {
             $class_module = $_module["module"];
             $middlewares = $_module["middlewares"];
@@ -41,9 +41,8 @@ class App extends Kernel {
 
 
             if (is_a($module, ModuleInterface::class)) {
-                $this->setAppliction($module);
-                /// fiha nadar
-                $module->autorisation($this->appliction);
+              
+               
 
                 $module->addRoute($router, $middlewares);
                 $module->addPathRenderer($renderer);
@@ -54,17 +53,11 @@ class App extends Kernel {
 
         $renderer->addGlobal("_Router", $router);
         $renderer->addGlobal("_menu", $menus);
-        $this->Autorisation_init();
     }
 
-/// fiha nadar
-    function setAppliction(ModuleInterface $module) {
-        foreach ($module->getControllers() as $controller) {
-            $this->appliction[$module::NameModule][] = ["controller" => $controller];
-        }
-    }
 
-    public function Autorisation_init() {
+
+    public function set_event_autorisation() {
         /**
          * is set cache=false ==> faire les Autorisation_init
          * optimisation appliction
@@ -73,12 +66,27 @@ class App extends Kernel {
          * ====> git les id relation par chaque table Autorisation$model
          * ....... 
          */
-        if (!$this->model::is_set_cache()) {
-            $autorisation = new Autorisation($this->model);
-            foreach ($this->appliction as $nameModul => $namecontrollers) {
+        $eventManager = $this->container->get(\Kernel\AWA_Interface\EventManagerInterface::class);
+        $modules = $this->modules;
+        $container = $this->container;
+        $model = $this->model;
+
+        $eventManager->attach("autorisation_init", function ($event) use ($modules, $container, $model) {
+            $appliction = [];
+            foreach ($modules as $_module) {
+                $class_module = $_module["module"];
+                $module = new $class_module($container);
+                if (is_a($module, ModuleInterface::class)) {
+                    foreach ($module->getControllers() as $controller) {
+                        $appliction[$module::NameModule][] = ["controller" => $controller];
+                    }
+                }
+            }
+            $autorisation = new Autorisation($model);
+            foreach ($appliction as $nameModul => $namecontrollers) {
                 $autorisation->Autorisation_init($nameModul, $namecontrollers);
             }
-        }
+        });
     }
 
 }
