@@ -5,7 +5,7 @@ $Bootstrap = ["BOOT" => "TEST"];
 /* * *********************** */
 
 $TEST = ["TEST" => [
-        "cache" => false,
+        "cache" => true,
         "DB" => "mysql",
         "dbhost" => "localhost",
         "dbuser" => "root",

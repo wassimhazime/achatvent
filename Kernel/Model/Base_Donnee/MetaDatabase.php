@@ -415,7 +415,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * cache json databas schema database
      * @return bool
      */
-    private static function is_set_cache(): bool {
+    public static function is_set_cache(): bool {
         return self::getConfigDB(self::cache);
     }
 
