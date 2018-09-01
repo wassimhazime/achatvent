@@ -30,28 +30,27 @@ class ComptesModule extends AbstractModule {
         foreach ($modules as $module) {
             $this->setController('autorisation$' . $module::NameModule);
         }
-        $this->set_event_autorisation();
     }
 
-    public function set_event_autorisation() {
-        $modules = $this->modules;
-        $container = $this->getContainer();
-        $eventManager = $container->get(\Kernel\AWA_Interface\EventManagerInterface::class);
-        $autorisation = $container->get(\App\Authentification\Autorisation::class);
-
-
-        $eventManager->attach("autorisation_init", function ($event) use ($modules, $autorisation) {
-
-
-            foreach ($modules as $module) {
-                $controllers = [];
-                foreach ($module->getControllers() as $controller) {
-                    $controllers[] = $controller;
-                }
-                $autorisation->Autorisation_init($module::NameModule, $controllers);
-            }
-        });
-    }
+//    public function set_event_autorisation() {
+//        $modules = $this->modules;
+//        $container = $this->getContainer();
+//        $eventManager = $container->get(\Kernel\AWA_Interface\EventManagerInterface::class);
+//        $autorisation = $container->get(\App\Authentification\Autorisation::class);
+//
+//
+//        $eventManager->attach("autorisation_init", function ($event) use ($modules, $autorisation) {
+//
+//
+//            foreach ($modules as $module) {
+//                $controllers = [];
+//                foreach ($module->getControllers() as $controller) {
+//                    $controllers[] = $controller;
+//                }
+//                $autorisation->Autorisation_init($module::NameModule, $controllers);
+//            }
+//        });
+//    }
 
     /////////////////////////////////////////////////////////////////////
 

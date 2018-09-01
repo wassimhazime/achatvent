@@ -1,10 +1,4 @@
 <?php
-     
-
-//require __DIR__ .'/vendor/robmorgan/phinx/app/web.php';
-//die();
-
-
 
 use App\Middleware\NotFound;
 use Kernel\AWA_Interface\RendererInterface;
@@ -15,22 +9,18 @@ use Middlewares\ContentType;
 use Middlewares\CssMinifier;
 use Middlewares\HtmlMinifier;
 use Middlewares\JsMinifier;
+use Middlewares\PhpSession;
 use Middlewares\ResponseTime;
 use Middlewares\Whoops;
-use Middlewares\BasicAuthentication;
-use Psr\Http\Message\ServerRequestInterface;
-use function Http\Response\send;
 
 if (php_sapi_name() != "cli") {
-    require __DIR__ . "/bootstrap.php";
-    $container = $app->getContainer();
-    
-    $app->addEvent("exeption", "code");
-    $app->addEvent("add", "code");
 
+    /**
+     * Middleware
+     */
     $app->addMiddleware(new Whoops());
-    $session=new Middlewares\PhpSession();
-   // $session->id("wassimawja");
+    $session = new PhpSession();
+    // $session->id("wassimawja");
     // session start() hhhhhh
     $app->addMiddleware($session);
     $app->addMiddleware([
@@ -53,17 +43,15 @@ if (php_sapi_name() != "cli") {
     })
     );
     $app->addMiddleware($container->get(RouterInterface::class));
-
-
-    /**
-     * run app
-     */
-    $Request = $container->get(ServerRequestInterface::class);
-    $Response = $app->run($Request);
-    
-    send($Response);
-   
 }
+
+
+
+
+
+
+
+
 
 
 

@@ -4,9 +4,9 @@
 {% use "@Statistique/plugins/graph.twig" %}
 
 {% block headcss %}
-    <link href="/public/Framework/DateRangePicker/daterangepicker.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/Framework/DateRangePicker/daterangepicker.min.css" rel="stylesheet" type="text/css"/>
     <!-- Bootstrap-select Custom CSS -->
-    <link href="/public/Framework/BootstrapSelect/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/Framework/BootstrapSelect/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
 
 
 {% endblock %}
@@ -26,12 +26,12 @@
 
 {% block footer %}
 
-    <script src="/public/Framework/Moment/moment.js" type="text/javascript"></script>
-    <script src="/public/Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="/public/Framework/BootstrapSelect/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
-    <script src="/public/Framework/DateRangePicker/jquery.daterangepicker.min.js" type="text/javascript"></script>
-    <script src="/public/AWA/InputSelectDate.js" type="text/javascript"></script>
-    <script src="/public/AWA/queryDataAjax.js" type="text/javascript"></script>
+    <script src="/Framework/Moment/moment.js" type="text/javascript"></script>
+    <script src="/Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/Framework/BootstrapSelect/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
+    <script src="/Framework/DateRangePicker/jquery.daterangepicker.min.js" type="text/javascript"></script>
+    <script src="/AWA/InputSelectDate.js" type="text/javascript"></script>
+    <script src="/AWA/queryDataAjax.js" type="text/javascript"></script>
     <script>
         $("#queryDataAjax").click(function() {
             /// method post
@@ -40,9 +40,9 @@
         });
     </script>
 
-    <script src="/public/Framework/ChartGraphique/Chart.min.js" type="text/javascript"></script>
+    <script src="/Framework/ChartGraphique/Chart.min.js" type="text/javascript"></script>
 
-    <script src="/public/AWA/graphAjax.js" type="text/javascript"></script>
+    <script src="/AWA/graphAjax.js" type="text/javascript"></script>
     <script>
         /// method get
         graphAjax("/ajax/st");

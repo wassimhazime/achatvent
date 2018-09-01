@@ -63,7 +63,7 @@ return [
         return new \Kernel\Router\Router;
     },
     File_UploadInterface::class => function (ContainerInterface $container): File_UploadInterface {
-        return new \Kernel\html\File_Upload($container->get(RouterInterface::class), "public/filesUpload/");
+        return new \Kernel\html\File_Upload($container->get(RouterInterface::class), "filesUpload/");
     },
   EventManagerInterface::class => function (ContainerInterface $container): EventManagerInterface {
         return new Kernel\Event\EventManager() ;

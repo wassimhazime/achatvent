@@ -65,7 +65,7 @@ class File_Upload implements File_UploadInterface
         $files = [];
         $preffix = $this->get_preffix($id_file);
 
-        $dir_filesUpload = ROOT . $this->path . $preffix;
+        $dir_filesUpload =  $this->path . $preffix;
 
 
         if (is_dir($dir_filesUpload)) {

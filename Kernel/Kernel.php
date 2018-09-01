@@ -2,8 +2,11 @@
 
 namespace Kernel;
 
+use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\AWA_Interface\ModuleInterface;
 use Kernel\Container\Factory_Container;
+use Kernel\AWA_Interface\RendererInterface;
+use Kernel\AWA_Interface\RouterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -12,15 +15,24 @@ use const DS;
 use const ROOT;
 use function class_exists;
 use function dirname;
+use function get_class;
 use function is_a;
 use function is_array;
+use function is_string;
 use function str_replace;
 
 abstract class Kernel {
 
     protected $container;
     protected $despatcher;
+    protected $router;
+    protected $renderer;
     protected $modules = [];
+
+    /**
+     * phinix config
+     * @var array string
+     */
     protected $pathModules = [];
 
     function __construct(string $pathconfig) {
@@ -28,23 +40,41 @@ abstract class Kernel {
         $container = Factory_Container::getContainer($pathconfig);
         $this->container = $container;
         $this->despatcher = $container->get(RequestHandlerInterface::class);
+        $this->router = $container->get(RouterInterface::class);
+        $this->renderer = $container->get(RendererInterface::class);
     }
 
     function getContainer(): ContainerInterface {
         return $this->container;
     }
 
-    public function addModule(string $name_module, array $middlewares = []) {
-        if (class_exists($name_module)) {
-            $object_module = new $name_module($this->container);
+    public function getModules(): array {
+        return $this->modules;
+    }
 
-            if (is_a($object_module, ModuleInterface::class)) {
+    /**
+     * path model save
+     * phinix ==>migrate
+     * @return array string 
+     */
+    public function getPathModules(): array {
 
-                $object_module->addMiddlewares($middlewares);
-                $this->modules[] = $object_module;
-                // phinix config
-                $this->pathModules[] = dirname(ROOT . str_replace("\\", DS, $name_module));
-            }
+        return $this->pathModules;
+    }
+
+    public function addModule($_module, array $middlewares = []) {
+
+
+        if (is_string($_module) && class_exists($_module)) {
+            $_module = new $_module($this->container);
+        }
+
+
+        if (is_a($_module, ModuleInterface::class)) {
+            $_module->addMiddlewares($middlewares);
+            $this->modules[] = $_module;
+            // phinix config
+            $this->pathModules[] = dirname(ROOT . str_replace("\\", DS, get_class($_module)));
         }
     }
 
@@ -58,8 +88,10 @@ abstract class Kernel {
         }
     }
 
-    function addEvent($param1, $m) {
-        
+    function addEvent(string $event, callable $callback, int $priority = 0) {
+        $eventManager = $this->container->get(EventManagerInterface::class);
+
+        $eventManager->attach($event, $callback, $priority);
     }
 
     public function run(ServerRequestInterface $request) {

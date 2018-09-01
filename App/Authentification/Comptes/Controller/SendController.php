@@ -15,6 +15,8 @@ namespace App\Authentification\Comptes\Controller;
  */
 use App\AbstractModules\Controller\AbstractSendController;
 use App\Authentification\Comptes\Model\Model;
+use Kernel\AWA_Interface\EventManagerInterface;
+use Kernel\Event\Event;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -28,54 +30,11 @@ class SendController extends AbstractSendController {
     }
 
     public function send_data(string $view_show, string $routeFile = ""): ResponseInterface {
-
-        if ($this->is_Erreur()) {
-            return $this->getResponse()->withStatus(404);
-        }
-        $request = $this->getRequest();
-
-
-
-        /// save les id_fichier et gere input file (id_file)
-        if ($routeFile != "") {
-            $file_Upload = $this->getFile_Upload();
-            $nameController = $this->getNameController();
-            $request = $file_Upload->save($routeFile, $request, $nameController);
-        }
-
-
-        $insert = $request->getParsedBody();
-
-        $id_parent = $this->getModel()->setData($insert);
-
-
+        $view = parent::send_data($view_show, $routeFile);
         /// is new compte danc set data default autorisation$modul
-
-        $event = new \Kernel\Event\Event();
-        $event->setName("autorisation_init");
-        $event->setParams([]);
-        $eventManager = $this->getContainer()->get(\Kernel\AWA_Interface\EventManagerInterface::class);
-        $eventManager->trigger($event);
-
-//        if (!isset($insert['id']) || $insert['id'] == "") {
-//            foreach ($this->application as $nameModul => $namecontrollers) {
-//                $table = 'autorisation$' . $nameModul;
-//                $this->chargeModel($table);
-//                $compte = ["comptes" => $id_parent];
-//                foreach ($namecontrollers as $namecontroller) {
-//                    $d = array_merge($namecontroller, $compte);
-//                    $this->getModel()->insert_table_Relation($d);
-//                }
-//            }
-//        }
-
-
-        $this->chargeModel("comptes");
-        //var_dump($id_parent);die();
-
-        $intent = $this->getModel()->show_styleForm($id_parent);
-
-        return $this->render($view_show, ["intent" => $intent]);
+        $eventManager = $this->getContainer()->get(EventManagerInterface::class);
+        $eventManager->trigger("autorisation_init");
+        return $view;
     }
 
 }

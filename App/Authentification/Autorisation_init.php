@@ -18,19 +18,34 @@ use function in_array;
  *
  * @author wassime
  */
-class Autorisation {
+class Autorisation_init {
 
     private $model;
+    private $modules;
 
-    function __construct(ModelInterface $model) {
+    public function __invoke($event) {
+
+
+        foreach ($this->modules as $module) {
+            $controllers = [];
+            foreach ($module->getControllers() as $controller) {
+                $controllers[] = $controller;
+            }
+
+            $this->Autorisation_init($module::NameModule, $controllers);
+        }
+    }
+
+    function __construct(ModelInterface $model, array $modules = []) {
         $this->model = $model;
+        $this->modules = $modules;
     }
 
     /**
      * save id table to 'autorisation$' . $nameModul
      * avec data default si not set
      */
-    public function Autorisation_init(string $nameModul,array  $namecontrollers) {
+    public function Autorisation_init(string $nameModul, array $namecontrollers) {
         //  var_dump($nameModul,$namecontrollers);die();
         /**
          * get id comptees save 
@@ -62,7 +77,7 @@ class Autorisation {
 
                 // set data to table 'autorisation$' . $nameModul
                 foreach ($namecontrollers as $namecontroller) {
-                    $data = array_merge(["controller" =>$namecontroller], ["comptes" => $id]);
+                    $data = array_merge(["controller" => $namecontroller], ["comptes" => $id]);
                     $this->model->insert_table_Relation($data);
                 }
             }
