@@ -225,6 +225,7 @@ abstract class Controller implements MiddlewareInterface {
         $renderer->addGlobal("_page", ucfirst(str_replace("$", "  ", $this->getNameController())));
         $renderer->addGlobal("_Controller", $this->getNameController());
         $renderer->addGlobal("_Action", $this->Actions());
+        $renderer->addGlobal("_ROOTWEB", ROOT_WEB);
        
         $renderer->addGlobal("_NamesRoute", $this->getNamesRoute());
         $data_view = $this->add_data_views($data);

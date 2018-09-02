@@ -1,10 +1,14 @@
 <?php
-$ROOT=dirname(dirname(__DIR__));
-require  $ROOT. "/public/index.php";
+
+$ROOT = dirname(dirname(__DIR__));
+if(is_file($ROOT . "/public/index.php")){
+   require $ROOT . "/public/index.php"; 
+} else {
+    require $ROOT . "/index.php";
+}
+
 
 use Kernel\AWA_Interface\ModelInterface;
-
-
 
 $container = $app->getContainer();
 $pathModules = $app->getPathModules();
