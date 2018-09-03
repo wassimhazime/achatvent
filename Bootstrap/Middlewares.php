@@ -13,37 +13,35 @@ use Middlewares\PhpSession;
 use Middlewares\ResponseTime;
 use Middlewares\Whoops;
 
-if (php_sapi_name() != "cli") {
+/**
+ * Middleware
+ */
+$app->addMiddleware(new Whoops());
+$session = new PhpSession();
+// $session->id("wassimawja");
+// session start() hhhhhh
+$app->addMiddleware($session);
+$app->addMiddleware([
+    new CssMinifier(),
+    new JsMinifier(),
+    new HtmlMinifier()
+]);
+$app->addMiddleware([
+    new ContentType(),
+    new ContentLanguage(['fr', 'en', 'ar']),
+    new ContentEncoding(['gzip', 'deflate'])
+]);
+$app->addMiddleware(new ResponseTime());
+$app->addMiddleware(new NotFound(function ($Response) use ($container) {
+    // is html page not found
+    $render = $container->get(RendererInterface::class)
+            ->render("404", ["_page" => "404"]);
+    $Response->getBody()->write($render);
+    return $Response;
+})
+);
+$app->addMiddleware($container->get(RouterInterface::class));
 
-    /**
-     * Middleware
-     */
-    $app->addMiddleware(new Whoops());
-    $session = new PhpSession();
-    // $session->id("wassimawja");
-    // session start() hhhhhh
-    $app->addMiddleware($session);
-    $app->addMiddleware([
-        new CssMinifier(),
-        new JsMinifier(),
-        new HtmlMinifier()
-    ]);
-    $app->addMiddleware([
-        new ContentType(),
-        new ContentLanguage(['fr', 'en', 'ar']),
-        new ContentEncoding(['gzip', 'deflate'])
-    ]);
-    $app->addMiddleware(new ResponseTime());
-    $app->addMiddleware(new NotFound(function ($Response) use ($container) {
-        // is html page not found
-        $render = $container->get(RendererInterface::class)
-                ->render("404", ["_page" => "404"]);
-        $Response->getBody()->write($render);
-        return $Response;
-    })
-    );
-    $app->addMiddleware($container->get(RouterInterface::class));
-}
 
 
 

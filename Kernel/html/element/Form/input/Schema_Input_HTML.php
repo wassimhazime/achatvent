@@ -89,10 +89,14 @@ class Schema_Input_HTML {
 
     /**
      * 
-     * @return bool
+     * @return string NO | YES
      */
-    function getIsNull(): bool {
-        return $this->isNull;
+    function getIsNull() {
+        if ($this->isNull) {
+            return "YES";
+        } else {
+            return "NO";
+        }
     }
 
     /**

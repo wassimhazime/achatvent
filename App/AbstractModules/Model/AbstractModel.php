@@ -215,6 +215,7 @@ class AbstractModel extends Model {
 // save data
 
     public function setData(array $data, $table_parent = "", $id_perent = 0) {
+      
 
 
         if (!empty($data)) {
@@ -230,7 +231,7 @@ class AbstractModel extends Model {
             }
             return ($id_parent);
         } else {
-            die("erreur send data");
+            die(" data to server php is empty show code html or ajax =>erreur send data");
         }
     }
 

@@ -47,6 +47,7 @@ abstract class Abstract_Input {
         $this->Data_load = $input->getData_load();
         $this->type = strtolower($input->getType());
         $this->null = $input->getIsNull();
+       
         $this->lable = str_replace(["_", "$"], " ", $input->getName());
         if ($this->type === "hidden") {
             $this->is_hidden = true;
@@ -84,7 +85,7 @@ abstract class Abstract_Input {
     function getLable(): string {
 
 
-        if (!$this->null) {
+        if ($this->null=="NO") {
             $this->lable .= ' <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ';
         }
         if ($this->is_hidden) {

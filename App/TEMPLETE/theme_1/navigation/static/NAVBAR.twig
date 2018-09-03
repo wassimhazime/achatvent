@@ -9,37 +9,37 @@
 
     {% for nav_menu in _menu   %}
 
-       
-            <li>
-             
-                  <a href="javascript:;">
+
+        <li>
+
+            <a href="javascript:;">
 
 
-                    <span class="nav-icon">
-                      <i class="{{ nav_menu.nav_icon}}"></i>  
-                    </span>
+                <span class="nav-icon">
+                    <i class="{{ nav_menu.nav_icon}}"></i>  
+                </span>
 
 
-                    <span class="nav-title">{{ nav_menu.nav_title }}</span>
-                    <span class="nav-tools">
-                      <i class="fa fa-fw arrow"></i>
-                    </span>
-                  </a>
-                  <ul class="nav nav-second-level">
+                <span class="nav-title">{{ nav_menu.nav_title }}</span>
+                <span class="nav-tools">
+                    <i class="fa fa-fw arrow"></i>
+                </span>
+            </a>
+            <ul class="nav nav-second-level">
 
 
-                    {% for label, url in nav_menu.nav %}
+                {% for label, url in nav_menu.nav %}
 
-                        {{ item.li_a(url,label) }}
+                    {{ item.li_a(url,label) }}
 
-                    {% endfor %}
+                {% endfor %}
 
-                  </ul>
+            </ul>
 
-            
 
-            </li> 
-      
+
+        </li> 
+
 
     {% endfor %} 
 

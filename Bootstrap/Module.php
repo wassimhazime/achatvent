@@ -6,7 +6,6 @@ use App\Modules\Statistique\StatistiqueModule;
 use App\Modules\Transactions\TransactionsModule;
 use App\Modules\Ventes\VentesModule;
 
-// add module
 $app->addModule(StatistiqueModule::class);
 $app->addModule(CRMModule::class);
 $app->addModule(AchatsModule::class);
