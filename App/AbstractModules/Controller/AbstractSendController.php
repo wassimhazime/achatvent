@@ -24,24 +24,35 @@ abstract class AbstractSendController extends AbstractController {
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
-        $request = $this->getRequest();
+
+        /**
+         * save les files
+         * get id files save
+         */
+        $file_Upload = $this->getFile_Upload();
+        $file_Upload->setPreffix($this->getNameController());
+        $uploadedFiles = $this->getRequest()->getUploadedFiles();
+        $keyFilesSave = $file_Upload->save($routeFile, $uploadedFiles);
 
 
-
-        /// save les id_fichier et gere input file (id_file)
-        if ($routeFile != "") {
-            $file_Upload = $this->getFile_Upload();
-            $nameController = $this->getNameController();
-            $request = $file_Upload->save($routeFile, $request, $nameController);
-        }
-
-
-        $insert = $request->getParsedBody();
-        
+        /**
+         * get data post
+         * merge data post and id file save
+         */
+        $POST = $this->getRequest()->getParsedBody();
+        $insert = array_merge($POST, $keyFilesSave);
+        /**
+         * set data to database
+         */
         $id_parent = $this->getModel()->setData($insert);
-        
-        $intent = $this->getModel()->show_styleForm($id_parent);
 
+        /**
+         * get data save to model
+         */
+        $intent = $this->getModel()->show_styleForm($id_parent);
+        /**
+         * show data get par model
+         */
         return $this->render($view_show, ["intent" => $intent]);
     }
 
@@ -65,7 +76,7 @@ abstract class AbstractSendController extends AbstractController {
 
 
         //  save data parent
-        $table_parent=$this->getNameController();
+        $table_parent = $this->getNameController();
         $this->chargeModel($table_parent);
 
         // insert data
@@ -74,19 +85,35 @@ abstract class AbstractSendController extends AbstractController {
 
         /*         * ************************* */
         //  save relation
-       
         /// save image
-        $data_child = $this->getFile_Upload()
-                ->save_child(
-                $routeFile, $this->getRequest(), $data_child, $this->getNameController()
-        );
-         /// childe achats => achat
+
+        $file_Upload = $this->getFile_Upload();
+        $file_Upload->setPreffix($this->getNameController());
+        $uploadedFiles = $this->getRequest()->getUploadedFiles();
+        /**
+         * keyFilesSaves
+         * $index int ==> row qui is file save
+         * value => keyFilesSave array
+         *   name input file and data inpute
+         */
+        $keyFilesSaves = $file_Upload->save_child($routeFile, $uploadedFiles);
+
+        foreach ($keyFilesSaves as $index => $keyFilesSave) {
+
+            foreach ($keyFilesSave as $nameinput => $keyfile) {
+
+                $data_child[$index][$nameinput] = $keyfile;
+            }
+        }
+
+
+        /// childe achats => achat
         $Controller_child = substr($this->getNameController(), 0, -1);
 
         /// save data child
         $this->chargeModel($Controller_child);
 
-        $this->getModel()->setData($data_child, $table_parent,$id_parent);
+        $this->getModel()->setData($data_child, $table_parent, $id_parent);
 
 
         /// show etem save

@@ -15,10 +15,10 @@ namespace Kernel\html;
  */
 use Kernel\AWA_Interface\File_UploadInterface;
 use Kernel\AWA_Interface\RouterInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use const D_S;
 use const ROOT;
+use const ROOT_WEB;
 use function count;
 use function date;
 use function filesize;
@@ -39,7 +39,7 @@ class File_Upload implements File_UploadInterface {
     private $path;
     private $path_relatif;
     private $path_absolu;
-    private $preffix;
+    private $preffix = "";
     private $router;
 
     public function __construct(RouterInterface $router, string $path) {
@@ -49,12 +49,13 @@ class File_Upload implements File_UploadInterface {
         $this->router = $router;
     }
 
-    public function setPreffix($preffix) {
-        $this->preffix = $preffix;
-    }
-
-    public function getRouter(): RouterInterface {
-        return $this->router;
+    /**
+     * preffix exemple name table ==>clients
+     */
+    public function setPreffix(string $preffix) {
+        if ($preffix != "") {
+            $this->preffix = $preffix;
+        }
     }
 
     public function get(string $id_file): array {
@@ -123,34 +124,32 @@ class File_Upload implements File_UploadInterface {
         }
     }
 
-    public function save(string $nameRoute, ServerRequestInterface $request, string $preffix = ""): ServerRequestInterface {
+    public function save(string $nameRoute, array $uploadedFiles, string $preffix = ""): array {
+
+        /**
+         * preffix exemple name table ==>clients
+         */
         $this->setPreffix($preffix);
-        $insert = $request->getParsedBody();
-        $uploadedFiles = $request->getUploadedFiles();
-
-
-        $this->mkdir_is_not($preffix);
+        $this->mkdir_is_not();
 
         $id_file = $this->preffix . "_" . date("Y-m-d-H-i-s");
 
+        $keyFilesave = [];
         foreach ($uploadedFiles as $key => $files) {
             $file_upload = [];
             foreach ($files as $file) {
-                $file_upload[] = $this->insert_file_upload($preffix, $file, $id_file);
+                $file_upload[] = $this->insert_file_upload($file, $id_file);
             }
 
-            $insert[$key] = $this->generateUrisave($nameRoute, $id_file, $file_upload);
+            $keyFilesave[$key] = $this->generateUrisave($nameRoute, $id_file, $file_upload);
         }
-
-        return $request->withParsedBody($insert);
+        return $keyFilesave;
     }
 
-    public function save_child(string $nameRoute, ServerRequestInterface $request, array $datachild, string $preffix = ""): array {
+    public function save_child(string $nameRoute, array $uploadedFiles, string $preffix = ""): array {
         $this->setPreffix($preffix);
-        $uploadedFiles = $request->getUploadedFiles();
-
-        $this->mkdir_is_not($preffix);
-
+        $this->mkdir_is_not();
+        $keyFilesSave = [];
         foreach ($uploadedFiles as $key => $file) {
             //exemple image_child_5 ==> 5 regex get nombre  index  and input  image
             preg_match('/([\D\d]+)_(.+)_(\d+)/i', $key, $matches);
@@ -158,21 +157,30 @@ class File_Upload implements File_UploadInterface {
             $index = $matches[3];
 
             $id_file = $this->preffix . "_" . date("Y-m-d-H-i-s") . "_" . $index;
-            $file_upload = [];
-            $file_upload[] = $this->insert_file_upload($preffix, $file, $id_file);
 
-            $datachild[$index][$input] = $this->generateUrisave($nameRoute, $id_file, $file_upload);
+            $file_upload = [];
+            $file_upload[] = $this->insert_file_upload($file, $id_file);
+
+            $keyFilesSave[$index][$input] = $this->generateUrisave($nameRoute, $id_file, $file_upload);
         }
 
-        return $datachild;
+
+        return $keyFilesSave;
     }
 
+    /**
+     * thayad
+     * @param string $nameRoute
+     * @param string $id_file
+     * @param array $file_uploads
+     * @return string
+     */
     private function generateUrisave(string $nameRoute, string $id_file, array $file_uploads): string {
 
 
         $con = count($file_uploads);
 
-        $url = $this->getRouter()->generateUri($nameRoute, ["controle" => $id_file]);
+        $url = $this->router->generateUri($nameRoute, ["controle" => $id_file]);
 
         return '<a class="btn "  role="button"'
                 . ' href="' . $url . '" '
@@ -182,14 +190,14 @@ class File_Upload implements File_UploadInterface {
                 '</a>';
     }
 
-    private function insert_file_upload(string $preffix, UploadedFileInterface $file, string $id_file): array {
+    private function insert_file_upload(UploadedFileInterface $file, string $id_file): array {
         $file_upload = [];
         if ($file->getClientFilename() != "" && $file->getError() == 0) {
             /// insert file upload
 
             $name = $id_file . self::FIN_REGEX . $file->getClientFilename();
             $type = $file->getClientMediaType();
-            $path = $this->path_absolu . $preffix . D_S . $name;
+            $path = $this->path_absolu . $this->preffix . D_S . $name;
             $size = $file->getSize();
 
             $file->moveTo($path);
@@ -199,12 +207,12 @@ class File_Upload implements File_UploadInterface {
         return $file_upload;
     }
 
-    private function mkdir_is_not(string $preffix) {
+    private function mkdir_is_not() {
 
-        if (!is_dir($this->path_absolu . $preffix)) {
-            $flag = mkdir($this->path_absolu . $preffix, 0777, true);
+        if (!is_dir($this->path_absolu . $this->preffix)) {
+            $flag = mkdir($this->path_absolu . $this->preffix, 0777, true);
             if (!$flag) {
-                echo $this->path_absolu . $preffix;
+                echo "function mkdir_is_not()";
                 die('<br>Echec lors de la création des répertoires...');
             }
         }
