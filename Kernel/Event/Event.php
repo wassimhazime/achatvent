@@ -58,17 +58,17 @@ class Event implements EventInterface
         return $this->propagationStopped;
     }
 
-    public function setName(string $name): void
+    public function setName(string $name)
     {
         $this->name = $name;
     }
 
-    public function setParams(array $params): void
+    public function setParams(array $params)
     {
         $this->params = $params;
     }
 
-    public function setTarget($target): void
+    public function setTarget($target)
     {
         $this->target = $target;
     }

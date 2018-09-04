@@ -13,7 +13,8 @@ namespace App\AbstractModules\Controller;
  *
  * @author wassime
  */
-
+use Kernel\AWA_Interface\EventManagerInterface;
+use Kernel\Event\Event;
 use Kernel\INTENT\Intent_Form;
 use Psr\Http\Message\ResponseInterface;
 use function preg_match;
@@ -83,21 +84,20 @@ abstract class AbstractShowController extends AbstractController {
 
         $url_id_file = $this->getModel()->get_idfile($id);
 
-        preg_match('!(.+)'
-                . 'data-regex="/(.+)/"'
-                . '(.+)!i', $url_id_file, $matches);
-
         $etat = $this->getModel()->delete($conditon);
+
         if ($etat == -1) {
             $r = $this->getResponse()->withStatus(406);
             $r->getBody()->write("accès refusé  de supprimer ID  $id");
             return $r;
         } else {
             $this->getResponse()->getBody()->write("$view  $id");
-
-            if (!empty($matches) && isset($matches[2])) {
-                $this->getFile_Upload()->delete($matches[2]);
-            }
+           
+            $eventManager = $this->getContainer()->get(EventManagerInterface::class);
+            $event = new Event();
+            $event->setName("delete_files");
+            $event->setParams(["url_id_file" => $url_id_file]);
+            $eventManager->trigger($event);
         }
 
         return $this->getResponse();
@@ -173,7 +173,7 @@ abstract class AbstractShowController extends AbstractController {
 
         $mode = $this->getModel()::MODE_SELECT_DEFAULT_NULL;
 
-        $intentshow = $this->getModel()->show_in( $mode,$rangeID);
+        $intentshow = $this->getModel()->show_in($mode, $rangeID);
 
         return $this->render($view, ["intent" => $intentshow]);
     }

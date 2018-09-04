@@ -40,13 +40,11 @@ class File_Upload implements File_UploadInterface {
     private $path_relatif;
     private $path_absolu;
     private $preffix = "";
-    private $router;
 
-    public function __construct(RouterInterface $router, string $path) {
+    public function __construct(string $path) {
         $this->path = $path;
         $this->path_absolu = ROOT . "public/" . $path;
         $this->path_relatif = ROOT_WEB . $path;
-        $this->router = $router;
     }
 
     /**
@@ -56,6 +54,15 @@ class File_Upload implements File_UploadInterface {
         if ($preffix != "") {
             $this->preffix = $preffix;
         }
+    }
+
+    private function get_preffix(string $id_file): string {
+        preg_match('/([a-zA-Z\$]+)_(.+)/i', $id_file, $matches);
+        if (empty($matches)) {
+            return "";
+        }
+        $preffix = $matches[1];
+        return $preffix;
     }
 
     public function get(string $id_file): array {
@@ -103,11 +110,13 @@ class File_Upload implements File_UploadInterface {
 
         $files = [];
         $preffix = $this->get_preffix($id_file);
-
         $dir_filesUpload = $this->path_absolu . $preffix;
 
         if (is_dir($dir_filesUpload)) {
-            foreach (scandir($dir_filesUpload) as $file_save) { /// scan les image save
+            /**
+             * /// scan les image save
+             */
+            foreach (scandir($dir_filesUpload) as $file_save) {
                 $path = $this->path_absolu . $preffix . D_S . $file_save;
                 $etat = [];
 
@@ -124,7 +133,7 @@ class File_Upload implements File_UploadInterface {
         }
     }
 
-    public function save(string $nameRoute, array $uploadedFiles, string $preffix = ""): array {
+    public function save(array $uploadedFiles, string $preffix = ""): array {
 
         /**
          * preffix exemple name table ==>clients
@@ -135,18 +144,18 @@ class File_Upload implements File_UploadInterface {
         $id_file = $this->preffix . "_" . date("Y-m-d-H-i-s");
 
         $keyFilesave = [];
-        foreach ($uploadedFiles as $key => $files) {
+        foreach ($uploadedFiles as $nameInput => $files) {
             $file_upload = [];
             foreach ($files as $file) {
                 $file_upload[] = $this->insert_file_upload($file, $id_file);
             }
 
-            $keyFilesave[$key] = $this->generateUrisave($nameRoute, $id_file, $file_upload);
+            $keyFilesave[$nameInput] = ["id_files" => $id_file, "count_files" => count($file_upload)];
         }
         return $keyFilesave;
     }
 
-    public function save_child(string $nameRoute, array $uploadedFiles, string $preffix = ""): array {
+    public function save_child(array $uploadedFiles, string $preffix = ""): array {
         $this->setPreffix($preffix);
         $this->mkdir_is_not();
         $keyFilesSave = [];
@@ -161,33 +170,11 @@ class File_Upload implements File_UploadInterface {
             $file_upload = [];
             $file_upload[] = $this->insert_file_upload($file, $id_file);
 
-            $keyFilesSave[$index][$input] = $this->generateUrisave($nameRoute, $id_file, $file_upload);
+            $keyFilesSave[$index][$input] = ["id_files" => $id_file, "count_files" => count($file_upload)];
         }
 
 
         return $keyFilesSave;
-    }
-
-    /**
-     * thayad
-     * @param string $nameRoute
-     * @param string $id_file
-     * @param array $file_uploads
-     * @return string
-     */
-    private function generateUrisave(string $nameRoute, string $id_file, array $file_uploads): string {
-
-
-        $con = count($file_uploads);
-
-        $url = $this->router->generateUri($nameRoute, ["controle" => $id_file]);
-
-        return '<a class="btn "  role="button"'
-                . ' href="' . $url . '" '
-                . ' data-regex="/' . $id_file . '/" > '
-                . '<spam class="glyphicon glyphicon-download-alt"></spam> '
-                . $con .
-                '</a>';
     }
 
     private function insert_file_upload(UploadedFileInterface $file, string $id_file): array {
@@ -218,20 +205,13 @@ class File_Upload implements File_UploadInterface {
         }
     }
 
-    private function get_preffix(string $id_file): string {
-        preg_match('/([a-zA-Z\$]+)_(.+)/i', $id_file, $matches);
-        if (empty($matches)) {
-            return "";
-        }
-        $preffix = $matches[1];
-        return $preffix;
-    }
-
     private function is_match(string $_id_file, string $file_save, string $finregex = ""): bool {
         $subject = str_replace("$", "", $file_save);
         $id_file = str_replace("$", "", $_id_file);
         $pattern = '!^' . $id_file . $finregex . '!';
         return preg_match($pattern, $subject);
     }
+
+   
 
 }
