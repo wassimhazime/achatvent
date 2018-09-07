@@ -18,8 +18,8 @@ use Middlewares\Whoops;
  */
 $app->addMiddleware(new Whoops());
 $session = new PhpSession();
-// $session->id("wassimawja");
-// session start() hhhhhh
+//// $session->id("wassimawja");
+//// session start() hhhhhh
 $app->addMiddleware($session);
 $app->addMiddleware([
     new CssMinifier(),
@@ -32,6 +32,7 @@ $app->addMiddleware([
     new ContentEncoding(['gzip', 'deflate'])
 ]);
 $app->addMiddleware(new ResponseTime());
+$app->addMiddleware(new App\Middleware\Authentification($container));
 $app->addMiddleware(new NotFound(function ($Response) use ($container) {
     // is html page not found
     $render = $container->get(RendererInterface::class)

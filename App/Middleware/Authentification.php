@@ -12,23 +12,78 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use function call_user_func;
+use function strpos;
+use function var_dump;
+use function Http\Response\send;
 
 /**
  * Description of Authentification
  *
  * @author wassime
  */
-class Authentification implements MiddlewareInterface
-{
+class Authentification implements MiddlewareInterface {
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
-        var_dump($_SESSION);
-        if (isset($_SESSION["auth"])) {
-            $response = $handler->handle($request);
-            return $response;
-        }
-        $_SESSION["auth"]="hh";
-        die("auth");
+    private $container;
+
+    function __construct($container) {
+        $this->container = $container;
     }
+
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+       
+        $url = $request->getUri()->getPath();
+     
+        if ($url == "/Login/login") {
+            return $handler->handle($request);
+        }
+        if (isset($_SESSION["aut"]) && !empty($_SESSION["aut"])) {
+            $Response = $handler->handle($request);
+        } else {
+
+            $r = new \GuzzleHttp\Psr7\Response();
+            $Response = $r->withHeader("Location", "/Login/login")->withStatus(403);
+        }
+
+
+
+
+        return $Response;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        if (isset($_SESSION["auth"])) {
+//            $response = $handler->handle($request);
+//            return $response;
+//        }
+//
+//
+//        if ($Response->getStatusCode() === 404) {
+//            // is json page not found
+//            $HeaderLine = $Response->getHeaderLine("Content-Type");
+//            if (strpos($HeaderLine, "json") > 0) {
+//                $Response->getBody()->write("{}");
+//            } else {
+//                // is html page not found
+//                $Response = call_user_func($this->call, $Response);
+//            }
+//            return $Response->withStatus(404);
+//        }
+//
+//        return $Response;
+//        die("auth");
+    }
+
 }

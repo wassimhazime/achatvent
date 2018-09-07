@@ -9,6 +9,8 @@
 namespace App\AbstractModules\Controller;
 
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Description of FileController
@@ -16,6 +18,23 @@ use Psr\Http\Message\ResponseInterface;
  * @author wassime
  */
 abstract class AbstractFileController extends AbstractController {
+
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+        parent::process($request, $handler);
+
+        if ($this->getResponse()->getStatusCode() != 200) {
+            return $this->getResponse();
+        }
+        $this->setRoute($this->getRouter()->match($this->getRequest()));
+        $this->setNameController($this->getRoute()->getParam("controle"));
+        //$this->chargeModel($this->getNameController());
+
+
+        if ($this->is_Erreur()) {
+            return $this->getResponse()->withStatus(404);
+        }
+        return $this->getResponse();
+    }
 
     public function get_views_files(string $name_views): ResponseInterface {
         if ($this->is_Erreur("Controller")) {

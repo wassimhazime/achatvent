@@ -10,18 +10,35 @@ namespace App\AbstractModules\Controller;
 
 use Kernel\Tools\Tools;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Description of AjaxController
  *
  * @author wassime
  */
-abstract class AbstractAjaxController extends AbstractController
-{
+abstract class AbstractAjaxController extends AbstractController {
 
-    public function ajax_js() : ResponseInterface
-    {
-      if ($this->is_Erreur()) {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+        parent::process($request, $handler);
+
+        if ($this->getResponse()->getStatusCode() != 200) {
+            return $this->getResponse();
+        }
+        $this->setRoute($this->getRouter()->match($this->getRequest()));
+        $this->setNameController($this->getRoute()->getParam("controle"));
+        $this->chargeModel($this->getNameController());
+
+
+        if ($this->is_Erreur()) {
+            return $this->getResponse()->withStatus(404);
+        }
+        return $this->getResponse();
+    }
+
+    public function ajax_js(): ResponseInterface {
+        if ($this->is_Erreur()) {
             return $this->getResponse()
                             ->withStatus(404)
                             ->withHeader('Content-Type', 'application/json; charset=utf-8');
@@ -36,4 +53,5 @@ abstract class AbstractAjaxController extends AbstractController
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
+
 }

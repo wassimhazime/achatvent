@@ -11,6 +11,8 @@ namespace App\AbstractModules\Controller;
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\Event\Event;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use function array_merge;
 use function preg_match;
 use function str_replace;
@@ -22,6 +24,23 @@ use function substr;
  * @author wassime
  */
 abstract class AbstractSendController extends AbstractController {
+
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+   parent::process($request, $handler);
+
+        if ($this->getResponse()->getStatusCode() != 200) {
+            return $this->getResponse();
+        }
+        $this->setRoute($this->getRouter()->match($this->getRequest()));
+        $this->setNameController($this->getRoute()->getParam("controle"));
+        $this->chargeModel($this->getNameController());
+
+
+        if ($this->is_Erreur()) {
+            return $this->getResponse()->withStatus(404);
+        }
+        return $this->getResponse();
+    }
 
     public function send_data(string $view_show, string $routeFile = ""): ResponseInterface {
         if ($this->is_Erreur()) {
@@ -219,7 +238,7 @@ abstract class AbstractSendController extends AbstractController {
 
         if (isset($insert['id']) && $insert['id'] != "" && !empty($IconShowFiles)) {
             $eventManager = $this->getContainer()->get(EventManagerInterface::class);
-            
+
             $event = new Event();
             $event->setName("delete_files");
             $event->setParams(["url_id_file" => $this->getModel()->get_idfile($insert['id'])]);

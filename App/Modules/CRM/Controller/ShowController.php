@@ -21,16 +21,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ShowController extends AbstractShowController {
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-   $this->setModel(new Model($this->getContainer()->get("pathModel")));
-        parent::process($request, $handler);
-        if ($this->is_Erreur()) {
-            return $this->getResponse()->withStatus(404);
-        }
-        $action = $this->getRoute()->getParam("action");
-        $this->Actions()->setAction($action);
-        $id = $this->getRoute()->getParam("id");
-        return $this->run($id);
+  public function __construct(array $Options) {
+        parent::__construct($Options);
+        $this->setModel(new Model($this->getContainer()->get("pathModel")));
     }
 
   public function run($id): ResponseInterface {

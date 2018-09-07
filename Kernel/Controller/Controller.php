@@ -39,14 +39,14 @@ abstract class Controller implements MiddlewareInterface {
     private $namesControllers = [];
     private $nameModule;
     private $namesRoute;
-   
-                function __construct(array $Options) {
+
+    function __construct(array $Options) {
         $this->container = $Options["container"];
         $this->namesControllers = $Options["namesControllers"];
         $this->nameModule = $Options["nameModule"];
         $this->setMiddlewares($Options["middlewares"]);
         $this->namesRoute = $Options["nameRoute"];
-      
+
 
         $this->action = $this->getContainer()->get(ActionInterface::class);
 
@@ -89,18 +89,23 @@ abstract class Controller implements MiddlewareInterface {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
+        /**
+         * add middlewares de module  to despatchre 
+         * 
+         */
+        // apres
         foreach ($this->middlewares as $middleware) {
             $this->container->get(RequestHandlerInterface::class)
                     ->pipe($middleware);
         }
+       
+        
 
-
+        $Response = $handler->handle($request);
         $this->setRequest($request);
-        $this->setResponse($handler->handle($request));
-        $this->setRoute($this->getRouter()->match($this->getRequest()));
-        $this->setNameController($this->getRoute()->getParam("controle"));
-        $this->chargeModel($this->getNameController());
-
+        $this->setResponse($Response);
+        
+       
         return $this->getResponse();
     }
 
@@ -226,7 +231,7 @@ abstract class Controller implements MiddlewareInterface {
         $renderer->addGlobal("_Controller", $this->getNameController());
         $renderer->addGlobal("_Action", $this->Actions());
         $renderer->addGlobal("_ROOTWEB", ROOT_WEB);
-       
+
         $renderer->addGlobal("_NamesRoute", $this->getNamesRoute());
         $data_view = $this->add_data_views($data);
 

@@ -15,6 +15,7 @@
 namespace App;
 
 use App\Authentification\Comptes\ComptesModule;
+use App\Authentification\Login\LoginModule;
 use Kernel\Kernel;
 
 class App extends Kernel {
@@ -39,9 +40,11 @@ class App extends Kernel {
     private function gestion_compte() {
 
         $Comptes = new ComptesModule($this->container);
+        $login=new LoginModule($this->container);
         $modules = $this->getModules();
         $Comptes->setModules($modules);
         $this->addModule($Comptes);
+        $this->addModule($login);
     }
 
 }

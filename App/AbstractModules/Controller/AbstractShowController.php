@@ -17,10 +17,33 @@ use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\Event\Event;
 use Kernel\INTENT\Intent_Form;
 use Psr\Http\Message\ResponseInterface;
-use function preg_match;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 abstract class AbstractShowController extends AbstractController {
 
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+        parent::process($request, $handler);
+
+//       if ($this->getResponse()->getStatusCode() != 200 ) {
+//            return $this->getResponse();
+//        }
+        $this->setRoute($this->getRouter()->match($this->getRequest()));
+        $this->setNameController($this->getRoute()->getParam("controle"));
+        $this->chargeModel($this->getNameController());
+
+
+//        if ($this->is_Erreur()) {
+//            return $this->getResponse()->withStatus(404);
+//        }
+        $action = $this->getRoute()->getParam("action");
+        $this->Actions()->setAction($action);
+        $id = $this->getRoute()->getParam("id");
+        return $this->run($id);
+    }
+    
+    
+    abstract function run($id): ResponseInterface;
     protected function showDataTable(string $name_views, string $nameRouteGetDataAjax): ResponseInterface {
 
         if ($this->is_Erreur()) {
@@ -78,7 +101,7 @@ abstract class AbstractShowController extends AbstractController {
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function supprimer($id, string $view): ResponseInterface {
+    protected function supprimer($id, string $view): ResponseInterface {
 
         $conditon = ['id' => $id];
 
@@ -92,7 +115,7 @@ abstract class AbstractShowController extends AbstractController {
             return $r;
         } else {
             $this->getResponse()->getBody()->write("$view  $id");
-           
+
             $eventManager = $this->getContainer()->get(EventManagerInterface::class);
             $event = new Event();
             $event->setName("delete_files");
@@ -103,7 +126,7 @@ abstract class AbstractShowController extends AbstractController {
         return $this->getResponse();
     }
 
-    public function modifier($id_save, string $view): ResponseInterface {
+    protected function modifier($id_save, string $view): ResponseInterface {
 
 
         $modeselect = $this->getModel()::MODE_SELECT_ALL_MASTER;
@@ -135,7 +158,7 @@ abstract class AbstractShowController extends AbstractController {
         return $this->render($view, ["intent" => $intent_Form]);
     }
 
-    public function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface {
+    protected function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface {
         $model = $this->getModel();
         $schema = $model->getschema();
 
@@ -164,12 +187,12 @@ abstract class AbstractShowController extends AbstractController {
         }
     }
 
-    public function show($id, string $view): ResponseInterface {
+    protected function show($id, string $view): ResponseInterface {
         $intent = $this->getModel()->show_styleForm($id);
         return $this->render($view, ["intent" => $intent]);
     }
 
-    public function message($rangeID, string $view): ResponseInterface {
+    protected function message($rangeID, string $view): ResponseInterface {
 
         $mode = $this->getModel()::MODE_SELECT_DEFAULT_NULL;
 

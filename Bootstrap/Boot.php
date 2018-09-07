@@ -28,7 +28,7 @@ if (php_sapi_name() != "cli") {
      */
     require ROOT . "Bootstrap" . D_S . "Event.php";
     /**
-     * set event
+     * set Middlewares
      */
     require ROOT . "Bootstrap" . D_S . "Middlewares.php";
     /**

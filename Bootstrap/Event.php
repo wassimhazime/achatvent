@@ -21,7 +21,6 @@ $app->addEvent("delete_files", function(EventInterface $event)use ($File_Upload)
             . 'data-regex="/(.+)/"'
             . '(.+)!i', $url_id_file, $matches);
     if (!empty($matches) && isset($matches[2])) {
-
         $File_Upload->delete($matches[2]);
     }
 });

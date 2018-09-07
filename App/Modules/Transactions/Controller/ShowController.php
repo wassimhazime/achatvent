@@ -24,16 +24,10 @@ use function substr;
 
 class ShowController extends AbstractShowController {
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+ public function __construct(array $Options) {
+        parent::__construct($Options);
+       
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
-        parent::process($request, $handler);
-        if ($this->is_Erreur()) {
-            return $this->getResponse()->withStatus(404);
-        }
-        $action = $this->getRoute()->getParam("action");
-        $this->Actions()->setAction($action);
-        $id = $this->getRoute()->getParam("id");
-        return $this->run($id);
     }
 
     public function run($id): ResponseInterface {
@@ -70,7 +64,7 @@ class ShowController extends AbstractShowController {
         }
     }
 
-    public function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface {
+    protected function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface {
         $model = $this->getModel();
         $schema = $model->getschema();
 
@@ -118,7 +112,7 @@ class ShowController extends AbstractShowController {
         }
     }
 
-    public function modifier($id_save, string $view): ResponseInterface {
+    protected function modifier($id_save, string $view): ResponseInterface {
 
 
         $model = $this->getModel();
