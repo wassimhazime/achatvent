@@ -25,25 +25,28 @@ abstract class AbstractShowController extends AbstractController {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
 
-//       if ($this->getResponse()->getStatusCode() != 200 ) {
-//            return $this->getResponse();
-//        }
+       if ($this->getResponse()->getStatusCode() != 200 ) {
+            return $this->getResponse();
+        }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
         $this->setNameController($this->getRoute()->getParam("controle"));
         $this->chargeModel($this->getNameController());
 
 
-//        if ($this->is_Erreur()) {
-//            return $this->getResponse()->withStatus(404);
-//        }
+        if ($this->is_Erreur()) {
+            return $this->getResponse()->withStatus(404);
+        }
         $action = $this->getRoute()->getParam("action");
         $this->Actions()->setAction($action);
         $id = $this->getRoute()->getParam("id");
+        
+        
+    
         return $this->run($id);
     }
-    
-    
+
     abstract function run($id): ResponseInterface;
+
     protected function showDataTable(string $name_views, string $nameRouteGetDataAjax): ResponseInterface {
 
         if ($this->is_Erreur()) {
@@ -72,6 +75,8 @@ abstract class AbstractShowController extends AbstractController {
             $get = "?" . $this->getRequest()->getUri()->getQuery();
             $data["ajax"] = $url . $get;
         }
+
+
         return $this->render($name_views, $data);
     }
 

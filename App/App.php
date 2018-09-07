@@ -40,11 +40,11 @@ class App extends Kernel {
     private function gestion_compte() {
 
         $Comptes = new ComptesModule($this->container);
-        $login=new LoginModule($this->container);
+       // $login=new LoginModule($this->container);
         $modules = $this->getModules();
         $Comptes->setModules($modules);
         $this->addModule($Comptes);
-        $this->addModule($login);
+       // $this->addModule($login);
     }
 
 }

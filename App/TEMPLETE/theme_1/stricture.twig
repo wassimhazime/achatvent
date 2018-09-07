@@ -96,7 +96,16 @@
         <script src="/{{_ROOTWEB}}AWA/sb-admin-2.js" type="text/javascript"></script>
         {% block footer %}
 
+
         {% endblock %}
+        <!-- cache menu or mobile -->
+        <script>
+
+            $(document).ready(function() {
+                $(".sidebar-nav").removeClass("in").addClass("collapse");
+            });
+
+        </script>
     </body>
 
 </html>

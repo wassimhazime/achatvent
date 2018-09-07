@@ -23,6 +23,7 @@ class ShowController extends AbstractShowController {
 
   public function __construct(array $Options) {
         parent::__construct($Options);
+        
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
     }
 
@@ -32,6 +33,7 @@ class ShowController extends AbstractShowController {
 
         switch (true) {
             case $this->Actions()->is_index():
+               
                 return $this->showDataTable("show", $this->getNamesRoute()->ajax());
 
 

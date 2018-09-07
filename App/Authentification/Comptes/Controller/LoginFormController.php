@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Authentification\Login\Controller;
+namespace App\Authentification\Comptes\Controller;
 
 /**
  * Description of PostController

@@ -32,28 +32,6 @@ class ComptesModule extends AbstractModule {
         }
     }
 
-//    public function set_event_autorisation() {
-//        $modules = $this->modules;
-//        $container = $this->getContainer();
-//        $eventManager = $container->get(\Kernel\AWA_Interface\EventManagerInterface::class);
-//        $autorisation = $container->get(\App\Authentification\Autorisation::class);
-//
-//
-//        $eventManager->attach("autorisation_init", function ($event) use ($modules, $autorisation) {
-//
-//
-//            foreach ($modules as $module) {
-//                $controllers = [];
-//                foreach ($module->getControllers() as $controller) {
-//                    $controllers[] = $controller;
-//                }
-//                $autorisation->Autorisation_init($module::NameModule, $controllers);
-//            }
-//        });
-//    }
-
-    /////////////////////////////////////////////////////////////////////
-
     public function addPathRenderer(RendererInterface $renderer) {
         $pathModule = __DIR__ . D_S . "views" . D_S;
         $renderer->addPath($pathModule, self::NameModule);
@@ -92,6 +70,18 @@ class ComptesModule extends AbstractModule {
 
         $router->addRoute_get(
                 "/files/{controle:[a-zA-Z0-9\_\$\-]+}", new FileController($Options), $nameRoute->files(), self::NameModule
+        );
+
+        /*
+         * login
+         */
+        $router->addRoute_get(
+                "/login", new Controller\LoginFormController($Options), "login", "login"
+        );
+
+
+        $router->addRoute_post(
+                "/login", new Controller\LoginSendController($Options), "loginPost", "login"
         );
     }
 

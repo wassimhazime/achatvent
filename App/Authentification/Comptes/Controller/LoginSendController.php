@@ -6,14 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace App\Authentification\Login\Controller;
+namespace App\Authentification\Comptes\Controller;
 
 /**
  * Description of PostController
  *
  * @author wassime
  */
-use App\Authentification\Login\Model\Model;
+use App\Authentification\Comptes\Model\Model;
 use App\AbstractModules\Controller\AbstractController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -42,13 +42,16 @@ class LoginSendController extends AbstractController {
         $model = $this->getModel();
 
         $_SESSION["aut"] = ($model->select(["login" => $login, "password" => $password]));
-        $r = new \GuzzleHttp\Psr7\Response();
+        $r = $this->getContainer()->get(ResponseInterface::class);
+        
         if (isset($_SESSION["aut"]) && !empty($_SESSION["aut"])) {
+           
 
             return $r->withHeader("Location", "/")->withStatus(403);
         } else {
-
-            return $r->withHeader("Location", "/Login/login")->withStatus(403);
+            $url = $this->getRouter()->generateUri("login");
+           
+            return $r->withHeader("Location", $url)->withStatus(403);
         }
     }
 
