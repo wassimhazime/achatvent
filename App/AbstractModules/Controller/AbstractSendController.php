@@ -9,6 +9,7 @@
 namespace App\AbstractModules\Controller;
 
 use Kernel\AWA_Interface\EventManagerInterface;
+use Kernel\AWA_Interface\PasswordInterface;
 use Kernel\Event\Event;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,6 +18,7 @@ use function array_merge;
 use function preg_match;
 use function str_replace;
 use function substr;
+use function var_dump;
 
 /**
  * Description of PostController
@@ -26,7 +28,7 @@ use function substr;
 abstract class AbstractSendController extends AbstractController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-   parent::process($request, $handler);
+        parent::process($request, $handler);
 
         if ($this->getResponse()->getStatusCode() != 200) {
             return $this->getResponse();
@@ -68,6 +70,10 @@ abstract class AbstractSendController extends AbstractController {
          */
         $POST = $this->getRequest()->getParsedBody();
         /**
+         * ecypte password
+         */
+        $POST = $this->encryptPassword($POST);
+        /**
          * update
          * remove file has is
          */
@@ -102,8 +108,11 @@ abstract class AbstractSendController extends AbstractController {
 
 
         // get data insert merge par parent et child
-        $insert = $request->getParsedBody();
-
+        $insertcler = $request->getParsedBody();
+        /**
+         * ecypte password
+         */
+        $insert = $this->encryptPassword($insertcler);
 
         // parse data
         $parseData = $this->parseDataPerant_child($insert);
@@ -244,6 +253,22 @@ abstract class AbstractSendController extends AbstractController {
             $event->setParams(["url_id_file" => $this->getModel()->get_idfile($insert['id'])]);
             $eventManager->trigger($event);
         }
+    }
+
+    /**
+     * ecypt password
+     */
+    protected function encryptPassword(array $dataForm): array {
+        if (isset($dataForm["password"])) {
+            $password= $this->getContainer()->get(PasswordInterface::class);
+            $hash = $password->encrypt($dataForm["password"]);
+            
+            $dataForm["password"] = $hash ;
+        }
+
+       
+
+        return$dataForm;
     }
 
 }

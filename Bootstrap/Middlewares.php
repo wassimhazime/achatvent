@@ -17,10 +17,10 @@ use Middlewares\Whoops;
  * Middleware
  */
 $app->addMiddleware(new Whoops());
-$session = new PhpSession();
-//// $session->id("wassimawja");
+//$session = new PhpSession();
+//$session->id("xx")->regenerateId(10)->name("S_awa");
 //// session start() hhhhhh
-$app->addMiddleware($session);
+$app->addMiddleware(new App\Middleware\TrailingSlash($container));
 $app->addMiddleware([
     new CssMinifier(),
     new JsMinifier(),

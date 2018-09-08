@@ -13,8 +13,10 @@ namespace App\Authentification\Comptes\Controller;
  *
  * @author wassime
  */
-use App\Authentification\Comptes\Model\Model;
+
 use App\AbstractModules\Controller\AbstractController;
+use App\Authentification\AutorisationInterface;
+use App\Authentification\Comptes\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -38,20 +40,24 @@ class LoginSendController extends AbstractController {
 
 
         $this->setModel(new Model($this->getContainer()->get("pathModel")));
-        $this->chargeModel("comptes");
-        $model = $this->getModel();
+        $model = $this->getModel("comptes");
+        $compte = $model->login($login, $password);
 
-        $_SESSION["aut"] = ($model->select(["login" => $login, "password" => $password]));
-        $r = $this->getContainer()->get(ResponseInterface::class);
-        
-        if (isset($_SESSION["aut"]) && !empty($_SESSION["aut"])) {
-           
+        $session = $this->getSession();
+        $response = $this->getResponse();
+        $key=AutorisationInterface::Name_Key_Session;
 
-            return $r->withHeader("Location", "/")->withStatus(403);
+
+
+        $session->set($key, $compte);
+
+
+        if ($session->has($key)) {
+            return $response->withHeader("Location", "/")->withStatus(301);
         } else {
             $url = $this->getRouter()->generateUri("login");
-           
-            return $r->withHeader("Location", $url)->withStatus(403);
+
+            return $response->withHeader("Location", $url)->withStatus(403);
         }
     }
 

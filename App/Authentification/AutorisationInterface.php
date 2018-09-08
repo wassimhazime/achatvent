@@ -6,19 +6,16 @@
  * and open the template in the editor.
  */
 
+namespace App\Authentification;
+
 /**
- * Description of Model
+ * Description of Autorisation
  *
  * @author wassime
  */
+interface AutorisationInterface {
 
-namespace App\Modules\CRM\Model;
-
-use App\AbstractModules\Model\AbstractModel;
-
-class Model extends AbstractModel
-{
-
-   
+const Prefixe='ssn$';
+const Name_Key_Session='aut';
 
 }

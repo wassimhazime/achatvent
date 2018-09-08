@@ -1,8 +1,8 @@
 <?php
 
-use App\AbstractModules\phinix_db\Autorisation;
+use App\Authentification\Autorisation_TablePhinix;
 
-class AutorisationComptes extends Autorisation {
+class AutorisationComptes extends Autorisation_TablePhinix {
 
     public function change() {
         $this->create_autorisation("Comptes");

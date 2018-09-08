@@ -1,11 +1,11 @@
 <?php
 
-namespace App\AbstractModules\phinix_db;
+namespace App\Authentification;
 
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-abstract class Autorisation extends AbstractMigration {
+abstract class Autorisation_TablePhinix extends AbstractMigration implements AutorisationInterface{
 
     protected function create_autorisation(string $nametable) {
         /**
@@ -33,7 +33,7 @@ abstract class Autorisation extends AbstractMigration {
           ADD CONSTRAINT `autorisation_$id` FOREIGN KEY (`comptes`) REFERENCES `comptes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
          */
-        $this->table('autorisation$' . $nametable
+        $this->table(self::Prefixe . $nametable
                         , HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::select('comptes'))

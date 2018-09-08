@@ -7,12 +7,12 @@ use Kernel\AWA_Interface\ModelInterface;
 use Kernel\AWA_Interface\ActionInterface;
 use Kernel\AWA_Interface\NamesRouteInterface;
 use Kernel\AWA_Interface\EventManagerInterface;
-
+use Kernel\AWA_Interface\SessionInterface;
+use Kernel\AWA_Interface\PasswordInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
 
 return [
     "Config" => function (): string {
@@ -63,9 +63,15 @@ return [
         return new \Kernel\Router\Router;
     },
     File_UploadInterface::class => function (ContainerInterface $container): File_UploadInterface {
-        return new \Kernel\html\File_Upload(  "filesUpload/");
+        return new \Kernel\html\File_Upload("filesUpload/");
     },
-  EventManagerInterface::class => function (ContainerInterface $container): EventManagerInterface {
-        return new Kernel\Event\EventManager() ;
+    EventManagerInterface::class => function (ContainerInterface $container): EventManagerInterface {
+        return new Kernel\Event\EventManager();
+    },
+    SessionInterface::class => function (ContainerInterface $container): SessionInterface {
+        return new Kernel\Session\SessionPHP();
+    },
+    PasswordInterface::class => function (ContainerInterface $container): PasswordInterface {
+        return new Kernel\Password\Password();
     },
 ];

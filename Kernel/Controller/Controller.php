@@ -9,11 +9,13 @@ use Kernel\AWA_Interface\NamesRouteInterface;
 use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouteInterface;
 use Kernel\AWA_Interface\RouterInterface;
+use Kernel\AWA_Interface\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use const ROOT_WEB;
 use function array_merge;
 use function in_array;
 use function is_a;
@@ -79,6 +81,9 @@ abstract class Controller implements MiddlewareInterface {
 
     function getResponse(): ResponseInterface {
         return $this->response;
+    }
+     function getSession(): SessionInterface {
+        return $this->getContainer()->get(SessionInterface::class);
     }
 
 // psr 15
@@ -153,7 +158,10 @@ abstract class Controller implements MiddlewareInterface {
         $this->model = $model;
     }
 
-    protected function getModel(): ModelInterface {
+    protected function getModel(string $nameTable=""): ModelInterface {
+       if($nameTable!==""){
+           $this->chargeModel($nameTable);
+       }
         return $this->model;
     }
 

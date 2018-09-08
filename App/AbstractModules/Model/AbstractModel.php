@@ -207,7 +207,7 @@ class AbstractModel extends Model {
      */
     public function showAjax($mode, $id = true): array {
 
-        $entity = $this->select( $id,$mode);
+        $entity = $this->select($id, $mode);
 
         return Tools::entitys_TO_array($entity);
     }
@@ -215,13 +215,13 @@ class AbstractModel extends Model {
 // save data
 
     public function setData(array $data, $table_parent = "", $id_perent = 0) {
-      
 
+         
 
         if (!empty($data)) {
             if ($id_perent === 0) {
                 if (!isset($data['id']) || $data['id'] == "") {
-                    
+
                     $id_parent = $this->insert_table_Relation($data);
                 } else {
                     $id_parent = $this->update($data);
@@ -234,5 +234,7 @@ class AbstractModel extends Model {
             die(" data to server php is empty show code html or ajax =>erreur send data");
         }
     }
+
+ 
 
 }

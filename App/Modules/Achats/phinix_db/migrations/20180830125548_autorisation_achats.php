@@ -1,8 +1,8 @@
 <?php
 
-use App\AbstractModules\phinix_db\Autorisation;
+use App\Authentification\Autorisation_TablePhinix;
 
-class AutorisationAchats extends Autorisation {
+class AutorisationAchats extends Autorisation_TablePhinix {
 
     public function change() {
         

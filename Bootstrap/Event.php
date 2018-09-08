@@ -1,6 +1,6 @@
 <?php
 
-use App\Authentification\Autorisation_init;
+use App\Authentification\Autorisation_Event;
 use Kernel\AWA_Interface\EventInterface;
 use Kernel\AWA_Interface\File_UploadInterface;
 use Kernel\AWA_Interface\ModelInterface;
@@ -12,9 +12,15 @@ $model = $container->get(ModelInterface::class);
 $File_Upload = $container->get(File_UploadInterface::class);
 
 
+/*
+ * metode __invok
+ */
+$autorisation_init = new Autorisation_Event($model, $modules);
+$app->addEvent("autorisation_init", $autorisation_init);
 
-$app->addEvent("autorisation_init", new Autorisation_init($model, $modules));
-
+/**
+ * callable
+ */
 $app->addEvent("delete_files", function(EventInterface $event)use ($File_Upload) {
     $url_id_file = $event->getParam("url_id_file");
     preg_match('!(.+)'

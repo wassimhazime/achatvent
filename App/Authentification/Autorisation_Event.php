@@ -18,7 +18,7 @@ use function in_array;
  *
  * @author wassime
  */
-class Autorisation_init {
+class Autorisation_Event implements AutorisationInterface{
 
     private $model;
     private $modules;
@@ -72,7 +72,7 @@ class Autorisation_init {
             if (!in_array($id, $id_comptes_setModule)) {
                 // model
 
-                $this->model->setTable('autorisation$' . $nameModul);
+                $this->model->setTable(self::Prefixe . $nameModul);
 
 
                 // set data to table 'autorisation$' . $nameModul
@@ -103,7 +103,7 @@ class Autorisation_init {
      */
     private function get_FOREIGN_KEY_Compes($nameModul): array {
 
-        $this->model->setTable('autorisation$' . $nameModul);
+        $this->model->setTable(self::Prefixe . $nameModul);
         $id_comptes_setModule = [];
 
         foreach ($this->model->select_simple(["comptes"]) as $value) {

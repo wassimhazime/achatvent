@@ -4,6 +4,7 @@ namespace App\Authentification\Comptes;
 
 use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
+use App\Authentification\AutorisationInterface;
 use Kernel\AWA_Interface\RendererInterface;
 use App\Authentification\Comptes\{
     Controller\SendController,
@@ -12,7 +13,7 @@ use App\Authentification\Comptes\{
     Controller\FileController
 };
 
-class ComptesModule extends AbstractModule {
+class ComptesModule extends AbstractModule  {
 
     private $modules = [];
     protected $Controllers = [
@@ -28,7 +29,7 @@ class ComptesModule extends AbstractModule {
     function setModules(array $modules) {
         $this->modules = $modules;
         foreach ($modules as $module) {
-            $this->setController('autorisation$' . $module::NameModule);
+            $this->setController(AutorisationInterface::Prefixe . $module::NameModule);
         }
     }
 
