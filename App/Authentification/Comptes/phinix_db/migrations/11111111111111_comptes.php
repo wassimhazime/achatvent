@@ -1,6 +1,9 @@
 <?php
 
+use Faker\Factory;
+use Kernel\AWA_Interface\PasswordInterface;
 use Kernel\Conevert\HTML_Phinx;
+use Kernel\Container\Factory_Container;
 use Phinx\Migration\AbstractMigration;
 
 class Comptes extends AbstractMigration {
@@ -30,24 +33,12 @@ class Comptes extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
-
-        /**
-          --
-          -- Structure de la table `comptes`
-          --
-
-          CREATE TABLE `comptes` (
-          `id` int(10) NOT NULL,
-          `comptes` varchar(200) NOT NULL,
-          `login` varchar(201) NOT NULL,
-          `password` varchar(202) NOT NULL,
-          `email` varchar(150) DEFAULT NULL,
-          `date_ajoute` datetime NOT NULL,
-          `date_modifier` datetime NOT NULL
-          ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-         */
-        $this->table("comptes", HTML_Phinx::id_default())
+   
+    /**
+     * Migrate Up.
+     */
+    public function up() {
+             $this->table("comptes", HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::text_master('comptes'))
                 ->addColumn(HTML_Phinx::text_master('login'))
@@ -60,8 +51,26 @@ class Comptes extends AbstractMigration {
                 ->addIndex(['comptes'], ['unique' => true])
                 ->addIndex(['email'], ['unique' => true])
                 ->create();
-        $data=["comptes"=>"root","login"=>"root","email"=>"root@root.root","active"=>1,"password"=>'root'];
-        $this->table("comptes")->insert($data);
+        $faker = Factory::create('fr_FR');
+        $container= Factory_Container::getContainer();
+        //singltone ==>dejat set $pathconfig
+        $password=$container->get(PasswordInterface::class);
+        $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
+        $data = ["comptes" => "root",
+            "login" => "root",
+            "email" => "root@root.root",
+            "active" => 1,
+            "password" =>$password->encrypt("root"),
+            "date_ajoute" => $date,
+            "date_modifier" => $date];
+        $this->table("comptes")->insert($data)->save();
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down() {
+        $this->table('comptes')->drop()->save();
     }
 
 }

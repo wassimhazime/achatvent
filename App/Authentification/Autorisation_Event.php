@@ -18,7 +18,7 @@ use function in_array;
  *
  * @author wassime
  */
-class Autorisation_Event implements AutorisationInterface{
+class Autorisation_Event implements AutorisationInterface {
 
     private $model;
     private $modules;
@@ -68,8 +68,8 @@ class Autorisation_Event implements AutorisationInterface{
         foreach ($id_comptes as $id) {
 
             // init si delete all  FOREIGN_KEY_Compes to table
-
-            if (!in_array($id, $id_comptes_setModule)) {
+//$id==1 is root
+            if ($id != 1 && !in_array($id, $id_comptes_setModule)) {
                 // model
 
                 $this->model->setTable(self::Prefixe . $nameModul);

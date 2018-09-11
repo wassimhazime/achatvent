@@ -92,7 +92,7 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
                     if ($row["ajouter"] == "1" && ($action->is_add() || $action->is_message() || $action->is_show())) {
                         return true;
                     }
-                    if ($row["modifier"] == "1" &&($action->is_update() || $action->is_message() || $action->is_show())) {
+                    if ($row["modifier"] == "1" && ($action->is_update() || $action->is_message() || $action->is_show())) {
                         return true;
                     }
                     if ($row["effacer"] == "1" && ($action->is_delete() || $action->is_message() || $action->is_show())) {
@@ -107,9 +107,7 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
     }
 
     protected function is_root($Autorisation): bool {
-
-
-        return $Autorisation["comptes"]["comptes"] === "root";
+        return $Autorisation["comptes"]["id"] === "1" && $Autorisation["comptes"]["active"] === "1";
     }
 
     protected function parseNameModule(ServerRequestInterface $request): string {

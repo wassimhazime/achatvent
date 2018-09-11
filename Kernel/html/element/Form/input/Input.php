@@ -40,7 +40,9 @@ class Input extends Abstract_Input {
             $tag = $this->input_file($tag);
         } elseif ($type == "checkbox") {
             $tag = $this->input_checkbox($tag);
-        } else {
+        }  elseif ($type == "password") {
+            $tag = $this->input_password($tag);
+        }else {
             $tag = $this->input_normal($tag);
         }
 
@@ -79,7 +81,19 @@ class Input extends Abstract_Input {
         }
         return $tag;
     }
-
+ /**
+     * default input
+     * @param HTML $tag
+     * @return HTML
+     */
+    private function input_password(HTML $tag): HTML {
+        $name = $this->name;
+       
+        $tag->setName($name . $this->child)
+                ->setAtt('data-set_null="' . $this->null . '"  step="any" ')
+                ;
+        return $tag;
+    }
     /**
      * default input
      * @param HTML $tag
