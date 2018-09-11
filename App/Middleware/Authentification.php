@@ -9,13 +9,16 @@
 namespace App\Middleware;
 
 use App\Authentification\AutorisationInterface;
+use Kernel\AWA_Interface\ActionInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\AWA_Interface\SessionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use function preg_match;
+use function var_dump;
 
 /**
  * Description of Authentification
@@ -29,7 +32,7 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
     private $Response;
     private $Session;
 
-    function __construct(\Psr\Container\ContainerInterface $container) {
+    function __construct(ContainerInterface $container) {
         $this->container = $container;
         $this->router = $container->get(RouterInterface::class);
         $this->Response = $container->get(ResponseInterface::class);
@@ -37,7 +40,9 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+        //return $handler->handle($request);
         $route = $this->getRouter()->match($request);
+
         // not is in modules
         if (!$route->isSuccess()) {
             return $handler->handle($request);
@@ -49,30 +54,59 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
             return $handler->handle($request);
         }
 
-
-
-     
-
-
-
-
-
-
-
         if ($this->getSession()->has(self::Name_Key_Session)) {
-        $nameModule = $this->parseNameModule($request);
-        $nameControler = $this->parseNameControler($request);
-        $compte = $this->getSession()->get(self::Name_Key_Session);
+            if($this->is_root()){
+                return $handler->handle($request);
+            }
 
-        //var_dump($nameModule, $nameControler,$compte);
-       // die();
-            
-            return $handler->handle($request);
-        } else {
-            return $this->getResponse()
-                            ->withHeader("Location", $url_login)
-                            ->withStatus(403);
+            $nameModule = $this->parseNameModule($request);
+            $nameControler = $this->parseNameControler($request);
+            $nameAction = $this->parseNameAction($request);
+            $flag = $this->is_autorise($nameModule, $nameControler, $nameAction);
+
+            if ($flag) {
+                return $handler->handle($request);
+            }
         }
+        return $this->getResponse()
+                        ->withHeader("Location", $url_login)
+                        ->withStatus(403);
+    }
+
+    private function is_autorise(string $nameModule, string $nameControler, ActionInterface $action): bool {
+        $Autorisation = $this->getSession()->get(self::Name_Key_Session);
+
+        $nameTableAutorisation = self::Prefixe . $nameModule;
+        if (isset($Autorisation[$nameTableAutorisation])) {
+            $TableAutorisation = $Autorisation[$nameTableAutorisation];
+            foreach ($TableAutorisation as $row) {
+                if ($row['controller'] == $nameControler) {
+
+                    if ($row["voir"] == "1" && ($action->is_index() || $action->is_message() || $action->is_show())) {
+                        return true;
+                    }
+                    if ($row["ajouter"] == "1" && ($action->is_add() || $action->is_message() || $action->is_show())) {
+                        return true;
+                    }
+                    if ($row["modifier"] == "1" && $action->is_update()) {
+                        return true;
+                    }
+                    if ($row["effacer"] == "1" && ($action->is_delete() || $action->is_message() || $action->is_show())) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private function is_root(): bool {
+        $Autorisation = $this->getSession()->get(self::Name_Key_Session);
+        //var_dump($Autorisation);
+       // die();
+        return $Autorisation["comptes"]["comptes"] === "root";
     }
 
     private function parseNameModule(ServerRequestInterface $request): string {
@@ -88,6 +122,14 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
     private function parseNameControler(ServerRequestInterface $request): string {
         $route = $this->getRouter()->match($request);
         return $route->getParam("controle");
+    }
+
+    private function parseNameAction(ServerRequestInterface $request): ActionInterface {
+        $route = $this->getRouter()->match($request);
+        $urlaction = $route->getParam("action");
+        $action = $this->container->get(ActionInterface::class);
+        $action->setAction($urlaction);
+        return $action;
     }
 
     private function getRouter(): RouterInterface {

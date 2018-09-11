@@ -51,12 +51,13 @@ class Comptes extends AbstractMigration {
                 ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::text_master('comptes'))
                 ->addColumn(HTML_Phinx::text_master('login'))
-                ->addColumn(HTML_Phinx::text_master('password'))
-                ->addColumn(HTML_Phinx::email())
+                ->addColumn(HTML_Phinx::email_master())
+                ->addColumn(HTML_Phinx::password())
                 ->addColumn(HTML_Phinx::datetime('date_ajoute'))
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
                 ->addIndex(['login'], ['unique' => true])
                 ->addIndex(['comptes'], ['unique' => true])
+                ->addIndex(['email'], ['unique' => true])
                 ->create();
     }
 

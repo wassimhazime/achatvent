@@ -13,10 +13,10 @@ namespace App\Authentification\Comptes\Controller;
  *
  * @author wassime
  */
-
 use App\AbstractModules\Controller\AbstractController;
 use App\Authentification\AutorisationInterface;
 use App\Authentification\Comptes\Model\Model;
+use Kernel\AWA_Interface\PasswordInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -28,28 +28,37 @@ class LoginSendController extends AbstractController {
         $password = false;
         $login = false;
         $post = $request->getParsedBody();
-        if (isset($post["login"]) && !empty($post["login"])) {
+        if (isset($post["login"]) && isset($post["password"])) {
             $login = $post["login"];
-        }
-        if (isset($post["password"]) && !empty($post["password"])) {
             $password = $post["password"];
+            $session = $this->getSession();
+            $response = $this->getResponse();
+            $key = AutorisationInterface::Name_Key_Session;
+            $this->setModel(new Model($this->getContainer()->get("pathModel")));
+            $model = $this->getModel("comptes");
+            $compte = $model->login($login);
+            if (!empty($compte)) {
+                $p = $this->getContainer()->get(PasswordInterface::class);
+                $password_encrypt = $compte["password"];
+
+                if ($p->verify($password, $password_encrypt)) {
+                    $autorisation = $model->autorisation($compte, $this->getNamesControllers());
+                    $autorisation["comptes"] = $compte;
+                    $session->set($key, $autorisation);
+                }
+            } else {
+
+                $session->delete($key);
+            }
         }
-        if ($login || $password) {
-            
-        }
-
-
-        $this->setModel(new Model($this->getContainer()->get("pathModel")));
-        $model = $this->getModel("comptes");
-        $compte = $model->login($login, $password);
-
-        $session = $this->getSession();
-        $response = $this->getResponse();
-        $key=AutorisationInterface::Name_Key_Session;
 
 
 
-        $session->set($key, $compte);
+
+
+
+
+
 
 
         if ($session->has($key)) {

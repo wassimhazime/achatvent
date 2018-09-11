@@ -43,8 +43,26 @@ class HTML_Phinx implements SQL_HTMLInterface {
      * @param string $name
      * @return Column
      */
+    public static function email_master(string $name = "email"): Column {
+        return self::parseColumn($name, "email_master");
+    }
+
+    /**
+     * 
+     * @param string $name
+     * @return Column
+     */
     public static function text_master(string $name): Column {
         return self::parseColumn($name, "text_master");
+    }
+
+    /**
+     * 
+     * @param string $name
+     * @return Column
+     */
+    public static function password(string $name = "password"): Column {
+        return self::parseColumn($name, "password");
     }
 
     /**

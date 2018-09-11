@@ -33,7 +33,9 @@ interface SQL_HTMLInterface {
                 [
                 "tel" =>         ["typeHtml"=>"tel",        "typePhinix" => "string",     "options" => ['limit' => 20, 'null' => true,'default' => '']],
                 "email" =>       ["typeHtml"=>"email",      "typePhinix" => "string",     "options" => ['limit' => 150, 'null' => true,'default' => '']],
+                "email_master" =>["typeHtml"=>"email",      "typePhinix" => "string",     "options" => ['limit' => 151]],
                 "text_master" => ["typeHtml"=>"text",       "typePhinix" => "string",     "options" => ['limit' => 200]],
+                "password" =>    ["typeHtml"=>"password",   "typePhinix" => "string",     "options" => ['limit' => 199]],
                 "text" =>        ["typeHtml"=>"text",       "typePhinix" => "string",     "options" => ['limit' => 201, 'null' => true,'default' => '']],
                 "file" =>        ["typeHtml"=>"file",       "typePhinix" => "string",     "options" => ['limit' => 250, 'null' => true,'default' => '']],
                 "textarea" =>    ["typeHtml"=>"textarea",   "typePhinix" => "text",       "options" => ['null' => true]],

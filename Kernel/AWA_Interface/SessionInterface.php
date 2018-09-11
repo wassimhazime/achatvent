@@ -42,6 +42,12 @@ interface SessionInterface {
      * @param type $value
      */
     public function set(string $key, $value);
+       /**
+     * delete data 
+     * @param string $key
+     * @param type $value
+     */
+    public function delete(string $key);
 
     /**
      * is value to key

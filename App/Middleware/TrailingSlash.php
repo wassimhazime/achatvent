@@ -35,11 +35,12 @@ class TrailingSlash implements MiddlewareInterface {
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $url = $request->getUri()->getPath();
+        
         /**
          * exemple http://awa.ma/CRM/hh/ ===> http://awa.ma/CRM/hh
          */
         $response = $this->container->get(ResponseInterface::class);
-        if ($url[-1] === "/") {
+        if (!empty($url) && $url != "/" && $url[-1] === "/" ) {
             $urTrailing = substr($url, 0, -1);
             return $response
                     ->withHeader("Location", $urTrailing)

@@ -96,6 +96,17 @@ class SessionPHP implements SessionInterface {
     }
 
     /**
+     * remove|delete data 
+     * @param string $key
+     * @param type $value
+     */
+    public function delete(string $key) {
+        if (isset($_SESSION[$key])) {
+            unset($_SESSION[$key]);
+        }
+    }
+
+    /**
      * is value to key
      * @param string $key
      * @return bool
