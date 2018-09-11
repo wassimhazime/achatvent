@@ -18,7 +18,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use function preg_match;
-use function var_dump;
 
 /**
  * Description of Authentification
@@ -54,27 +53,32 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
             return $handler->handle($request);
         }
 
-        if ($this->getSession()->has(self::Name_Key_Session)) {
-            if($this->is_root()){
-                return $handler->handle($request);
-            }
 
-            $nameModule = $this->parseNameModule($request);
-            $nameControler = $this->parseNameControler($request);
-            $nameAction = $this->parseNameAction($request);
-            $flag = $this->is_autorise($nameModule, $nameControler, $nameAction);
-
-            if ($flag) {
-                return $handler->handle($request);
-            }
+        //is_autorise
+        if ($this->is_autorise($request)) {
+            return $handler->handle($request);
         }
+
         return $this->getResponse()
                         ->withHeader("Location", $url_login)
                         ->withStatus(403);
     }
 
-    private function is_autorise(string $nameModule, string $nameControler, ActionInterface $action): bool {
-        $Autorisation = $this->getSession()->get(self::Name_Key_Session);
+    protected function is_autorise($request): bool {
+        $session = $this->getSession();
+        if (!$session->has(self::Auth_Session)) {
+            return false;
+        }
+
+        $Autorisation = $session->get(self::Auth_Session);
+        if ($this->is_root($Autorisation)) {
+            return true;
+        }
+
+        $nameModule = $this->parseNameModule($request);
+        $nameControler = $this->parseNameControler($request);
+        $action = $this->parseAction($request);
+
 
         $nameTableAutorisation = self::Prefixe . $nameModule;
         if (isset($Autorisation[$nameTableAutorisation])) {
@@ -88,7 +92,7 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
                     if ($row["ajouter"] == "1" && ($action->is_add() || $action->is_message() || $action->is_show())) {
                         return true;
                     }
-                    if ($row["modifier"] == "1" && $action->is_update()) {
+                    if ($row["modifier"] == "1" &&($action->is_update() || $action->is_message() || $action->is_show())) {
                         return true;
                     }
                     if ($row["effacer"] == "1" && ($action->is_delete() || $action->is_message() || $action->is_show())) {
@@ -102,14 +106,13 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
         }
     }
 
-    private function is_root(): bool {
-        $Autorisation = $this->getSession()->get(self::Name_Key_Session);
-        //var_dump($Autorisation);
-       // die();
+    protected function is_root($Autorisation): bool {
+
+
         return $Autorisation["comptes"]["comptes"] === "root";
     }
 
-    private function parseNameModule(ServerRequestInterface $request): string {
+    protected function parseNameModule(ServerRequestInterface $request): string {
         $url = $request->getUri()->getPath();
         preg_match('!/([A-Za-z]+)(.*)!i', $url, $matches);
         if (empty($matches)) {
@@ -119,12 +122,12 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
         }
     }
 
-    private function parseNameControler(ServerRequestInterface $request): string {
+    protected function parseNameControler(ServerRequestInterface $request): string {
         $route = $this->getRouter()->match($request);
         return $route->getParam("controle");
     }
 
-    private function parseNameAction(ServerRequestInterface $request): ActionInterface {
+    protected function parseAction(ServerRequestInterface $request): ActionInterface {
         $route = $this->getRouter()->match($request);
         $urlaction = $route->getParam("action");
         $action = $this->container->get(ActionInterface::class);
@@ -132,15 +135,15 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
         return $action;
     }
 
-    private function getRouter(): RouterInterface {
+    protected function getRouter(): RouterInterface {
         return $this->router;
     }
 
-    private function getResponse(): ResponseInterface {
+    protected function getResponse(): ResponseInterface {
         return $this->Response;
     }
 
-    private function getSession(): SessionInterface {
+    protected function getSession(): SessionInterface {
         return $this->Session;
     }
 

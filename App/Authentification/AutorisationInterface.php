@@ -15,7 +15,7 @@ namespace App\Authentification;
  */
 interface AutorisationInterface {
 
-const Prefixe='ssn$';
-const Name_Key_Session='aut';
+const Prefixe='autorisation$';
+const Auth_Session='aut';
 
 }
