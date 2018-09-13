@@ -52,8 +52,9 @@ class Comptes extends AbstractMigration {
                 ->addIndex(['email'], ['unique' => true])
                 ->create();
         $faker = Factory::create('fr_FR');
-        $container= Factory_Container::getContainer();
         //singltone ==>dejat set $pathconfig
+        $container= Factory_Container::getContainer();
+        
         $password=$container->get(PasswordInterface::class);
         $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
         $data = ["comptes" => "root",

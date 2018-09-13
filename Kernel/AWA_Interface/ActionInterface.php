@@ -14,15 +14,15 @@ namespace Kernel\AWA_Interface;
  */
 interface ActionInterface {
 
-    public function add(): string;
+    public function name_add(): string;
 
-    public function update(): string;
+    public function name_update(): string;
 
-    public function delete(): string;
+    public function name_delete(): string;
 
-    public function show(): string;
+    public function name_show(): string;
 
-    public function message(): string;
+    public function name_message(): string;
 
     function setAction($action);
 

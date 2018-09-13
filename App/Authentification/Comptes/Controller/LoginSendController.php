@@ -62,7 +62,11 @@ class LoginSendController extends AbstractController {
 
 
         if ($session->has($key)) {
-            return $response->withHeader("Location", "/")->withStatus(301);
+            /**
+             *get  url stop 
+             */
+            $url=$session->get("url", "/");
+            return $response->withHeader("Location", $url)->withStatus(301);
         } else {
             $url = $this->getRouter()->generateUri("login");
 

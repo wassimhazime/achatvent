@@ -32,7 +32,13 @@ class Action implements ActionInterface {
      * @param string $show
      * @param string $message
      */
-    function __construct(string $add = "add", string $update = "update", string $delete = "delete", string $show = "show", string $message = "message") {
+    function __construct(
+            string $add = "add",
+            string $update = "update",
+            string $delete = "delete",
+            string $show = "show",
+            string $message = "message"
+            ) {
         $this->add = $add;
         $this->update = $update;
         $this->delete = $delete;
@@ -44,7 +50,7 @@ class Action implements ActionInterface {
      * 
      * @return string
      */
-    public function add(): string {
+    public function name_add(): string {
         return $this->add;
     }
 
@@ -52,7 +58,7 @@ class Action implements ActionInterface {
      * 
      * @return string
      */
-    public function update(): string {
+    public function name_update(): string {
         return $this->update;
     }
 
@@ -60,7 +66,7 @@ class Action implements ActionInterface {
      * 
      * @return string
      */
-    public function delete(): string {
+    public function name_delete(): string {
         return $this->delete;
     }
 
@@ -68,7 +74,7 @@ class Action implements ActionInterface {
      * 
      * @return string
      */
-    public function show(): string {
+    public function name_show(): string {
         return $this->show;
     }
 
@@ -76,7 +82,7 @@ class Action implements ActionInterface {
      * 
      * @return string
      */
-    public function message(): string {
+    public function name_message(): string {
         return $this->message;
     }
 

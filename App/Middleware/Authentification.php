@@ -43,10 +43,12 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
         $route = $this->getRouter()->match($request);
 
         // not is in modules
+        // get page not found
         if (!$route->isSuccess()) {
             return $handler->handle($request);
         }
         //  is in login page
+        // url is urllogin
         $url = $request->getUri()->getPath();
         $url_login = $this->getRouter()->generateUri("login");
         if ($url == $url_login) {
@@ -56,12 +58,17 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
 
         //is_autorise
         if ($this->is_autorise($request)) {
+            //ok
             return $handler->handle($request);
-        }
+        } else {
+            $session = $this->getSession();
 
-        return $this->getResponse()
-                        ->withHeader("Location", $url_login)
-                        ->withStatus(403);
+            $session->set("url", $url);
+            //  Redirection  to ligin page
+            return $this->getResponse()
+                            ->withHeader("Location", $url_login)
+                            ->withStatus(403);
+        }
     }
 
     protected function is_autorise($request): bool {
@@ -86,23 +93,39 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
             foreach ($TableAutorisation as $row) {
                 if ($row['controller'] == $nameControler) {
 
-                    if ($row["voir"] == "1" && ($action->is_index() || $action->is_message() || $action->is_show())) {
+                    if ($row[$action->name_show()] == "1" &&
+                            ($action->is_index() ||
+                            $action->is_message() ||
+                            $action->is_show())) {
+                        
                         return true;
                     }
-                    if ($row["ajouter"] == "1" && ($action->is_add() || $action->is_message() || $action->is_show())) {
+                    if ($row[$action->name_add()] == "1" && 
+                            ($action->is_add() ||
+                            $action->is_message() || 
+                            $action->is_show())
+                            
+                            ) {
+                        
                         return true;
                     }
-                    if ($row["modifier"] == "1" && ($action->is_update() || $action->is_message() || $action->is_show())) {
+                    if ($row[$action->name_update()] == "1" &&
+                            ($action->is_update() || 
+                            $action->is_message() || 
+                            $action->is_show())) {
                         return true;
                     }
-                    if ($row["effacer"] == "1" && ($action->is_delete() || $action->is_message() || $action->is_show())) {
+                    if ($row[$action->name_delete()] == "1" &&
+                            ($action->is_delete() ||
+                            $action->is_message() || 
+                            $action->is_show())) {
                         return true;
                     }
                 }
             }
             return false;
         } else {
-            return true;
+            return false;
         }
     }
 

@@ -64,19 +64,19 @@ class Inpute_Table extends Twig_Extension {
         $url = [];
         $nameroute = $this->getNamesRoute()->show();
         $url["supprimer"] = $this->getRouter()->generateUri($nameroute, ["controle" => $this->getNameController(),
-            "action" => $this->getAction()->delete(),
+            "action" => $this->getAction()->name_delete(),
             "id" => 0]);
         $url["modifier"] = $this->getRouter()->generateUri($nameroute, ["controle" => $this->getNameController(),
-            "action" => $this->getAction()->update(),
+            "action" => $this->getAction()->name_update(),
             "id" => 0]);
         $url["voir"] = $this->getRouter()->generateUri($nameroute, ["controle" => $this->getNameController(),
-            "action" => $this->getAction()->show(),
+            "action" => $this->getAction()->name_show(),
             "id" => 0]);
         $url["message"] = $this->getRouter()->generateUri($nameroute, ["controle" => $this->getNameController(),
-            "action" => $this->getAction()->message(),
+            "action" => $this->getAction()->name_message(),
             "id" => 0]);
         $url["ajouter"] = $this->getRouter()->generateUri($nameroute, ["controle" => $this->getNameController(),
-            "action" => $this->getAction()->add(),
+            "action" => $this->getAction()->name_add(),
             "id" => 0]);
 
         return $url;
