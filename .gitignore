@@ -2,6 +2,6 @@ nbproject
 nbproject/*
 .directory
 
-/.metadata/
-/vendor/
-/public/filesUpload/*
+.metadata/
+vendor/
+public/filesUpload/*
