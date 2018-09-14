@@ -10,6 +10,7 @@ namespace App\Middleware;
 
 use App\Authentification\AutorisationInterface;
 use Kernel\AWA_Interface\ActionInterface;
+use Kernel\AWA_Interface\NamesRouteInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\AWA_Interface\SessionInterface;
 use Psr\Container\ContainerInterface;
@@ -39,16 +40,17 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-        //return $handler->handle($request);
+//return $handler->handle($request);
         $route = $this->getRouter()->match($request);
 
-        // not is in modules
-        // get page not found
+
+// not is in modules
+// get page not found
         if (!$route->isSuccess()) {
             return $handler->handle($request);
         }
-        //  is in login page
-        // url is urllogin
+//  is in login page
+// url is urllogin
         $url = $request->getUri()->getPath();
         $url_login = $this->getRouter()->generateUri("login");
         if ($url == $url_login) {
@@ -56,15 +58,17 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
         }
 
 
-        //is_autorise
+//is_autorise
         if ($this->is_autorise($request)) {
-            //ok
+//ok
             return $handler->handle($request);
         } else {
             $session = $this->getSession();
 
             $session->set("url", $url);
-            //  Redirection  to ligin page
+//  Redirection  to ligin page
+
+
             return $this->getResponse()
                             ->withHeader("Location", $url_login)
                             ->withStatus(403);
@@ -84,47 +88,77 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
 
         $nameModule = $this->parseNameModule($request);
         $nameControler = $this->parseNameControler($request);
+        $nameRoute = $this->NameRoute($request);
         $action = $this->parseAction($request);
-
-
         $nameTableAutorisation = self::Prefixe . $nameModule;
         if (isset($Autorisation[$nameTableAutorisation])) {
             $TableAutorisation = $Autorisation[$nameTableAutorisation];
             foreach ($TableAutorisation as $row) {
-                if ($row['controller'] == $nameControler) {
 
-                    if ($row[$action->name_show()] == "1" &&
-                            ($action->is_index() ||
-                            $action->is_message() ||
-                            $action->is_show())) {
-                        
-                        return true;
+
+                if ($row['controller'] == $nameControler || preg_match("/^" . $row['controller'] . "/i", $nameControler)) {
+
+                    /**
+                     * show
+                     */
+                    if ($row[$action->name_show()] == "1") {
+
+                        if ($nameRoute->is_show() || $nameRoute->is_ajax()) {
+                            if ($action->is_index() || $action->is_show()) {
+                                return true;
+                            }
+                        }
+                        if ($nameRoute->is_files()) {
+                            return true;
+                        }
                     }
-                    if ($row[$action->name_add()] == "1" && 
-                            ($action->is_add() ||
-                            $action->is_message() || 
-                            $action->is_show())
-                            
-                            ) {
-                        
-                        return true;
+                    /**
+                     * add
+                     */
+                    if ($row[$action->name_add()] == "1") {
+                        if ($nameRoute->is_send() || $nameRoute->is_show()) {
+                            if ($action->is_add() || $action->is_show()) {
+
+                                return true;
+                            }
+                        }
+                        if ($nameRoute->is_files()) {
+                            return true;
+                        }
                     }
-                    if ($row[$action->name_update()] == "1" &&
-                            ($action->is_update() || 
-                            $action->is_message() || 
-                            $action->is_show())) {
-                        return true;
+                    /**
+                     * update
+                     */
+                    if ($row[$action->name_update()] == "1") {
+                        if ($nameRoute->is_send() || $nameRoute->is_show()) {
+                            if ($action->is_update() || $action->is_show()) {
+
+                                return true;
+                            }
+                        }
+                        if ($nameRoute->is_files()) {
+                            return true;
+                        }
                     }
-                    if ($row[$action->name_delete()] == "1" &&
-                            ($action->is_delete() ||
-                            $action->is_message() || 
-                            $action->is_show())) {
-                        return true;
+                    /**
+                     * delete
+                     */
+                    if ($row[$action->name_delete()] == "1") {
+                        if ($nameRoute->is_show()) {
+                            if ($action->is_delete() || $action->is_message() || $action->is_show()) {
+
+                                return true;
+                            }
+                        }
+                        if ($nameRoute->is_files()) {
+                            return true;
+                        }
                     }
                 }
             }
             return false;
         } else {
+
             return false;
         }
     }
@@ -141,6 +175,14 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
         } else {
             return $matches[1];
         }
+    }
+
+    protected function NameRoute(ServerRequestInterface $request): NamesRouteInterface {
+        $route = $this->getRouter()->match($request);
+        $name = $route->getName();
+        $nameRoute = $this->container->get(NamesRouteInterface::class);
+        $nameRoute->set_NameRoute($name);
+        return $nameRoute;
     }
 
     protected function parseNameControler(ServerRequestInterface $request): string {

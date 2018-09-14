@@ -14,7 +14,10 @@ namespace Kernel\AWA_Interface;
  */
 interface NamesRouteInterface {
 
+    function __construct($ajax = "_Ajax", $files = "_Files", $send = "_Send", $show = "_Show");
+
     public function set_NameModule(string $nameModule = "");
+    public function set_NameRoute(string $nameRoute );
 
     public function ajax(): string;
 
@@ -23,4 +26,12 @@ interface NamesRouteInterface {
     public function send(): string;
 
     public function show(): string;
+
+    public function is_ajax(): bool;
+
+    public function is_files(): bool;
+
+    public function is_send(): bool;
+
+    public function is_show(): bool;
 }
