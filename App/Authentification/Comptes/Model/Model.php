@@ -52,16 +52,31 @@ class Model extends AbstractModel {
     public function autorisation(array $compte, array $tableAutorisations) {
         $id_compte = $compte["id"];
         $autorisation = [];
-       
-        
+
+
         foreach ($tableAutorisations as $tableAutorisation) {
-            $autorisation[$tableAutorisation] = $this->prepareQueryAssoc(
-                    self::Get_QuerySQL()->select()
-                            ->from($tableAutorisation)
-                            ->where(["comptes" => $id_compte])
-                            ->prepareQuery());
+            $autorisation[$tableAutorisation] = $this->getRool($tableAutorisation, $id_compte);
         }
         return $autorisation;
+    }
+
+    private function getRool($tableAutorisation, $id_compte): array {
+        $rool = $this->prepareQueryAssoc(
+                self::Get_QuerySQL()->select()
+                        ->from($tableAutorisation)
+                        ->where(["comptes" => $id_compte])
+                        ->prepareQuery());
+
+        /**
+         * change index nompbre to arra assoc par index name controller
+         */
+        $per = [];
+        foreach ($rool as $row) {
+            $controler = $row['controller'];
+            $per[$controler] = $row;
+        }
+
+        return $per;
     }
 
 }

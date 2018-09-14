@@ -93,6 +93,7 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
         $nameTableAutorisation = self::Prefixe . $nameModule;
         if (isset($Autorisation[$nameTableAutorisation])) {
             $TableAutorisation = $Autorisation[$nameTableAutorisation];
+            var_dump($TableAutorisation);die();
             foreach ($TableAutorisation as $row) {
 
 

@@ -43,6 +43,7 @@ class LoginSendController extends AbstractController {
 
                 if ($p->verify($password, $password_encrypt)) {
                     $autorisation = $model->autorisation($compte, $this->getNamesControllers());
+                   
                     $autorisation["comptes"] = $compte;
                     $session->set($key, $autorisation);
                 }
