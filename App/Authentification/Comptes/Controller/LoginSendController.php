@@ -37,6 +37,11 @@ class LoginSendController extends AbstractController {
             $this->setModel(new Model($this->getContainer()->get("pathModel")));
             $model = $this->getModel("comptes");
             $compte = $model->login($login);
+            
+            
+            /**
+             * get compte and set to session
+             */
             if (!empty($compte)) {
                 $p = $this->getContainer()->get(PasswordInterface::class);
                 $password_encrypt = $compte["password"];

@@ -80,18 +80,18 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
         if (!$session->has(self::Auth_Session)) {
             return false;
         }
-
-        $Autorisation = $session->get(self::Auth_Session);
-        if ($this->is_root($Autorisation)) {
-            return true;
-        }
-
-        $nameModule = $this->parseNameModule($request);
-        $nameControler = $this->parseNameControler($request);
-        $nameRoute = $this->NameRoute($request);
-        $action = $this->parseAction($request);
-        $nameTableAutorisation = self::Prefixe . $nameModule;
-        if (isset($Autorisation[$nameTableAutorisation])) {
+// get permession to table 
+//        $Autorisation = $session->get(self::Auth_Session);
+//        if ($this->is_root($Autorisation)) {
+//            return true;
+//        }
+//
+//        $nameModule = $this->parseNameModule($request);
+//        $nameControler = $this->parseNameControler($request);
+//        $nameRoute = $this->NameRoute($request);
+//        $action = $this->parseAction($request);
+//        $nameTableAutorisation = self::Prefixe . $nameModule;
+       if (isset($Autorisation[$nameTableAutorisation])) {
             $TableAutorisation = $Autorisation[$nameTableAutorisation];
             var_dump($TableAutorisation);die();
             foreach ($TableAutorisation as $row) {
