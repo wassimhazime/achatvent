@@ -40,7 +40,7 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-//return $handler->handle($request);
+return $handler->handle($request);
         $route = $this->getRouter()->match($request);
 
 
@@ -80,17 +80,17 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
         if (!$session->has(self::Auth_Session)) {
             return false;
         }
-// get permession to table 
-//        $Autorisation = $session->get(self::Auth_Session);
-//        if ($this->is_root($Autorisation)) {
-//            return true;
-//        }
-//
-//        $nameModule = $this->parseNameModule($request);
-//        $nameControler = $this->parseNameControler($request);
-//        $nameRoute = $this->NameRoute($request);
-//        $action = $this->parseAction($request);
-//        $nameTableAutorisation = self::Prefixe . $nameModule;
+ //get permession to table 
+        $Autorisation = $session->get(self::Auth_Session);
+        if ($this->is_root($Autorisation)) {
+            return true;
+        }
+
+        $nameModule = $this->parseNameModule($request);
+        $nameControler = $this->parseNameControler($request);
+        $nameRoute = $this->NameRoute($request);
+        $action = $this->parseAction($request);
+        $nameTableAutorisation = self::Prefixe . $nameModule;
        if (isset($Autorisation[$nameTableAutorisation])) {
             $TableAutorisation = $Autorisation[$nameTableAutorisation];
             var_dump($TableAutorisation);die();
