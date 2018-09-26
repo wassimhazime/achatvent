@@ -1,0 +1,15 @@
+web:
+   build: .
+  
+   environment:
+     - ALLOW_OVERRIDE=true
+   ports:
+     - "80:80"
+   
+   volumes:
+     -  ./public:/app
+     
+     
+   
+
+

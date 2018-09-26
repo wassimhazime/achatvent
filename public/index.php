@@ -1,5 +1,6 @@
 <?php
 
+die("ggg");
 
 if (!defined("ROOT_WEB")) {
     define('ROOT_WEB', "");
