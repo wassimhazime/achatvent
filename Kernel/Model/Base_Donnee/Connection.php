@@ -54,11 +54,16 @@ class Connection implements ConnectionInterface {
             $dbpass = self::getConfigDB('dbpass');
             $dbname = self::getConfigDB('dbname');
             self::$DBname = $dbname;
+            
             try {
 
-                self::$PDO = new PDO("$DB:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-            } catch (Exception $e) {
-
+               // self::$PDO = new PDO("$DB:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+              self::$PDO = new PDO("$DB:host=$dbhost", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+              
+              self::$PDO->exec("CREATE DATABASE IF NOT EXISTS " .$dbname);
+              self::$PDO->query("use $dbname");
+                } catch (Exception $e) {
+                    
                 die('Erreur data base: ' . $e->getMessage());
             }
         }

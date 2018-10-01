@@ -7,7 +7,7 @@ $Bootstrap = ["BOOT" => "TEST"];
 $TEST = ["TEST" => [
         "cache" => false, // permissio file
         "DB" => "mysql",
-        "dbhost" => "localhost",
+        "dbhost" => "database",
         "dbuser" => "root",
         "dbpass" => "root",
         "dbname" => "vtest"

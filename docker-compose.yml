@@ -1,15 +1,47 @@
 web:
    build: .
-  
+   hostname: awa
+   domainname: awa.com
    environment:
      - ALLOW_OVERRIDE=true
+     - PHP_DISPLAY_ERRORS=true
    ports:
      - "80:80"
-   
+   links:
+     - database:database 
+     - adminer:adminer
+     - phpmyadmin:phpmyadmin
    volumes:
-     -  ./public:/app
+     -  ./public:/var/www/public
+     -  ./:/var/www
+database:
+   image: mariadb
+   restart: always
+   environment:
+     MYSQL_ROOT_PASSWORD: root
      
-     
+   ports:
+     - "3306:3306"
+adminer:
+   image: adminer
+   restart: always
+   links:
+     - database
+   
+   ports:
+     - "8080:8080"
+phpmyadmin:
+   image: phpmyadmin/phpmyadmin
+   
+   environment:
+     - PMA_ARBITRARY=1
+   restart: always
+   links:
+     - database
+   ports:
+     - "8888:80"
+   volumes:
+     - /sessions
    
 
 
