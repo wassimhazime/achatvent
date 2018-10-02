@@ -1,7 +1,6 @@
 web:
    build: .
-   hostname: awa
-   domainname: awa.com
+
    environment:
      - ALLOW_OVERRIDE=true
      - PHP_DISPLAY_ERRORS=true
@@ -9,10 +8,9 @@ web:
      - "80:80"
    links:
      - database:database 
-     - adminer:adminer
-     - phpmyadmin:phpmyadmin
+
    volumes:
-     -  ./public:/var/www/public
+     
      -  ./:/var/www
 database:
    image: mariadb
