@@ -144,6 +144,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
             $this->getALLschema_manule();
             $this->getALLschema_auto();
             if (empty(self::$allSchema)) {
+                
                 throw new TypeError(" "
                 . "erreur getALLschema =>> show json|php auto config | "
                 . "SCHEMA_SELECT_MANUAL"
