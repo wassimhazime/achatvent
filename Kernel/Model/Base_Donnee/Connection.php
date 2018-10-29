@@ -57,15 +57,15 @@ class Connection implements ConnectionInterface {
             
             try {
 
-               // self::$PDO = new PDO("$DB:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-              self::$PDO = new PDO("$DB:host=$dbhost", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+               self::$PDO = new PDO("$DB:host=$dbhost", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+             // self::$PDO = new PDO("mysql:dbname=vtest;unix_socket=/cloudsql/root", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
               
               self::$PDO->exec(" CREATE DATABASE IF NOT EXISTS " .$dbname);
               self::$PDO->query(" use $dbname");
               
                 } catch (Exception $e) {
                     
-                die('Erreur data base: start migrate  ' . $e->getMessage());
+                die('Erreur data base: de config Connection   ' . $e->getMessage());
             }
         }
 

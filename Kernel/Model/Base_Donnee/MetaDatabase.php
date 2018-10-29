@@ -144,12 +144,20 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
             $this->getALLschema_manule();
             $this->getALLschema_auto();
             if (empty(self::$allSchema)) {
-                
-                throw new TypeError(" "
-                . "erreur getALLschema =>> show json|php auto config | "
-                . "SCHEMA_SELECT_MANUAL"
-                . "SCHEMA_SELECT_AUTO"
-                . "SCHEMA_SELECT_CACHE");
+                // start migrate phinix
+                 header('Location: /migrate');
+                 exit();
+////                 $appphinix = new PhinxApplication();
+////                 $wrap = new TextWrapper($appphinix);
+////                 $output =$wrap->getMigrate();
+////                 echo $output;
+////                 die();
+////                
+//                throw new TypeError(" "
+//                . "erreur getALLschema =>> show json|php auto config | "
+//                . "SCHEMA_SELECT_MANUAL"
+//                . "SCHEMA_SELECT_AUTO"
+//                . "SCHEMA_SELECT_CACHE");
             }
 
             if (self::is_set_cache()) {

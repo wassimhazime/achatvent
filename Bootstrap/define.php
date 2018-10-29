@@ -1,5 +1,7 @@
 <?php
 
+use App\App;
+
 date_default_timezone_set("Africa/Casablanca");
 /**
   In practise, upload requests are limited by:
@@ -8,10 +10,10 @@ date_default_timezone_set("Africa/Casablanca");
  *  How many concurrent AJAX (XmlHttpRequest) 
  * requests are allowed in popular browsers?
  * 
-  The configured limit on the web server, eg. 
+  The configured limit on the web server, eg.
  * LimitRequestBody on Apache,
  *  client_max_body_size on Nginx.
-  The limits in the server-side scripting environment, e.g. 
+  The limits in the server-side scripting environment, e.g.
  * upload_max_filesize and post_max_size in PHP.
  * 
   Memory limits (bugs, client-side or server-side).
@@ -22,7 +24,25 @@ ini_set('post_max_size', '100M');
 if (!ini_get('display_errors')) {
     ini_set('display_errors', '1');
 }
-define('D_S', DIRECTORY_SEPARATOR);
-define('ROOT', dirname(__DIR__) . D_S);
+if (!defined("ROOT")) {
+    define('D_S', DIRECTORY_SEPARATOR);
+    define('ROOT', dirname(__DIR__) . D_S);
+    
+}
+require_once ROOT . "vendor" . D_S . "autoload.php";
+/**
+ *  configue container
+ */
+$configue = ROOT . "Config" . D_S . "Config_Container.php";
+/**
+ * creer application and set configue container
+ */
+$app = new App($configue);
+/**
+ * set le module de applicaton
+ */
+require ROOT . "Bootstrap" . D_S . "Module.php";
+
+
 
 
