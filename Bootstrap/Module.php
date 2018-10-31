@@ -7,7 +7,7 @@ use App\Modules\Statistique\StatistiqueModule;
 use App\Modules\Transactions\TransactionsModule;
 use App\Modules\Ventes\VentesModule;
 use Kernel\AWA_Interface\RendererInterface;
-$container = $app->getContainer();
+//$container = $app->getContainer();
 
 $app->addModule(StatistiqueModule::class);
 $app->addModule(CRMModule::class);
@@ -19,3 +19,4 @@ $app->addModule(TransactionsModule::class, [
   //  new Authentification($container)
         ]
 );
+$app->run_modules();// ===> not run method charge and run

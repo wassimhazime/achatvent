@@ -20,7 +20,7 @@ use Kernel\Kernel;
 
 class App extends Kernel {
 
-    function run_modules() {
+  public  function run_modules() {
         $this->gestion_compte();
         $modules = $this->getModules();
 
@@ -46,5 +46,7 @@ class App extends Kernel {
         $this->addModule($Comptes);
        // $this->addModule($login);
     }
+
+    
 
 }

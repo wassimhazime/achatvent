@@ -96,10 +96,11 @@ abstract class Kernel {
 
     public function run(ServerRequestInterface $request) {
 
-        $this->run_modules();
+      //  $this->run_modules();
         $response = $this->despatcher->handle($request);
         return $response;
     }
 
-    abstract function run_modules();
+    public abstract function run_modules();
+    
 }

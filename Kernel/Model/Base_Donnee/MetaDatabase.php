@@ -145,13 +145,13 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
             $this->getALLschema_auto();
             if (empty(self::$allSchema)) {
                 // start migrate phinix
-                 header('Location: /migrate');
-                 exit();
-////                 $appphinix = new PhinxApplication();
-////                 $wrap = new TextWrapper($appphinix);
-////                 $output =$wrap->getMigrate();
-////                 echo $output;
-////                 die();
+//                 header('Location: /migrate');
+//                 exit();
+                 $appphinix = new \Phinx\Console\PhinxApplication();
+                 $wrap = new \Phinx\Wrapper\TextWrapper($appphinix);
+                 $output =$wrap->getMigrate();
+                 echo $output;
+                 die();
 ////                
 //                throw new TypeError(" "
 //                . "erreur getALLschema =>> show json|php auto config | "
