@@ -1,6 +1,6 @@
 <?php
 
-use App\App;
+
 
 date_default_timezone_set("Africa/Casablanca");
 /**
@@ -37,12 +37,12 @@ $configue = ROOT . "Config" . D_S . "Config_Container.php";
 /**
  * creer application and set configue container
  */
-if($app===null ){
-$app = new App($configue);
+
+
 /**
  * set le module de applicaton
  */
-require ROOT . "Bootstrap" . D_S . "Module.php";}
+require ROOT . "Bootstrap" . D_S . "Module.php";
 
 
 

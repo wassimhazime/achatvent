@@ -20,7 +20,17 @@ use Kernel\Kernel;
 
 class App extends Kernel {
 
-  public  function run_modules() {
+    private static $app = null;
+
+    public static function getApp(string $pathconfig) {
+        if (self::$app === null) {
+            self::$app = new self($pathconfig);
+            return self::$app;
+        }
+        return self::$app;
+    }
+
+    public function run_modules() {
         $this->gestion_compte();
         $modules = $this->getModules();
 
@@ -40,13 +50,11 @@ class App extends Kernel {
     private function gestion_compte() {
 
         $Comptes = new ComptesModule($this->container);
-       // $login=new LoginModule($this->container);
+        // $login=new LoginModule($this->container);
         $modules = $this->getModules();
         $Comptes->setModules($modules);
         $this->addModule($Comptes);
-       // $this->addModule($login);
+        // $this->addModule($login);
     }
-
-    
 
 }

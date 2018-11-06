@@ -147,6 +147,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
                 // start migrate phinix
 //                 header('Location: /migrate');
 //                 exit();
+           
                  $appphinix = new \Phinx\Console\PhinxApplication();
                  $wrap = new \Phinx\Wrapper\TextWrapper($appphinix);
                  $output =$wrap->getMigrate();

@@ -28,6 +28,7 @@ abstract class Kernel {
     protected $router;
     protected $renderer;
     protected $modules = [];
+    protected $string_modules = [];
 
     /**
      * phinix config
@@ -35,7 +36,7 @@ abstract class Kernel {
      */
     protected $pathModules = [];
 
-    function __construct(string $pathconfig) {
+    protected function __construct(string $pathconfig) {
 
         $container = Factory_Container::getContainer($pathconfig);
         $this->container = $container;
@@ -62,19 +63,20 @@ abstract class Kernel {
         return $this->pathModules;
     }
 
-    public function addModule($_module, array $middlewares = []) {
+    public function addModule(string $s_module, array $middlewares = []) {
 
 
-        if (is_string($_module) && class_exists($_module)) {
-            $_module = new $_module($this->container);
+        if (class_exists($s_module)) {
+            $o_module = new $s_module($this->container);
         }
 
 
-        if (is_a($_module, ModuleInterface::class)) {
-            $_module->addMiddlewares($middlewares);
-            $this->modules[] = $_module;
+        if (is_a($o_module, ModuleInterface::class) && !in_array($s_module, $this->string_modules)) {
+            $this->string_modules[] = $s_module;
+            $o_module->addMiddlewares($middlewares);
+            $this->modules[] = $o_module;
             // phinix config
-            $this->pathModules[] = dirname(ROOT . str_replace("\\", DS, get_class($_module)));
+            $this->pathModules[] = dirname(ROOT . str_replace("\\", DS, get_class($o_module)));
         }
     }
 
@@ -96,11 +98,10 @@ abstract class Kernel {
 
     public function run(ServerRequestInterface $request) {
 
-      //  $this->run_modules();
+        //  $this->run_modules();
         $response = $this->despatcher->handle($request);
         return $response;
     }
 
     public abstract function run_modules();
-    
 }
