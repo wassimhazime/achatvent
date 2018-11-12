@@ -9,6 +9,8 @@ use App\Modules\Ventes\VentesModule;
 use Kernel\AWA_Interface\RendererInterface;
 //$container = $app->getContainer();
 $app =  App::getApp($configue);
+
+if(empty($app->getModules())){
 $app->addModule(StatistiqueModule::class);
 $app->addModule(CRMModule::class);
 $app->addModule(AchatsModule::class);
@@ -20,3 +22,4 @@ $app->addModule(TransactionsModule::class, [
         ]
 );
 $app->run_modules();// ===> not run method charge and run
+}

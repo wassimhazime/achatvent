@@ -1,12 +1,6 @@
 <?php
 
 $ROOT = dirname(dirname(__DIR__));
-//if (is_file($ROOT . "/public/index.php")) {
-//    require $ROOT . "/public/index.php";
-//} else {
-//    require $ROOT . "/index.php";
-//}
-
 require $ROOT . "/Bootstrap/define.php";
 
 
@@ -17,11 +11,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 
 $container = $app->getContainer();
-
-//$Request = $container->get(ServerRequestInterface::class);
-
-
-
 $pathModules = $app->getPathModules();
 
 

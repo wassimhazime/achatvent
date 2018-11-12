@@ -27,7 +27,7 @@ if (!ini_get('display_errors')) {
 if (!defined("ROOT")) {
     define('D_S', DIRECTORY_SEPARATOR);
     define('ROOT', dirname(__DIR__) . D_S);
-    
+    define('ROOT_WEB', "public/");
 }
 require_once ROOT . "vendor" . D_S . "autoload.php";
 /**

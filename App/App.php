@@ -22,7 +22,7 @@ class App extends Kernel {
 
     private static $app = null;
 
-    public static function getApp(string $pathconfig) {
+    public static function getApp(string $pathconfig) :self{
         if (self::$app === null) {
             self::$app = new self($pathconfig);
             return self::$app;

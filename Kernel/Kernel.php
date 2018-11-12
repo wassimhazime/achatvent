@@ -28,7 +28,7 @@ abstract class Kernel {
     protected $router;
     protected $renderer;
     protected $modules = [];
-    protected $string_modules = [];
+
 
     /**
      * phinix config
@@ -63,20 +63,21 @@ abstract class Kernel {
         return $this->pathModules;
     }
 
-    public function addModule(string $s_module, array $middlewares = []) {
+    public function addModule($module, array $middlewares = []) {
 
 
-        if (class_exists($s_module)) {
-            $o_module = new $s_module($this->container);
+        if (is_string($module) && class_exists($module)) {
+
+            $module = new $module($this->container);
         }
 
+        if (is_a($module, ModuleInterface::class)) {
+            
+            $this->modules[] = $module;
+            $module->addMiddlewares($middlewares);
 
-        if (is_a($o_module, ModuleInterface::class) && !in_array($s_module, $this->string_modules)) {
-            $this->string_modules[] = $s_module;
-            $o_module->addMiddlewares($middlewares);
-            $this->modules[] = $o_module;
             // phinix config
-            $this->pathModules[] = dirname(ROOT . str_replace("\\", DS, get_class($o_module)));
+            $this->pathModules[] = dirname(ROOT . str_replace("\\", DS, get_class($module)));
         }
     }
 
