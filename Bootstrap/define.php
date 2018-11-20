@@ -1,7 +1,5 @@
 <?php
 
-
-
 date_default_timezone_set("Africa/Casablanca");
 /**
   In practise, upload requests are limited by:
@@ -28,13 +26,8 @@ if (!defined("ROOT")) {
     define('D_S', DIRECTORY_SEPARATOR);
     define('ROOT', dirname(__DIR__) . D_S);
     define('ROOT_WEB', "");
-      
 }
 require_once ROOT . "vendor" . D_S . "autoload.php";
-/**
- *  configue container
- */
-$configue = ROOT . "Config" . D_S . "Config_Container.php";
 
 
 
@@ -42,6 +35,11 @@ $configue = ROOT . "Config" . D_S . "Config_Container.php";
  * set le module de applicaton
  */
 require ROOT . "Bootstrap" . D_S . "Module.php";
+/**
+ * migrate par web si besoin
+ * true or false
+ */
+require_once ROOT . "Bootstrap" . D_S . "PhinxWeb.php";
 
 
 

@@ -20,11 +20,7 @@ if (php_sapi_name() != "cli") {
      * set Middlewares
      */
     require_once ROOT . "Bootstrap" . D_S . "Middlewares.php";
-    /**
-     * migrate par web si besoin
-     * true or false
-     */
-    require_once ROOT . "Bootstrap" . D_S . "PhinxWeb.php";
+  
 }
 
 /**
@@ -32,7 +28,6 @@ if (php_sapi_name() != "cli") {
  */
 $container = $app->getContainer();
 $Request = $container->get(ServerRequestInterface::class);
-
 $Response = $app->run($Request);
 
 

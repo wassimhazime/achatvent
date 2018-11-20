@@ -145,20 +145,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
             $this->getALLschema_auto();
             if (empty(self::$allSchema)) {
                 // start migrate phinix
-//                 header('Location: /migrate');
-//                 exit();
-           
-                 $appphinix = new \Phinx\Console\PhinxApplication();
-                 $wrap = new \Phinx\Wrapper\TextWrapper($appphinix);
-                 $output =$wrap->getMigrate();
-                 echo $output;
-                 die();
-////                
-//                throw new TypeError(" "
-//                . "erreur getALLschema =>> show json|php auto config | "
-//                . "SCHEMA_SELECT_MANUAL"
-//                . "SCHEMA_SELECT_AUTO"
-//                . "SCHEMA_SELECT_CACHE");
+                $this->startMigratePhinix();
             }
 
             if (self::is_set_cache()) {
@@ -170,6 +157,14 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
             }
         }
         return self::$allSchema;
+    }
+
+    public function startMigratePhinix() {
+        $appphinix = new \Phinx\Console\PhinxApplication();
+        $wrap = new \Phinx\Wrapper\TextWrapper($appphinix);
+        $output = $wrap->getMigrate();
+        echo $output;
+        die();
     }
 
     /**
