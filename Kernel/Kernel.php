@@ -73,8 +73,9 @@ abstract class Kernel {
 
         if (is_a($module, ModuleInterface::class)) {
             
-            $this->modules[] = $module;
+            
             $module->addMiddlewares($middlewares);
+            $this->modules[] = $module;
 
             // phinix config
             $this->pathModules[] = dirname(ROOT . str_replace("\\", DS, get_class($module)));

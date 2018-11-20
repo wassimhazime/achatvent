@@ -1,10 +1,10 @@
 <?php
 
-$Bootstrap = ["BOOT" => "TEST"];
+$Bootstrap = ["BOOT" => "local"];
 
 /* * *********************** */
 
-$TEST = ["TEST" => [
+$TEST = ["docker" => [
         "cache" => false, // permissio file
         "DB" => "mysql",
         "dbhost" => "database",
@@ -12,12 +12,12 @@ $TEST = ["TEST" => [
         "dbpass" => "root",
         "dbname" => "vtest"
         ]];
-$PROD = ["PROD" => [
-        "cache" => true,
+$PROD = ["local" => [
+        "cache" => false,
         "DB" => "mysql",
         "dbhost" => "localhost",
-        "dbuser" => "comptable",
-        "dbpass" => "achrafwassim",
+        "dbuser" => "root",
+        "dbpass" => "root",
         "dbname" => "comptable"
         ]];
 

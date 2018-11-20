@@ -40,6 +40,15 @@ phpmyadmin:
      - "8888:80"
    volumes:
      - /sessions
+blackfire:
+   image: blackfire/blackfire
+   environment:
+        # Exposes the host BLACKFIRE_SERVER_ID and TOKEN environment variables.
+     - BLACKFIRE_SERVER_ID:406086b1-e18f-4fc3-add1-85235bfc642d
+     - BLACKFIRE_SERVER_TOKEN:3a4135fef37203512e4b9999662858bc70f47b7891d0eb282031b71da9b6c991
+        # You can also use global environment credentials :
+        # BLACKFIRE_SERVER_ID: SERVER-ID
+        # BLACKFIRE_SERVER_TOKEN: SERVER-TOKEN
    
 
 
