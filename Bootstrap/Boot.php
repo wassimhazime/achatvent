@@ -20,18 +20,16 @@ if (php_sapi_name() != "cli") {
      * set Middlewares
      */
     require_once ROOT . "Bootstrap" . D_S . "Middlewares.php";
-  
-}
-
-/**
- * run app
- */
-$container = $app->getContainer();
-$Request = $container->get(ServerRequestInterface::class);
-$Response = $app->run($Request);
-
-
-if (php_sapi_name() != "cli") {
+    /**
+     * run app
+     */
+    $container = $app->getContainer();
+    $Request = $container->get(ServerRequestInterface::class);
+    $Response = $app->run($Request);
     send($Response);
 }
+
+
+
+
 

@@ -1,18 +1,18 @@
 <?php
 
-$Bootstrap = ["BOOT" => "docker"];
+$Bootstrap = ["BOOT" => "local"];
 
 /* * *********************** */
 
 $TEST = ["docker" => [
-        "cache" => true, // permission file
+        "cache" => true, 
         "dsn" => "mysql:host=database",
         "dbuser" => "root",
         "dbpass" => "root",
         "dbname" => "vtest"
         ]];
 $PROD = ["local" => [
-        "cache" => false,
+        "cache" => true,
         "dsn" => "mysql:host=localhost",
         "dbuser" => "root",
         "dbpass" => "root",
