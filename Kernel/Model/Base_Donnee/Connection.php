@@ -44,15 +44,13 @@ class Connection implements ConnectionInterface {
 
             $fileConfig = new File($PathConfigJson, File::JSON, []);
             self::setFileConfigDB($fileConfig);
-            
+
             $fileCash = new File($PathCash, File::JSON, []);
             self::setFileCashDB($fileCash);
 
             $config = self::getFileConfigDB(self::File_Connect_DataBase, File::PHP);
             self::setConfigDB($config);
-
-            $DB = self::getConfigDB('DB');
-            $dbhost = self::getConfigDB('dbhost');
+            $dsn = self::getConfigDB('dsn');
             $dbuser = self::getConfigDB('dbuser');
             $dbpass = self::getConfigDB('dbpass');
             $dbname = self::getConfigDB('dbname');
@@ -60,9 +58,8 @@ class Connection implements ConnectionInterface {
 
             try {
 
-                self::$PDO = new PDO("$DB:host=$dbhost", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-                // self::$PDO = new PDO("mysql:dbname=vtest;unix_socket=/cloudsql/root", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-
+                self::$PDO = new PDO($dsn, $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            
                 self::$PDO->exec(" CREATE DATABASE IF NOT EXISTS " . $dbname);
                 self::$PDO->query(" use $dbname");
             } catch (Exception $e) {
@@ -91,8 +88,8 @@ class Connection implements ConnectionInterface {
      *
      * @param string $PathConfigJson
      */
-    public function __construct(string $PathConfigJson,string $PathCashJson, $table = null) {
-        self::getPDO($PathConfigJson,$PathCashJson);
+    public function __construct(string $PathConfigJson, string $PathCashJson, $table = null) {
+        self::getPDO($PathConfigJson, $PathCashJson);
     }
 
     /**
@@ -122,7 +119,8 @@ class Connection implements ConnectionInterface {
             return self::$fileConfigDB->get($key, $type);
         }
     }
-   /**
+
+    /**
      * 
      * @param string $key
      * @param string $type
@@ -136,6 +134,7 @@ class Connection implements ConnectionInterface {
             return self::$fileCashDB->get($key, $type);
         }
     }
+
     /**
      * 
      * @param File $fileConfigDB
@@ -143,13 +142,15 @@ class Connection implements ConnectionInterface {
     static function setFileConfigDB(File $fileConfigDB) {
         self::$fileConfigDB = $fileConfigDB;
     }
-   /**
+
+    /**
      * 
      * @param File $fileCashDB
      */
     static function setFileCashDB(File $fileCashDB) {
         self::$fileCashDB = $fileCashDB;
     }
+
     /**
      * 
      * @param array $config
