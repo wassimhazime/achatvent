@@ -30,8 +30,9 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param type $PathConfigJsone
      * @param type $table
      */
-    public function __construct($PathConfigJsone, $table = null) {
-        parent::__construct($PathConfigJsone);
+    public function __construct(string $PathConfigJson,string $PathCashJson, $table = null) {
+      
+        parent::__construct( $PathConfigJson, $PathCashJson);
         if ($table != null) {
             $this->setTable($table);
         }
@@ -449,7 +450,7 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @return array
      */
     private static function getgenerateCACHE_SELECT(): array {
-        return self::getFileConfigDB(self::CACHE_SELECT);
+        return self::getFileCashDB(self::CACHE_SELECT);
     }
 
     /**
@@ -457,14 +458,14 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param type $schmaTabls
      */
     private static function setgenerateCACHE_SELECT($schmaTabls) {
-        self::getFileConfigDB()->set($schmaTabls, self::CACHE_SELECT);
+        self::getFileCashDB()->set($schmaTabls, self::CACHE_SELECT);
     }
 
     /**
      * remove cache shema
      */
     private static function removeCACHE_SELECT() {
-        self::getFileConfigDB()->remove(self::CACHE_SELECT);
+        self::getFileCashDB()->remove(self::CACHE_SELECT);
     }
 
     /**

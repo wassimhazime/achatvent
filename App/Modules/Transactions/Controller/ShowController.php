@@ -27,7 +27,7 @@ class ShowController extends AbstractShowController {
  public function __construct(array $Options) {
         parent::__construct($Options);
        
-        $this->setModel(new Model($this->getContainer()->get("pathModel")));
+            $this->setModel(new Model($this->getContainer()->get("pathModel"),$this->getContainer()->get("tmp")));
     }
 
     public function run($id): ResponseInterface {

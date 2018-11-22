@@ -23,7 +23,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 class AjaxController extends AbstractAjaxController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-        $this->setModel(new Model($this->getContainer()->get("pathModel")));
+        $this->setModel(new Model($this->getContainer()->get("pathModel"),$this->getContainer()->get("tmp")));
 
         parent::process($request, $handler);
          return $this->ajax_js();

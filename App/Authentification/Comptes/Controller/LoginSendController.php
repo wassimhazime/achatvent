@@ -34,7 +34,7 @@ class LoginSendController extends AbstractController {
             $session = $this->getSession();
             $response = $this->getResponse();
             $key = AutorisationInterface::Auth_Session;
-            $this->setModel(new Model($this->getContainer()->get("pathModel")));
+            $this->setModel(new Model($this->getContainer()->get("pathModel"),$this->getContainer()->get("tmp")));
             $model = $this->getModel("comptes");
             $compte = $model->login($login);
             

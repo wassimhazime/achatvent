@@ -28,6 +28,7 @@ class Connection implements ConnectionInterface {
     const dbname = "dbname";
 
     private static $fileConfigDB;
+    private static $fileCashDB;
     private static $ConfigDB;
     private static $PDO = null;
     private static $DBname = "";
@@ -37,13 +38,15 @@ class Connection implements ConnectionInterface {
      * @param string $PathConfigJson
      * @return PDO
      */
-    public static function getPDO(string $PathConfigJson): PDO {
+    public static function getPDO(string $PathConfigJson, string $PathCash): PDO {
         if (self::$PDO === null) {
 
 
-            $file = new File($PathConfigJson, File::JSON, []);
-
-            self::setFileConfigDB($file);
+            $fileConfig = new File($PathConfigJson, File::JSON, []);
+            self::setFileConfigDB($fileConfig);
+            
+            $fileCash = new File($PathCash, File::JSON, []);
+            self::setFileCashDB($fileCash);
 
             $config = self::getFileConfigDB(self::File_Connect_DataBase, File::PHP);
             self::setConfigDB($config);
@@ -54,17 +57,16 @@ class Connection implements ConnectionInterface {
             $dbpass = self::getConfigDB('dbpass');
             $dbname = self::getConfigDB('dbname');
             self::$DBname = $dbname;
-            
+
             try {
 
-               self::$PDO = new PDO("$DB:host=$dbhost", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-             // self::$PDO = new PDO("mysql:dbname=vtest;unix_socket=/cloudsql/root", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-              
-              self::$PDO->exec(" CREATE DATABASE IF NOT EXISTS " .$dbname);
-              self::$PDO->query(" use $dbname");
-              
-                } catch (Exception $e) {
-                    
+                self::$PDO = new PDO("$DB:host=$dbhost", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+                // self::$PDO = new PDO("mysql:dbname=vtest;unix_socket=/cloudsql/root", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+
+                self::$PDO->exec(" CREATE DATABASE IF NOT EXISTS " . $dbname);
+                self::$PDO->query(" use $dbname");
+            } catch (Exception $e) {
+
                 die('Erreur data base: de config Connection   ' . $e->getMessage());
             }
         }
@@ -89,8 +91,8 @@ class Connection implements ConnectionInterface {
      *
      * @param string $PathConfigJson
      */
-    public function __construct($PathConfigJson, $table = null) {
-        self::getPDO($PathConfigJson);
+    public function __construct(string $PathConfigJson,string $PathCashJson, $table = null) {
+        self::getPDO($PathConfigJson,$PathCashJson);
     }
 
     /**
@@ -101,11 +103,12 @@ class Connection implements ConnectionInterface {
 
         return self::$PDO;
     }
+
     public function getDBnames(): string {
-     return self::$DBname;   
+        return self::$DBname;
     }
 
-        /**
+    /**
      * 
      * @param string $key
      * @param string $type
@@ -119,7 +122,20 @@ class Connection implements ConnectionInterface {
             return self::$fileConfigDB->get($key, $type);
         }
     }
+   /**
+     * 
+     * @param string $key
+     * @param string $type
+     * @return type
+     */
+    static function getFileCashDB(string $key = "", string $type = File::JSON) {
 
+        if ($key == "") {
+            return self::$fileCashDB;
+        } else {
+            return self::$fileCashDB->get($key, $type);
+        }
+    }
     /**
      * 
      * @param File $fileConfigDB
@@ -127,7 +143,13 @@ class Connection implements ConnectionInterface {
     static function setFileConfigDB(File $fileConfigDB) {
         self::$fileConfigDB = $fileConfigDB;
     }
-
+   /**
+     * 
+     * @param File $fileCashDB
+     */
+    static function setFileCashDB(File $fileCashDB) {
+        self::$fileCashDB = $fileCashDB;
+    }
     /**
      * 
      * @param array $config

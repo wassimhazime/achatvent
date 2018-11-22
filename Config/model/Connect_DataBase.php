@@ -1,11 +1,11 @@
 <?php
 
-$Bootstrap = ["BOOT" => "local"];
+$Bootstrap = ["BOOT" => "docker"];
 
 /* * *********************** */
 
 $TEST = ["docker" => [
-        "cache" => false, // permissio file
+        "cache" => false, // permission file
         "DB" => "mysql",
         "dbhost" => "database",
         "dbuser" => "root",

@@ -15,6 +15,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 return [
+    "tmp" => function (): string {
+        return ROOT . "tmp" . D_S;
+    }, 
     "Config" => function (): string {
         return ROOT . "Config" . D_S;
     }, "App" => function (): string {
@@ -24,7 +27,7 @@ return [
         return $container->get("Config") . "model" . D_S;
     },
     ModelInterface::class => function (ContainerInterface $container): ModelInterface {
-        return new \Kernel\Model\Model($container->get("pathModel"));
+        return new \Kernel\Model\Model($container->get("pathModel"),$container->get("tmp"));
     }, ActionInterface::class => function (ContainerInterface $container): ActionInterface {
         return new Kernel\Controller\Action("ajouter","modifier","effacer","voir","message");
     }, NamesRouteInterface::class => function (ContainerInterface $container): NamesRouteInterface {
