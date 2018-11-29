@@ -1,26 +1,30 @@
 <?php
 
-namespace App\Modules\CRM;
+namespace App\Modules\Reglages;
 
 use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RendererInterface;
 
-use App\Modules\CRM\{
+use App\Modules\Reglages\{
     Controller\SendController,
     Controller\ShowController,
     Controller\AjaxController,
     Controller\FileController
 };
 
-class CRMModule extends AbstractModule {
+class ReglagesModule extends AbstractModule {
 
     protected $Controllers = [
-        "clients",
-        'raison$sociale',
-        'contacts'
-        ];
-    const NameModule = "CRM";
+//        "Catégories des dépenses",
+//        'Catégories des recettes',
+//        'Comptes bancaires',
+//              'Modes de paiement',
+//        'Devises',
+//              'Taxes tva Pourcentage %',
+//        'Unités',
+        'mode$paiement'];
+    const NameModule = "Reglages";
     const IconModule = " fa fa-fw fa-stack-overflow ";
     
  public function addPathRenderer(RendererInterface $renderer) {

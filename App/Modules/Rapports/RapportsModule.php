@@ -12,16 +12,16 @@
  * @author wassime
  */
 
-namespace App\Modules\Statistique;
+namespace App\Modules\Rapports;
 
 use App\AbstractModules\AbstractModule;
-use App\Modules\Statistique\Controller\AjaxController;
-use App\Modules\Statistique\Controller\globalController;
+use App\Modules\Rapports\Controller\AjaxController;
+use App\Modules\Rapports\Controller\globalController;
 use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use const D_S;
 
-class StatistiqueModule extends AbstractModule {
+class RapportsModule extends AbstractModule {
 
     protected $Controllers = [
         "clients",
@@ -29,7 +29,7 @@ class StatistiqueModule extends AbstractModule {
         'contacts',
         'mode$paiement'
     ];
-    const NameModule = "Statistique";
+    const NameModule = "Rapports";
     const IconModule = " fa fa-fw fa-bar-chart-o ";
 
     public function addPathRenderer(RendererInterface $renderer) {

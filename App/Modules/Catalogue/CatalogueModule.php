@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Modules\CRM;
+namespace App\Modules\Catalogue;
 
 use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RendererInterface;
 
-use App\Modules\CRM\{
+use App\Modules\Catalogue\{
     Controller\SendController,
     Controller\ShowController,
     Controller\AjaxController,
     Controller\FileController
 };
 
-class CRMModule extends AbstractModule {
+class CatalogueModule extends AbstractModule {
 
     protected $Controllers = [
         "clients",
         'raison$sociale',
-        'contacts'
-        ];
-    const NameModule = "CRM";
+        'contacts',
+        'mode$paiement'];
+    const NameModule = "Catalogue";
     const IconModule = " fa fa-fw fa-stack-overflow ";
     
  public function addPathRenderer(RendererInterface $renderer) {

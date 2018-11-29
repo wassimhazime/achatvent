@@ -1,7 +1,7 @@
 {% extends "themes.twig" %}
-{% use "@Statistique/plugins/formqueryDataAjax.twig" %}
-{% use "@Statistique/plugins/message_global.twig" %}
-{% use "@Statistique/plugins/graph.twig" %}
+{% use "@Rapports/plugins/formqueryDataAjax.twig" %}
+{% use "@Rapports/plugins/message_global.twig" %}
+{% use "@Rapports/plugins/graph.twig" %}
 
 {% block headcss %}
     <link href="/{{_ROOTWEB}}Framework/DateRangePicker/daterangepicker.min.css" rel="stylesheet" type="text/css"/>
@@ -35,7 +35,7 @@
     <script>
         $("#queryDataAjax").click(function() {
             /// method post
-            queryDataAjax('/ajax/statistique');
+            queryDataAjax('/ajax/Rapports');
 
         });
     </script>

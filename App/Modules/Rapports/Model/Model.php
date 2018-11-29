@@ -12,7 +12,7 @@
  * @author wassime
  */
 
-namespace App\Modules\Statistique\Model;
+namespace App\Modules\Rapports\Model;
 
 use App\AbstractModules\Model\AbstractModel;
 
@@ -23,7 +23,7 @@ class Model extends AbstractModel
 
 
 
-//statistique
+//Rapports
     public function Facture_achat_HT($date)
     {
     }

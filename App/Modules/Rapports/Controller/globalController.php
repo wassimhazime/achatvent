@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\Statistique\Controller;
+namespace App\Modules\Rapports\Controller;
 
 /**
  * Description of PostController
@@ -21,7 +21,7 @@ class globalController extends AbstractController
 
     public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
     {
-        $this->setModel(new \App\Modules\Statistique\Model\Model($this->getContainer()->get("pathModel"),$this->getContainer()->get("tmp")));
+        $this->setModel(new \App\Modules\Rapports\Model\Model($this->getContainer()->get("pathModel"),$this->getContainer()->get("tmp")));
 
         parent::process($request, $handler);
         
