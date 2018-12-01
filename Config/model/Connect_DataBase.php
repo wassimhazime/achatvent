@@ -16,7 +16,7 @@ $PROD = ["local" => [
         "dsn" => "mysql:host=localhost",
         "dbuser" => "root",
         "dbpass" => "root",
-        "dbname" => "comptable"
+        "dbname" => "vtest"
         ]];
 $google = ["google" => [
         "cache" => false,

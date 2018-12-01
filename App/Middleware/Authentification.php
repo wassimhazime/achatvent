@@ -42,7 +42,7 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
         $route = $this->getRouter()->match($request);
-
+return $handler->handle($request);
 
 // not is in modules
 // get page not found
