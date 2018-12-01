@@ -7,22 +7,18 @@
  */
 
 /**
- * Description of Controller
+ * Description of Model
  *
  * @author wassime
  */
 
-namespace App\Modules\Statistique\Controller;
+namespace App\Modules\Catalogue\Model;
 
+use App\AbstractModules\Model\AbstractModel;
 
-
-
-
-use Kernel\Controller\Controller;
-
-
-abstract class AbstractController extends Controller
+class Model extends AbstractModel
 {
 
+   
 
 }

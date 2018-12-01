@@ -12,7 +12,7 @@ $TEST = ["docker" => [
         "dbname" => "vtest"
         ]];
 $PROD = ["local" => [
-        "cache" => true,
+        "cache" => false,
         "dsn" => "mysql:host=localhost",
         "dbuser" => "root",
         "dbpass" => "root",

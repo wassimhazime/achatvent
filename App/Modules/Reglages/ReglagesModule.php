@@ -1,32 +1,36 @@
 <?php
 
-namespace App\Modules\CRM;
+namespace App\Modules\Reglages;
 
 use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RendererInterface;
-
-use App\Modules\CRM\{
+use App\Modules\Reglages\{
     Controller\SendController,
     Controller\ShowController,
     Controller\AjaxController,
     Controller\FileController
 };
 
-class CRMModule extends AbstractModule {
+class ReglagesModule extends AbstractModule {
 
     protected $Controllers = [
-        "clients",
-        'raison$sociale',
-        'contacts'
-        ];
-    const NameModule = "CRM";
+        'categories$des$depenses',
+        'categories$des$recettes',
+        'comptes$bancaires',
+        'devises',
+        'taxes',
+        'unites',
+        'mode$paiement'];
+
+    const NameModule = "Reglages";
     const IconModule = " fa fa-fw fa-stack-overflow ";
-    
- public function addPathRenderer(RendererInterface $renderer) {
+
+    public function addPathRenderer(RendererInterface $renderer) {
         $pathModule = __DIR__ . D_S . "views" . D_S;
         $renderer->addPath($pathModule, self::NameModule);
     }
+
     public function addRoute(RouterInterface $router) {
         $nameRoute = $this->getNamesRoute();
 
@@ -57,7 +61,5 @@ class CRMModule extends AbstractModule {
                 "/files/{controle:[a-z0-9\_\$\-]+}", new FileController($Options), $nameRoute->files(), self::NameModule
         );
     }
-
-
 
 }

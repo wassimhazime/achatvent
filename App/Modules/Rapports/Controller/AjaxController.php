@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\Statistique\Controller;
+namespace App\Modules\Rapports\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 
@@ -20,22 +20,22 @@ class AjaxController extends AbstractController
 
     public function process(\Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
     {
-        $this->setModel(new \App\Modules\Statistique\Model\Model($this->getContainer()->get("pathModel")));
+        $this->setModel(new \App\Modules\Rapports\Model\Model($this->getContainer()->get("pathModel")));
 
         parent::process($request, $handler);
 
 
-//        if ($this->getPage() == "statistique") {
+//        if ($this->getPage() == "Rapports") {
 //            $query = $this->getRequest()->getParsedBody();
-//            $st = $this->getModel()->setStatement('statistique');
-//            $raport = ($st->statistique_pour($query));
+//            $st = $this->getModel()->setStatement('Rapports');
+//            $raport = ($st->Rapports_pour($query));
 //            $this->response->getBody()->write($raport);
 //            return $this->getResponse();
 //        }
 //
 //        if ($this->getPage() == "st" or $this->getPage() == "st") {
-//            $st = $this->model->setStatement('statistique');
-//            $this->response->getBody()->write($st->statistique_par('bons$achats', "2017-01-01", "2019-01-01"));
+//            $st = $this->model->setStatement('Rapports');
+//            $this->response->getBody()->write($st->Rapports_par('bons$achats', "2017-01-01", "2019-01-01"));
 //
 //            return $this->getResponse();
 //        }
