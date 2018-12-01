@@ -1,13 +1,34 @@
-****************************************
-Réglages
+1 Réglages
 Trésorerie
 -----------Catégories des dépenses    CategoriesDesDepenses
+
 -----------Catégories des recettes     CategoriesDesRecettes
+	
+	
+	
+
 -----------Comptes bancaires         ComptesBancaires
 -----------Modes de paiement
 -----------Devises
 -----------Taxes tva Pourcentage %
 -----------Unites
+
+2 produit
+-----------Marques
+----------Catégories produit vs Familles des articles
+-----------articles
+-----------Packs
+
+lange trad
+**********************
+Transactions
+achats 
+ventes
+transfert
+dépense
+ recette
+****************************************
+
 
 
 
@@ -16,11 +37,7 @@ Trésorerie
 
 
 ******************************
-produit
------------Marques
-----------Catégories produit vs Familles des articles
------------articles
------------Packs
+
 
 
 

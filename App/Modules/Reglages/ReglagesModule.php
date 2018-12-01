@@ -5,7 +5,6 @@ namespace App\Modules\Reglages;
 use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RendererInterface;
-
 use App\Modules\Reglages\{
     Controller\SendController,
     Controller\ShowController,
@@ -16,21 +15,22 @@ use App\Modules\Reglages\{
 class ReglagesModule extends AbstractModule {
 
     protected $Controllers = [
-//        "Catégories des dépenses",
-//        'Catégories des recettes',
-//        'Comptes bancaires',
-//              'Modes de paiement',
-//        'Devises',
-//              'Taxes tva Pourcentage %',
-//        'Unités',
+        'categories$des$depenses',
+        'categories$des$recettes',
+        'comptes$bancaires',
+        'devises',
+        'taxes',
+        'unites',
         'mode$paiement'];
+
     const NameModule = "Reglages";
     const IconModule = " fa fa-fw fa-stack-overflow ";
-    
- public function addPathRenderer(RendererInterface $renderer) {
+
+    public function addPathRenderer(RendererInterface $renderer) {
         $pathModule = __DIR__ . D_S . "views" . D_S;
         $renderer->addPath($pathModule, self::NameModule);
     }
+
     public function addRoute(RouterInterface $router) {
         $nameRoute = $this->getNamesRoute();
 
@@ -61,7 +61,5 @@ class ReglagesModule extends AbstractModule {
                 "/files/{controle:[a-z0-9\_\$\-]+}", new FileController($Options), $nameRoute->files(), self::NameModule
         );
     }
-
-
 
 }
