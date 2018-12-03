@@ -1,9 +1,10 @@
 <?php
 
 use Kernel\Conevert\HTML_Phinx;
+use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
-class ModePaiement extends AbstractMigration {
+class Marques extends AbstractMigration {
 
     /**
      * Change Method.
@@ -31,22 +32,14 @@ class ModePaiement extends AbstractMigration {
      * with the Table class.
      */
     public function change() {
-        /*
-          CREATE TABLE `mode$paiement` (
-          `id` int(10) NOT NULL,
-          `mode$paiement` varchar(200) NOT NULL,
-          `date_ajoute` datetime NOT NULL,
-          `date_modifier` datetime NOT NULL
-          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-         */
-
-
-        $this->table('mode$paiement', HTML_Phinx::id_default())
+     
+        $this->table("marques", HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
-                ->addColumn(HTML_Phinx::text_master('mode$paiement'))
+                ->addColumn(HTML_Phinx::text_master('marques'))
+                ->addColumn(HTML_Phinx::textarea('note'))
+                ->addColumn(HTML_Phinx::text('site$web'))
                 ->addColumn(HTML_Phinx::datetime('date_ajoute'))
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
-                ->addIndex(['mode$paiement'], ['unique' => true])
                 ->create();
     }
 

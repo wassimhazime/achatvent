@@ -7,6 +7,7 @@ use App\Modules\Reglages\ReglagesModule;
 use App\Modules\Catalogue\CatalogueModule;
 use App\Modules\Achats\AchatsModule;
 use App\Modules\CRM\CRMModule;
+use App\Modules\Produit\ProduitModule;
 use App\Modules\Rapports\RapportsModule;
 use App\Modules\Transactions\TransactionsModule;
 use App\Modules\Ventes\VentesModule;
@@ -27,6 +28,7 @@ $container = $app->getContainer();
 if (empty($app->getModules())) {
     $app->addModule(RapportsModule::class);
     $app->addModule(ReglagesModule::class);
+    $app->addModule(ProduitModule::class);
 //    $app->addModule(CatalogueModule::class);
 //    $app->addModule(CRMModule::class);
 //    $app->addModule(AchatsModule::class);

@@ -6,27 +6,25 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\Catalogue\Controller;
+namespace App\Modules\Produit\Controller;
 
-use App\AbstractModules\Controller\AbstractAjaxController;
-use App\Modules\Catalogue\Model\Model;
+use App\AbstractModules\Controller\AbstractFileController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-
 /**
- * Description of AjaxController
+ * Description of FileController
  *
  * @author wassime
  */
-class AjaxController extends AbstractAjaxController {
+class FileController extends AbstractFileController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-        $this->setModel(new Model($this->getContainer()->get("pathModel"),$this->getContainer()->get("tmp")));
 
         parent::process($request, $handler);
-         return $this->ajax_js();
+
+        return $this->get_views_files("show_files");
     }
 
 }

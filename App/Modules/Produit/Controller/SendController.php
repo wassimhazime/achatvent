@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\Catalogue\Controller;
+namespace App\Modules\Produit\Controller;
 /**
  * Description of PostController
  *
@@ -14,7 +14,7 @@ namespace App\Modules\Catalogue\Controller;
  */
 
 use App\AbstractModules\Controller\AbstractSendController;
-use App\Modules\Catalogue\Model\Model;
+use App\Modules\Produit\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;

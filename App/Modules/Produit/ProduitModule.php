@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Modules\Catalogue;
+namespace App\Modules\Produit;
 
 use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RendererInterface;
 
-use App\Modules\Catalogue\{
+use App\Modules\Produit\{
     Controller\SendController,
     Controller\ShowController,
     Controller\AjaxController,
     Controller\FileController
 };
 
-class CatalogueModule extends AbstractModule {
+class ProduitModule extends AbstractModule {
 
     protected $Controllers = [
-        "clients",
-        'raison$sociale',
-        'contacts',
-        'mode$paiement'];
-    const NameModule = "Catalogue";
+        "marques",
+        'familles$des$articles',
+        'articles'
+        ];
+    const NameModule = "Produit";
     const IconModule = " fa fa-fw fa-stack-overflow ";
     
  public function addPathRenderer(RendererInterface $renderer) {

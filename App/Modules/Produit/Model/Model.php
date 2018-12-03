@@ -12,7 +12,7 @@
  * @author wassime
  */
 
-namespace App\Modules\Catalogue\Model;
+namespace App\Modules\Produit\Model;
 
 use App\AbstractModules\Model\AbstractModel;
 
