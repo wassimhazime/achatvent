@@ -39,12 +39,25 @@ abstract class Controller implements MiddlewareInterface {
     private $middlewares = [];
     private $nameController = "";
     private $namesControllers = [];
+    private $child = [];
     private $nameModule;
     private $namesRoute;
 
     function __construct(array $Options) {
+        $Controllers = $Options["namesControllers"];
+
+        foreach ($Controllers as $Controller) {
+            if (is_string($Controller)) {
+                $this->namesControllers [] = $Controller;
+            } else {
+                $this->child[array_keys($Controller)[0]] = $Controller[array_keys($Controller)[0]];
+                $this->namesControllers [] = array_keys($Controller)[0];
+            }
+        }
+
         $this->container = $Options["container"];
-        $this->namesControllers = $Options["namesControllers"];
+
+
         $this->nameModule = $Options["nameModule"];
         $this->setMiddlewares($Options["middlewares"]);
         $this->namesRoute = $Options["nameRoute"];
@@ -82,7 +95,8 @@ abstract class Controller implements MiddlewareInterface {
     function getResponse(): ResponseInterface {
         return $this->response;
     }
-     function getSession(): SessionInterface {
+
+    function getSession(): SessionInterface {
         return $this->getContainer()->get(SessionInterface::class);
     }
 
@@ -103,14 +117,14 @@ abstract class Controller implements MiddlewareInterface {
             $this->container->get(RequestHandlerInterface::class)
                     ->pipe($middleware);
         }
-       
-        
+
+
 
         $Response = $handler->handle($request);
         $this->setRequest($request);
         $this->setResponse($Response);
-        
-       
+
+
         return $this->getResponse();
     }
 
@@ -158,10 +172,10 @@ abstract class Controller implements MiddlewareInterface {
         $this->model = $model;
     }
 
-    protected function getModel(string $nameTable=""): ModelInterface {
-       if($nameTable!==""){
-           $this->chargeModel($nameTable);
-       }
+    protected function getModel(string $nameTable = ""): ModelInterface {
+        if ($nameTable !== "") {
+            $this->chargeModel($nameTable);
+        }
         return $this->model;
     }
 
@@ -179,6 +193,14 @@ abstract class Controller implements MiddlewareInterface {
     }
 
     /// controller
+    protected function getChild( ) {
+        $parent= $this->getNameController();
+        if (isset($this->child[$parent])) {
+            return $this->child[$parent];
+        } else {
+            return false;
+        }
+    }
 
     function getNamesControllers(): array {
         return $this->namesControllers;

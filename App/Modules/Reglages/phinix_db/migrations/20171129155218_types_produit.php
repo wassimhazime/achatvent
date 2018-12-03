@@ -3,7 +3,7 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class Taxes extends AbstractMigration {
+class TypesProduit extends AbstractMigration {
 
     /**
      * Change Method.
@@ -31,15 +31,14 @@ class Taxes extends AbstractMigration {
      * with the Table class.
      */
     public function change() {
-        $reglage = 'taxes';
+        $reglage = 'Type$produit';
         $this->table($reglage, HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::text_master($reglage))
-                ->addColumn(HTML_Phinx::number("Pourcentage"))
-                ->addColumn(HTML_Phinx::text("note"))
+                ->addColumn(HTML_Phinx::textarea("note"))
                 ->addColumn(HTML_Phinx::datetime('date_ajoute'))
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
-                //  ->addIndex([$reglage], ['unique' => true])
+                ->addIndex([$reglage], ['unique' => true])
                 ->create();
         $this->seed($reglage);
     }
@@ -49,20 +48,28 @@ class Taxes extends AbstractMigration {
         $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
         $data = [
             [
-                $reglage => "opérations exonérées de TVA",
-                "Pourcentage" => "0",
-                "note" => "Certaines opérations sont exonérées de TVA. Découvrez les secteurs d'activités et les opérations concernées par cette exonération.",
-                "date_ajoute" => $date,
-                "date_modifier" => $date
-            ], [
-                $reglage => "TVA normal 20 % ",
-                "Pourcentage" => "20",
-                "note" => "La taxe sur la valeur ajoutée ou TVA est un impôt indirect sur la consommation.",
-                "date_ajoute" => $date,
-                "date_modifier" => $date
-        ]];
+        $reglage => "produit",
+        "note" => "Les produits (biens) sont classés : selon le type de clientèle, la fréquence d'achat, la durée d'utilisation ou selon le lien qu'ils entretiennent avec d'autres produits. ",
+        "date_ajoute" => $date,
+        "date_modifier" => $date
+            ],       [
+        $reglage => "Service",
+        "note" => "Distinction biens / services. Un bien matériel est tangible, on peut le toucher, le voir. Un service est une \"aide\" donnée à une autre personne en échange de quelque chose. Un bien matériel est un objet que l'on peut acheter.",
+        "date_ajoute" => $date,
+        "date_modifier" => $date
+            ],       [
+        $reglage => "Ouvrage",
+        "note" => "travail",
+        "date_ajoute" => $date,
+        "date_modifier" => $date
+            ],       [
+        $reglage => "Composant",
+        "note" => "lément qui entre dans la composition de qqch",
+        "date_ajoute" => $date,
+        "date_modifier" => $date
+            ]];
 
-        $this->table($reglage)->insert($data)->save();
+                $this->table($reglage)->insert($data)->save();
     }
 
 }

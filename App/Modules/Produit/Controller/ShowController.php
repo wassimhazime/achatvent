@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Modules\Catalogue\Controller;
+namespace App\Modules\Produit\Controller;
 
 /**
  * Description of PostController
@@ -14,26 +14,23 @@ namespace App\Modules\Catalogue\Controller;
  * @author wassime
  */
 use App\AbstractModules\Controller\AbstractShowController;
-use App\Modules\Catalogue\Model\Model;
+use App\Modules\Produit\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 class ShowController extends AbstractShowController {
 
-  public function __construct(array $Options) {
+    public function __construct(array $Options) {
         parent::__construct($Options);
-        
-        $this->setModel(new Model($this->getContainer()->get("pathModel"),$this->getContainer()->get("tmp")));
+
+        $this->setModel(new Model($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
     }
 
-  public function run($id): ResponseInterface {
-     
-        
-
+    public function run($id): ResponseInterface {
         switch (true) {
             case $this->Actions()->is_index():
-               
+
                 return $this->showDataTable("show", $this->getNamesRoute()->ajax());
 
 
@@ -54,11 +51,19 @@ class ShowController extends AbstractShowController {
 
 
             case $this->Actions()->is_add():
-                return $this->ajouter("ajouter_form", "ajouter_select");
+
+
+                if ($this->getChild() !== false) {
+                    return $this->ajouter_child("ajouter_form_child", "ajouter_select");
+                } else {
+                    return $this->ajouter("ajouter_form", "ajouter_select");
+                }
+
 
 
             default:
                 return $this->getResponse()->withStatus(404);
         }
     }
+
 }

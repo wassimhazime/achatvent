@@ -48,103 +48,107 @@ class Unites extends AbstractMigration {
         $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
         $data = [
             [
-        $reglage => "Année",
-        "Symbole" => " A ",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Gramme",
-        "Symbole" => "g",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Heure",
-        "Symbole" => "h",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Image",
-        "Symbole" => "img",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Jour",
-        "Symbole" => "Jour",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Kilogramme",
-        "Symbole" => "Kg",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Kilomètre",
-        "Symbole" => "Km",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Litre",
-        "Symbole" => "l",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Mètre",
-        "Symbole" => "m",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Mètre carré",
-        "Symbole" => "m2",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Chèque",
-        "Symbole" => " h ",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Mètre cube",
-        "Symbole" => "m3",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Mètre linéaire",
-        "Symbole" => "ml",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Minute",
-        "Symbole" => "min",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Mois",
-        "Symbole" => "M",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Personne",
-        "Symbole" => "p",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Seconde",
-        "Symbole" => "s",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "Tonne",
-        "Symbole" => "T",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],       [
-        $reglage => "hectare",
-        "Symbole" => "ha",
-        "date_ajoute" => $date,
-        "date_modifier" => $date
-            ],];
+                $reglage => "Année",
+                "Symbole" => " A ",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Gramme",
+                "Symbole" => "g",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Heure",
+                "Symbole" => "h",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Image",
+                "Symbole" => "img",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Jour",
+                "Symbole" => "Jour",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Kilogramme",
+                "Symbole" => "Kg",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Kilomètre",
+                "Symbole" => "Km",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Litre",
+                "Symbole" => "l",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Mètre",
+                "Symbole" => "m",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Mètre carré",
+                "Symbole" => "m2",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Chèque",
+                "Symbole" => " h ",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Mètre cube",
+                "Symbole" => "m3",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Mètre linéaire",
+                "Symbole" => "ml",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Minute",
+                "Symbole" => "min",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Mois",
+                "Symbole" => "M",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Personne",
+                "Symbole" => "p",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Seconde",
+                "Symbole" => "s",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "Tonne",
+                "Symbole" => "T",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [
+                $reglage => "hectare",
+                "Symbole" => "ha",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+            ], [$reglage => "Unité",
+                "Symbole" => "U",
+                "date_ajoute" => $date,
+                "date_modifier" => $date
+        ]];
 
-                $this->table($reglage)->insert($data)->save();
+        $this->table($reglage)->insert($data)->save();
     }
 
 }

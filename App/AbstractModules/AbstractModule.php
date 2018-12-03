@@ -30,7 +30,7 @@ abstract class AbstractModule implements ModuleInterface {
     private $router;
     private $namesRoute;
     protected $Controllers;
-    protected $middlewares=[];
+    protected $middlewares = [];
 
     const NameModule = "";
     const IconModule = "";
@@ -45,6 +45,9 @@ abstract class AbstractModule implements ModuleInterface {
     protected function generateUriMenu(string $name_route, array $Controllers): array {
         $generateUriMenu = [];
         foreach ($Controllers as $controle) {
+            if (is_array($controle)) {
+                $controle = array_keys($controle)[0];
+            }
             $url = $this->getRouter()->generateUri($name_route, ["controle" => $controle]);
             $label = ucfirst(str_replace("$", "  ", $controle));
             $generateUriMenu[$label] = $url;
@@ -73,20 +76,18 @@ abstract class AbstractModule implements ModuleInterface {
 
     public function getMenu(): array {
         $menu = [
-                    "nav_title" => $this::NameModule,
-                    "nav_icon" => $this::IconModule,
-                    "nav" => $this->generateUriMenu($this->getNamesRoute()->show(), $this->getControllers())
+            "nav_title" => $this::NameModule,
+            "nav_icon" => $this::IconModule,
+            "nav" => $this->generateUriMenu($this->getNamesRoute()->show(), $this->getControllers())
                 ]
         ;
 
         return $menu;
         // // "group"=> [[lable,url],....]
     }
-    
+
     public function addMiddlewares($middlewares) {
-        $this->middlewares=$middlewares; 
+        $this->middlewares = $middlewares;
     }
-
-
 
 }

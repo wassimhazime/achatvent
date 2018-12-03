@@ -44,7 +44,7 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
    return $handler->handle($request);
    ////////////
         $route = $this->getRouter()->match($request);
-
+return $handler->handle($request);
 
 // not is in modules
 // get page not found
