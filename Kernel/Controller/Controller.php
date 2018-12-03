@@ -194,6 +194,8 @@ abstract class Controller implements MiddlewareInterface {
 
     /// controller
     protected function getChild( ) {
+        // $NameControllerchild = substr($this->getNameController(), 0, -1); // childe achats => achat
+            
         $parent= $this->getNameController();
         if (isset($this->child[$parent])) {
             return $this->child[$parent];

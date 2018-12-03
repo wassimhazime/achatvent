@@ -140,7 +140,7 @@ class AbstractModel extends Model {
      * @param array $mode
      * @return type
      */
-    public function get_Charge_multiSelect($id_save, array $mode = self::MODE_SELECT_ALL_MASTER) {
+    public function get_Charge_multiSelect($id_save, array $mode = self::MODE_SELECT_ALL_DEFAULT) {
         //select id de FOREIGN_KEY lier to table
         $id_FOREIGN_KEYs = $this->get_id_FOREIGN_KEYs($id_save);
         // select data de MultiSelect || tablechilde
@@ -153,7 +153,7 @@ class AbstractModel extends Model {
      * @param type $modeselect
      * @return Intent_Form
      */
-    public function show_styleForm($id, $modeselect = self::MODE_SELECT_ALL_MASTER): Intent_Form {
+    public function show_styleForm($id, $modeselect = self::MODE_SELECT_ALL_DEFAULT): Intent_Form {
 
 
         $schema = $this->getschema();

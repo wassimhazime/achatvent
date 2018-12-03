@@ -168,7 +168,9 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
             return $this->getDataBase()->lastInsertId();
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-               var_dump($exc->getMessage());
+             var_dump($sqlprepare); 
+            var_dump($params_execute); 
+            var_dump($exc->getMessage());
             die();
             return -1;
         }

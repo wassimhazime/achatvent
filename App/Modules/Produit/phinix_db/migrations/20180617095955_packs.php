@@ -9,7 +9,7 @@ class Packs extends AbstractMigration {
     public function change() {
         $this->table("packs", HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
-                ->addColumn(HTML_Phinx::text_master('pack'))
+                ->addColumn(HTML_Phinx::text_master('nom$pack'))
                 ->addColumn(HTML_Phinx::textarea('Description'))
                 ->addColumn(HTML_Phinx::number('Prix$d$achat$TTC'))
                 ->addColumn(HTML_Phinx::number('Prix$de$vente$TTC'))

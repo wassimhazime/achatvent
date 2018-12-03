@@ -28,8 +28,9 @@ use App\Modules\Transactions\{
 class TransactionsModule extends AbstractModule {
 
     protected $Controllers = [
-        "achats",
-        'ventes'
+        ["achats"=>"achat"],
+        ["ventes"=>"vente"]
+       
     ];
     const NameModule = "Transactions";
     const IconModule = "  fa fa-fw fa-briefcase ";

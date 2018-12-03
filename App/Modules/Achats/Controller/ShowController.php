@@ -26,14 +26,20 @@ class ShowController extends AbstractShowController {
             $this->setModel(new Model($this->getContainer()->get("pathModel"),$this->getContainer()->get("tmp")));
     }
 
-    public function run($id): ResponseInterface {
+        public function run($id): ResponseInterface {
         switch (true) {
             case $this->Actions()->is_index():
+
                 return $this->showDataTable("show", $this->getNamesRoute()->ajax());
 
 
             case $this->Actions()->is_update():
-                return $this->modifier($id, "modifier_form");
+
+                if ($this->getChild() !== false) {
+                    return $this->modifier_child($id, "modifier_form_child");
+                } else {
+                    return $this->modifier($id, "modifier_form");
+                }
 
 
             case $this->Actions()->is_delete():
@@ -49,7 +55,14 @@ class ShowController extends AbstractShowController {
 
 
             case $this->Actions()->is_add():
-                return $this->ajouter("ajouter_form", "ajouter_select");
+
+
+                if ($this->getChild() !== false) {
+                    return $this->ajouter_child("ajouter_form_child", "ajouter_select");
+                } else {
+                    return $this->ajouter("ajouter_form", "ajouter_select");
+                }
+
 
 
             default:

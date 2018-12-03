@@ -45,6 +45,14 @@ abstract class AbstractSendController extends AbstractController {
     }
 
     public function send_data(string $view_show, string $routeFile = ""): ResponseInterface {
+        if ($this->getChild() !== false) {
+            return $this->send_data_ParantChild($view_show, $routeFile);
+        } else {
+            return $this->send_data_normal($view_show, $routeFile);
+        }
+    }
+
+    protected function send_data_normal(string $view_show, string $routeFile = ""): ResponseInterface {
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
@@ -99,7 +107,7 @@ abstract class AbstractSendController extends AbstractController {
         return $this->render($view_show, ["intent" => $intent]);
     }
 
-    public function send_data_ParantChild(string $view_show, string $routeFile = ""): ResponseInterface {
+    protected function send_data_ParantChild(string $view_show, string $routeFile = ""): ResponseInterface {
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
@@ -145,8 +153,8 @@ abstract class AbstractSendController extends AbstractController {
         $IconShowFiles = $this->generateIconShow($routeFile, $keyFilesSaves, false);
 
         /// childe achats => achat
-        $Controller_child = substr($this->getNameController(), 0, -1);
-
+        //$Controller_child = substr($this->getNameController(), 0, -1);
+        $Controller_child = $this->getChild();
         /// save data child
         $this->chargeModel($Controller_child);
 
@@ -260,13 +268,13 @@ abstract class AbstractSendController extends AbstractController {
      */
     protected function encryptPassword(array $dataForm): array {
         if (isset($dataForm["password"])) {
-            $password= $this->getContainer()->get(PasswordInterface::class);
+            $password = $this->getContainer()->get(PasswordInterface::class);
             $hash = $password->encrypt($dataForm["password"]);
-            
-            $dataForm["password"] = $hash ;
+
+            $dataForm["password"] = $hash;
         }
 
-       
+
 
         return$dataForm;
     }

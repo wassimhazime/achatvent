@@ -240,11 +240,8 @@ abstract class AbstractShowController extends AbstractController {
 
 
 
-/***
- * hona yazib hhhhhhh
- */
-            $NameControllerchild = substr($this->getNameController(), 0, -1); // childe achats => achat
-            $NameControllerchild= $this->getChild();
+
+           $NameControllerchild= $this->getChild();
             $this->getModel()->setTable($NameControllerchild);
 
             $model = $this->getModel();

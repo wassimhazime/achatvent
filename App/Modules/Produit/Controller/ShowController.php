@@ -35,7 +35,12 @@ class ShowController extends AbstractShowController {
 
 
             case $this->Actions()->is_update():
-                return $this->modifier($id, "modifier_form");
+
+                if ($this->getChild() !== false) {
+                    return $this->modifier_child($id, "modifier_form_child");
+                } else {
+                    return $this->modifier($id, "modifier_form");
+                }
 
 
             case $this->Actions()->is_delete():
