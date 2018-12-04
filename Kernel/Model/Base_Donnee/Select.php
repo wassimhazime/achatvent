@@ -71,6 +71,7 @@ class Select extends MetaDatabase implements SelectInterface {
      */
     public function find_by_id($id, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): EntitysDataTable {
         $Entitys = $this->select($id, $mode, $schema);
+
         if (isset($Entitys[0])) {
             return ($Entitys[0]);
         } else {
@@ -107,6 +108,7 @@ class Select extends MetaDatabase implements SelectInterface {
                 ->join($schema->getFOREIGN_KEY())
                 ->where($id)
                 ->prepareQuery();
+
         $Entitys = $this->prepareQuery($sql);
 
 
@@ -245,17 +247,18 @@ class Select extends MetaDatabase implements SelectInterface {
             foreach ($schema->get_table_CHILDREN() as $tablechild) {
 
                 $fields = $schema->select_CHILDREN($tablechild, $mode[1]);
+                $nametable = $schema->getNameTable();
+
+
                 $sql = $this->prepareQuery(
                         self::Get_QuerySQL()
                                 ->select($fields)
-                         //      ->column($this->getschema($tablechild)->getFOREIGN_KEY())
-                                ->from($schema->getNameTable())
-                         // ->join($this->getschema($tablechild)->getFOREIGN_KEY())
+                                ->column($this->getschema($tablechild)->select_FOREIGN_KEY())
+                                ->from($nametable)
                                 ->join($tablechild, " INNER ", true)
-                               
+                                ->join($this->getschema($tablechild)->getFOREIGN_KEY(), " INNER ", false, "", $tablechild)
                                 ->where($schema->getNameTable() . ".id = " . $Entity->id)
                                 ->prepareQuery());
-           //     var_dump($fields,$sql, $this->getschema($tablechild)->getFOREIGN_KEY());die();
                 $Entity->setDataJOIN($tablechild, $sql);
             }
         }

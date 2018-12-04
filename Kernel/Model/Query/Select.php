@@ -239,7 +239,7 @@ class Select extends Abstract_Query
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected function joinstring($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '')
+    protected function joinstring($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '',string $TABLEpere="")
     {
 
 
@@ -262,7 +262,11 @@ class Select extends Abstract_Query
 // INNER JOIN d_produit_categorie ON id_produit=id_produit_detail
 // INNER JOIN categorie           ON id_categorie=id_categorie_detail
 //
+       
+        if($TABLEpere==""){
         $TABLEpere = $this->table[0];
+        
+        }
 
 
         if ($relation) {
@@ -286,7 +290,7 @@ class Select extends Abstract_Query
         }
     }
 
-    public function join($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '')
+    public function join($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '',string $TABLEpere="")
     {
 
 
@@ -294,15 +298,15 @@ class Select extends Abstract_Query
         if (is_array($tablejoin)) {
             if ($this->isAssoc($tablejoin)) {
                 foreach ($tablejoin as $tableJ => $colums) {
-                    $this->joinstring($tableJ, $type, $relation, $conditions);
+                    $this->joinstring($tableJ, $type, $relation, $conditions,$TABLEpere);
                 }
             } else {
                 foreach ($tablejoin as $tableJ) {
-                    $this->joinstring($tableJ, $type, $relation, $conditions);
+                    $this->joinstring($tableJ, $type, $relation, $conditions,$TABLEpere);
                 }
             }
         } else {
-            $this->joinstring($tablejoin, $type, $relation, $conditions);
+            $this->joinstring($tablejoin, $type, $relation, $conditions,$TABLEpere);
         }
 
         return $this;
