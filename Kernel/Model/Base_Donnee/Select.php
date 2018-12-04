@@ -243,15 +243,20 @@ class Select extends MetaDatabase implements SelectInterface {
 
         foreach ($Entitys as $Entity) {
             foreach ($schema->get_table_CHILDREN() as $tablechild) {
-                $fields = $schema->select_CHILDREN($tablechild, $mode[1]);
 
-                $Entity->setDataJOIN($tablechild, $this->prepareQuery(
-                                self::Get_QuerySQL()
-                                        ->select($fields)
-                                        ->from($schema->getNameTable())
-                                        ->join($tablechild, " INNER ", true)
-                                        ->where($schema->getNameTable() . ".id = " . $Entity->id)
-                                        ->prepareQuery()));
+                $fields = $schema->select_CHILDREN($tablechild, $mode[1]);
+                $sql = $this->prepareQuery(
+                        self::Get_QuerySQL()
+                                ->select($fields)
+                         //      ->column($this->getschema($tablechild)->getFOREIGN_KEY())
+                                ->from($schema->getNameTable())
+                         // ->join($this->getschema($tablechild)->getFOREIGN_KEY())
+                                ->join($tablechild, " INNER ", true)
+                               
+                                ->where($schema->getNameTable() . ".id = " . $Entity->id)
+                                ->prepareQuery());
+           //     var_dump($fields,$sql, $this->getschema($tablechild)->getFOREIGN_KEY());die();
+                $Entity->setDataJOIN($tablechild, $sql);
             }
         }
 
