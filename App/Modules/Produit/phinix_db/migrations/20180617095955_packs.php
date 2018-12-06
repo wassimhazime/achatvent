@@ -19,7 +19,7 @@ class Packs extends AbstractMigration {
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
                 ->create();
 
-        HTML_Phinx::relation('packs', 'pack', $this->getAdapter());
+        HTML_Phinx::relation('packs', 'list$articles', $this->getAdapter());
     }
 
 }

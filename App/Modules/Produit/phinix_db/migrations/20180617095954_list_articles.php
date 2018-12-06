@@ -4,11 +4,11 @@ use Kernel\Conevert\HTML_Phinx;
 use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
-class Pack extends AbstractMigration {
+class ListArticles extends AbstractMigration {
 
     public function change() {
 
-        $this->table("pack", HTML_Phinx::id_default())
+        $this->table('list$articles', HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::select('articles'))
                 ->addColumn(HTML_Phinx::number('Qte'))
