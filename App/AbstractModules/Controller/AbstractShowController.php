@@ -172,7 +172,7 @@ abstract class AbstractShowController extends AbstractController {
         $data_get = $this->getRequest()->getQueryParams();
         $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"]);
 
-        if (empty($data_get) && !empty($META_data)) {
+        if (false && empty($data_get) && !empty($META_data)) {
             $select = $model->get_Data_FOREIGN_KEY();
             $intent_formselect = new Intent_Form();
             $intent_formselect->setCOLUMNS_META($META_data);
