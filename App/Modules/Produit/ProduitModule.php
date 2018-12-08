@@ -18,8 +18,8 @@ class ProduitModule extends AbstractModule {
     protected $Controllers = [
         "marques",
         'familles$des$articles',
-        'articles',
-        ["packs"=>'list$articles']
+        ['articles'=>['notSelect'=>["marques"]]],
+        ["packs"=>['child'=>'list$articles','formSelect'=>[]]]
         ];
     const NameModule = "Produit";
     const IconModule = " fa fa-fw fa-stack-overflow ";

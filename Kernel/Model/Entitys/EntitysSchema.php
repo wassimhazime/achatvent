@@ -5,7 +5,7 @@ namespace Kernel\Model\Entitys;
 use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Tools\Tools;
 
-class EntitysSchema implements MODE_SELECT_Interface{
+class EntitysSchema implements MODE_SELECT_Interface {
 
     private $modeCHILDREN = null;
     private $NameTable = null;
@@ -61,22 +61,45 @@ class EntitysSchema implements MODE_SELECT_Interface{
      * COLUMNS
      */
     /// get columns meta total ou par type exemple  getCOLUMNS_META(["Key" =>"MUL"])
-    function getCOLUMNS_META(array $key = []): array {
+    function getCOLUMNS_META(array $key = [], array $notkey = []): array {
         if (empty($key)) {
             return $this->COLUMNS_META;
         } else {
             if (Tools::isAssoc($key)) {
                 $COLUMNS_META = Tools::entitys_TO_array($this->COLUMNS_META);
 
-                $COLUMNS_META_select = [];
+                /// condition true
+                $COLUMNS_META_true = [];
                 foreach ($key as $k => $v) {
                     foreach ($COLUMNS_META as $COLUMNS) {
                         if ($COLUMNS[$k] == $v) {
-                            $COLUMNS_META_select[] = $COLUMNS;
+                            $COLUMNS_META_true[] = $COLUMNS;
                         }
                     }
                 }
-                return $COLUMNS_META_select;
+                $COLUMNS_META_filter = $COLUMNS_META_true;
+
+                if (!empty($notkey)) {
+                    /// condition false 
+                 
+                    $COLUMNS_META_false = [];
+                    foreach ($notkey as $k => $v) {
+                        foreach ($COLUMNS_META_true as $COLUMNS) {
+                            
+                            if (isset($COLUMNS[$k])) {
+                                if ( !in_array($COLUMNS[$k], $v)) {
+                                    $COLUMNS_META_false[] = $COLUMNS;
+                                }
+                            } else {
+                                $COLUMNS_META_false[] = $COLUMNS;
+                            }
+                        }
+                    }
+                    $COLUMNS_META_filter = $COLUMNS_META_false;
+                }
+
+
+                return $COLUMNS_META_filter;
             } else {
                 return [];
             }

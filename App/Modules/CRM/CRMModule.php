@@ -18,7 +18,7 @@ class CRMModule extends AbstractModule {
     protected $Controllers = [
         "clients",
         'raison$sociale',
-        'contacts'
+        ['contacts'=>['notSelect'=>['raison$sociale']]]
         ];
     const NameModule = "CRM";
     const IconModule = " fa fa-fw fa-stack-overflow ";

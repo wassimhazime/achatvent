@@ -10,6 +10,7 @@ use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouteInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\AWA_Interface\SessionInterface;
+use Kernel\Tools\Tools;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -40,20 +41,13 @@ abstract class Controller implements MiddlewareInterface {
     private $nameController = "";
     private $namesControllers = [];
     private $child = [];
+    private $notSelect = [];
     private $nameModule;
     private $namesRoute;
 
     function __construct(array $Options) {
         $Controllers = $Options["namesControllers"];
-
-        foreach ($Controllers as $Controller) {
-            if (is_string($Controller)) {
-                $this->namesControllers [] = $Controller;
-            } else {
-                $this->child[array_keys($Controller)[0]] = $Controller[array_keys($Controller)[0]];
-                $this->namesControllers [] = array_keys($Controller)[0];
-            }
-        }
+        $this->chargeControllers($Controllers);
 
         $this->container = $Options["container"];
 
@@ -147,6 +141,8 @@ abstract class Controller implements MiddlewareInterface {
     }
 
     // mvc
+
+
     function is_Erreur(string $MC = ""): bool {
         if ($MC == "") {
             return !$this->erreur["Controller"] || !$this->erreur["Model"];
@@ -193,18 +189,48 @@ abstract class Controller implements MiddlewareInterface {
     }
 
     /// controller
-    protected function getChild( ) {
-        // $NameControllerchild = substr($this->getNameController(), 0, -1); // childe achats => achat
-            
-        $parent= $this->getNameController();
+    private function chargeControllers($Controllers) {
+        foreach ($Controllers as $Controller) {
+            if (is_string($Controller)) {
+                $this->namesControllers [] = $Controller;
+            } elseif (is_array($Controller)) {
+                if (Tools::isAssoc($Controller)) {
+                    $namesController = array_keys($Controller)[0];
+                    $option = $Controller[$namesController];
+                    if (isset($option['child'])) {
+                        $this->child[$namesController] = $option['child'];
+                    }
+                    if (isset($option['notSelect'])) {
+                        $this->notSelect[$namesController] = $option['notSelect'];
+                    }
+                } else {
+                    $namesController = $Controller[0];
+                }
+                $this->namesControllers [] = $namesController;
+            }
+        }
+    }
+
+    protected function getChild() {
+   
+        $parent = $this->getNameController();
         if (isset($this->child[$parent])) {
             return $this->child[$parent];
         } else {
             return false;
         }
     }
+    function getnotSelect() : array{
+                $parent = $this->getNameController();
+        if (isset($this->notSelect[$parent])) {
+            return $this->notSelect[$parent];
+        } else {
+            return [];
+        }
+        
+    }
 
-    function getNamesControllers(): array {
+        function getNamesControllers(): array {
         return $this->namesControllers;
     }
 

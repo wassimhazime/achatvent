@@ -19,7 +19,6 @@ use Kernel\INTENT\Intent_Form;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
 use function substr;
 
 abstract class AbstractShowController extends AbstractController {
@@ -27,7 +26,7 @@ abstract class AbstractShowController extends AbstractController {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
 
-       if ($this->getResponse()->getStatusCode() != 200 ) {
+        if ($this->getResponse()->getStatusCode() != 200) {
             return $this->getResponse();
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
@@ -41,9 +40,9 @@ abstract class AbstractShowController extends AbstractController {
         $action = $this->getRoute()->getParam("action");
         $this->Actions()->setAction($action);
         $id = $this->getRoute()->getParam("id");
-        
-        
-    
+
+
+
         return $this->run($id);
     }
 
@@ -170,10 +169,16 @@ abstract class AbstractShowController extends AbstractController {
         $schema = $model->getschema();
 
         $data_get = $this->getRequest()->getQueryParams();
-        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"]);
+        $NotSelect = $this->getnotSelect();
 
-        if (false && empty($data_get) && !empty($META_data)) {
+        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"], ["Field" => $NotSelect]);
+
+
+        if (empty($data_get) && !empty($META_data)) {
             $select = $model->get_Data_FOREIGN_KEY();
+
+
+
             $intent_formselect = new Intent_Form();
             $intent_formselect->setCOLUMNS_META($META_data);
             $intent_formselect->setCharge_data_select($select);
@@ -208,10 +213,11 @@ abstract class AbstractShowController extends AbstractController {
         return $this->render($view, ["intent" => $intentshow]);
     }
 
-    /*****
+    /*     * ***
      * child
      */
-       protected function ajouter_child(string $viewAjoutes, string $viewSelect): ResponseInterface {
+
+    protected function ajouter_child(string $viewAjoutes, string $viewSelect): ResponseInterface {
         $model = $this->getModel();
         $schema = $model->getschema();
 
@@ -241,7 +247,7 @@ abstract class AbstractShowController extends AbstractController {
 
 
 
-           $NameControllerchild= $this->getChild();
+            $NameControllerchild = $this->getChild();
             $this->getModel()->setTable($NameControllerchild);
 
             $model = $this->getModel();

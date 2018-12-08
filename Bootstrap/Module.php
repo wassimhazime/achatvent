@@ -31,7 +31,7 @@ if (empty($app->getModules())) {
    $app->addModule(ProduitModule::class);
  
     $app->addModule(CRMModule::class);
-  //  $app->addModule(AchatsModule::class);
+   $app->addModule(AchatsModule::class);
     //$app->addModule(VentesModule::class);
     //$app->addModule(TransactionsModule::class, [
         //new Authentification($container)
