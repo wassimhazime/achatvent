@@ -34,11 +34,13 @@ class Articles extends AbstractMigration {
     public function change() {
 
         $this->table("articles", HTML_Phinx::id_default())
+                
                 ->addColumn(HTML_Phinx::id())
+                ->addColumn(HTML_Phinx::select('type$produit'))
                 ->addColumn(HTML_Phinx::text_master('articles'))
                 ->addColumn(HTML_Phinx::select('taxes'))
                 ->addColumn(HTML_Phinx::select('marques'))
-                ->addColumn(HTML_Phinx::select('Type$produit'))
+                
                 ->addColumn(HTML_Phinx::select('familles$des$articles'))
                 ->addColumn(HTML_Phinx::select('unites'))
                 ->addColumn(HTML_Phinx::textarea('Description'))
@@ -50,10 +52,10 @@ class Articles extends AbstractMigration {
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
                 ->addForeignKey('taxes', 'taxes', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->addForeignKey('marques', 'marques', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
-                ->addForeignKey('Type$produit', 'Type$produit', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
+                ->addForeignKey('type$produit', 'type$produit', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->addForeignKey('familles$des$articles', 'familles$des$articles', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->addForeignKey('unites', 'unites', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
-    }
+  }
 
 }

@@ -31,7 +31,7 @@ class TypesProduit extends AbstractMigration {
      * with the Table class.
      */
     public function change() {
-        $reglage = 'Type$produit';
+        $reglage = 'type$produit';
         $this->table($reglage, HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::text_master($reglage))
@@ -47,8 +47,14 @@ class TypesProduit extends AbstractMigration {
         $faker = Faker\Factory::create('fr_FR');
         $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
         $data = [
+                  [
+        $reglage => "packs",
+        "note" => "Vous pourriez souhaiter vendre un pack de produits composé de plusieurs articles.  ",
+        "date_ajoute" => $date,
+        "date_modifier" => $date
+            ],
             [
-        $reglage => "produit",
+        $reglage => "articles",
         "note" => "Les produits (biens) sont classés : selon le type de clientèle, la fréquence d'achat, la durée d'utilisation ou selon le lien qu'ils entretiennent avec d'autres produits. ",
         "date_ajoute" => $date,
         "date_modifier" => $date
@@ -67,7 +73,8 @@ class TypesProduit extends AbstractMigration {
         "note" => "lément qui entre dans la composition de qqch",
         "date_ajoute" => $date,
         "date_modifier" => $date
-            ]];
+            ]
+                ];
 
                 $this->table($reglage)->insert($data)->save();
     }

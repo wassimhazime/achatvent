@@ -18,6 +18,7 @@ class ListArticles extends AbstractMigration {
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
                 ->addForeignKey('articles', 'articles', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
+        HTML_Phinx::relation('articles', 'list$articles', $this->getAdapter());
     }
 
 }

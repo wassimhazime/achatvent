@@ -18,7 +18,7 @@ class ReglagesModule extends AbstractModule {
         'categories$des$depenses',
         'categories$des$recettes',
         'comptes$bancaires',
-        
+        'type$produit',
         'taxes',
         'unites',
         'mode$paiement'];
