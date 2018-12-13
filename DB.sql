@@ -1046,3 +1046,21 @@ ALTER TABLE `ventes`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+SELECT
+ list$articles.id as list$articles_id , 
+list$articles.Qte as list$articles_Qte , 
+list$articles.prix as list$articles_prix , 
+list$articles.remarque as list$articles_remarque ,
+ list$articles.date_ajoute as list$articles_date_ajoute ,
+ list$articles.date_modifier as list$articles_date_modifier ,
+  articles.articles 
+             FROM articles
+             INNER JOIN  r_articles_list$articles 
+                       ON articles.id =r_articles_list$articles.id_articles
+             INNER JOIN  list$articles 
+                      ON list$articles.id =r_articles_list$articles.id_list$articles
+             INNER JOIN articles 
+                     ON articles.id = list$articles.articles
+                      WHERE ( articles.id = 1 )

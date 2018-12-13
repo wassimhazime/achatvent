@@ -19,7 +19,7 @@ class ProduitModule extends AbstractModule {
         "marques",
         'familles$des$articles',
         ['articles'=>['child'=>'list$articles','notSelect'=>["marques","taxes",'unites','familles$des$articles']]],
-        ["packs"=>['child'=>'list$articles','formSelect'=>[]]]
+       // ["packs"=>['child'=>'list$articles','formSelect'=>[]]]
         ];
     const NameModule = "Produit";
     const IconModule = " fa fa-fw fa-stack-overflow ";

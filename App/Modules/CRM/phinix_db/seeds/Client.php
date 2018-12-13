@@ -15,7 +15,7 @@ class Client extends AbstractSeed {
     public function run() {
         $data = [];
         $faker = Faker\Factory::create('fr_FR');
-        for ($index = 0; $index < 30; $index++) {
+        for ($index = 0; $index < 1000; $index++) {
             $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
             $data[] = [
                 "clients" => $faker->name(),

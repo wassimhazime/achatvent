@@ -171,6 +171,7 @@ abstract class AbstractShowController extends AbstractController {
         $data_get = $this->getRequest()->getQueryParams();
         $NotSelect = $this->getnotSelect();
 
+
         $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"], ["Field" => $NotSelect]);
 
 
@@ -222,7 +223,10 @@ abstract class AbstractShowController extends AbstractController {
         $schema = $model->getschema();
 
         $data_get = $this->getRequest()->getQueryParams();
-        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"]);
+        $NotSelect = $this->getnotSelect();
+
+        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"], ["Field" => $NotSelect]);
+
 
         if (empty($data_get) && !empty($META_data)) {
             $select = $model->get_Data_FOREIGN_KEY();
