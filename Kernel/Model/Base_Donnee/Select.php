@@ -235,7 +235,7 @@ class Select extends MetaDatabase implements SelectInterface {
      * @param type $schema
      * @return array
      */
-    private function get_Data_CHILDREN(array $Entitys, array $mode, $schema = null): array {
+    protected function get_Data_CHILDREN(array $Entitys, array $mode, $schema = null): array {
         if ($schema === null) {
             $schema = $this->getSchema();
         }

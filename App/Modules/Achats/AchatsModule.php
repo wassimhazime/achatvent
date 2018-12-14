@@ -20,7 +20,8 @@ class AchatsModule extends AbstractModule {
     }
 
     protected $Controllers = [
-        'commandes',
+          ['commandes'=>['child'=>'list$articles','notSelect'=>[]]],
+    
         'bons$achats',
         'factures$achats',
         'avoirs$achats'

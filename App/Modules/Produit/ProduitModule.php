@@ -18,7 +18,7 @@ class ProduitModule extends AbstractModule {
     protected $Controllers = [
         "marques",
         'familles$des$articles',
-        ['articles'=>['child'=>'list$articles','notSelect'=>["marques","taxes",'unites','familles$des$articles']]],
+        ['articles'=>['notSelect'=>["marques","taxes",'unites','familles$des$articles','type$produit']]],
        // ["packs"=>['child'=>'list$articles','formSelect'=>[]]]
         ];
     const NameModule = "Produit";
