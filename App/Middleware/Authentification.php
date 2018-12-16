@@ -40,7 +40,7 @@ class Authentification implements MiddlewareInterface, AutorisationInterface {
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-  /////==>   
+  /////==>
    return $handler->handle($request);
    ////////////
         $route = $this->getRouter()->match($request);
@@ -82,7 +82,7 @@ return $handler->handle($request);
         if (!$session->has(self::Auth_Session)) {
             return false;
         }
- //get permession to table 
+ //get permession to table
         $Autorisation = $session->get(self::Auth_Session);
         if ($this->is_root($Autorisation)) {
             return true;

@@ -87,9 +87,9 @@ class AbstractModel extends Model {
         return $this->get_Data_FOREIGN_KEY($id_FOREIGN_KEYs);
     }
 
-////multiselect input 
+////multiselect input
     /**
-     * 
+     *
      * @param array $id_FOREIGN_KEYs   exemple ['raison$sociale' =>  '24']
      * @param array $mode
      * @return array
@@ -110,7 +110,7 @@ class AbstractModel extends Model {
                 foreach ($this->getschema($table_CHILDREN)->getFOREIGN_KEY() as $FOREIGN_KEY) {
                     if (isset($id_FOREIGN_KEYs[$FOREIGN_KEY])) {
                         $id = $id_FOREIGN_KEYs[$FOREIGN_KEY];
-                        $conditions[$FOREIGN_KEY . ".id"] = $id; // exemple ['raison$sociale.id' =>  '24',....] 
+                        $conditions[$FOREIGN_KEY . ".id"] = $id; // exemple ['raison$sociale.id' =>  '24',....]
                     }
                 }
                 if (empty($conditions)) {
@@ -130,12 +130,12 @@ class AbstractModel extends Model {
                             ->where($conditions) // lier FOREIGN_KEY
                             ->prepareQuery());
         }
-        
+
         return $Entitys_CHILDRENs;
     }
 
     /**
-     * 
+     *
      * @param type $id_save
      * @param array $mode
      * @return type
@@ -148,7 +148,7 @@ class AbstractModel extends Model {
     }
 
     /**
-     * 
+     *
      * @param type $id
      * @param type $modeselect
      * @return Intent_Form
@@ -174,7 +174,7 @@ class AbstractModel extends Model {
     }
 
     /**
-     * self::mode 
+     * self::mode
      * @param array $mode
      * @param type $rangeID
      * @return Intent_Show
@@ -216,7 +216,7 @@ class AbstractModel extends Model {
 
     public function setData(array $data, $table_parent = "", $id_perent = 0) {
 
-         
+
 
         if (!empty($data)) {
             if ($id_perent === 0) {
@@ -235,6 +235,6 @@ class AbstractModel extends Model {
         }
     }
 
- 
+
 
 }
