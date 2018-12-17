@@ -15,7 +15,8 @@ use Kernel\AWA_Interface\ActionInterface;
  *
  * @author wassime
  */
-class Action implements ActionInterface {
+class Action implements ActionInterface
+{
 
     private $add;
     private $update;
@@ -25,7 +26,7 @@ class Action implements ActionInterface {
     private $action;
 
     /**
-     * 
+     *
      * @param string $add
      * @param string $update
      * @param string $delete
@@ -33,12 +34,12 @@ class Action implements ActionInterface {
      * @param string $message
      */
     function __construct(
-            string $add = "add",
-            string $update = "update",
-            string $delete = "delete",
-            string $show = "show",
-            string $message = "message"
-            ) {
+        string $add = "add",
+        string $update = "update",
+        string $delete = "delete",
+        string $show = "show",
+        string $message = "message"
+    ) {
         $this->add = $add;
         $this->update = $update;
         $this->delete = $delete;
@@ -47,99 +48,110 @@ class Action implements ActionInterface {
     }
 
     /**
-     * 
+     *
      * @return string
      */
-    public function name_add(): string {
+    public function name_add(): string
+    {
         return $this->add;
     }
 
     /**
-     * 
+     *
      * @return string
      */
-    public function name_update(): string {
+    public function name_update(): string
+    {
         return $this->update;
     }
 
     /**
-     * 
+     *
      * @return string
      */
-    public function name_delete(): string {
+    public function name_delete(): string
+    {
         return $this->delete;
     }
 
     /**
-     * 
+     *
      * @return string
      */
-    public function name_show(): string {
+    public function name_show(): string
+    {
         return $this->show;
     }
 
     /**
-     * 
+     *
      * @return string
      */
-    public function name_message(): string {
+    public function name_message(): string
+    {
         return $this->message;
     }
 
     /**
-     * 
+     *
      * @param type $action
      */
-    function setAction($action) {
+    function setAction($action)
+    {
         $this->action = $action;
     }
 
     /**
-     * 
+     *
      * @return bool
      */
-    public function is_add(): bool {
+    public function is_add(): bool
+    {
         return $this->add === $this->action;
     }
 
     /**
-     * 
+     *
      * @return bool
      */
-    public function is_update(): bool {
+    public function is_update(): bool
+    {
         return $this->update === $this->action;
     }
 
     /**
-     * 
+     *
      * @return bool
      */
-    public function is_delete(): bool {
+    public function is_delete(): bool
+    {
         return $this->delete === $this->action;
     }
 
     /**
-     * 
+     *
      * @return bool
      */
-    public function is_show(): bool {
+    public function is_show(): bool
+    {
         return $this->show === $this->action;
     }
 
     /**
-     * 
+     *
      * @return bool
      */
-    public function is_message(): bool {
+    public function is_message(): bool
+    {
         return $this->message === $this->action;
     }
 
     /**
-     * 
+     *
      * @return bool
      */
-    public function is_index(): bool {
+    public function is_index(): bool
+    {
         return "index" === strtolower($this->action) || "" === $this->action || null == $this->action;
     }
-
 }

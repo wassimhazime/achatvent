@@ -12,7 +12,8 @@ namespace Kernel\AWA_Interface;
  *
  * @author wassime
  */
-interface SQL_HTMLInterface {
+interface SQL_HTMLInterface
+{
     /*
      "text": "textarea",
     "date": "date",
@@ -25,11 +26,11 @@ interface SQL_HTMLInterface {
     "varchar(250)": "file",
     "int(10)": "hidden",
     "int(11)": "select",
-    "double": "number", 
+    "double": "number",
     "datetime": "hidden"
      */
 
-    const HTML_SQL = 
+    const HTML_SQL =
                 [
                 "tel" =>         ["typeHtml"=>"tel",        "typePhinix" => "string",     "options" => ['limit' => 20, 'null' => true,'default' => '']],
                 "email" =>       ["typeHtml"=>"email",      "typePhinix" => "string",     "options" => ['limit' => 150, 'null' => true,'default' => '']],
@@ -45,7 +46,6 @@ interface SQL_HTMLInterface {
                 "double" =>      ["typeHtml"=>"number",     "typePhinix" => "double",     "options" => []], /// alias integer
                 "select" =>      ["typeHtml"=>"select",     "typePhinix" => "integer",    "options" => ['limit' => 11]],
                 "id" =>          ["typeHtml"=>"hidden",     "typePhinix" => "integer",    "options" => ['limit' => 10, 'identity' => true]],
-                "add_update" =>  ["typeHtml"=>"hidden",     "typePhinix" => "datetime",   "options" => [] ] 
+                "add_update" =>  ["typeHtml"=>"hidden",     "typePhinix" => "datetime",   "options" => [] ]
                     ];
-
 }

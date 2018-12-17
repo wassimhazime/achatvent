@@ -3,7 +3,8 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class Achats extends AbstractMigration {
+class Achats extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class Achats extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
 
         /*
           --
@@ -107,5 +109,4 @@ class Achats extends AbstractMigration {
          */
         HTML_Phinx::relation('achats', 'factures$achats', $this->getAdapter());
     }
-
 }

@@ -16,9 +16,11 @@ namespace App\Authentification\Comptes\Model;
 
 use App\AbstractModules\Model\AbstractModel;
 
-class Model extends AbstractModel {
+class Model extends AbstractModel
+{
 
-    public function login(string $login): array {
+    public function login(string $login): array
+    {
 
         if (empty($login) || $login == "") {
             return [];
@@ -27,16 +29,18 @@ class Model extends AbstractModel {
 
         if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
             $compte = $this->prepareQueryAssoc(
-                    self::Get_QuerySQL()->select()
+                self::Get_QuerySQL()->select()
                             ->from($schema->getNameTable())
                             ->where(["email" => $login])
-                            ->prepareQuery());
+                ->prepareQuery()
+            );
         } else {
             $compte = $this->prepareQueryAssoc(
-                    self::Get_QuerySQL()->select()
+                self::Get_QuerySQL()->select()
                             ->from($schema->getNameTable())
                             ->where(["login" => $login])
-                            ->prepareQuery());
+                ->prepareQuery()
+            );
         }
 
 
@@ -49,7 +53,8 @@ class Model extends AbstractModel {
         }
     }
 
-    public function autorisation(array $compte, array $tableAutorisations) {
+    public function autorisation(array $compte, array $tableAutorisations)
+    {
         $id_compte = $compte["id"];
         $autorisation = [];
 
@@ -60,12 +65,14 @@ class Model extends AbstractModel {
         return $autorisation;
     }
 
-    private function getRool($tableAutorisation, $id_compte): array {
+    private function getRool($tableAutorisation, $id_compte): array
+    {
         $rool = $this->prepareQueryAssoc(
-                self::Get_QuerySQL()->select()
+            self::Get_QuerySQL()->select()
                         ->from($tableAutorisation)
                         ->where(["comptes" => $id_compte])
-                        ->prepareQuery());
+            ->prepareQuery()
+        );
 
         /**
          * change index nompbre to arra assoc par index name controller
@@ -78,5 +85,4 @@ class Model extends AbstractModel {
 
         return $per;
     }
-
 }

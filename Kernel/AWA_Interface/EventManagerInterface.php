@@ -5,7 +5,8 @@ namespace Kernel\AWA_Interface;
 /**
  * Interface for EventManager
  */
-interface EventManagerInterface {
+interface EventManagerInterface
+{
 
     /**
      * Attaches a listener to an event

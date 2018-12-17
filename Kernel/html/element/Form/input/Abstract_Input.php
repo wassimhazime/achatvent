@@ -17,7 +17,8 @@ use function str_replace;
  *
  * @author wassime
  */
-abstract class Abstract_Input {
+abstract class Abstract_Input
+{
 
     /**
      *
@@ -27,7 +28,7 @@ abstract class Abstract_Input {
 
     /**
      *
-     * @var string || array 
+     * @var string || array
      */
     protected $Default = "";
     protected $Data_load = [];
@@ -39,7 +40,8 @@ abstract class Abstract_Input {
     protected $child = "";
     protected $is_hidden = false;
 
-    function __construct(Schema_Input_HTML $input) {
+    function __construct(Schema_Input_HTML $input)
+    {
         $this->input = $input;
         $this->name = $input->getName();
         $this->id_html = $input->getId_html();
@@ -55,10 +57,11 @@ abstract class Abstract_Input {
     }
 
     /**
-     * 
+     *
      * @return string
      */
-    function getName(): string {
+    function getName(): string
+    {
         return $this->name;
     }
 
@@ -66,7 +69,8 @@ abstract class Abstract_Input {
      * select or inpute normal
      * @return string | array
      */
-    function getDefault() {
+    function getDefault()
+    {
         return $this->Default;
     }
 
@@ -74,15 +78,17 @@ abstract class Abstract_Input {
      * data charge for select or multi select
      * @return array
      */
-    function getData_load(): array {
+    function getData_load(): array
+    {
         return $this->Data_load;
     }
 
     /**
-     * 
+     *
      * @return string
      */
-    function getLable(): string {
+    function getLable(): string
+    {
 
 
         if ($this->null=="NO") {
@@ -105,11 +111,11 @@ abstract class Abstract_Input {
      * @param type $namechild
      * @return \self
      */
-    function setChild($namechild = "_child"): self {
+    function setChild($namechild = "_child"): self
+    {
         $this->child = "[]";
         $this->name .= $namechild;
         $this->id_html .= $namechild;
         return $this;
     }
-
 }

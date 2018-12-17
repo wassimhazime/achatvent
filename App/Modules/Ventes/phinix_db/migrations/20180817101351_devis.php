@@ -3,7 +3,8 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class Devis extends AbstractMigration {
+class Devis extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class Devis extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
         /*
           --
           -- Structure de la table `devis`
@@ -67,5 +69,4 @@ class Devis extends AbstractMigration {
                 ->addForeignKey('clients', 'clients', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
     }
-
 }

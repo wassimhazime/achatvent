@@ -11,13 +11,15 @@ use Kernel\Model\Query\QuerySQL;
 use PDO;
 use PDOException;
 
-class ActionDataBase extends Connection implements ActionDataBaseInterface {
+class ActionDataBase extends Connection implements ActionDataBaseInterface
+{
 
     /**
      *  Créons un Query Builder
      * @return QuerySQL
      */
-    public static function Get_QuerySQL(): QuerySQL {
+    public static function Get_QuerySQL(): QuerySQL
+    {
         return new QuerySQL();
     }
 
@@ -25,9 +27,10 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
      * get Shema form EntitysSchema
      * array de EntitysSchema
      * @param string $sql
-     * @return array 
+     * @return array
      */
-    public function querySchema(string $sql): array {
+    public function querySchema(string $sql): array
+    {
 
         try {
             $Statement = $this->getDataBase()->query($sql);
@@ -46,7 +49,8 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
      * @param string $sql
      * @return array EntitysDataTable
      */
-    public function query(string $sql): array {
+    public function query(string $sql): array
+    {
 
         try {
             $Statement = $this->getDataBase()->query($sql);
@@ -65,7 +69,8 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
      * @param Prepare $query
      * @return array EntitysDataTable
      */
-    public function prepareQuery(Prepare $query): array {
+    public function prepareQuery(Prepare $query): array
+    {
 
         $sqlprepare = $query->getPrepare();
         $params_execute = $query->getExecute();
@@ -89,7 +94,8 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
      * @param Prepare $query
      * @return array Assoc
      */
-    public function prepareQueryAssoc(Prepare $query): array {
+    public function prepareQueryAssoc(Prepare $query): array
+    {
         $sqlprepare = $query->getPrepare();
         $params_execute = $query->getExecute();
 
@@ -108,11 +114,12 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
     }
 
     /**
-     * / get data form array assoc 
+     * / get data form array assoc
      * @param string $sql
      * @return array assoc
      */
-    public function querySimple(string $sql): array {
+    public function querySimple(string $sql): array
+    {
 
         try {
             $Statement = $this->getDataBase()->query($sql);
@@ -132,7 +139,8 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
      * @param string $sql
      * @return int
      */
-    public function exec(string $sql): int {
+    public function exec(string $sql): int
+    {
 
 
 
@@ -157,7 +165,8 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
      * @param Prepare $query
      * @return int
      */
-    public function prepareEXEC(Prepare $query): int {
+    public function prepareEXEC(Prepare $query): int
+    {
 
         $sqlprepare = $query->getPrepare();
         $params_execute = $query->getExecute();
@@ -168,12 +177,11 @@ class ActionDataBase extends Connection implements ActionDataBaseInterface {
             return $this->getDataBase()->lastInsertId();
         } catch (\PDOException $exc) {
             //    Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
-             var_dump($sqlprepare); 
-            var_dump($params_execute); 
+             var_dump($sqlprepare);
+            var_dump($params_execute);
             var_dump($exc->getMessage());
             die();
             return -1;
         }
     }
-
 }

@@ -21,9 +21,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class LoginSendController extends AbstractController {
+class LoginSendController extends AbstractController
+{
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         parent::process($request, $handler);
         $password = false;
         $login = false;
@@ -34,7 +36,7 @@ class LoginSendController extends AbstractController {
             $session = $this->getSession();
             $response = $this->getResponse();
             $key = AutorisationInterface::Auth_Session;
-            $this->setModel(new Model($this->getContainer()->get("pathModel"),$this->getContainer()->get("tmp")));
+            $this->setModel(new Model($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
             $model = $this->getModel("comptes");
             $compte = $model->login($login);
             
@@ -53,7 +55,6 @@ class LoginSendController extends AbstractController {
                     $session->set($key, $autorisation);
                 }
             } else {
-
                 $session->delete($key);
             }
         }
@@ -69,7 +70,7 @@ class LoginSendController extends AbstractController {
 
         if ($session->has($key)) {
             /**
-             *get  url stop 
+             *get  url stop
              */
             $url=$session->get("url", "/");
             return $response->withHeader("Location", $url)->withStatus(301);
@@ -79,5 +80,4 @@ class LoginSendController extends AbstractController {
             return $response->withHeader("Location", $url)->withStatus(403);
         }
     }
-
 }

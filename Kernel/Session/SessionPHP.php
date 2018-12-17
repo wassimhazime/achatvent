@@ -21,7 +21,8 @@ use const PHP_SESSION_DISABLED;
 use function session_start;
 use function session_status;
 
-class SessionPHP implements SessionInterface {
+class SessionPHP implements SessionInterface
+{
 
     /**
 
@@ -34,7 +35,8 @@ class SessionPHP implements SessionInterface {
      * session_start
      * @throws RuntimeException
      */
-    function __construct(string $name = "", string $id = "", array $options = [], int $regenerateIdInterval = -1, string $sessionIdExpiryKey = "session-id-expires") {
+    function __construct(string $name = "", string $id = "", array $options = [], int $regenerateIdInterval = -1, string $sessionIdExpiryKey = "session-id-expires")
+    {
         if (session_status() === PHP_SESSION_DISABLED) {
             throw new RuntimeException('PHP sessions are disabled');
         }
@@ -78,7 +80,8 @@ class SessionPHP implements SessionInterface {
      * @param type $default
      * @return type
      */
-    public function get(string $key, $default = "") {
+    public function get(string $key, $default = "")
+    {
         if (isset($_SESSION[$key])) {
             return $_SESSION[$key];
         } else {
@@ -87,20 +90,22 @@ class SessionPHP implements SessionInterface {
     }
 
     /**
-     * set data 
+     * set data
      * @param string $key
      * @param type $value
      */
-    public function set(string $key, $value) {
+    public function set(string $key, $value)
+    {
         $_SESSION[$key] = $value;
     }
 
     /**
-     * remove|delete data 
+     * remove|delete data
      * @param string $key
      * @param type $value
      */
-    public function delete(string $key) {
+    public function delete(string $key)
+    {
         if (isset($_SESSION[$key])) {
             unset($_SESSION[$key]);
         }
@@ -111,14 +116,16 @@ class SessionPHP implements SessionInterface {
      * @param string $key
      * @return bool
      */
-    public function has(string $key): bool {
+    public function has(string $key): bool
+    {
         return isset($_SESSION[$key]) && !empty($_SESSION[$key]);
     }
 
     /**
      * Regenerate the session id if it's needed
      */
-    private function IdRegeneration(int $interval = -1, string $key) {
+    private function IdRegeneration(int $interval = -1, string $key)
+    {
         if ($interval <= 0) {
             return;
         }
@@ -134,5 +141,4 @@ class SessionPHP implements SessionInterface {
             $_SESSION[$key] = $expiry;
         }
     }
-
 }

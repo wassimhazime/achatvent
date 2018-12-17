@@ -16,13 +16,15 @@ use Kernel\html\HTML;
  *
  * @author wassime
  */
-class Input extends Abstract_Input {
+class Input extends Abstract_Input
+{
 
     /**
-     * 
+     *
      * @return string
      */
-    public function builder_Tag(): string {
+    public function builder_Tag(): string
+    {
         $name = $this->name;
         $placeholder = str_replace(["_", "$"], " ", $name);
         $id_html = $this->id_html;
@@ -40,9 +42,9 @@ class Input extends Abstract_Input {
             $tag = $this->input_file($tag);
         } elseif ($type == "checkbox") {
             $tag = $this->input_checkbox($tag);
-        }  elseif ($type == "password") {
+        } elseif ($type == "password") {
             $tag = $this->input_password($tag);
-        }else {
+        } else {
             $tag = $this->input_normal($tag);
         }
 
@@ -54,7 +56,8 @@ class Input extends Abstract_Input {
      * @param HTML $tag
      * @return HTML
      */
-    private function input_file(HTML $tag): HTML {
+    private function input_file(HTML $tag): HTML
+    {
         $name = $this->name;
         if ($this->child != "[]") {
             $tag->setAtt('multiple ');
@@ -71,7 +74,8 @@ class Input extends Abstract_Input {
      * @param HTML $tag
      * @return HTML
      */
-    private function input_checkbox(HTML $tag): HTML {
+    private function input_checkbox(HTML $tag): HTML
+    {
         $name = $this->name;
         $Default = $this->Default;
         $tag->setName($name . $this->child)
@@ -86,7 +90,8 @@ class Input extends Abstract_Input {
      * @param HTML $tag
      * @return HTML
      */
-    private function input_password(HTML $tag): HTML {
+    private function input_password(HTML $tag): HTML
+    {
         $name = $this->name;
        
         $tag->setName($name . $this->child)
@@ -99,7 +104,8 @@ class Input extends Abstract_Input {
      * @param HTML $tag
      * @return HTML
      */
-    private function input_normal(HTML $tag): HTML {
+    private function input_normal(HTML $tag): HTML
+    {
         $name = $this->name;
         $Default = $this->Default;
         $tag->setName($name . $this->child)
@@ -107,5 +113,4 @@ class Input extends Abstract_Input {
                 ->setValue($Default);
         return $tag;
     }
-
 }

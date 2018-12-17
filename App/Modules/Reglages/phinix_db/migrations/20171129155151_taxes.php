@@ -3,7 +3,8 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class Taxes extends AbstractMigration {
+class Taxes extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class Taxes extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
         $reglage = 'taxes';
         $this->table($reglage, HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
@@ -44,7 +46,8 @@ class Taxes extends AbstractMigration {
         $this->seed($reglage);
     }
 
-    public function seed($reglage) {
+    public function seed($reglage)
+    {
         $faker = Faker\Factory::create('fr_FR');
         $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
         $data = [
@@ -60,9 +63,8 @@ class Taxes extends AbstractMigration {
                 "note" => "La taxe sur la valeur ajoutée ou TVA est un impôt indirect sur la consommation.",
                 "date_ajoute" => $date,
                 "date_modifier" => $date
-        ]];
+            ]];
 
         $this->table($reglage)->insert($data)->save();
     }
-
 }

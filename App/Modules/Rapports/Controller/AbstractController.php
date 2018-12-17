@@ -14,12 +14,7 @@
 
 namespace App\Modules\Rapports\Controller;
 
-
-
-
-
 use Kernel\Controller\Controller;
-
 
 abstract class AbstractController extends Controller
 {

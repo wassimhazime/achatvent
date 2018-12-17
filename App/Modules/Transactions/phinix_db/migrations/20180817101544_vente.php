@@ -3,7 +3,8 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class Vente extends AbstractMigration {
+class Vente extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class Vente extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
         $this->table("vente", HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::number('net_a_payer'))
@@ -46,5 +48,4 @@ class Vente extends AbstractMigration {
                 ->addForeignKey('clients', 'clients', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
     }
-
 }

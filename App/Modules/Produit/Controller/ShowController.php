@@ -19,23 +19,24 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class ShowController extends AbstractShowController {
+class ShowController extends AbstractShowController
+{
 
-    public function __construct(array $Options) {
+    public function __construct(array $Options)
+    {
         parent::__construct($Options);
 
         $this->setModel(new Model($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
     }
 
-    public function run($id): ResponseInterface {
+    public function run($id): ResponseInterface
+    {
         switch (true) {
             case $this->Actions()->is_index():
-
                 return $this->showDataTable("show", $this->getNamesRoute()->ajax());
 
 
             case $this->Actions()->is_update():
-
                 if ($this->getChild() !== false) {
                     return $this->modifier_child($id, "modifier_form_child");
                 } else {
@@ -56,8 +57,6 @@ class ShowController extends AbstractShowController {
 
 
             case $this->Actions()->is_add():
-
-
                 if ($this->getChild() !== false) {
                     return $this->ajouter_child("ajouter_form_child", "ajouter_select");
                 } else {
@@ -70,5 +69,4 @@ class ShowController extends AbstractShowController {
                 return $this->getResponse()->withStatus(404);
         }
     }
-
 }

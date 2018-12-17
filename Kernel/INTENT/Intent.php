@@ -7,27 +7,32 @@ use Kernel\Model\Entitys\EntitysSchema;
 use Kernel\Tools\Tools;
 use TypeError;
 
-class Intent {
+class Intent
+{
 
     private $entitysSchema;
     private $entitysDataTable;
     private $mode;
 
-    public function __construct(EntitysSchema $entitysSchema, array $entitysDataTables, array $mode) {
+    public function __construct(EntitysSchema $entitysSchema, array $entitysDataTables, array $mode)
+    {
         $this->mode = $mode;
         $this->entitysSchema = $entitysSchema;
         $this->entitysDataTable = $entitysDataTables;
     }
 
-    public function getEntitysSchema(): EntitysSchema {
+    public function getEntitysSchema(): EntitysSchema
+    {
         return $this->entitysSchema;
     }
 
-    public function getEntitysDataTable() {
+    public function getEntitysDataTable()
+    {
         return $this->entitysDataTable;
     }
 
-    public function getMode(): array {
+    public function getMode(): array
+    {
         return $this->mode;
     }
 

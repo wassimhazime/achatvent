@@ -4,7 +4,8 @@ use Kernel\Conevert\HTML_Phinx;
 use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
-class Marques extends AbstractMigration {
+class Marques extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -31,7 +32,8 @@ class Marques extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
      
         $this->table("marques", HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
@@ -42,5 +44,4 @@ class Marques extends AbstractMigration {
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
                 ->create();
     }
-
 }

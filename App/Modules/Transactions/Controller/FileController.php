@@ -22,7 +22,8 @@ class FileController extends AbstractFileController
 {
 
   
-     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
 
         parent::process($request, $handler);
 

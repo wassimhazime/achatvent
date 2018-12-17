@@ -15,7 +15,8 @@ use TypeError;
  *
  * @author wassime
  */
-interface SetDataInterface {
+interface SetDataInterface
+{
      ///////////////////////////////////////////////////////////
     /**
      * delete one item get id delete
@@ -50,7 +51,7 @@ interface SetDataInterface {
     public function parse(array $data): Intent_Set ;
 
     /**
-     * 
+     *
      * @param array $dataForm
      * @return int
      */
@@ -71,6 +72,4 @@ interface SetDataInterface {
      * @return int
      */
     public function insert_tableChilde_Relation(array $dataForms, int $id_table_parent, string $table_parent = ""): int ;
-
-    
 }

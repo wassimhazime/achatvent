@@ -19,12 +19,13 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-class FileController extends AbstractFileController {
-   public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+class FileController extends AbstractFileController
+{
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
 
         parent::process($request, $handler);
 
         return $this->get_views_files("show_files");
     }
-
 }

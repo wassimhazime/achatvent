@@ -3,7 +3,8 @@
 use Phinx\Migration\AbstractMigration;
 use Kernel\Conevert\HTML_Phinx;
 
-class famillesDesArticles extends AbstractMigration {
+class famillesDesArticles extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class famillesDesArticles extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
 
 
 
@@ -42,5 +44,4 @@ class famillesDesArticles extends AbstractMigration {
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
                 ->create();
     }
-
 }

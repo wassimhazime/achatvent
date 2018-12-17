@@ -10,7 +10,8 @@ use Psr\Http\Message\UploadedFileInterface;
  *
  * @author wassime
  */
-interface File_UploadInterface {
+interface File_UploadInterface
+{
 
     public function __construct(string $path);
 

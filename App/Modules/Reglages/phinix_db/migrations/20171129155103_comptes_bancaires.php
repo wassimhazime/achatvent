@@ -3,7 +3,8 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class ComptesBancaires extends AbstractMigration {
+class ComptesBancaires extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class ComptesBancaires extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
         $reglage = 'comptes$bancaires';
         $this->table($reglage, HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
@@ -46,7 +48,8 @@ class ComptesBancaires extends AbstractMigration {
         $this->seed($reglage);
     }
 
-    public function seed($reglage) {
+    public function seed($reglage)
+    {
         $faker = Faker\Factory::create('fr_FR');
         $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
         $data = [
@@ -63,9 +66,8 @@ class ComptesBancaires extends AbstractMigration {
                 'solde$initial' => "0",
                 "date_ajoute" => $date,
                 "date_modifier" => $date
-        ]];
+            ]];
 
         $this->table($reglage)->insert($data)->save();
     }
-
 }

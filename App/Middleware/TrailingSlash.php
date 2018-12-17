@@ -20,27 +20,29 @@ use function substr;
  *
  * @author wassime
  */
-class TrailingSlash implements MiddlewareInterface {
+class TrailingSlash implements MiddlewareInterface
+{
     private $container;
-            function __construct(ContainerInterface $container) {
+    function __construct(ContainerInterface $container)
+    {
         $this->container = $container;
-        
     }
 
     /**
-     * 
+     *
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         $url = $request->getUri()->getPath();
         
         /**
          * exemple http://awa.ma/CRM/hh/ ===> http://awa.ma/CRM/hh
          */
         $response = $this->container->get(ResponseInterface::class);
-        if (!empty($url) && $url != "/" && $url[-1] === "/" ) {
+        if (!empty($url) && $url != "/" && $url[-1] === "/") {
             $urTrailing = substr($url, 0, -1);
             return $response
                     ->withHeader("Location", $urTrailing)
@@ -48,5 +50,4 @@ class TrailingSlash implements MiddlewareInterface {
         }
         return $handler->handle($request);
     }
-
 }

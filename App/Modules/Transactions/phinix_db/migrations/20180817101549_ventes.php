@@ -33,7 +33,7 @@ class Ventes extends AbstractMigration
     public function change()
     {
   /*
-        
+
 --
 -- Structure de la table `ventes`
 --
@@ -41,7 +41,7 @@ class Ventes extends AbstractMigration
 CREATE TABLE `ventes` (
   `id` int(10) NOT NULL,
   `clients` int(11) NOT NULL,
- 
+
   `date` date NOT NULL,
   `montant_factures_TTC` double NOT NULL,
   `montant_paye_TTC` double NOT NULL,
@@ -71,6 +71,5 @@ CREATE TABLE `ventes` (
 
 
         HTML_Phinx::relation('ventes', 'factures$ventes', $this->getAdapter());
-    
     }
 }

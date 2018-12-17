@@ -16,16 +16,17 @@ use TypeError;
  *
  * @author wassime
  */
-interface ConnectionInterface {
+interface ConnectionInterface
+{
 
-    public function __construct(string $PathConfigJson,string $PathCashJson, $table = null);
+    public function __construct(string $PathConfigJson, string $PathCashJson, $table = null);
 
     /**
      * singlton
      * @param string $PathConfigJson
      * @return PDO
      */
-    public static function getPDO(string $PathConfigJson,string $PathCash): PDO;
+    public static function getPDO(string $PathConfigJson, string $PathCash): PDO;
 
     /**
      * data config file
@@ -47,33 +48,33 @@ interface ConnectionInterface {
     public function getDBnames(): string;
 
     /**
-     * 
+     *
      * @param string $key
      * @return type File | array
      */
     static function getFileConfigDB(string $key = "", string $type = "json");
 
     /**
-     * 
+     *
      * @param string $key
      * @return type File | array
      */
     static function getFileCashDB(string $key = "", string $type = "json");
 
     /**
-     * 
+     *
      * @param File $fileConfigDB
      */
     static function setFileConfigDB(File $fileConfigDB);
 
     /**
-     * 
+     *
      * @param File $fileCashDB
      */
     static function setFileCashDB(File $fileCashDB);
 
     /**
-     * 
+     *
      * @param array $config
      * @throws TypeError
      */

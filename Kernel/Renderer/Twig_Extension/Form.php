@@ -20,9 +20,11 @@ use Twig_SimpleFunction;
  *
  * @author wassime
  */
-class Form extends Twig_Extension {
+class Form extends Twig_Extension
+{
 
-    public function getFunctions() {
+    public function getFunctions()
+    {
         return [
             new Twig_SimpleFunction("form", [$this, "form"], ['is_safe' => ['html']]),
             new Twig_SimpleFunction("form_child", [$this, "form_child"], ['is_safe' => ['html']]),
@@ -30,23 +32,25 @@ class Form extends Twig_Extension {
         ];
     }
 
-    public function form(Intent_Form $Intent_Form) {
+    public function form(Intent_Form $Intent_Form)
+    {
 
         $inputs = $Intent_Form->getInputsSchema();
         $formhtml = new FormHTML($inputs);
         return $formhtml->builder_form();
     }
 
-    public function form_child(Intent_Form $Intent_Form) {
+    public function form_child(Intent_Form $Intent_Form)
+    {
         $inputs = $Intent_Form->getInputsSchema();
         $formhtml = new Form_child_HTML($inputs);
         return $formhtml->builder_form();
     }
 
-    public function Form_view(Intent_Form $Intent_Form) {
+    public function Form_view(Intent_Form $Intent_Form)
+    {
         $inputs = $Intent_Form->getInputsSchema();
         $formhtml = new Form_view($inputs);
         return $formhtml->builder_form();
     }
-
 }

@@ -239,7 +239,7 @@ class Select extends Abstract_Query
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected function joinstring($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '',string $TABLEpere="")
+    protected function joinstring($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '', string $TABLEpere = "")
     {
 
 
@@ -263,9 +263,8 @@ class Select extends Abstract_Query
 // INNER JOIN categorie           ON id_categorie=id_categorie_detail
 //
        
-        if($TABLEpere==""){
-        $TABLEpere = $this->table[0];
-        
+        if ($TABLEpere=="") {
+            $TABLEpere = $this->table[0];
         }
 
 
@@ -290,7 +289,7 @@ class Select extends Abstract_Query
         }
     }
 
-    public function join($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '',string $TABLEpere="")
+    public function join($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '', string $TABLEpere = "")
     {
 
 
@@ -298,15 +297,15 @@ class Select extends Abstract_Query
         if (is_array($tablejoin)) {
             if ($this->isAssoc($tablejoin)) {
                 foreach ($tablejoin as $tableJ => $colums) {
-                    $this->joinstring($tableJ, $type, $relation, $conditions,$TABLEpere);
+                    $this->joinstring($tableJ, $type, $relation, $conditions, $TABLEpere);
                 }
             } else {
                 foreach ($tablejoin as $tableJ) {
-                    $this->joinstring($tableJ, $type, $relation, $conditions,$TABLEpere);
+                    $this->joinstring($tableJ, $type, $relation, $conditions, $TABLEpere);
                 }
             }
         } else {
-            $this->joinstring($tablejoin, $type, $relation, $conditions,$TABLEpere);
+            $this->joinstring($tablejoin, $type, $relation, $conditions, $TABLEpere);
         }
 
         return $this;

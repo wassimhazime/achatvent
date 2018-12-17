@@ -22,8 +22,6 @@ use function count;
 use function is_string;
 use function uasort;
 
-
-
 class EventManager implements EventManagerInterface
 {
 

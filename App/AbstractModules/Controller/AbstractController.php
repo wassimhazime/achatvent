@@ -17,9 +17,11 @@ namespace App\AbstractModules\Controller;
 use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Controller\Controller;
 
-abstract class AbstractController extends Controller {
+abstract class AbstractController extends Controller
+{
 
-    protected function getModeShow(array $modeHTTP): array {
+    protected function getModeShow(array $modeHTTP): array
+    {
         ;
         $parent = MODE_SELECT_Interface::_DEFAULT;
         $child = MODE_SELECT_Interface::_NULL;
@@ -39,7 +41,8 @@ abstract class AbstractController extends Controller {
         return ["type" => $type, "modeSelect" => [$parent, $child]];
     }
 
-    private function parseMode(string $modefr, $default): string {
+    private function parseMode(string $modefr, $default): string
+    {
         switch ($modefr) {
             case "rien":
                 $mode = MODE_SELECT_Interface::_NULL;
@@ -61,5 +64,4 @@ abstract class AbstractController extends Controller {
         }
         return $mode;
     }
-
 }

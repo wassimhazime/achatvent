@@ -7,22 +7,24 @@ use Kernel\Conevert\HTML_Phinx;
 use Kernel\Container\Factory_Container;
 use Phinx\Migration\AbstractMigration;
 
-abstract class Autorisation_TablePhinix extends AbstractMigration implements AutorisationInterface {
+abstract class Autorisation_TablePhinix extends AbstractMigration implements AutorisationInterface
+{
 
-    protected function create_autorisation(string $nametable) {
+    protected function create_autorisation(string $nametable)
+    {
         /**
           CREATE TABLE IF NOT EXISTS `autorisation$name` (
           `id` int(10) NOT NULL AUTO_INCREMENT,
           `comptes` int(11) NOT NULL,
-         * 
+         *
           `controller` varchar(200) NOT NULL,
-         * 
+         *
           `voir` tinyint(4) DEFAULT 1,
           `ajouter` tinyint(4) DEFAULT 0,
           `modifier` tinyint(4) DEFAULT 0,
           `effacer` tinyint(4) DEFAULT 0,
           `active` tinyint(4) DEFAULT 1,
-         * 
+         *
           `date_ajoute` datetime NOT NULL,
           `date_modifier` datetime NOT NULL,
 
@@ -38,8 +40,10 @@ abstract class Autorisation_TablePhinix extends AbstractMigration implements Aut
         //singltone ==>dejat set $pathconfig
         $exists = $this->hasTable(self::Prefixe . $nametable);
         if (!$exists) {
-            $this->table(self::Prefixe . $nametable
-                            , HTML_Phinx::id_default())
+            $this->table(
+                self::Prefixe . $nametable,
+                HTML_Phinx::id_default()
+            )
                     ->addColumn(HTML_Phinx::id())
                     ->addColumn(HTML_Phinx::select('comptes'))
                     ->addColumn(HTML_Phinx::text_master('controller'))
@@ -54,10 +58,10 @@ abstract class Autorisation_TablePhinix extends AbstractMigration implements Aut
         }
     }
 
-    private function getAction(): ActionInterface {
+    private function getAction(): ActionInterface
+    {
         $container = Factory_Container::getContainer();
         $action = $container->get(ActionInterface::class);
         return $action;
     }
-
 }

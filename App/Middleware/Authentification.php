@@ -25,26 +25,29 @@ use function preg_match;
  *
  * @author wassime
  */
-class Authentification implements MiddlewareInterface, AutorisationInterface {
+class Authentification implements MiddlewareInterface, AutorisationInterface
+{
 
     private $container;
     private $router;
     private $Response;
     private $Session;
 
-    function __construct(ContainerInterface $container) {
+    function __construct(ContainerInterface $container)
+    {
         $this->container = $container;
         $this->router = $container->get(RouterInterface::class);
         $this->Response = $container->get(ResponseInterface::class);
         $this->Session = $container->get(SessionInterface::class);
     }
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
   /////==>
-   return $handler->handle($request);
+        return $handler->handle($request);
    ////////////
         $route = $this->getRouter()->match($request);
-return $handler->handle($request);
+        return $handler->handle($request);
 
 // not is in modules
 // get page not found
@@ -77,7 +80,8 @@ return $handler->handle($request);
         }
     }
 
-    protected function is_autorise($request): bool {
+    protected function is_autorise($request): bool
+    {
         $session = $this->getSession();
         if (!$session->has(self::Auth_Session)) {
             return false;
@@ -93,19 +97,17 @@ return $handler->handle($request);
         $nameRoute = $this->NameRoute($request);
         $action = $this->parseAction($request);
         $nameTableAutorisation = self::Prefixe . $nameModule;
-       if (isset($Autorisation[$nameTableAutorisation])) {
+        if (isset($Autorisation[$nameTableAutorisation])) {
             $TableAutorisation = $Autorisation[$nameTableAutorisation];
-            var_dump($TableAutorisation);die();
+            var_dump($TableAutorisation);
+            die();
             foreach ($TableAutorisation as $row) {
-
-
                 if ($row['controller'] == $nameControler || preg_match("/^" . $row['controller'] . "/i", $nameControler)) {
 
                     /**
                      * show
                      */
                     if ($row[$action->name_show()] == "1") {
-
                         if ($nameRoute->is_show() || $nameRoute->is_ajax()) {
                             if ($action->is_index() || $action->is_show()) {
                                 return true;
@@ -121,7 +123,6 @@ return $handler->handle($request);
                     if ($row[$action->name_add()] == "1") {
                         if ($nameRoute->is_send() || $nameRoute->is_show()) {
                             if ($action->is_add() || $action->is_show()) {
-
                                 return true;
                             }
                         }
@@ -135,7 +136,6 @@ return $handler->handle($request);
                     if ($row[$action->name_update()] == "1") {
                         if ($nameRoute->is_send() || $nameRoute->is_show()) {
                             if ($action->is_update() || $action->is_show()) {
-
                                 return true;
                             }
                         }
@@ -149,7 +149,6 @@ return $handler->handle($request);
                     if ($row[$action->name_delete()] == "1") {
                         if ($nameRoute->is_show()) {
                             if ($action->is_delete() || $action->is_message() || $action->is_show()) {
-
                                 return true;
                             }
                         }
@@ -161,16 +160,17 @@ return $handler->handle($request);
             }
             return false;
         } else {
-
             return false;
         }
     }
 
-    protected function is_root($Autorisation): bool {
+    protected function is_root($Autorisation): bool
+    {
         return $Autorisation["comptes"]["id"] === "1" && $Autorisation["comptes"]["active"] === "1";
     }
 
-    protected function parseNameModule(ServerRequestInterface $request): string {
+    protected function parseNameModule(ServerRequestInterface $request): string
+    {
         $url = $request->getUri()->getPath();
         preg_match('!/([A-Za-z]+)(.*)!i', $url, $matches);
         if (empty($matches)) {
@@ -180,7 +180,8 @@ return $handler->handle($request);
         }
     }
 
-    protected function NameRoute(ServerRequestInterface $request): NamesRouteInterface {
+    protected function NameRoute(ServerRequestInterface $request): NamesRouteInterface
+    {
         $route = $this->getRouter()->match($request);
         $name = $route->getName();
         $nameRoute = $this->container->get(NamesRouteInterface::class);
@@ -188,12 +189,14 @@ return $handler->handle($request);
         return $nameRoute;
     }
 
-    protected function parseNameControler(ServerRequestInterface $request): string {
+    protected function parseNameControler(ServerRequestInterface $request): string
+    {
         $route = $this->getRouter()->match($request);
         return $route->getParam("controle");
     }
 
-    protected function parseAction(ServerRequestInterface $request): ActionInterface {
+    protected function parseAction(ServerRequestInterface $request): ActionInterface
+    {
         $route = $this->getRouter()->match($request);
         $urlaction = $route->getParam("action");
         $action = $this->container->get(ActionInterface::class);
@@ -201,16 +204,18 @@ return $handler->handle($request);
         return $action;
     }
 
-    protected function getRouter(): RouterInterface {
+    protected function getRouter(): RouterInterface
+    {
         return $this->router;
     }
 
-    protected function getResponse(): ResponseInterface {
+    protected function getResponse(): ResponseInterface
+    {
         return $this->Response;
     }
 
-    protected function getSession(): SessionInterface {
+    protected function getSession(): SessionInterface
+    {
         return $this->Session;
     }
-
 }

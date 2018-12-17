@@ -2,7 +2,8 @@
 
 use Phinx\Seed\AbstractSeed;
 
-class RaisonSociale extends AbstractSeed {
+class RaisonSociale extends AbstractSeed
+{
 
     /**
      * Run Method.
@@ -12,7 +13,8 @@ class RaisonSociale extends AbstractSeed {
      * More information on writing seeders is available here:
      * http://docs.phinx.org/en/latest/seeding.html
      */
-    public function run() {
+    public function run()
+    {
         $data = [];
         $faker = Faker\Factory::create('fr_FR');
         for ($index = 0; $index < 30; $index++) {
@@ -37,5 +39,4 @@ class RaisonSociale extends AbstractSeed {
         }
         $this->table('raison$sociale')->insert($data)->save();
     }
-
 }

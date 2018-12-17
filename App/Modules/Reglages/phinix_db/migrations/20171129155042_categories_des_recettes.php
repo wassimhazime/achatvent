@@ -3,7 +3,8 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class CategoriesDesRecettes extends AbstractMigration {
+class CategoriesDesRecettes extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class CategoriesDesRecettes extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
         $reglage = 'categories$des$recettes';
         $this->table($reglage, HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
@@ -43,7 +45,8 @@ class CategoriesDesRecettes extends AbstractMigration {
         $this->seed($reglage);
     }
 
-    public function seed($reglage) {
+    public function seed($reglage)
+    {
         $faker = Faker\Factory::create('fr_FR');
         $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
         $data = [
@@ -67,9 +70,8 @@ class CategoriesDesRecettes extends AbstractMigration {
                 "note" => "",
                 "date_ajoute" => $date,
                 "date_modifier" => $date
-        ]];
+            ]];
 
         $this->table($reglage)->insert($data)->save();
     }
-
 }

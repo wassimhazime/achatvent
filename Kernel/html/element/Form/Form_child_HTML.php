@@ -10,9 +10,11 @@ use Kernel\html\element\Form\input\Select;
 use Kernel\html\element\Form\input\Textarea;
 use function implode;
 
-class Form_child_HTML extends FormAbstract {
+class Form_child_HTML extends FormAbstract
+{
 
-    public function builder_form(): string {
+    public function builder_form(): string
+    {
         $label = [];
         $input = [];
         foreach ($this->inputs as $input) {
@@ -27,11 +29,12 @@ class Form_child_HTML extends FormAbstract {
     }
 
     /**
-     * 
+     *
      * @param type $labels
      * @return array
      */
-    private function parseThead($labels): array {
+    private function parseThead($labels): array
+    {
 
         $Thead = [];
 
@@ -47,11 +50,12 @@ class Form_child_HTML extends FormAbstract {
     }
 
     /**
-     * 
+     *
      * @param type $inputsHTML
      * @return array
      */
-    private function parseTbody($inputsHTML): array {
+    private function parseTbody($inputsHTML): array
+    {
 
         $Tbody = [];
         $Tbody[] = ' <tbody id="content-child"> <tr   class="inputs-child">';
@@ -64,11 +68,12 @@ class Form_child_HTML extends FormAbstract {
     }
 
     /**
-     * 
+     *
      * @param Schema_Input_HTML $input
      * @return Abstract_Input
      */
-    private function GenereteType(Schema_Input_HTML $input): Abstract_Input {
+    private function GenereteType(Schema_Input_HTML $input): Abstract_Input
+    {
 
         switch ($input->getType()) {
             case "textarea":
@@ -91,5 +96,4 @@ class Form_child_HTML extends FormAbstract {
 
         return $inputHTML->setChild();
     }
-
 }

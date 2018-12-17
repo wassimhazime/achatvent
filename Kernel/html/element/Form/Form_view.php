@@ -7,13 +7,15 @@ use Kernel\html\element\Form\FormAbstract;
 use Kernel\html\element\Form\input\Readonly;
 use function implode;
 
-class Form_view extends FormAbstract {
+class Form_view extends FormAbstract
+{
 
     /**
-     * 
+     *
      * @return string
      */
-    public function builder_form(): string {
+    public function builder_form(): string
+    {
         $form_grop = [];
 
         foreach ($this->inputs as $input) {
@@ -26,5 +28,4 @@ class Form_view extends FormAbstract {
 
         return ( new Box_shadow("", $content, 16))->builder();
     }
-
 }

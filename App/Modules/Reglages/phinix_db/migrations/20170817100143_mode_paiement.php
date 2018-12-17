@@ -3,7 +3,8 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class ModePaiement extends AbstractMigration {
+class ModePaiement extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class ModePaiement extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
         /*
           CREATE TABLE `mode$paiement` (
           `id` int(10) NOT NULL,
@@ -51,7 +53,8 @@ class ModePaiement extends AbstractMigration {
         $this->seed($reglage);
     }
 
-    public function seed($reglage) {
+    public function seed($reglage)
+    {
         $faker = Faker\Factory::create('fr_FR');
         $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
         $data = [[
@@ -84,9 +87,8 @@ class ModePaiement extends AbstractMigration {
                 "note" => "L'escompte est le mécanisme par lequel un établissement de crédit (une banque généralement) rachète à un bénéficiaire les effets de commerce dont il est porteur. Le bénéficiaire qui cède ainsi ses effets est appelé le cédant, le débiteur est appelé le cédé. Le banquier devient alors le créancier du cédé.",
                 "date_ajoute" => $date,
                 "date_modifier" => $date
-        ]];
+            ]];
 
         $this->table($reglage)->insert($data)->save();
     }
-
 }

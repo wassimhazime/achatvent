@@ -12,7 +12,8 @@ namespace Kernel\AWA_Interface\Base_Donnee;
  *
  * @author wassime
  */
-interface MODE_SELECT_Interface {
+interface MODE_SELECT_Interface
+{
 
     const _DEFAULT = "DEFAULT";
     const _MASTER = "MASTER";

@@ -13,9 +13,9 @@ namespace App\Authentification;
  *
  * @author wassime
  */
-interface AutorisationInterface {
+interface AutorisationInterface
+{
 
-const Prefixe='autorisation$';
-const Auth_Session='aut';
-
+    const Prefixe='autorisation$';
+    const Auth_Session='aut';
 }

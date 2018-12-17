@@ -17,7 +17,8 @@ use function var_dump;
  *
  * @author wassime
  */
-class Select_Fonctions extends Select{
+class Select_Fonctions extends Select
+{
       
 
     /*
@@ -39,7 +40,8 @@ class Select_Fonctions extends Select{
 
 
 
-    public function chargeDataSelect() {
+    public function chargeDataSelect()
+    {
         $sh = $this->getSchemaStatistique("sum", " ");
         $dataselect = [];
         foreach ($sh as $key => $value) {
@@ -48,7 +50,8 @@ class Select_Fonctions extends Select{
         return $dataselect;
     }
 
-    public function statistique_global() {
+    public function statistique_global()
+    {
         $sh = $this->getALLschema();
         foreach ($sh as $value) {
             $st = ($value->select_statistique_SUM());
@@ -70,7 +73,8 @@ class Select_Fonctions extends Select{
         }
     }
 
-    public function statistique_pour(array $query) {
+    public function statistique_pour(array $query)
+    {
         $startdate = $query["startinputDate"];
         $findate = $query["fininputDate"];
         $tables = $query["Rapports"];
@@ -81,7 +85,8 @@ class Select_Fonctions extends Select{
         return Tools::json($json);
     }
 
-    public function statistique_par($table, $startdate, $findat) {
+    public function statistique_par($table, $startdate, $findat)
+    {
         $schema_statistiqueMIN = $this->getSchemaStatistique("sum", "", $table);
         foreach ($schema_statistiqueMIN as $table => $st) {
             $champ = $st["filds"];
@@ -103,7 +108,8 @@ class Select_Fonctions extends Select{
         }
     }
 
-    public function total($table, $champ, $alias, $date) {
+    public function total($table, $champ, $alias, $date)
+    {
         $sh = $this->getALLschema();
         foreach ($sh as $value) {
             $st = ($value->select_statistique_SUM());
@@ -118,7 +124,8 @@ class Select_Fonctions extends Select{
         return Tools::entitys_TO_array($entity);
     }
 
-    public function totalpar($table, $champ, $alias, $date, $by) {
+    public function totalpar($table, $champ, $alias, $date, $by)
+    {
         $sql = "SELECT $by, SUM($champ) as $alias FROM $table WHERE YEAR(`date`)=$date "
                 . " GROUP BY $by ";
         $entity = $this->query($sql);

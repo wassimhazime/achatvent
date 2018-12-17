@@ -17,9 +17,11 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-abstract class AbstractFileController extends AbstractController {
+abstract class AbstractFileController extends AbstractController
+{
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         parent::process($request, $handler);
 
         if ($this->getResponse()->getStatusCode() != 200) {
@@ -36,7 +38,8 @@ abstract class AbstractFileController extends AbstractController {
         return $this->getResponse();
     }
 
-    public function get_views_files(string $name_views): ResponseInterface {
+    public function get_views_files(string $name_views): ResponseInterface
+    {
         if ($this->is_Erreur("Controller")) {
             return $this->getResponse()->withStatus(404);
         }
@@ -44,5 +47,4 @@ abstract class AbstractFileController extends AbstractController {
 
         return $this->render($name_views, ["files" => $files]);
     }
-
 }

@@ -36,13 +36,13 @@ class EntitysDataTable
         return [$this];
     }
     
-    function is_Null(): bool {
+    function is_Null(): bool
+    {
         return $this->null;
     }
 
-    function setNull($null=true) {
+    function setNull($null = true)
+    {
         $this->null = $null;
     }
-
-
 }

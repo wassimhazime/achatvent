@@ -19,8 +19,6 @@ namespace Kernel\Event;
 
 use Kernel\AWA_Interface\EventInterface;
 
-
-
 class Event implements EventInterface
 {
 

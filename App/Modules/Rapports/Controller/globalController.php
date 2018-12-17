@@ -21,7 +21,7 @@ class globalController extends AbstractController
 
     public function process(ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
     {
-        $this->setModel(new \App\Modules\Rapports\Model\Model($this->getContainer()->get("pathModel"),$this->getContainer()->get("tmp")));
+        $this->setModel(new \App\Modules\Rapports\Model\Model($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
 
         parent::process($request, $handler);
         

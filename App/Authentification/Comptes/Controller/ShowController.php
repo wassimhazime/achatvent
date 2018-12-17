@@ -19,14 +19,17 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class ShowController extends AbstractShowController {
+class ShowController extends AbstractShowController
+{
 
-   public function __construct(array $Options) {
+    public function __construct(array $Options)
+    {
         parent::__construct($Options);
-           $this->setModel(new Model($this->getContainer()->get("pathModel"),$this->getContainer()->get("tmp")));
+           $this->setModel(new Model($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
     }
 
-  public function run($id): ResponseInterface {
+    public function run($id): ResponseInterface
+    {
      
         
 

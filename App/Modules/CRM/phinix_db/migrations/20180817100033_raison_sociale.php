@@ -3,7 +3,8 @@
 use Phinx\Migration\AbstractMigration;
 use Kernel\Conevert\HTML_Phinx;
 
-class RaisonSociale extends AbstractMigration {
+class RaisonSociale extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class RaisonSociale extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
 
         /*
           CREATE TABLE `raison$sociale` (
@@ -94,5 +96,4 @@ class RaisonSociale extends AbstractMigration {
                 ->addIndex(['CNSS'], ['unique' => true])
                 ->create();
     }
-
 }

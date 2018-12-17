@@ -12,12 +12,13 @@ namespace Kernel\AWA_Interface;
  *
  * @author wassime
  */
-interface NamesRouteInterface {
+interface NamesRouteInterface
+{
 
     function __construct($ajax = "_Ajax", $files = "_Files", $send = "_Send", $show = "_Show");
 
     public function set_NameModule(string $nameModule = "");
-    public function set_NameRoute(string $nameRoute );
+    public function set_NameRoute(string $nameRoute);
 
     public function ajax(): string;
 

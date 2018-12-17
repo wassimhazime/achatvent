@@ -12,7 +12,8 @@ namespace Kernel\AWA_Interface;
  *
  * @author wassime
  */
-interface ActionInterface {
+interface ActionInterface
+{
 
     public function name_add(): string;
 

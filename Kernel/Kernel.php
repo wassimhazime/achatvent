@@ -21,7 +21,8 @@ use function is_array;
 use function is_string;
 use function str_replace;
 
-abstract class Kernel {
+abstract class Kernel
+{
 
     protected $container;
     protected $despatcher;
@@ -36,7 +37,8 @@ abstract class Kernel {
      */
     protected $pathModules = [];
 
-    protected function __construct(string $pathconfig) {
+    protected function __construct(string $pathconfig)
+    {
 
         $container = Factory_Container::getContainer($pathconfig);
         $this->container = $container;
@@ -45,35 +47,36 @@ abstract class Kernel {
         $this->renderer = $container->get(RendererInterface::class);
     }
 
-    function getContainer(): ContainerInterface {
+    function getContainer(): ContainerInterface
+    {
         return $this->container;
     }
 
-    public function getModules(): array {
+    public function getModules(): array
+    {
         return $this->modules;
     }
 
     /**
      * path model save
      * phinix ==>migrate
-     * @return array string 
+     * @return array string
      */
-    public function getPathModules(): array {
+    public function getPathModules(): array
+    {
 
         return $this->pathModules;
     }
 
-    public function addModule($module, array $middlewares = []) {
+    public function addModule($module, array $middlewares = [])
+    {
 
 
         if (is_string($module) && class_exists($module)) {
-
             $module = new $module($this->container);
         }
 
         if (is_a($module, ModuleInterface::class)) {
-            
-            
             $module->addMiddlewares($middlewares);
             $this->modules[] = $module;
 
@@ -82,7 +85,8 @@ abstract class Kernel {
         }
     }
 
-    function addMiddleware($Middlewares) {
+    function addMiddleware($Middlewares)
+    {
         if (is_a($Middlewares, MiddlewareInterface::class)) {
             $this->despatcher->pipe($Middlewares);
         } elseif (is_array($Middlewares)) {
@@ -92,18 +96,20 @@ abstract class Kernel {
         }
     }
 
-    function addEvent(string $event, callable $callback, int $priority = 0) {
+    function addEvent(string $event, callable $callback, int $priority = 0)
+    {
         $eventManager = $this->container->get(EventManagerInterface::class);
 
         $eventManager->attach($event, $callback, $priority);
     }
 
-    public function run(ServerRequestInterface $request) {
+    public function run(ServerRequestInterface $request)
+    {
 
         //  $this->run_modules();
         $response = $this->despatcher->handle($request);
         return $response;
     }
 
-    public abstract function run_modules();
+    abstract public function run_modules();
 }

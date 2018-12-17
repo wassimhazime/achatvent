@@ -14,7 +14,8 @@
 
 namespace Kernel\File;
 
-class File {
+class File
+{
 
     const JSON = "json";
     const PHP = "php";
@@ -23,7 +24,8 @@ class File {
     private $type;
     private $is_null;
 
-    function __construct(string $path, string $type = self::JSON, $is_null = null) {
+    function __construct(string $path, string $type = self::JSON, $is_null = null)
+    {
         // php >=7.1 => $fin_path= $path[-1]
         // php <7.1  => $fin_path=(str_split($path)[count(str_split($path))-1])
         //           or =>  $fin_path=(str_split($path)[strlen($path)-1]);
@@ -39,17 +41,16 @@ class File {
         $this->is_null = $is_null;
     }
 
-    public function get($file, string $type = self::JSON): array {
+    public function get($file, string $type = self::JSON): array
+    {
         $path_file = $this->path . $file . "." . $type;
         if ($type == self::JSON) {
-
             if (is_file($path_file)) {
                 $file_contents = file_get_contents($path_file);
                 return $this->decode($file_contents);
             }
         } elseif ($type == self::PHP) {
             if (is_file($path_file)) {
-
                 return require $path_file;
             }
         }
@@ -57,7 +58,8 @@ class File {
         return $this->is_null;
     }
 
-    public function set($contents, $file) {
+    public function set($contents, $file)
+    {
         $path_file = $this->path . $file . "." . $this->type;
 
 
@@ -66,7 +68,8 @@ class File {
         fclose($fp);
     }
 
-    public function remove($file): bool {
+    public function remove($file): bool
+    {
         $path_file = $this->path . $file . "." . $this->type;
         if (is_file($path_file)) {
             return unlink($path_file);
@@ -74,18 +77,19 @@ class File {
         return false;
     }
 
-    private function decode(string $contents) {
+    private function decode(string $contents)
+    {
         if ($this->type === self::JSON) {
             return json_decode($contents, true);
         }
         return $contents;
     }
 
-    private function encode($contents) {
+    private function encode($contents)
+    {
         if ($this->type === self::JSON) {
             return json_encode($contents);
         }
         return $contents;
     }
-
 }

@@ -21,7 +21,8 @@ use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use const D_S;
 
-class RapportsModule extends AbstractModule {
+class RapportsModule extends AbstractModule
+{
 
     protected $Controllers = [
         "clients",
@@ -32,12 +33,14 @@ class RapportsModule extends AbstractModule {
     const NameModule = "Rapports";
     const IconModule = " fa fa-fw fa-bar-chart-o ";
 
-    public function addPathRenderer(RendererInterface $renderer) {
+    public function addPathRenderer(RendererInterface $renderer)
+    {
         $pathModule = __DIR__ . D_S . "views" . D_S;
         $renderer->addPath($pathModule, self::NameModule);
     }
 
-    public function addRoute(RouterInterface $router) {
+    public function addRoute(RouterInterface $router)
+    {
        
         $nameRoute=$this->getNamesRoute();
         $Options=["container"=>$this->getContainer(),
@@ -51,5 +54,4 @@ class RapportsModule extends AbstractModule {
 
         $router->addRoute_any("st/{controle:[a-z\$]*}", new AjaxController($Options), "st.get");
     }
-
 }

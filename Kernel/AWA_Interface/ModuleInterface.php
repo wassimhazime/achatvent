@@ -17,7 +17,8 @@ use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Psr\Container\ContainerInterface;
 
-interface ModuleInterface {
+interface ModuleInterface
+{
 
     public function getControllers();
 
@@ -43,11 +44,8 @@ interface ModuleInterface {
     public function getMenu(): array;
 
     /**
-     * 
+     *
      * @param array $middlewares
      */
-    public function addMiddlewares( $middlewares);
-    
-    
-    
+    public function addMiddlewares($middlewares);
 }

@@ -22,15 +22,17 @@ use function is_a;
  *
  * @author wassime
  */
-abstract class FormAbstract {
+abstract class FormAbstract
+{
 
     protected $inputs = [];
 
     /**
-     * 
+     *
      * @param array Schema_Input_HTML $inputs
      */
-    function __construct(array $inputs) {
+    function __construct(array $inputs)
+    {
 
         $flag = $this->is_Array_Schema_Input($inputs);
         if (!$flag) {
@@ -40,11 +42,12 @@ abstract class FormAbstract {
     }
 
     /**
-     * cheket type input 
+     * cheket type input
      * @param array $inputs
      * @return boolean
      */
-    private function is_Array_Schema_Input(array $inputs): bool {
+    private function is_Array_Schema_Input(array $inputs): bool
+    {
         foreach ($inputs as $input) {
             if (!is_a($input, Schema_Input_HTML::class)) {
                 return false;
@@ -64,7 +67,8 @@ abstract class FormAbstract {
      * @param Abstract_Input $input
      * @return string
      */
-    protected function style_form_horizonta(Abstract_Input $input): string {
+    protected function style_form_horizonta(Abstract_Input $input): string
+    {
         $body = $input->builder_Tag();
         $title = $input->getLable();
 
@@ -88,13 +92,14 @@ abstract class FormAbstract {
     }
 
     /**
-     * 
+     *
      * creer les style forms html
      * bootstrap
      * @param Abstract_Input $input
      * @return string
      */
-    protected function style_form_inline(Abstract_Input $input): string {
+    protected function style_form_inline(Abstract_Input $input): string
+    {
         $body = $input->builder_Tag();
         $title = $input->getLable();
         $labelHTML = HTML::TAG('label')
@@ -121,7 +126,8 @@ abstract class FormAbstract {
      * @param Abstract_Input $input
      * @return string
      */
-    protected function style_Panel(Abstract_Input $input): string {
+    protected function style_Panel(Abstract_Input $input): string
+    {
         $body = $input->builder_Tag();
         $title = $input->getLable();
         $panel = (new Panel($title, $body));
@@ -136,7 +142,8 @@ abstract class FormAbstract {
      * @param Abstract_Input $input
      * @return string
      */
-    protected function style_Modals(Abstract_Input $input): string {
+    protected function style_Modals(Abstract_Input $input): string
+    {
         $body = $input->builder_Tag();
         $title = $input->getLable();
         $cont = 0;
@@ -152,5 +159,4 @@ abstract class FormAbstract {
 
         return $modal->builder();
     }
-
 }

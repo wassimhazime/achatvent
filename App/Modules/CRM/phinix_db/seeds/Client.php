@@ -2,7 +2,8 @@
 
 use Phinx\Seed\AbstractSeed;
 
-class Client extends AbstractSeed {
+class Client extends AbstractSeed
+{
 
     /**
      * Run Method.
@@ -12,7 +13,8 @@ class Client extends AbstractSeed {
      * More information on writing seeders is available here:
      * http://docs.phinx.org/en/latest/seeding.html
      */
-    public function run() {
+    public function run()
+    {
         $data = [];
         $faker = Faker\Factory::create('fr_FR');
         for ($index = 0; $index < 1000; $index++) {
@@ -29,5 +31,4 @@ class Client extends AbstractSeed {
         }
         $this->table("clients")->insert($data)->save();
     }
-
 }

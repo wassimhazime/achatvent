@@ -18,11 +18,13 @@ use App\Authentification\Comptes\ComptesModule;
 use App\Authentification\Login\LoginModule;
 use Kernel\Kernel;
 
-class App extends Kernel {
+class App extends Kernel
+{
 
     private static $app = null;
 
-    public static function getApp(string $pathconfig) :self{
+    public static function getApp(string $pathconfig) :self
+    {
         if (self::$app === null) {
             self::$app = new self($pathconfig);
             return self::$app;
@@ -30,14 +32,14 @@ class App extends Kernel {
         return self::$app;
     }
 
-    public function run_modules() {
+    public function run_modules()
+    {
         $this->gestion_compte();
         $modules = $this->getModules();
 
 
         $menus = [];
         foreach ($modules as $module) {
-
             $module->addRoute($this->router);
             $module->addPathRenderer($this->renderer);
             $menus[] = $module->getMenu();
@@ -47,7 +49,8 @@ class App extends Kernel {
         $this->renderer->addGlobal("_menu", $menus);
     }
 
-    private function gestion_compte() {
+    private function gestion_compte()
+    {
 
         $Comptes = new ComptesModule($this->container);
         // $login=new LoginModule($this->container);
@@ -56,5 +59,4 @@ class App extends Kernel {
         $this->addModule($Comptes);
         // $this->addModule($login);
     }
-
 }

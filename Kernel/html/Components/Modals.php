@@ -128,7 +128,6 @@ class Modals
                             ->setData($this->title)
                             ->builder();
         } else {
-           
             return HTML::TAG('button')
                             ->setType("button")
                             ->setClass("btn btn-primary btn-lg")

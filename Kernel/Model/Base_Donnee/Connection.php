@@ -20,7 +20,8 @@ use TypeError;
  *
  * @author wassime
  */
-class Connection implements ConnectionInterface {
+class Connection implements ConnectionInterface
+{
 
     const File_Connect_DataBase = "Connect_DataBase";
     const BOOT = "BOOT";
@@ -38,10 +39,9 @@ class Connection implements ConnectionInterface {
      * @param string $PathConfigJson
      * @return PDO
      */
-    public static function getPDO(string $PathConfigJson, string $PathCash): PDO {
+    public static function getPDO(string $PathConfigJson, string $PathCash): PDO
+    {
         if (self::$PDO === null) {
-
-
             $fileConfig = new File($PathConfigJson, File::JSON, []);
             self::setFileConfigDB($fileConfig);
 
@@ -57,13 +57,11 @@ class Connection implements ConnectionInterface {
             self::$DBname = $dbname;
 
             try {
-
                 self::$PDO = new PDO($dsn, $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             
                 self::$PDO->exec(" CREATE DATABASE IF NOT EXISTS " . $dbname);
                 self::$PDO->query(" use $dbname");
             } catch (Exception $e) {
-
                 die('Erreur data base: de config Connection   ' . $e->getMessage());
             }
         }
@@ -76,7 +74,8 @@ class Connection implements ConnectionInterface {
      * @param string $key
      * @return array|string
      */
-    static function getConfigDB(string $key = "") {
+    static function getConfigDB(string $key = "")
+    {
         if ($key == "") {
             return self::$ConfigDB;
         } else {
@@ -88,7 +87,8 @@ class Connection implements ConnectionInterface {
      *
      * @param string $PathConfigJson
      */
-    public function __construct(string $PathConfigJson, string $PathCashJson, $table = null) {
+    public function __construct(string $PathConfigJson, string $PathCashJson, $table = null)
+    {
         self::getPDO($PathConfigJson, $PathCashJson);
     }
 
@@ -96,22 +96,25 @@ class Connection implements ConnectionInterface {
      * singlton
      * @return PDO
      */
-    public function getDatabase(): PDO {
+    public function getDatabase(): PDO
+    {
 
         return self::$PDO;
     }
 
-    public function getDBnames(): string {
+    public function getDBnames(): string
+    {
         return self::$DBname;
     }
 
     /**
-     * 
+     *
      * @param string $key
      * @param string $type
      * @return type
      */
-    static function getFileConfigDB(string $key = "", string $type = File::JSON) {
+    static function getFileConfigDB(string $key = "", string $type = File::JSON)
+    {
 
         if ($key == "") {
             return self::$fileConfigDB;
@@ -121,12 +124,13 @@ class Connection implements ConnectionInterface {
     }
 
     /**
-     * 
+     *
      * @param string $key
      * @param string $type
      * @return type
      */
-    static function getFileCashDB(string $key = "", string $type = File::JSON) {
+    static function getFileCashDB(string $key = "", string $type = File::JSON)
+    {
 
         if ($key == "") {
             return self::$fileCashDB;
@@ -136,31 +140,33 @@ class Connection implements ConnectionInterface {
     }
 
     /**
-     * 
+     *
      * @param File $fileConfigDB
      */
-    static function setFileConfigDB(File $fileConfigDB) {
+    static function setFileConfigDB(File $fileConfigDB)
+    {
         self::$fileConfigDB = $fileConfigDB;
     }
 
     /**
-     * 
+     *
      * @param File $fileCashDB
      */
-    static function setFileCashDB(File $fileCashDB) {
+    static function setFileCashDB(File $fileCashDB)
+    {
         self::$fileCashDB = $fileCashDB;
     }
 
     /**
-     * 
+     *
      * @param array $config
      * @throws TypeError
      */
-    static function setConfigDB(array $config) {
+    static function setConfigDB(array $config)
+    {
         if (empty($config)) {
             throw new TypeError(" erreur file config dataBase json or path ");
         }
         self::$ConfigDB = $config[$config[self::BOOT]];
     }
-
 }

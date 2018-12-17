@@ -32,7 +32,8 @@ use function str_replace;
 use function strpos;
 use function unlink;
 
-class File_Upload implements File_UploadInterface {
+class File_Upload implements File_UploadInterface
+{
 
     const FIN_REGEX = "_";
 
@@ -41,7 +42,8 @@ class File_Upload implements File_UploadInterface {
     private $path_absolu;
     private $preffix = "";
 
-    public function __construct(string $path) {
+    public function __construct(string $path)
+    {
         $this->path = $path;
         $this->path_absolu = ROOT . "public/" . $path;
         $this->path_relatif = ROOT_WEB . $path;
@@ -50,13 +52,15 @@ class File_Upload implements File_UploadInterface {
     /**
      * preffix exemple name table ==>clients
      */
-    public function setPreffix(string $preffix) {
+    public function setPreffix(string $preffix)
+    {
         if ($preffix != "") {
             $this->preffix = $preffix;
         }
     }
 
-    private function get_preffix(string $id_file): string {
+    private function get_preffix(string $id_file): string
+    {
         preg_match('/([a-zA-Z\$]+)_(.+)/i', $id_file, $matches);
         if (empty($matches)) {
             return "";
@@ -65,7 +69,8 @@ class File_Upload implements File_UploadInterface {
         return $preffix;
     }
 
-    public function get(string $id_file): array {
+    public function get(string $id_file): array
+    {
 
         $files = [];
         $preffix = $this->get_preffix($id_file);
@@ -106,7 +111,8 @@ class File_Upload implements File_UploadInterface {
         return $files;
     }
 
-    public function delete(string $id_file): array {
+    public function delete(string $id_file): array
+    {
 
         $files = [];
         $preffix = $this->get_preffix($id_file);
@@ -133,7 +139,8 @@ class File_Upload implements File_UploadInterface {
         }
     }
 
-    public function save(array $uploadedFiles, string $preffix = ""): array {
+    public function save(array $uploadedFiles, string $preffix = ""): array
+    {
 
         /**
          * preffix exemple name table ==>clients
@@ -155,7 +162,8 @@ class File_Upload implements File_UploadInterface {
         return $keyFilesave;
     }
 
-    public function save_child(array $uploadedFiles, string $preffix = ""): array {
+    public function save_child(array $uploadedFiles, string $preffix = ""): array
+    {
         $this->setPreffix($preffix);
         $this->mkdir_is_not();
         $keyFilesSave = [];
@@ -177,7 +185,8 @@ class File_Upload implements File_UploadInterface {
         return $keyFilesSave;
     }
 
-    private function insert_file_upload(UploadedFileInterface $file, string $id_file): array {
+    private function insert_file_upload(UploadedFileInterface $file, string $id_file): array
+    {
         $file_upload = [];
         if ($file->getClientFilename() != "" && $file->getError() == 0) {
             /// insert file upload
@@ -194,7 +203,8 @@ class File_Upload implements File_UploadInterface {
         return $file_upload;
     }
 
-    private function mkdir_is_not() {
+    private function mkdir_is_not()
+    {
 
         if (!is_dir($this->path_absolu . $this->preffix)) {
             $flag = mkdir($this->path_absolu . $this->preffix, 0777, true);
@@ -205,13 +215,11 @@ class File_Upload implements File_UploadInterface {
         }
     }
 
-    private function is_match(string $_id_file, string $file_save, string $finregex = ""): bool {
+    private function is_match(string $_id_file, string $file_save, string $finregex = ""): bool
+    {
         $subject = str_replace("$", "", $file_save);
         $id_file = str_replace("$", "", $_id_file);
         $pattern = '!^' . $id_file . $finregex . '!';
         return preg_match($pattern, $subject);
     }
-
-   
-
 }

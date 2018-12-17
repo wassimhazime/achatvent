@@ -5,11 +5,13 @@ namespace Kernel\Container;
 use Psr\Container\ContainerInterface;
 use DI\ContainerBuilder;
 
-class Factory_Container {
+class Factory_Container
+{
 
     private static $DI = null;
 
-    public static function getContainer(string $pathconfig="", string $implementscontainer = "local"): ContainerInterface {
+    public static function getContainer(string $pathconfig = "", string $implementscontainer = "local"): ContainerInterface
+    {
         if (self::$DI != null) {
             return self::$DI;
         }
@@ -29,5 +31,4 @@ class Factory_Container {
             return $container;
         }
     }
-
 }

@@ -3,7 +3,8 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class Commandes extends AbstractMigration {
+class Commandes extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class Commandes extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
         /*
           CREATE TABLE `commandes` (
           `id` int(10) NOT NULL,
@@ -61,5 +63,4 @@ class Commandes extends AbstractMigration {
                 ->create();
              HTML_Phinx::relation('commandes', 'list$articles', $this->getAdapter());
     }
-
 }

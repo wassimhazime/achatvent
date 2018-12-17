@@ -21,7 +21,8 @@ use function date;
  *
  * @author wassime
  */
-class SetData extends Select_Fonctions implements SetDataInterface{
+class SetData extends Select_Fonctions implements SetDataInterface
+{
  ///////////////////////////////////////////////////////////
     /**
      * delete one item get id delete
@@ -29,7 +30,8 @@ class SetData extends Select_Fonctions implements SetDataInterface{
      * @return int
      */
 
-    public function delete(array $condition): int {
+    public function delete(array $condition): int
+    {
         // one  item
         
         $delete = self::Get_QuerySQL()
@@ -45,7 +47,8 @@ class SetData extends Select_Fonctions implements SetDataInterface{
      * @param string $id_Table
      * @param array $Data_CHILDREN_id
      */
-    public function insert_Relation_childe(string $id_Table, array $Data_CHILDREN_id, string $table = "") {
+    public function insert_Relation_childe(string $id_Table, array $Data_CHILDREN_id, string $table = "")
+    {
         if ($table == "") {
             $table = $this->getTable();
         }
@@ -69,7 +72,8 @@ class SetData extends Select_Fonctions implements SetDataInterface{
      *  exec SQL des tables relations
      * @param string $id_Table
      */
-    public function delete_Relation_childe(string $id_Table) {
+    public function delete_Relation_childe(string $id_Table)
+    {
         $name_CHILDRENs = (array_keys($this->getschema()->getCHILDREN())); // name childern array
 
         foreach ($name_CHILDRENs as $name_table_CHILDREN) {
@@ -89,7 +93,8 @@ class SetData extends Select_Fonctions implements SetDataInterface{
      * @return Intent_Set
      * @throws TypeError
      */
-    public function parse(array $data): Intent_Set {
+    public function parse(array $data): Intent_Set
+    {
         $schema = $this->getschema();
         if (Tools::isAssoc($data) and isset($data)) {
             return (new Intent_Set($schema, ((new EntitysDataTable())->set($data))));
@@ -99,11 +104,12 @@ class SetData extends Select_Fonctions implements SetDataInterface{
     }
 
     /**
-     * 
+     *
      * @param array $dataForm
      * @return int
      */
-    public function update(array $dataForm): int {
+    public function update(array $dataForm): int
+    {
         $intent_set = $this->parse($dataForm);
         $Data_CHILDREN_id = $intent_set->get_Data_CHILDREN_id();
         $data_table = $intent_set->get_Data_Table();
@@ -134,7 +140,8 @@ class SetData extends Select_Fonctions implements SetDataInterface{
      * @param array $dataForm
      * @return int
      */
-    public function insert_table_Relation(array $dataForm): int {
+    public function insert_table_Relation(array $dataForm): int
+    {
 
 
         $intent_set = $this->parse($dataForm);
@@ -169,7 +176,8 @@ class SetData extends Select_Fonctions implements SetDataInterface{
      * @param string $table_parent
      * @return int
      */
-    public function insert_tableChilde_Relation(array $dataForms, int $id_table_parent, string $table_parent = ""): int {
+    public function insert_tableChilde_Relation(array $dataForms, int $id_table_parent, string $table_parent = ""): int
+    {
         $id_cheldrns = [];
         $table = $this->getTable();
         if ($table_parent == "") {
@@ -189,5 +197,4 @@ class SetData extends Select_Fonctions implements SetDataInterface{
 
         return $id_table_parent;
     }
-
 }

@@ -21,9 +21,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use function substr;
 
-abstract class AbstractShowController extends AbstractController {
+abstract class AbstractShowController extends AbstractController
+{
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         parent::process($request, $handler);
 
         if ($this->getResponse()->getStatusCode() != 200) {
@@ -48,7 +50,8 @@ abstract class AbstractShowController extends AbstractController {
 
     abstract function run($id): ResponseInterface;
 
-    protected function showDataTable(string $name_views, string $nameRouteGetDataAjax): ResponseInterface {
+    protected function showDataTable(string $name_views, string $nameRouteGetDataAjax): ResponseInterface
+    {
 
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
@@ -81,7 +84,8 @@ abstract class AbstractShowController extends AbstractController {
         return $this->render($name_views, $data);
     }
 
-    private function btn_DataTable(array $modeHTTP): array {
+    private function btn_DataTable(array $modeHTTP): array
+    {
 
         $param = "pageLength colvis";
         $jsCharge = [];
@@ -107,7 +111,8 @@ abstract class AbstractShowController extends AbstractController {
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected function supprimer($id, string $view): ResponseInterface {
+    protected function supprimer($id, string $view): ResponseInterface
+    {
 
         $conditon = ['id' => $id];
 
@@ -132,7 +137,8 @@ abstract class AbstractShowController extends AbstractController {
         return $this->getResponse();
     }
 
-    protected function modifier($id_save, string $view): ResponseInterface {
+    protected function modifier($id_save, string $view): ResponseInterface
+    {
 
 
         $modeselect = $this->getModel()::MODE_SELECT_ALL_MASTER;
@@ -164,7 +170,8 @@ abstract class AbstractShowController extends AbstractController {
         return $this->render($view, ["intent" => $intent_Form]);
     }
 
-    protected function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface {
+    protected function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface
+    {
         $model = $this->getModel();
         $schema = $model->getschema();
 
@@ -185,7 +192,6 @@ abstract class AbstractShowController extends AbstractController {
             $intent_formselect->setCharge_data_select($select);
             return $this->render($viewSelect, ["intent" => $intent_formselect]);
         } else {
-
             $META_data = $schema->getCOLUMNS_META();
             $select = $model->get_Data_FOREIGN_KEY($data_get);
             $multiSelect = $model->dataChargeMultiSelectIndependent($data_get);
@@ -200,12 +206,14 @@ abstract class AbstractShowController extends AbstractController {
         }
     }
 
-    protected function show($id, string $view): ResponseInterface {
+    protected function show($id, string $view): ResponseInterface
+    {
         $intent = $this->getModel()->show_styleForm($id);
         return $this->render($view, ["intent" => $intent]);
     }
 
-    protected function message($rangeID, string $view): ResponseInterface {
+    protected function message($rangeID, string $view): ResponseInterface
+    {
 
         $mode = $this->getModel()::MODE_SELECT_DEFAULT_NULL;
 
@@ -218,7 +226,8 @@ abstract class AbstractShowController extends AbstractController {
      * child
      */
 
-    protected function ajouter_child(string $viewAjoutes, string $viewSelect): ResponseInterface {
+    protected function ajouter_child(string $viewAjoutes, string $viewSelect): ResponseInterface
+    {
         $model = $this->getModel();
         $schema = $model->getschema();
 
@@ -235,8 +244,6 @@ abstract class AbstractShowController extends AbstractController {
             $intent_formselect->setCharge_data_select($select);
             return $this->render($viewSelect, ["intent" => $intent_formselect]);
         } else {
-
-
             $model = $this->getModel();
             $schema = $model->getschema();
             $META_data = $schema->getCOLUMNS_META();
@@ -269,7 +276,8 @@ abstract class AbstractShowController extends AbstractController {
         }
     }
 
-    protected function modifier_child($id_save, string $view): ResponseInterface {
+    protected function modifier_child($id_save, string $view): ResponseInterface
+    {
 
 
         $model = $this->getModel();
@@ -309,5 +317,4 @@ abstract class AbstractShowController extends AbstractController {
 
         return $this->render($view, ["intent" => $intent_Form, "intentchild" => $intent_formChile]);
     }
-
 }

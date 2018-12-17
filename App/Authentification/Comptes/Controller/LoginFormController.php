@@ -18,11 +18,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class LoginFormController extends AbstractController {
+class LoginFormController extends AbstractController
+{
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         parent::process($request, $handler);
         return $this->render("login_form");
     }
-
 }

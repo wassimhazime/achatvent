@@ -4,7 +4,8 @@ use Kernel\Conevert\HTML_Phinx;
 use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
-class Clients extends AbstractMigration {
+class Clients extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -31,7 +32,8 @@ class Clients extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
         /**
           CREATE TABLE `clients` (
           `id` int(10) NOT NULL,
@@ -55,7 +57,7 @@ class Clients extends AbstractMigration {
           MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
          */
         $this->table("clients", HTML_Phinx::id_default())
-                ->addColumn( HTML_Phinx::id())
+                ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::text_master('clients'))
                 ->addColumn(HTML_Phinx::text_master('cin'))
                 ->addColumn(HTML_Phinx::tel())
@@ -70,5 +72,4 @@ class Clients extends AbstractMigration {
                 ->addIndex(['cin'], ['unique' => true])
                 ->create();
     }
-
 }

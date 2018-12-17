@@ -6,7 +6,8 @@ use Kernel\Conevert\HTML_Phinx;
 use Kernel\Container\Factory_Container;
 use Phinx\Migration\AbstractMigration;
 
-class Comptes extends AbstractMigration {
+class Comptes extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -37,7 +38,8 @@ class Comptes extends AbstractMigration {
     /**
      * Migrate Up.
      */
-    public function up() {
+    public function up()
+    {
              $this->table("comptes", HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::text_master('comptes'))
@@ -70,8 +72,8 @@ class Comptes extends AbstractMigration {
     /**
      * Migrate Down.
      */
-    public function down() {
+    public function down()
+    {
         $this->table('comptes')->drop()->save();
     }
-
 }

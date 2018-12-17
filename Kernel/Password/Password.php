@@ -19,12 +19,14 @@ use const PASSWORD_BCRYPT;
 use function password_hash;
 use function password_verify;
 
-class Password implements PasswordInterface {
+class Password implements PasswordInterface
+{
 
     private $algo;
     private $options;
 
-    function __construct(int $algo = -1, array $options = []) {
+    function __construct(int $algo = -1, array $options = [])
+    {
         if ($algo === -1) {
             $algo = PASSWORD_BCRYPT;
         }
@@ -42,7 +44,8 @@ class Password implements PasswordInterface {
      * @param string $password
      * @return string
      */
-    public function encrypt(string $password): string {
+    public function encrypt(string $password): string
+    {
 
         return password_hash($password, $this->algo, $this->options);
     }
@@ -53,8 +56,8 @@ class Password implements PasswordInterface {
      * @param string $hash
      * @return bool
      */
-    public function verify(string $password, string $hash): bool {
+    public function verify(string $password, string $hash): bool
+    {
         return password_verify($password, $hash);
     }
-
 }

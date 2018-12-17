@@ -23,16 +23,18 @@ use function is_string;
  *
  * @author wassime
  */
-class Select extends MetaDatabase implements SelectInterface {
+class Select extends MetaDatabase implements SelectInterface
+{
 
     /**
      * get id (exmple:<a class="btn "  role="button" href="/CRM/files/clients_2018-08-01-16-32-12"  data-regex="/clients_2018-08-01-16-32-12/" > <spam class="glyphicon glyphicon-download-alt"></spam> 6</a>)
      * set to table de file upload
-     * 
+     *
      * @param string $id_save
      * @return string
      */
-    public function get_idfile(string $id_save): string {
+    public function get_idfile(string $id_save): string
+    {
         $schema = $this->getSchema();
         if (empty($schema->getFILES())) {
             return "";
@@ -56,7 +58,8 @@ class Select extends MetaDatabase implements SelectInterface {
      * @param string $id
      * @return bool
      */
-    public function is_id(string $id, $schema = null): bool {
+    public function is_id(string $id, $schema = null): bool
+    {
 
         $entitysDataTable = $this->find_by_id($id, self::MODE_SELECT_MASTER_NULL, $schema);
         return !$entitysDataTable->is_Null();
@@ -66,10 +69,11 @@ class Select extends MetaDatabase implements SelectInterface {
      * recherche par id
      * @param type $id
      * @param array $mode
-     * @param EntitysSchema $schema 
+     * @param EntitysSchema $schema
      * @return EntitysDataTable
      */
-    public function find_by_id($id, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): EntitysDataTable {
+    public function find_by_id($id, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): EntitysDataTable
+    {
         $Entitys = $this->select($id, $mode, $schema);
 
         if (isset($Entitys[0])) {
@@ -88,7 +92,8 @@ class Select extends MetaDatabase implements SelectInterface {
      * @param EntitysSchema $schema
      * @return array
      */
-    public function select($id = true, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array {
+    public function select($id = true, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array
+    {
         if ($schema === null) {
             $schema = $this->getSchema();
         }
@@ -124,7 +129,8 @@ class Select extends MetaDatabase implements SelectInterface {
      * @param EntitysSchema $schema
      * @return array assoc
      */
-    public function select_simple(array $fields, $id = true, $schema = null): array {
+    public function select_simple(array $fields, $id = true, $schema = null): array
+    {
         if ($schema === null) {
             $schema = $this->getSchema();
         }
@@ -135,21 +141,23 @@ class Select extends MetaDatabase implements SelectInterface {
             }
         }
         return $this->prepareQueryAssoc(
-                        self::Get_QuerySQL()
+            self::Get_QuerySQL()
                                 ->select($fields)
                                 ->from($schema->getNameTable())
                                 ->where($id)
-                                ->prepareQuery());
+            ->prepareQuery()
+        );
     }
 
     /**
-     * pour sele data in range 
+     * pour sele data in range
      * @param string|array $rangeID
      * @param array $mode
      * @param EntitysSchema $schema
      * @return array EntitysDataTable
      */
-    public function select_in($rangeID, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array {
+    public function select_in($rangeID, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array
+    {
         if ($schema === null) {
             $schema = $this->getSchema();
         }
@@ -183,7 +191,8 @@ class Select extends MetaDatabase implements SelectInterface {
      * @param EntitysSchema $schema
      * @return array EntitysDataTable
      */
-    public function select_BETWEEN(int $valeur1, int $valeur2, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array {
+    public function select_BETWEEN(int $valeur1, int $valeur2, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array
+    {
         if ($schema === null) {
             $schema = $this->getSchema();
         }
@@ -207,7 +216,8 @@ class Select extends MetaDatabase implements SelectInterface {
      * @return array
      * @throws TypeError
      */
-    private function get_fields(array $mode, $schema = null): array {
+    private function get_fields(array $mode, $schema = null): array
+    {
 
         // mode
         if ($schema == null) {
@@ -221,7 +231,6 @@ class Select extends MetaDatabase implements SelectInterface {
         } elseif ($mode[0] === self::_DEFAULT) {
             $fields = $schema->select_default();
         } else {
-
             throw new \TypeError(" Error mode ");
         }
 
@@ -235,7 +244,8 @@ class Select extends MetaDatabase implements SelectInterface {
      * @param type $schema
      * @return array
      */
-    protected function get_Data_CHILDREN(array $Entitys, array $mode, $schema = null): array {
+    protected function get_Data_CHILDREN(array $Entitys, array $mode, $schema = null): array
+    {
         if ($schema === null) {
             $schema = $this->getSchema();
         }
@@ -245,25 +255,24 @@ class Select extends MetaDatabase implements SelectInterface {
 
         foreach ($Entitys as $Entity) {
             foreach ($schema->get_table_CHILDREN() as $tablechild) {
-
                 $fields = $schema->select_CHILDREN($tablechild, $mode[1]);
                 $nametable = $schema->getNameTable();
 
 
                 $sql = $this->prepareQuery(
-                        self::Get_QuerySQL()
+                    self::Get_QuerySQL()
                                 ->select($fields)
                                 ->column($this->getschema($tablechild)->select_FOREIGN_KEY())
                                 ->from($nametable)
                                 ->join($tablechild, " INNER ", true)
                                 ->join($this->getschema($tablechild)->getFOREIGN_KEY(), " INNER ", false, "", $tablechild)
                                 ->where($schema->getNameTable() . ".id = " . $Entity->id)
-                                ->prepareQuery());
+                    ->prepareQuery()
+                );
                 $Entity->setDataJOIN($tablechild, $sql);
             }
         }
 
         return $Entitys;
     }
-
 }

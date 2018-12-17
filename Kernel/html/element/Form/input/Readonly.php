@@ -16,9 +16,11 @@ namespace Kernel\html\element\Form\input;
 use Kernel\html\element\TableHTML;
 use function str_replace;
 
-class Readonly extends Abstract_Input {
+class Readonly extends Abstract_Input
+{
 
-    public function builder_Tag(): string {
+    public function builder_Tag(): string
+    {
         $this->is_hidden = false;
         // input type multi select
         if (is_array($this->Default)) {
@@ -34,7 +36,8 @@ class Readonly extends Abstract_Input {
      * @param type $att
      * @return string
      */
-    private function data_styleTable(array $default, $att = ' style="width:95% ; margin: auto ;" class="table table-striped table-bordered dt-responsive nowrap "'): string {
+    private function data_styleTable(array $default, $att = ' style="width:95% ; margin: auto ;" class="table table-striped table-bordered dt-responsive nowrap "'): string
+    {
         if (empty($default)) {
             return "";
         }
@@ -51,5 +54,4 @@ class Readonly extends Abstract_Input {
 
         return "<table $att >" . $table . "</table>";
     }
-
 }

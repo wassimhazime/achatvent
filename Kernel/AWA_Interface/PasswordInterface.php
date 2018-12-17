@@ -12,7 +12,8 @@ namespace Kernel\AWA_Interface;
  *
  * @author wassime
  */
-interface PasswordInterface {
+interface PasswordInterface
+{
 
     function __construct(int $algo = -1, array $options = []);
 

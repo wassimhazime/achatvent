@@ -18,13 +18,15 @@ use Kernel\html\element\Form\input\Abstract_Input;
 use Kernel\html\HTML;
 use Kernel\Tools\Tools;
 
-class Select extends Abstract_Input {
+class Select extends Abstract_Input
+{
 
     /**
-     * 
+     *
      * @return string
      */
-    public function builder_Tag(): string {
+    public function builder_Tag(): string
+    {
         $name = $this->name;
         $id_html = $this->id_html;
         $data_load = [];
@@ -56,16 +58,15 @@ class Select extends Abstract_Input {
      * @param array $data_load
      * @return array
      */
-    private function charge_options(array $data_load): array {
-        /// name base input (remove _child if is) 
+    private function charge_options(array $data_load): array
+    {
+        /// name base input (remove _child if is)
         $name = $this->input->getName();
 
 
 
         $optionTag = [];
         foreach ($data_load as $key => $data) {
-
-
             $rowTag = HTML::TAG('option')
                     ->setValue($key)
                     ->setData($data[$name]);
@@ -91,7 +92,8 @@ class Select extends Abstract_Input {
      * @param array $data
      * @return HTML
      */
-    private function att_javaScript(HTML $rowTag, array $data): HTML {
+    private function att_javaScript(HTML $rowTag, array $data): HTML
+    {
 
         $infocontent = "";
         $tokens = "";
@@ -112,7 +114,8 @@ class Select extends Abstract_Input {
      * @param HTML $tag
      * @return HTML
      */
-    private function select_one(HTML $tag): HTML {
+    private function select_one(HTML $tag): HTML
+    {
         $tag->setClass(" form-control form-string input-sm")
                 ->setAtt(" readonly  ");
 
@@ -128,12 +131,12 @@ class Select extends Abstract_Input {
      * @param HTML $tag
      * @return HTML
      */
-    private function select_all(HTML $tag): HTML {
+    private function select_all(HTML $tag): HTML
+    {
         $tag->setClass(" selectpicker form-control input-sm")
                 ->setAtt(' data-live-search="true"  data-size="5" data-container="body" ')
                 ->setAtt('  data-set_null="' . $this->null . '" ');
 
         return $tag;
     }
-
 }

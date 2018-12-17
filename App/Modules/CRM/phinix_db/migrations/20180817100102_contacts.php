@@ -3,7 +3,8 @@
 use Phinx\Migration\AbstractMigration;
 use Kernel\Conevert\HTML_Phinx;
 
-class Contacts extends AbstractMigration {
+class Contacts extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class Contacts extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
         /*
           CREATE TABLE `contacts` (
           `id` int(10) NOT NULL,
@@ -60,5 +62,4 @@ class Contacts extends AbstractMigration {
                 ->addForeignKey('raison$sociale', 'raison$sociale', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
     }
-
 }

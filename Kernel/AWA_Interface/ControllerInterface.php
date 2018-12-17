@@ -12,6 +12,7 @@ namespace Kernel\AWA_Interface;
  *
  * @author wassime
  */
-interface ControllerInterface {
+interface ControllerInterface
+{
     //put your code here
 }

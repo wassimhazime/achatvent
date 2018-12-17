@@ -14,7 +14,8 @@ use function str_replace;
  *
  * @author wassime
  */
-class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE_SELECT_Interface {
+class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE_SELECT_Interface
+{
 
     const SCHEMA_SELECT_MANUAL = "SCHEMA_SELECT_MANUAL";
     const SCHEMA_SELECT_AUTO = "SCHEMA_SELECT_AUTO";
@@ -26,13 +27,14 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
     private $table;
 
     /**
-     * 
+     *
      * @param type $PathConfigJsone
      * @param type $table
      */
-    public function __construct(string $PathConfigJson,string $PathCashJson, $table = null) {
+    public function __construct(string $PathConfigJson, string $PathCashJson, $table = null)
+    {
       
-        parent::__construct( $PathConfigJson, $PathCashJson);
+        parent::__construct($PathConfigJson, $PathCashJson);
         if ($table != null) {
             $this->setTable($table);
         }
@@ -42,7 +44,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * is not table to data base
      * @return bool
      */
-    public function is_null(): bool {
+    public function is_null(): bool
+    {
         return $this->is_null;
     }
 
@@ -51,7 +54,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param string $nameTable
      * @return bool
      */
-    public function is_Table(string $nameTable): bool {
+    public function is_Table(string $nameTable): bool
+    {
         if ($nameTable == "") {
             return false;
         }
@@ -64,7 +68,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param string $nameTable
      * @return bool
      */
-    public function has_Table(string $nameTable): bool {
+    public function has_Table(string $nameTable): bool
+    {
         return $this->is_Table($nameTable);
     }
 
@@ -73,7 +78,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @return string
      * @throws TypeError
      */
-    public function getTable(): string {
+    public function getTable(): string
+    {
         if ($this->is_null()) {
             throw new TypeError(" set table ==> call function setTable()");
         }
@@ -85,7 +91,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param string $table
      * @return bool
      */
-    public function setTable(string $table): bool {
+    public function setTable(string $table): bool
+    {
         if ($this->is_Table($table)) {
             $this->is_null = false;
             $this->table = $table;
@@ -102,7 +109,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @return EntitysSchema
      * @throws TypeError
      */
-    public function getschema(string $NameTable = ""): EntitysSchema {
+    public function getschema(string $NameTable = ""): EntitysSchema
+    {
         if ($NameTable == "" && $this->schema != null) {
             if ($this->is_null()) {
                 throw new TypeError(" set table ==> call function setTable()");
@@ -124,7 +132,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * get tous les names tables  data base
      * @return array string
      */
-    public function getAllTables(): array {
+    public function getAllTables(): array
+    {
         $names_Tables = [];
         $Schemas = $this->getALLschema();
         foreach ($Schemas as $schema) {
@@ -138,7 +147,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @return array
      * @throws TypeError
      */
-    public function getALLschema(): array {
+    public function getALLschema(): array
+    {
 
         if (empty(self::$allSchema)) {
             $this->getALLschema_cache();
@@ -160,7 +170,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
         return self::$allSchema;
     }
 
-    public function startMigratePhinix() {
+    public function startMigratePhinix()
+    {
         $appphinix = new \Phinx\Console\PhinxApplication();
         $wrap = new \Phinx\Wrapper\TextWrapper($appphinix);
         $output = $wrap->getMigrate();
@@ -175,7 +186,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param type $table
      * @return type
      */
-    public function getSchemaStatistique($fonction, $alias, $table = "") {
+    public function getSchemaStatistique($fonction, $alias, $table = "")
+    {
         if ($table == "") {
             $Schemas = $this->getALLschema();
         } else {
@@ -201,7 +213,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param array $config
      * @return type
      */
-    private function columns_default($table, array $config) {
+    private function columns_default($table, array $config)
+    {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " .
                 $table->getNameTable() .
@@ -216,7 +229,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param array $config
      * @return type
      */
-    private function columns_master($table, array $config) {
+    private function columns_master($table, array $config)
+    {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " .
                 $table->getNameTable() .
@@ -231,7 +245,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param array $config
      * @return type
      */
-    private function columns_all($table, array $config) {
+    private function columns_all($table, array $config)
+    {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " .
                 $table->getNameTable() .
@@ -246,7 +261,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param array $config
      * @return type
      */
-    private function columns_META($table, array $config) {
+    private function columns_META($table, array $config)
+    {
 
 
         $describe = $this->querySchema($config['COLUMNS_META'] .
@@ -262,7 +278,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param array $config
      * @return type
      */
-    private function columns_master_CHILDREN($table, array $config) {
+    private function columns_master_CHILDREN($table, array $config)
+    {
 
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
@@ -277,7 +294,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param array $config
      * @return type
      */
-    private function columns_default_CHILDREN($table, array $config) {
+    private function columns_default_CHILDREN($table, array $config)
+    {
 
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
@@ -292,7 +310,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param array $config
      * @return type
      */
-    private function columns_all_CHILDREN($table, array $config) {
+    private function columns_all_CHILDREN($table, array $config)
+    {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " . $table .
                 $config['CHILDREN'][self::_ALL]);
@@ -308,7 +327,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param array $config
      * @return type
      */
-    private function FOREIGN_KEY($table, array $config) {
+    private function FOREIGN_KEY($table, array $config)
+    {
         if (isset($config['FOREIGN_KEY']) and ! empty($config['FOREIGN_KEY'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
@@ -325,7 +345,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param array $config
      * @return type
      */
-    private function FILES($table, array $config) {
+    private function FILES($table, array $config)
+    {
         if (isset($config['FILES']) and ! empty($config['FILES'])) {
             $describe = $this->querySimple("SHOW COLUMNS FROM " .
                     $table->getNameTable() .
@@ -342,7 +363,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param array $config
      * @return type
      */
-    private function STATISTIQUE($table, array $config) {
+    private function STATISTIQUE($table, array $config)
+    {
 
         $describe = $this->querySimple("SHOW COLUMNS FROM " .
                 $table->getNameTable() .
@@ -360,7 +382,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param type $DB_name
      * @return array
      */
-    private function tables_CHILDREN($mainTable, $config, $DB_name) {
+    private function tables_CHILDREN($mainTable, $config, $DB_name)
+    {
 
         $tables_relation = $this->querySchema('SELECT table_name as tables_relation FROM'
                 . ' INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" '
@@ -386,7 +409,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param array $describe
      * @return array
      */
-    private function getField(array $describe): array {
+    private function getField(array $describe): array
+    {
         $Field = [];
         foreach ($describe as $champ) {
             $Field[] = $champ["Field"];
@@ -401,7 +425,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * generateCache
      */
 //////////////////////////////////////
-    private function generateCache() {
+    private function generateCache()
+    {
         $schmaTabls = [];
         foreach (self::$allSchema as $Schema) {
             $schmaTabls[] = Tools::parse_object_TO_array($Schema);
@@ -413,7 +438,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * nam base donnee
      * @return string
      */
-    private static function getNameDataBase(): string {
+    private static function getNameDataBase(): string
+    {
         return self::getConfigDB(self::dbname);
     }
 
@@ -421,7 +447,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * cache json databas schema database
      * @return bool
      */
-    public static function is_set_cache(): bool {
+    public static function is_set_cache(): bool
+    {
         return self::getConfigDB(self::cache);
     }
 
@@ -430,7 +457,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param type $name
      * @return array
      */
-    private static function getSCHEMA_SELECT_MANUAL(): array {
+    private static function getSCHEMA_SELECT_MANUAL(): array
+    {
         return self::getFileConfigDB(self::SCHEMA_SELECT_MANUAL);
     }
 
@@ -438,7 +466,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * regle pour select schema auto
      * @return array
      */
-    private static function getSCHEMA_SELECT_AUTO(): array {
+    private static function getSCHEMA_SELECT_AUTO(): array
+    {
 
         $config = self::getFileConfigDB(self::SCHEMA_SELECT_AUTO, "php");
 
@@ -449,7 +478,8 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * get cache shema
      * @return array
      */
-    private static function getgenerateCACHE_SELECT(): array {
+    private static function getgenerateCACHE_SELECT(): array
+    {
         return self::getFileCashDB(self::CACHE_SELECT);
     }
 
@@ -457,23 +487,25 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * set cache schema par table
      * @param type $schmaTabls
      */
-    private static function setgenerateCACHE_SELECT($schmaTabls) {
+    private static function setgenerateCACHE_SELECT($schmaTabls)
+    {
         self::getFileCashDB()->set($schmaTabls, self::CACHE_SELECT);
     }
 
     /**
      * remove cache shema
      */
-    private static function removeCACHE_SELECT() {
+    private static function removeCACHE_SELECT()
+    {
         self::getFileCashDB()->remove(self::CACHE_SELECT);
     }
 
     /**
-     * set self::$allSchema 
+     * set self::$allSchema
      */
-    private function getALLschema_cache() {
+    private function getALLschema_cache()
+    {
         if (empty(self::$allSchema)) {
-
             if (self::is_set_cache()) {
                 $allSchema = [];
 
@@ -486,9 +518,10 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
     }
 
     /**
-     * set self::$allSchema 
+     * set self::$allSchema
      */
-    private function getALLschema_manule() {
+    private function getALLschema_manule()
+    {
         if (empty(self::$allSchema)) {
             $allSchema = [];
             foreach (self::getSCHEMA_SELECT_MANUAL() as $table) {
@@ -499,11 +532,11 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
     }
 
     /**
-     * set self::$allSchema 
+     * set self::$allSchema
      */
-    private function getALLschema_auto() {
+    private function getALLschema_auto()
+    {
         if (empty(self::$allSchema)) {
-
             $config = self::getSCHEMA_SELECT_AUTO();
             $DB_name = self::getNameDataBase();
             $sql = ' SELECT table_name as NameTable FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" and  table_name not LIKE("r\_%") ';
@@ -521,5 +554,4 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
             self::$allSchema = $allSchema;
         }
     }
-
 }

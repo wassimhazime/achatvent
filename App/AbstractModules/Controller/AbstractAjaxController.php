@@ -18,9 +18,11 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-abstract class AbstractAjaxController extends AbstractController {
+abstract class AbstractAjaxController extends AbstractController
+{
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         parent::process($request, $handler);
 
         if ($this->getResponse()->getStatusCode() != 200) {
@@ -37,7 +39,8 @@ abstract class AbstractAjaxController extends AbstractController {
         return $this->getResponse();
     }
 
-    public function ajax_js(): ResponseInterface {
+    public function ajax_js(): ResponseInterface
+    {
         if ($this->is_Erreur()) {
             return $this->getResponse()
                             ->withStatus(404)
@@ -53,5 +56,4 @@ abstract class AbstractAjaxController extends AbstractController {
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
-
 }

@@ -3,7 +3,8 @@
 use Kernel\Conevert\HTML_Phinx;
 use Phinx\Migration\AbstractMigration;
 
-class AvoirsAchats extends AbstractMigration {
+class AvoirsAchats extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -30,7 +31,8 @@ class AvoirsAchats extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
 
         /*
 
@@ -81,7 +83,7 @@ class AvoirsAchats extends AbstractMigration {
 
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-         * 
+         *
 
          */
         
@@ -104,7 +106,5 @@ class AvoirsAchats extends AbstractMigration {
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
          */
          HTML_Phinx::relation('avoirs$achats', 'factures$achats', $this->getAdapter());
-
     }
-
 }

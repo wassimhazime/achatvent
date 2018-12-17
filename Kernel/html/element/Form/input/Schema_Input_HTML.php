@@ -13,11 +13,12 @@ namespace Kernel\html\element\Form\input;
  *
  * @author wassime
  */
-class Schema_Input_HTML {
+class Schema_Input_HTML
+{
 
     /**
      * name Field
-     * @var string 
+     * @var string
      */
     private $name;
     /*
@@ -28,20 +29,20 @@ class Schema_Input_HTML {
 
     /**
      * is set null to data base
-     * @var boll 
+     * @var boll
      */
     private $isNull = true;
 
     /**
      * valure default en dataBase
-     * @var string 
+     * @var string
      */
     private $default = "";
 
     /**
      * sefix #id
      * #id element html
-     * @var string 
+     * @var string
      */
     private $sefix = "id_html_";
 
@@ -51,11 +52,13 @@ class Schema_Input_HTML {
      */
     private $data_load = [];
 
-    function getData_load(): array {
+    function getData_load(): array
+    {
         return $this->data_load;
     }
 
-    function setData_load(array $data_load): self {
+    function setData_load(array $data_load): self
+    {
         $this->data_load = $data_load;
         return $this;
     }
@@ -64,34 +67,38 @@ class Schema_Input_HTML {
      * #id element html exemple id_html_nom
      * @return string
      */
-    function getId_html(): string {
+    function getId_html(): string
+    {
         // java scripe ==> not $ in id html
         $name = (str_replace(["$"], "_", $this->getName()));
         return $this->sefix . $name;
     }
 
     /**
-     * 
+     *
      * @return string
      */
-    function getName(): string {
+    function getName(): string
+    {
         return $this->name;
     }
 
     /**
-     * 
+     *
      * @return string
      */
-    function getType(): string {
+    function getType(): string
+    {
         // html Renvoie une chaîne en minuscules
         return strtolower($this->type);
     }
 
     /**
-     * 
+     *
      * @return string NO | YES
      */
-    function getIsNull() {
+    function getIsNull()
+    {
         if ($this->isNull) {
             return "YES";
         } else {
@@ -100,39 +107,43 @@ class Schema_Input_HTML {
     }
 
     /**
-     * 
+     *
      * @return string|array
      */
-    function getDefault() {
+    function getDefault()
+    {
         return $this->default;
     }
 
     /**
-     * 
+     *
      * @param string $name
      * @return \self
      */
-    function setName(string $name): self {
+    function setName(string $name): self
+    {
         $this->name = $name;
         return $this;
     }
 
     /**
-     * 
+     *
      * @param string $type
      * @return \self
      */
-    function setType(string$type): self {
+    function setType(string$type): self
+    {
         $this->type = $type;
         return $this;
     }
 
     /**
-     * 
+     *
      * @param bool $isNull
      * @return \self
      */
-    function setIsNull($isNull): self {
+    function setIsNull($isNull): self
+    {
         if (is_string($isNull) && $isNull === "NO") {
             $this->isNull = false;
         } elseif (is_bool($isNull)) {
@@ -142,11 +153,12 @@ class Schema_Input_HTML {
     }
 
     /**
-     * 
+     *
      * @param string|array $default
      * @return \self
      */
-    function setDefault($default): self {
+    function setDefault($default): self
+    {
 
         $this->default = $default;
 
@@ -154,13 +166,13 @@ class Schema_Input_HTML {
     }
 
     /**
-     * 
+     *
      * @param string $sefix
      * @return \self
      */
-    function setSefix(string $sefix): self {
+    function setSefix(string $sefix): self
+    {
         $this->sefix = $sefix;
         return $this;
     }
-
 }

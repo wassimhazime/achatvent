@@ -16,9 +16,11 @@ use Kernel\html\HTML;
  *
  * @author wassime
  */
-class MultiSelect extends Abstract_Input {
+class MultiSelect extends Abstract_Input
+{
 
-    public function builder_Tag(): string {
+    public function builder_Tag(): string
+    {
         $name = $this->name;
         $id_html = $this->id_html;
 
@@ -44,7 +46,8 @@ class MultiSelect extends Abstract_Input {
      * @param array $data
      * @return array
      */
-    private function value_att(array $data): array {
+    private function value_att(array $data): array
+    {
 
         $data_value_att = [];
         foreach ($data as $row) {
@@ -63,12 +66,13 @@ class MultiSelect extends Abstract_Input {
     }
 
     /**
-     * charge les Options par data default and data load 
+     * charge les Options par data default and data load
      * @param array $data_load
      * @param array $Default
      * @return array
      */
-    private function chargeOption(array $data_load, array $Default): array {
+    private function chargeOption(array $data_load, array $Default): array
+    {
         $optionTag = [];
         foreach ($data_load as $id => $data) {
             $optionTag [] = HTML::TAG('option')
@@ -85,5 +89,4 @@ class MultiSelect extends Abstract_Input {
 
         return $optionTag;
     }
-
 }

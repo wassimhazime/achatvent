@@ -15,12 +15,13 @@ use Kernel\Model\Entitys\EntitysSchema;
  *
  * @author wassime
  */
-interface SelectInterface extends MODE_SELECT_Interface {
+interface SelectInterface extends MODE_SELECT_Interface
+{
 
     /**
      * get id (exmple:<a class="btn "  role="button" href="/CRM/files/clients_2018-08-01-16-32-12"  data-regex="/clients_2018-08-01-16-32-12/" > <spam class="glyphicon glyphicon-download-alt"></spam> 6</a>)
      * set to table de file upload
-     * 
+     *
      * @param string $id_save
      * @return string
      */
@@ -37,7 +38,7 @@ interface SelectInterface extends MODE_SELECT_Interface {
      * recherche par id
      * @param type $id
      * @param array $mode
-     * @param EntitysSchema $schema 
+     * @param EntitysSchema $schema
      * @return EntitysDataTable
      */
     public function find_by_id($id, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): EntitysDataTable;
@@ -62,7 +63,7 @@ interface SelectInterface extends MODE_SELECT_Interface {
     public function select_simple(array $fields, $id = true, $schema = null): array;
 
     /**
-     * pour sele data in range 
+     * pour sele data in range
 
      * @param string|array $rangeID
      * @param array $mode

@@ -15,7 +15,8 @@ use Kernel\Model\Query\QuerySQL;
  *
  * @author wassime
  */
-interface ActionDataBaseInterface  {
+interface ActionDataBaseInterface
+{
      /**
      *  Créons un Query Builder
      * @return QuerySQL
@@ -27,7 +28,7 @@ interface ActionDataBaseInterface  {
      * get Shema form EntitysSchema
      * array de EntitysSchema
      * @param string $sql
-     * @return array 
+     * @return array
      */
     public function querySchema(string $sql): array;
 
@@ -53,7 +54,7 @@ interface ActionDataBaseInterface  {
     public function prepareQueryAssoc(Prepare $query): array;
 
     /**
-     * / get data form array assoc 
+     * / get data form array assoc
      * @param string $sql
      * @return array assoc
      */
@@ -67,7 +68,7 @@ interface ActionDataBaseInterface  {
     public function exec(string $sql): int;
 
     /**
-     * 
+     *
      * @param Prepare $query
      * @return int
      */

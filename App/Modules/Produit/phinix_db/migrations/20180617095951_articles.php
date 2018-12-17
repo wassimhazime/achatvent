@@ -4,7 +4,8 @@ use Kernel\Conevert\HTML_Phinx;
 use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
-class Articles extends AbstractMigration {
+class Articles extends AbstractMigration
+{
 
     /**
      * Change Method.
@@ -31,7 +32,8 @@ class Articles extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change() {
+    public function change()
+    {
 
         $this->table("articles", HTML_Phinx::id_default())
                 
@@ -56,6 +58,5 @@ class Articles extends AbstractMigration {
                 ->addForeignKey('familles$des$articles', 'familles$des$articles', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->addForeignKey('unites', 'unites', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
-  }
-
+    }
 }

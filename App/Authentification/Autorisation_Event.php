@@ -18,12 +18,14 @@ use function in_array;
  *
  * @author wassime
  */
-class Autorisation_Event implements AutorisationInterface {
+class Autorisation_Event implements AutorisationInterface
+{
 
     private $model;
     private $modules;
 
-    public function __invoke($event) {
+    public function __invoke($event)
+    {
 
 
         foreach ($this->modules as $module) {
@@ -36,7 +38,8 @@ class Autorisation_Event implements AutorisationInterface {
         }
     }
 
-    function __construct(ModelInterface $model, array $modules = []) {
+    function __construct(ModelInterface $model, array $modules = [])
+    {
         $this->model = $model;
         $this->modules = $modules;
     }
@@ -45,10 +48,11 @@ class Autorisation_Event implements AutorisationInterface {
      * save id table to 'autorisation$' . $nameModul
      * avec data default si not set
      */
-    public function Autorisation_init(string $nameModul, array $namecontrollers) {
+    public function Autorisation_init(string $nameModul, array $namecontrollers)
+    {
         //  var_dump($nameModul,$namecontrollers);die();
         /**
-         * get id comptees save 
+         * get id comptees save
          */
         $id_comptes = $this->get_idCompes();
 
@@ -62,11 +66,10 @@ class Autorisation_Event implements AutorisationInterface {
         /**
          * save id table to 'autorisation$' . $nameModul
          * avec data default si not set
-         * 
+         *
          * init si delete all  FOREIGN_KEY_Compes to table
          */
         foreach ($id_comptes as $id) {
-
             // init si delete all  FOREIGN_KEY_Compes to table
 //$id==1 is root
             if ($id != 1 && !in_array($id, $id_comptes_setModule)) {
@@ -85,9 +88,10 @@ class Autorisation_Event implements AutorisationInterface {
     }
 
     /**
-     * get id comptees save 
+     * get id comptees save
      */
-    private function get_idCompes(): array {
+    private function get_idCompes(): array
+    {
 
         $id_comptes = [];
         $this->model->setTable("comptes");
@@ -101,7 +105,8 @@ class Autorisation_Event implements AutorisationInterface {
      * get id competes save to table ==>
      * 'autorisation$' . $nameModul
      */
-    private function get_FOREIGN_KEY_Compes($nameModul): array {
+    private function get_FOREIGN_KEY_Compes($nameModul): array
+    {
 
         $this->model->setTable(self::Prefixe . $nameModul);
         $id_comptes_setModule = [];
@@ -112,5 +117,4 @@ class Autorisation_Event implements AutorisationInterface {
 
         return array_unique($id_comptes_setModule);
     }
-
 }

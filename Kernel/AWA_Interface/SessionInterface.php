@@ -12,7 +12,8 @@ namespace Kernel\AWA_Interface;
  *
  * @author wassime
  */
-interface SessionInterface {
+interface SessionInterface
+{
 
     /**
      * Configure the session name.
@@ -22,11 +23,12 @@ interface SessionInterface {
      * Set the session id regenerate interval and id expiry key name.
      */
     function __construct(
-    string $name = "",
-            string $id = "",
-            array $options = [],
-            int $regenerateIdInterval = -1,
-            string $sessionIdExpiryKey = "session-id-expires");
+        string $name = "",
+        string $id = "",
+        array $options = [],
+        int $regenerateIdInterval = -1,
+        string $sessionIdExpiryKey = "session-id-expires"
+    );
 
     /**
      * get data
@@ -37,13 +39,13 @@ interface SessionInterface {
     public function get(string $key, $default = "");
 
     /**
-     * set data 
+     * set data
      * @param string $key
      * @param type $value
      */
     public function set(string $key, $value);
        /**
-     * delete data 
+     * delete data
      * @param string $key
      * @param type $value
      */

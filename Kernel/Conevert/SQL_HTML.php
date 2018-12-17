@@ -15,7 +15,8 @@ use Kernel\AWA_Interface\SQL_HTMLInterface;
  *
  * @author wassime
  */
-class SQL_HTML implements SQL_HTMLInterface {
+class SQL_HTML implements SQL_HTMLInterface
+{
 
     /**
       'varchar(20)' => 'tel',
@@ -31,7 +32,8 @@ class SQL_HTML implements SQL_HTMLInterface {
       'int(10)' => 'hidden
 
      */
-    private static function getType(string $typesqle): string {
+    private static function getType(string $typesqle): string
+    {
 
         if (preg_match("/varchar/i", $typesqle)) {
             return "string";
@@ -52,7 +54,8 @@ class SQL_HTML implements SQL_HTMLInterface {
         }
     }
 
-    private static function getlimit(string $typesqle) {
+    private static function getlimit(string $typesqle)
+    {
 
         // get numbre
         preg_match_all('/\d+/', $typesqle, $matches);
@@ -62,21 +65,19 @@ class SQL_HTML implements SQL_HTMLInterface {
         return 0;
     }
 
-    public static function getTypeHTML(string $typesqle) {
+    public static function getTypeHTML(string $typesqle)
+    {
 
         $type = self::getType($typesqle);
         $limit = self::getlimit($typesqle);
 
         foreach (self::HTML_SQL as $params) {
             if ($params["typePhinix"] == $type) {
-
                 if (!isset($params["options"]['limit']) ||
                         $params["options"]['limit'] == $limit) {
-
                     return $params["typeHtml"];
                 }
             }
         }
     }
-
 }
