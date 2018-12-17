@@ -15,7 +15,7 @@
         {
             "label": "gitm",
             "type": "shell",
-            "command": "git add . ; git commit -m 'ok'; push origin master             "
+            "command": "git add . ; git commit -m 'ok';git push origin master             "
         }
     ]
 }
