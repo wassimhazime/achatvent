@@ -1,0 +1,21 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "gitp",
+            "type": "shell",
+            "command": "git pull",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "gitm",
+            "type": "shell",
+            "command": "git add . ; git commit -m 'ok'; push origin master             "
+        }
+    ]
+}
