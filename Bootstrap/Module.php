@@ -21,7 +21,9 @@ use Kernel\AWA_Interface\RendererInterface;
  */
 $configue = ROOT . "Config" . D_S . "Config_Container.php";
 
+
 $app = App::getApp($configue);
+
 
 $container = $app->getContainer();
 //charge module
@@ -29,7 +31,7 @@ if (empty($app->getModules())) {
     $app->addModule(RapportsModule::class);
     $app->addModule(ReglagesModule::class);
    $app->addModule(ProduitModule::class);
- 
+
     $app->addModule(CRMModule::class);
    $app->addModule(AchatsModule::class);
     $app->addModule(VentesModule::class);
