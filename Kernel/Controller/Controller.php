@@ -236,7 +236,7 @@ abstract class Controller implements MiddlewareInterface
 
     protected function getChild()
     {
-   
+
         $parent = $this->getNameController();
         if (isset($this->child[$parent])) {
             return $this->child[$parent];
@@ -326,7 +326,7 @@ abstract class Controller implements MiddlewareInterface
         $renderer->addGlobal("_NamesRoute", $this->getNamesRoute());
         $data_view = $this->add_data_views($data);
 
-        $render = $renderer->render("@{$this->getNameModule()}/" . $name_view, $data_view);
+        $render = $renderer->render("@{$this->getNameModule()}{$this->getNameController()}/" . $name_view, $data_view);
 
         $response = $this->getResponse();
         $response->getBody()->write($render);

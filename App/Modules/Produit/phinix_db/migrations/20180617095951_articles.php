@@ -36,13 +36,13 @@ class Articles extends AbstractMigration
     {
 
         $this->table("articles", HTML_Phinx::id_default())
-                
+
                 ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::select('type$produit'))
                 ->addColumn(HTML_Phinx::text_master('articles'))
                 ->addColumn(HTML_Phinx::select('taxes'))
                 ->addColumn(HTML_Phinx::select('marques'))
-                
+
                 ->addColumn(HTML_Phinx::select('familles$des$articles'))
                 ->addColumn(HTML_Phinx::select('unites'))
                 ->addColumn(HTML_Phinx::textarea('Description'))
@@ -58,5 +58,68 @@ class Articles extends AbstractMigration
                 ->addForeignKey('familles$des$articles', 'familles$des$articles', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->addForeignKey('unites', 'unites', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
+
+
+                $faker = Faker\Factory::create('fr_FR');
+                $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
+                $data = [
+                    [
+                        'articles' => "produit1",
+                        'type$produit' => "1",
+                        'taxes' => "1",
+                         'marques'=> "1",
+                        'familles$des$articles' => "1",
+                        'unites' => "5",
+                        'Prix$d$achat$HT' => "100",
+                        'Prix$de$vente$HT' => "200",
+                        'Disponible$dans$les$ventes' => "1",
+                        'Disponible$dans$les$achats' => "1",
+                        "date_ajoute" => $date,
+                        "date_modifier" => $date
+                    ], [
+                      'articles' => "produit2",
+                      'type$produit' => "2",
+                      'taxes' => "1",
+                       'marques'=> "2",
+                      'familles$des$articles' => "2",
+                      'unites' => "3",
+                      'Prix$d$achat$HT' => "500",
+                      'Prix$de$vente$HT' => "600",
+                      'Disponible$dans$les$ventes' => "1",
+                      'Disponible$dans$les$achats' => "0",
+                      "date_ajoute" => $date,
+                      "date_modifier" => $date
+
+                    ], [
+                      'articles' => "produit3",
+                      'type$produit' => "1",
+                      'taxes' => "1",
+                       'marques'=> "1",
+                      'familles$des$articles' => "1",
+                      'unites' => "1",
+                      'Prix$d$achat$HT' => "700",
+                      'Prix$de$vente$HT' => "100",
+                      'Disponible$dans$les$ventes' => "0",
+                      'Disponible$dans$les$achats' => "1",
+                      "date_ajoute" => $date,
+                      "date_modifier" => $date
+
+                    ], [
+                      'articles' => "produit4",
+                      'type$produit' => "1",
+                      'taxes' => "1",
+                       'marques'=> "1",
+                      'familles$des$articles' => "1",
+                      'unites' => "1",
+                      'Prix$d$achat$HT' => "200",
+                      'Prix$de$vente$HT' => "400",
+                      'Disponible$dans$les$ventes' => "1",
+                      'Disponible$dans$les$achats' => "1",
+                      "date_ajoute" => $date,
+                      "date_modifier" => $date
+
+                    ]];
+
+                $this->table('articles')->insert($data)->save();
     }
 }

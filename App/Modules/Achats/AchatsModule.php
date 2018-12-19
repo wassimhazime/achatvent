@@ -13,21 +13,32 @@ use App\Modules\Achats\Controller\FileController;
 class AchatsModule extends AbstractModule
 {
 
-    public function addPathRenderer(RendererInterface $renderer)
-    {
-        $pathModule = __DIR__ . D_S . "views" . D_S;
-        $renderer->addPath($pathModule, self::NameModule);
-    }
+
 
     protected $Controllers = [
-          ['commandes'=>['child'=>'list$articles','notSelect'=>[]]],
-    
-        'bons$achats',
-        'factures$achats',
-        'avoirs$achats'
+          ['commandes'=>['child'=>'list$articles','notSelect'=>['raison$sociale']]],
+          ['bons$achats'=>['child'=>'list$articles','notSelect'=>[]]],
+          ['factures$achats'=>['child'=>'list$articles','notSelect'=>[]]],
+          ['avoirs$achats'=>['child'=>'list$articles','notSelect'=>[]]],
+
+
     ];
     const NameModule = "Achats";
     const IconModule = " fa fa-fw fa-shopping-cart ";
+
+
+    public function addPathRenderer(RendererInterface $renderer)
+    {
+
+        $NamesControllers=$this->getNamesControllers($this->Controllers);
+        foreach ($NamesControllers as $NameController ) {
+          $pathModule = __DIR__ . D_S . "views" . D_S.$NameController.D_S;
+
+          $renderer->addPath($pathModule, self::NameModule.$NameController);
+        }
+
+    }
+
 
     public function addRoute(RouterInterface $router)
     {

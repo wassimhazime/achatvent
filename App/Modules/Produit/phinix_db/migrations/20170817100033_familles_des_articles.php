@@ -43,5 +43,25 @@ class famillesDesArticles extends AbstractMigration
                 ->addColumn(HTML_Phinx::datetime('date_ajoute'))
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
                 ->create();
+
+
+                $faker = Faker\Factory::create('fr_FR');
+                $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
+                $data = [
+                    [
+                        'familles$des$articles' => "filtre",
+
+                        "note" => "Certaines opérations sont exonérées de TVA. Découvrez les secteurs d'activités et les opérations concernées par cette exonération.",
+                        "date_ajoute" => $date,
+                        "date_modifier" => $date
+                    ], [
+                        'familles$des$articles' => "pc",
+
+                        "note" => "La taxe sur la valeur ajoutée ou TVA est un impôt indirect sur la consommation.",
+                        "date_ajoute" => $date,
+                        "date_modifier" => $date
+                    ]];
+
+                $this->table('familles$des$articles')->insert($data)->save();
     }
 }

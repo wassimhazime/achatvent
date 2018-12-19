@@ -86,9 +86,10 @@ class AvoirsAchats extends AbstractMigration
          *
 
          */
-        
+
          HTML_Phinx::relation('avoirs$achats', 'bons$achats', $this->getAdapter());
-       
+         HTML_Phinx::relation('avoirs$achats', 'list$articles', $this->getAdapter());
+
 
 
 

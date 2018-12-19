@@ -34,7 +34,7 @@ class Marques extends AbstractMigration
      */
     public function change()
     {
-     
+
         $this->table("marques", HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
                 ->addColumn(HTML_Phinx::text_master('marques'))
@@ -43,5 +43,25 @@ class Marques extends AbstractMigration
                 ->addColumn(HTML_Phinx::datetime('date_ajoute'))
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
                 ->create();
+
+//////////////////////////////////////////////////////////////////////////////////////
+                $faker = Faker\Factory::create('fr_FR');
+                $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
+                $data = [
+                    [
+                        'marques' => "dell",
+
+                        "note" => "Certaines opérations sont exonérées de TVA. Découvrez les secteurs d'activités et les opérations concernées par cette exonération.",
+                        "date_ajoute" => $date,
+                        "date_modifier" => $date
+                    ], [
+                        'marques' => "hp",
+
+                        "note" => "La taxe sur la valeur ajoutée ou TVA est un impôt indirect sur la consommation.",
+                        "date_ajoute" => $date,
+                        "date_modifier" => $date
+                    ]];
+
+                $this->table("marques")->insert($data)->save();
     }
 }
