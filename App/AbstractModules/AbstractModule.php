@@ -10,6 +10,7 @@ use Psr\Container\ContainerInterface;
 use const D_S;
 use function str_replace;
 use function ucfirst;
+use Kernel\Tools\Tools;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -70,7 +71,24 @@ abstract class AbstractModule implements ModuleInterface
     {
         return $this->namesRoute;
     }
+     function getNamesControllers($Controllers):array
+    {
+      $namesControllers =[];
+        foreach ($Controllers as $Controller) {
+            if (is_string($Controller)) {
+                $namesControllers [] = $Controller;
+            } elseif (is_array($Controller)) {
+                if (Tools::isAssoc($Controller)) {
+                    $namesController = array_keys($Controller)[0];
 
+                } else {
+                    $namesController = $Controller[0];
+                }
+                $namesControllers [] = $namesController;
+            }
+        }
+      return $namesControllers;  
+    }
     public function getControllers()
     {
         return $this->Controllers;

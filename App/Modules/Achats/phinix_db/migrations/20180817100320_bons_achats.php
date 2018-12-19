@@ -65,6 +65,7 @@ class BonsAchats extends AbstractMigration
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
                 ->addForeignKey('raison$sociale', 'raison$sociale', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
+                HTML_Phinx::relation('bons$achats', 'list$articles', $this->getAdapter());
 
         /**
           --
@@ -87,7 +88,7 @@ class BonsAchats extends AbstractMigration
 
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
          */
-        
+
         HTML_Phinx::relation('bons$achats', 'commandes', $this->getAdapter());
     }
 }
