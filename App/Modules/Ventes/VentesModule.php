@@ -20,11 +20,16 @@ class VentesModule extends AbstractModule
 
     const NameModule = "Ventes";
     const IconModule = " fa fa-fw fa-usd   ";
-
     public function addPathRenderer(RendererInterface $renderer)
     {
-        $pathModule = __DIR__ . D_S . "views" . D_S;
-        $renderer->addPath($pathModule, self::NameModule);
+
+        $NamesControllers=$this->getNamesControllers($this->Controllers);
+        foreach ($NamesControllers as $NameController ) {
+          $pathModule = __DIR__ . D_S . "views" . D_S.$NameController.D_S;
+
+          $renderer->addPath($pathModule, self::NameModule.$NameController);
+        }
+
     }
 
     public function addRoute(RouterInterface $router)

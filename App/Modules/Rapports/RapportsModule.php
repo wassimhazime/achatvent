@@ -26,22 +26,26 @@ class RapportsModule extends AbstractModule
 
     protected $Controllers = [
         "clients",
-        'raison$sociale',
+        /* 'raison$sociale',
         'contacts',
-        'mode$paiement'
+        'mode$paiement' */
     ];
     const NameModule = "Rapports";
     const IconModule = " fa fa-fw fa-bar-chart-o ";
 
     public function addPathRenderer(RendererInterface $renderer)
     {
+        $pathModule = __DIR__ . D_S . "views" . D_S;
 
-        $NamesControllers=$this->getNamesControllers($this->Controllers);
-        foreach ($NamesControllers as $NameController ) {
-          $pathModule = __DIR__ . D_S . "views" . D_S.$NameController.D_S;
+        $renderer->addPath($pathModule, self::NameModule);
 
-          $renderer->addPath($pathModule, self::NameModule.$NameController);
-        }
+       // $NamesControllers=$this->getNamesControllers($this->Controllers);
+       // foreach ($NamesControllers as $NameController ) {
+
+          //$pathModule = __DIR__ . D_S . "views" . D_S.$NameController.D_S;
+
+         // $renderer->addPath($pathModule, self::NameModule.$NameController);
+     //   }
 
     }
 
