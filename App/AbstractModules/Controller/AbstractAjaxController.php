@@ -18,11 +18,9 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-abstract class AbstractAjaxController extends AbstractController
-{
+abstract class AbstractAjaxController extends AbstractController {
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
 
         if ($this->getResponse()->getStatusCode() != 200) {
@@ -30,17 +28,21 @@ abstract class AbstractAjaxController extends AbstractController
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
         $this->setNameController($this->getRoute()->getParam("controle"));
+
+        $classModel = $this->getNameSpace("Model");
+
+        $this->setModel(new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
         $this->chargeModel($this->getNameController());
 
 
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
-        return $this->getResponse();
+        return $this->ajax_js();
+       
     }
 
-    public function ajax_js(): ResponseInterface
-    {
+    public function ajax_js(): ResponseInterface {
         if ($this->is_Erreur()) {
             return $this->getResponse()
                             ->withStatus(404)
@@ -56,4 +58,5 @@ abstract class AbstractAjaxController extends AbstractController
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
+
 }

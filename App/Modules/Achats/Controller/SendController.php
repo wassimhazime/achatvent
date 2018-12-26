@@ -23,10 +23,5 @@ use Psr\Http\Server\RequestHandlerInterface;
 class SendController extends AbstractSendController
 {
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
-           $this->setModel(new Model($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
-        parent::process($request, $handler);
-        return $this->send_data("show_item", $this->getNamesRoute()->files());
-    }
+   
 }

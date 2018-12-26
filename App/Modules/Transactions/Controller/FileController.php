@@ -9,9 +9,6 @@
 namespace App\Modules\Transactions\Controller;
 
 use App\AbstractModules\Controller\AbstractFileController;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Description of FileController
@@ -22,11 +19,5 @@ class FileController extends AbstractFileController
 {
 
   
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
-
-        parent::process($request, $handler);
-
-        return $this->get_views_files("show_files");
-    }
+    
 }

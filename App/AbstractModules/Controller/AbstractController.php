@@ -20,7 +20,7 @@ use Kernel\Controller\Controller;
 abstract class AbstractController extends Controller {
 
     protected function getModeShow(array $modeHTTP): array {
-        ;
+        
         $parent = MODE_SELECT_Interface::_DEFAULT;
         $child = MODE_SELECT_Interface::_NULL;
 

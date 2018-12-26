@@ -20,8 +20,7 @@ class AjaxController extends AbstractController
 
     public function process(\Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
     {
-        $this->setModel(new \App\Modules\Rapports\Model\Model($this->getContainer()->get("pathModel")));
-
+      
         parent::process($request, $handler);
 
 

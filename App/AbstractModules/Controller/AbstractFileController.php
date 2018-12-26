@@ -29,13 +29,14 @@ abstract class AbstractFileController extends AbstractController
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
         $this->setNameController($this->getRoute()->getParam("controle"));
-        //$this->chargeModel($this->getNameController());
+      
 
 
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
-        return $this->getResponse();
+        return $this->get_views_files("show_files");
+     
     }
 
     public function get_views_files(string $name_views): ResponseInterface

@@ -36,14 +36,19 @@ abstract class AbstractSendController extends AbstractController
             return $this->getResponse();
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
-        $this->setNameController($this->getRoute()->getParam("controle"));
+      $this->setNameController($this->getRoute()->getParam("controle"));
+
+        $classModel = $this->getNameSpace("Model");
+
+        $this->setModel(new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
         $this->chargeModel($this->getNameController());
 
 
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
-        return $this->getResponse();
+         return $this->send_data("show_item", $this->getNamesRoute()->files());
+       
     }
 
     public function send_data(string $view_show, string $routeFile = ""): ResponseInterface
