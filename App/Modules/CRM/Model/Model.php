@@ -12,8 +12,8 @@
  * @author wassime
  */
 
-namespace App\Modules\Achats\Model;
 
+namespace App\Modules\CRM\Model;
 
 use App\AbstractModules\Model\Model as m;
 

@@ -12,12 +12,11 @@
  * @author wassime
  */
 
-namespace App\Modules\Achats\Model;
+namespace App\Modules\CRM\Model;
 
+use App\AbstractModules\Model\Model ;
 
-use App\AbstractModules\Model\Model as m;
-
-class Model extends m
+class Clients extends Model
 {
 
 
