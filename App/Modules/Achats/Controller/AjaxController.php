@@ -8,14 +8,14 @@
 
 namespace App\Modules\Achats\Controller;
 
-use App\AbstractModules\Controller\AbstractAjaxController;
+use App\AbstractModules\Controller\AjaxController as ajax;
 
 /**
  * Description of AjaxController
  *
  * @author wassime
  */
-class AjaxController extends AbstractAjaxController
+class AjaxController extends ajax
 {
 
   

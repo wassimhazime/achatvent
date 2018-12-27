@@ -114,4 +114,18 @@ abstract class AbstractModule implements ModuleInterface
     {
         $this->middlewares = $middlewares;
     }
+    ////////
+       public function addPathRenderer(RendererInterface $renderer,string $pathModules) {
+
+        $NamesControllers = $this->getNamesControllers($this->getControllers());
+        
+        foreach ($NamesControllers as $NameController) {
+            
+            $pathModule = $pathModules . $this::NameModule . D_S . "views" . D_S . $NameController . D_S;
+           
+            if (is_dir($pathModule)) {
+                $renderer->addPath($pathModule, $this::NameModule . $NameController);
+            }
+        }
+    }
 }

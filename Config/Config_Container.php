@@ -20,8 +20,15 @@ return [
     }, 
     "Config" => function (): string {
         return ROOT . "Config" . D_S;
-    }, "App" => function (): string {
+    }, 
+     "App" => function (): string {
         return ROOT . "App" . D_S;
+    }, 
+     "Modules" => function (): string {
+        return ROOT."App".D_S."Modules" .D_S;
+    }, 
+     "Default_view" => function (): string {
+        return ROOT . "App" . D_S . "AbstractModules" . D_S . "views" . D_S ;
     },
     "pathModel" => function (ContainerInterface $container): string {
         return $container->get("Config") . "model" . D_S;

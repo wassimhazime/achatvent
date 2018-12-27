@@ -8,7 +8,7 @@
 
 namespace App\Authentification\Comptes\Controller;
 
-use App\AbstractModules\Controller\AbstractAjaxController;
+use App\AbstractModules\Controller\AjaxController as ajax;
 use App\Authentification\Comptes\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,7 +19,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-class AjaxController extends AbstractAjaxController
+class AjaxController extends ajax
 {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

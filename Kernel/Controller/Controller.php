@@ -73,18 +73,32 @@ abstract class Controller implements MiddlewareInterface {
     }
 
     //
-    public function getNameSpace($type = "Model"): string {
+    public function getClassModel(): string {
+        $type = "Model";
+
         $modul = $this->getNameModule();
         $controller = ucfirst($this->getNameController());
+
         $class = "\App\Modules\\$modul\\$type\\$controller";
+
         if (class_exists($class)) {
+
             return $class;
         }
 
         $classDefault = "\App\Modules\\$modul\\$type\\$type";
+
         if (class_exists($classDefault)) {
+
             return $classDefault;
         }
+        $classDAbstractModules = "\App\AbstractModules\\$type\\$type";
+
+        if (class_exists($classDAbstractModules)) {
+
+            return $classDAbstractModules;
+        }
+
         // error
     }
 
@@ -309,7 +323,19 @@ abstract class Controller implements MiddlewareInterface {
         $renderer->addGlobal("_NamesRoute", $this->getNamesRoute());
         $data_view = $this->add_data_views($data);
 
-        $render = $renderer->render("@{$this->getNameModule()}{$this->getNameController()}/" . $name_view, $data_view);
+
+        $pathview = $this->getContainer()->get("Modules") .
+                $this->getNameModule() . D_S .
+                "views" . D_S .
+                $this->getNameController() . D_S;
+
+        if (is_dir($pathview)) {
+            $render = $renderer->render("@{$this->getNameModule()}{$this->getNameController()}/" . $name_view, $data_view);
+        } else {
+            $render = $renderer->render("@default_view/" . $name_view, $data_view);
+        }
+
+
 
         $response = $this->getResponse();
         $response->getBody()->write($render);

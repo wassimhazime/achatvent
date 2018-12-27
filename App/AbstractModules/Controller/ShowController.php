@@ -21,7 +21,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use function substr;
 
-abstract class AbstractShowController extends AbstractController {
+ class ShowController extends AbstractController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
@@ -32,7 +32,7 @@ abstract class AbstractShowController extends AbstractController {
         $this->setRoute($this->getRouter()->match($this->getRequest()));
         $this->setNameController($this->getRoute()->getParam("controle"));
 
-        $classModel = $this->getNameSpace("Model");
+      $classModel = $this->getClassModel();
 
         $this->setModel(new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
         $this->chargeModel($this->getNameController());

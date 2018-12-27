@@ -14,10 +14,10 @@ namespace App\Modules\Achats\Controller;
  * @author wassime
  */
 
-use App\AbstractModules\Controller\AbstractShowController;
+use App\AbstractModules\Controller\ShowController as show;
 use Psr\Http\Message\ResponseInterface;
 
-class ShowController extends AbstractShowController
+class ShowController extends show
 {
 
 

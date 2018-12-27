@@ -27,17 +27,7 @@ class AchatsModule extends AbstractModule
     const IconModule = " fa fa-fw fa-shopping-cart ";
 
 
-    public function addPathRenderer(RendererInterface $renderer)
-    {
-
-        $NamesControllers=$this->getNamesControllers($this->Controllers);
-        foreach ($NamesControllers as $NameController ) {
-          $pathModule = __DIR__ . D_S . "views" . D_S.$NameController.D_S;
-
-          $renderer->addPath($pathModule, self::NameModule.$NameController);
-        }
-
-    }
+    
 
 
     public function addRoute(RouterInterface $router)

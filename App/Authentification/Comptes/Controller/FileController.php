@@ -8,7 +8,7 @@
 
 namespace App\Authentification\Comptes\Controller;
 
-use App\AbstractModules\Controller\AbstractFileController;
+use App\AbstractModules\Controller\FileController as file;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -18,7 +18,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-class FileController extends AbstractFileController
+class FileController extends file
 {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

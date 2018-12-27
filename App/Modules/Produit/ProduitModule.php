@@ -6,11 +6,10 @@ use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RendererInterface;
 
-use App\Modules\Produit\Controller\SendController;
-use App\Modules\Produit\Controller\ShowController;
-use App\Modules\Produit\Controller\AjaxController;
-use App\Modules\Produit\Controller\FileController;
-
+use App\AbstractModules\Controller\SendController;
+use App\AbstractModules\Controller\ShowController;
+use App\AbstractModules\Controller\AjaxController;
+use App\AbstractModules\Controller\FileController;
 class ProduitModule extends AbstractModule
 {
 
@@ -23,17 +22,7 @@ class ProduitModule extends AbstractModule
     const NameModule = "Produit";
     const IconModule = " fa fa-fw fa-stack-overflow ";
 
-    public function addPathRenderer(RendererInterface $renderer)
-    {
-
-        $NamesControllers=$this->getNamesControllers($this->Controllers);
-        foreach ($NamesControllers as $NameController ) {
-          $pathModule = __DIR__ . D_S . "views" . D_S.$NameController.D_S;
-
-          $renderer->addPath($pathModule, self::NameModule.$NameController);
-        }
-
-    }
+    
     public function addRoute(RouterInterface $router)
     {
         $nameRoute = $this->getNamesRoute();

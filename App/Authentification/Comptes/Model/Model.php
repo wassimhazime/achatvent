@@ -14,9 +14,9 @@
 
 namespace App\Authentification\Comptes\Model;
 
-use App\AbstractModules\Model\AbstractModel;
+use App\AbstractModules\Model\Model as m;
 
-class Model extends AbstractModel
+class Model extends m
 {
 
     public function login(string $login): array

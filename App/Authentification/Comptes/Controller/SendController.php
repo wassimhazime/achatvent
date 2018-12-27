@@ -13,7 +13,7 @@ namespace App\Authentification\Comptes\Controller;
  *
  * @author wassime
  */
-use App\AbstractModules\Controller\AbstractSendController;
+use App\AbstractModules\Controller\SendController as send;
 use App\Authentification\Comptes\Model\Model;
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\Event\Event;
@@ -21,7 +21,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class SendController extends AbstractSendController
+class SendController extends send
 {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

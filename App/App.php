@@ -18,15 +18,14 @@ use App\Authentification\Comptes\ComptesModule;
 use App\Authentification\Login\LoginModule;
 use Kernel\Kernel;
 
-class App extends Kernel
-{
+class App extends Kernel {
 
     private static $app = null;
-/**
- * singlton app
- */
-    public static function getApp(string $pathconfig) :self
-    {
+
+    /**
+     * singlton app
+     */
+    public static function getApp(string $pathconfig): self {
         if (self::$app === null) {
             self::$app = new self($pathconfig);
             return self::$app;
@@ -34,16 +33,20 @@ class App extends Kernel
         return self::$app;
     }
 
-    public function run_modules()
-    {
+    public function run_modules() {
+
+        $this->default_Views();
+       
         $this->gestion_compte();
         $modules = $this->getModules();
+        $pathModules= $this->getContainer()->get("Modules") ;
 
 
         $menus = [];
         foreach ($modules as $module) {
             $module->addRoute($this->router);
-            $module->addPathRenderer($this->renderer);
+            
+            $module->addPathRenderer($this->renderer,$pathModules);
             $menus[] = $module->getMenu();
         }
 
@@ -51,8 +54,7 @@ class App extends Kernel
         $this->renderer->addGlobal("_menu", $menus);
     }
 
-    private function gestion_compte()
-    {
+    private function gestion_compte() {
 
         $Comptes = new ComptesModule($this->container);
         // $login=new LoginModule($this->container);
@@ -61,4 +63,18 @@ class App extends Kernel
         $this->addModule($Comptes);
         // $this->addModule($login);
     }
+    private function default_Views() {
+          //default rendere
+        $pathDefault_view = $this->getContainer()->get("Default_view") ;
+
+        if (is_dir($pathDefault_view)) {
+            
+            $this->renderer->addPath($pathDefault_view, "default_view");
+            
+        }else{
+          var_dump(is_dir($pathDefault_view));
+           die("error");   
+        }
+    }
+
 }

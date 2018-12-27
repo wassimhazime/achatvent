@@ -14,13 +14,13 @@ namespace App\Modules\Achats\Controller;
  * @author wassime
  */
 
-use App\AbstractModules\Controller\AbstractSendController;
+use App\AbstractModules\Controller\SendController as send;
 use App\Modules\Achats\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class SendController extends AbstractSendController
+class SendController extends send
 {
 
    

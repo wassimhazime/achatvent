@@ -33,7 +33,7 @@ class RapportsModule extends AbstractModule
     const NameModule = "Rapports";
     const IconModule = " fa fa-fw fa-bar-chart-o ";
 
-    public function addPathRenderer(RendererInterface $renderer)
+    public function addPathRenderer(RendererInterface $renderer,string $path)
     {
         $pathModule = __DIR__ . D_S . "views" . D_S;
 

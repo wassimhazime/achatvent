@@ -17,11 +17,10 @@ namespace App\Modules\Transactions;
 use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RendererInterface;
-
-use App\Modules\Transactions\Controller\SendController;
-use App\Modules\Transactions\Controller\ShowController;
-use App\Modules\Transactions\Controller\AjaxController;
-use App\Modules\Transactions\Controller\FileController;
+use App\AbstractModules\Controller\SendController;
+use App\AbstractModules\Controller\ShowController;
+use App\AbstractModules\Controller\AjaxController;
+use App\AbstractModules\Controller\FileController;
 
 class TransactionsModule extends AbstractModule
 {
@@ -34,17 +33,7 @@ class TransactionsModule extends AbstractModule
     const NameModule = "Transactions";
     const IconModule = "  fa fa-fw fa-briefcase ";
 
-    public function addPathRenderer(RendererInterface $renderer)
-    {
-
-        $NamesControllers=$this->getNamesControllers($this->Controllers);
-        foreach ($NamesControllers as $NameController ) {
-          $pathModule = __DIR__ . D_S . "views" . D_S.$NameController.D_S;
-
-          $renderer->addPath($pathModule, self::NameModule.$NameController);
-        }
-
-    }
+    
 
     public function addRoute(RouterInterface $router)
     {

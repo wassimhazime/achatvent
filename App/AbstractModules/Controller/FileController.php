@@ -17,7 +17,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-abstract class AbstractFileController extends AbstractController
+ class FileController extends AbstractController
 {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

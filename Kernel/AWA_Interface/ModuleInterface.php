@@ -27,8 +27,9 @@ interface ModuleInterface
     /**
      * add path view
      * @param RendererInterface $renderer
+     * @param string $pathModules
      */
-    public function addPathRenderer(RendererInterface $renderer);
+    public function addPathRenderer(RendererInterface $renderer,string $pathModules);
 
     /**
      * add path url

@@ -12,14 +12,14 @@
  * @author wassime
  */
 
-namespace App\AbstractModules\Model;
+namespace App\AbstractModules\Model ;
 
 use Kernel\INTENT\Intent_Form;
 use Kernel\INTENT\Intent_Show;
-use Kernel\Model\Model;
+use Kernel\Model\Model as m;
 use Kernel\Tools\Tools;
 
-class AbstractModel extends Model
+class Model extends m
 {
     ////select input simple
 

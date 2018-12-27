@@ -13,13 +13,13 @@ namespace App\Authentification\Comptes\Controller;
  *
  * @author wassime
  */
-use App\AbstractModules\Controller\AbstractShowController;
+use App\AbstractModules\Controller\ShowController as show;
 use App\Authentification\Comptes\Model\Model;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class ShowController extends AbstractShowController
+class ShowController extends show
 {
 
     public function __construct(array $Options)

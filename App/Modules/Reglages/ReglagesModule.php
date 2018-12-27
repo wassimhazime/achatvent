@@ -5,11 +5,10 @@ namespace App\Modules\Reglages;
 use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RendererInterface;
-use App\Modules\Reglages\Controller\SendController;
-use App\Modules\Reglages\Controller\ShowController;
-use App\Modules\Reglages\Controller\AjaxController;
-use App\Modules\Reglages\Controller\FileController;
-
+use App\AbstractModules\Controller\SendController;
+use App\AbstractModules\Controller\ShowController;
+use App\AbstractModules\Controller\AjaxController;
+use App\AbstractModules\Controller\FileController;
 class ReglagesModule extends AbstractModule
 {
 
@@ -25,17 +24,7 @@ class ReglagesModule extends AbstractModule
     const NameModule = "Reglages";
     const IconModule = " fa fa-fw fa-stack-overflow ";
 
-    public function addPathRenderer(RendererInterface $renderer)
-    {
-
-        $NamesControllers=$this->getNamesControllers($this->Controllers);
-        foreach ($NamesControllers as $NameController ) {
-          $pathModule = __DIR__ . D_S . "views" . D_S.$NameController.D_S;
-
-          $renderer->addPath($pathModule, self::NameModule.$NameController);
-        }
-
-    }
+   
 
     public function addRoute(RouterInterface $router)
     {

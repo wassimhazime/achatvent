@@ -8,14 +8,14 @@
 
 namespace App\Modules\Achats\Controller;
 
-use App\AbstractModules\Controller\AbstractFileController;
+use App\AbstractModules\Controller\FileController as file;
 
 /**
  * Description of FileController
  *
  * @author wassime
  */
-class FileController extends AbstractFileController
+class FileController extends file
 {
   
 }

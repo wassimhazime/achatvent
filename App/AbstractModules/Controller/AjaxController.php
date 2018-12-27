@@ -18,7 +18,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-abstract class AbstractAjaxController extends AbstractController {
+ class AjaxController extends AbstractController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
@@ -29,7 +29,7 @@ abstract class AbstractAjaxController extends AbstractController {
         $this->setRoute($this->getRouter()->match($this->getRequest()));
         $this->setNameController($this->getRoute()->getParam("controle"));
 
-        $classModel = $this->getNameSpace("Model");
+        $classModel = $this->getClassModel();
 
         $this->setModel(new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
         $this->chargeModel($this->getNameController());

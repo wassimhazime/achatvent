@@ -34,7 +34,7 @@ class ComptesModule extends AbstractModule
         }
     }
 
-    public function addPathRenderer(RendererInterface $renderer)
+    public function addPathRenderer(RendererInterface $renderer,string $path)
     {
         $pathModule = __DIR__ . D_S . "views" . D_S;
         $renderer->addPath($pathModule, self::NameModule);
