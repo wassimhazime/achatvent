@@ -15,10 +15,6 @@ namespace App\Modules\Achats\Controller;
  */
 
 use App\AbstractModules\Controller\SendController as send;
-use App\Modules\Achats\Model\Model;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 class SendController extends send
 {

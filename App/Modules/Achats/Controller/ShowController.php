@@ -15,7 +15,6 @@ namespace App\Modules\Achats\Controller;
  */
 
 use App\AbstractModules\Controller\ShowController as show;
-use Psr\Http\Message\ResponseInterface;
 
 class ShowController extends show
 {

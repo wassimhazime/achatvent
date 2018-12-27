@@ -27,12 +27,15 @@ class TwigRenderer implements RendererInterface
     private $loader;
     static $renderer = null;
 
-    function __construct($pathTemplete, $PathConfigJsone)
+    function __construct($pathTemplete, $PathConfigJsone,$cache=false)
     {
 
         $this->loader = new Twig_Loader_Filesystem($pathTemplete);
         $this->twig = new Twig_Environment($this->loader, array(
-            'cache' => false, 'debug' => true
+            'cache' => $cache,
+            
+            'debug' => true,
+             
         ));
 
         $this->twig->addFunction(new \Twig_SimpleFunction("html", function ($context) {

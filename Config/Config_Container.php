@@ -62,7 +62,10 @@ return [
     RendererInterface::class => function (ContainerInterface $container): RendererInterface {
 
         $renderer = new \Kernel\Renderer\TwigRenderer(
-                $container->get("default_Templte"), $container->get("configue_Extension")
+                $container->get("default_Templte"),
+                $container->get("configue_Extension")
+            //    ,$container->get("tmp")
+                
         );
         // add templet abstract
         $renderer->addPath($container->get("AbstractTempletModules"), "AbstractModules");
