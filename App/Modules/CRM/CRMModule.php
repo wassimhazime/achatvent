@@ -20,8 +20,6 @@ class CRMModule extends AbstractModule {
     const NameModule = "CRM";
     const IconModule = " fa fa-fw fa-stack-overflow ";
 
- 
-
     public function addRoute(RouterInterface $router) {
         $nameRoute = $this->getNamesRoute();
 
@@ -32,19 +30,14 @@ class CRMModule extends AbstractModule {
             "nameRoute" => $nameRoute
         ];
 
-  
-  
+
+
         $router->addRoute_get(
-                "/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]", new ShowController($Options), 
-                
-                
+                "/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]", new ShowController($Options),
                 /// name route
-                $nameRoute->show()."ee",
-                
-                
-                self::NameModule
+                $nameRoute->show() . "ee", self::NameModule
         );
-$router->addRoute_get(
+        $router->addRoute_get(
                 "/_clients[/{action:[a-z]+}-{id:[0-9\,]+}]", new Controller\Clients($Options), $nameRoute->show(), self::NameModule
         );
 
@@ -62,9 +55,8 @@ $router->addRoute_get(
                 "/files/{controle:[a-z0-9\_\$\-]+}", new FileController($Options), $nameRoute->files(), self::NameModule
         );
     }
-    
-       protected function generateUriMenu(string $name_route, array $Controllers): array
-    {
+
+    protected function generateUriMenu(string $name_route, array $Controllers): array {
         $generateUriMenu = [];
         foreach ($Controllers as $controle) {
             if (is_array($controle)) {
@@ -76,8 +68,8 @@ $router->addRoute_get(
         }
         return $generateUriMenu;
     }
-       public function getMenu(): array
-    {
+
+    public function getMenu(): array {
         $menu = [
             "nav_title" => $this::NameModule,
             "nav_icon" => $this::IconModule,
